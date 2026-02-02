@@ -30,21 +30,21 @@ namespace MMMEngine
 
         float maxYawSpeed = 0.0f;
 
-        //PIDÁ¦¾î
+        //PIDï¿½ï¿½ï¿½ï¿½
         float kp = 0.0f;
 
-        //¶óµð¾È
+        //ï¿½ï¿½ï¿½ï¿½
         float alignEps;
 
         void Start();
         void Update();
 
-        //¼öÄ¡Á¶Àý
+        //ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
         float turnSpeed = 25.0f;
         bool is_Scoop = false;
 
 
-        Vector3 m_InputDir;            // Update¿¡¼­ ÀúÀå (Á¤±ÔÈ­ Àü/ÈÄ »ó°ü¾øÀ½)
+        Vector3 m_InputDir;            // Updateï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½/ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
         void FixedUpdate();
 
