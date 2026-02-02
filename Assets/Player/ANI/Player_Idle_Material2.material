@@ -1,5 +1,5 @@
 {
-    "MUID": "08e93476-e2fd-4c5d-9ff7-a9f42e77a3cb",
+    "MUID": "a393fa7b-0501-4338-a044-f642e2585a88",
     "properties": {
         "_albedo": {
             "file": "Assets\\Player\\ANI\\H_Holy Cleric_F_txt.png",
@@ -14,6 +14,6 @@
         "file": "Shader/PBR/PS/BRDFShader.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
     }
 }

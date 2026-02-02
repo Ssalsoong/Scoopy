@@ -1,5 +1,5 @@
 {
-    "MUID": "9541e4dd-d034-4aee-9de8-8541b14d78d8",
+    "MUID": "1e9e20c1-a27a-4987-bdff-d21bfc51b99d",
     "properties": {
         "_albedo": {
             "file": "Assets\\Player\\ANI\\Pink_Expressions.png",
@@ -14,6 +14,6 @@
         "file": "Shader/PBR/PS/BRDFShader.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
     }
 }
