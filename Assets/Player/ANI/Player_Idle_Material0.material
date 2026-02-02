@@ -1,0 +1,19 @@
+{
+    "MUID": "34af1213-d568-4fda-b494-20dfc02969d9",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Player\\ANI\\C_Holy Cleric_F_txt.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Assets\\Player\\ANI\\C_Holy Cleric_F_txt.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+    }
+}

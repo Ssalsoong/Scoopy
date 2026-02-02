@@ -1,0 +1,253 @@
+#include "ScriptBehaviour.h"
+#include "Player.h"
+#include "rttr/registration"
+#include "rttr/detail/policies/ctor_policies.h"
+#include "MMMTime.h"
+#include "MMMInput.h"
+#include "Transform.h"
+#include "../Enemy/Enemy.h"
+#include "../Manager/SnowballManager.h"
+#include "../Snow/Snowball.h"
+
+RTTR_PLUGIN_REGISTRATION
+{
+    using namespace rttr;
+    using namespace MMMEngine;
+
+    registration::class_<Player>("Player")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"));
+    registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
+        .constructor(
+            []() {
+                return Object::NewObject<Player>();
+	}).method("Inject", &ObjPtr<Player>::Inject);;
+}
+
+void MMMEngine::Player::Start()
+{
+}
+
+void MMMEngine::Player::Update()
+{
+	pos = GetTransform()->GetWorldPosition();
+	HandleMovement();
+	UpdateScoop();
+	HandleAttack();
+	AutoHeal();
+}
+
+// 임시 이동이므로 이후 반드시 삭제
+void MMMEngine::Player::HandleMovement()
+{
+	float dx = 0.0f;
+	float dz = 0.0f;
+	if (Input::GetKey(KeyCode::LeftArrow))  dx -= 1.0f;
+	if (Input::GetKey(KeyCode::RightArrow)) dx += 1.0f;
+	if (Input::GetKey(KeyCode::UpArrow))    dz += 1.0f;
+	if (Input::GetKey(KeyCode::DownArrow))  dz -= 1.0f;
+	isMoving = (dx != 0.0f || dz != 0.0f);
+	if (isMoving) {
+		float len = sqrtf(dx * dx + dz * dz);
+		dx /= len;
+		dz /= len;
+
+		pos.x += dx * velocity * Time::GetDeltaTime();
+		pos.z += dz * velocity * Time::GetDeltaTime();
+		GetTransform()->SetWorldPosition(pos);
+	}
+}
+
+void MMMEngine::Player::UpdateScoop()
+{
+	if (Input::GetKeyDown(KeyCode::Space)) {
+		SnowballManager::instance->OnScoopStart(*this);
+		scoopHeld = true;
+	}
+	if (Input::GetKey(KeyCode::Space)) {
+		SnowballManager::instance->OnScoopHold(*this);
+	}
+	if (Input::GetKeyUp(KeyCode::Space)) {
+		SnowballManager::instance->OnScoopEnd(*this);
+		scoopHeld = false;
+	}
+}
+
+bool MMMEngine::Player::AttachSnowball(ObjPtr<GameObject> snow)
+{
+	if (!snow) return false;
+
+	if (matchedSnowball == snow)
+		return true;
+	if (matchedSnowball) DetachSnowball();
+	matchedSnowball = snow;
+	matchedSnowball->GetTransform()->SetParent(GetTransform());
+	float scale = matchedSnowball->GetComponent<Snowball>()->GetScale();
+	float distance = baseRadius * scale * k;
+	matchedSnowball->GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Forward * distance);
+	return true;
+}
+
+void MMMEngine::Player::DetachSnowball()
+{
+	if (!matchedSnowball) return;
+	matchedSnowball->GetTransform()->SetParent(nullptr);
+	matchedSnowball = nullptr;
+}
+
+void MMMEngine::Player::SnapToSnowball()
+{
+	if (!matchedSnowball) return;
+
+	auto tr = GetTransform();
+	auto sTr = matchedSnowball->GetTransform();
+	if (!tr || !sTr) return;
+
+	auto sc = matchedSnowball->GetComponent<Snowball>();
+	if (!sc) return;
+
+	auto snowPos = sTr->GetWorldPosition();
+
+	// 1) 먼저 바라보기
+	LookAt(snowPos);
+
+	// 2) 붙을 위치 계산 (dir 기반)
+	auto playerPos = tr->GetWorldPosition();
+	auto dir = snowPos - playerPos;
+	dir.y = 0.0f;
+	if (dir.LengthSquared() < 1e-8f) return;
+	dir.Normalize();
+
+	float distance = baseRadius * sc->GetScale() * k;
+
+	// 플레이어는 눈에서 distance만큼 뒤로 물러난 위치로
+	auto targetPos = snowPos - dir * distance;
+
+	playerPos.x = targetPos.x;
+	playerPos.z = targetPos.z;
+	tr->SetWorldPosition(playerPos);
+}
+
+void MMMEngine::Player::LookAt(const DirectX::SimpleMath::Vector3& target)
+{
+	auto dir = target - pos;
+	dir.y = 0.0f;
+
+	float len2 = dir.LengthSquared();
+	if (len2 < 1e-8f) return;
+
+	dir.Normalize();
+
+	float yaw = atan2f(dir.x, dir.z);
+	auto rot = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0, 0);
+	GetTransform()->SetWorldRotation(rot);
+}
+
+void MMMEngine::Player::HandleAttack()
+{
+	if (scoopHeld)
+		return;
+	auto enemies = GameObject::FindGameObjectsWithTag("Enemy");
+
+
+	const float range = info.battledist;
+	const float rangeSq = range * range;
+
+	bool hasEnemyInRange = false;
+
+	// 범위 안 적이 있는지 체크
+	for (auto& e : enemies)
+	{
+		if (!e) continue;
+
+		auto tec = e->GetComponent<Enemy>();
+		if (!tec) continue;
+
+		auto tr = e->GetTransform();
+		if (!tr) continue;
+
+		auto p = tr->GetWorldPosition();
+		float dx = p.x - pos.x;
+		float dz = p.z - pos.z;
+
+		if (dx * dx + dz * dz <= rangeSq)
+		{
+			hasEnemyInRange = true;
+			break;
+		}
+	}
+
+	if (!hasEnemyInRange)
+	{
+		attackTimer = 0.0f;
+		return;
+	}
+
+	attackTimer += Time::GetDeltaTime();
+
+	if (attackTimer < info.attackDelay)
+		return;
+
+	attackTimer = 0.0f;
+
+	for (auto& e : enemies)
+	{
+		auto tec = e->GetComponent<Enemy>();
+		if (!tec) continue;
+
+		auto tr = e->GetTransform();
+		if (!tr) continue;
+
+		auto p = tr->GetWorldPosition();
+		float dx = p.x - pos.x;
+		float dz = p.z - pos.z;
+
+		if (dx * dx + dz * dz > rangeSq)
+			continue;
+
+		tec->GetDamage(info.atk);
+		tec->PlayerHitMe();
+	}
+}
+
+void MMMEngine::Player::GetDamage(int t)
+{
+	if (damageTimer > 0.0f)
+		return; // 무적 시간 중이면 데미지 무시
+
+	info.HP -= t;
+	info.HP = std::max(info.HP, 0);
+
+	damageTimer = damageDelay; // 무적 타이머 시작
+}
+
+void MMMEngine::Player::AutoHeal()
+{
+	if (damageTimer > 0.0f)
+	{
+		damageTimer -= Time::GetDeltaTime();
+	}
+	if (prevHP > info.HP)
+	{
+		fighting = true;
+		nonfightTimer = 0.0f;
+	}
+	prevHP = info.HP;
+	if (fighting)
+	{
+		nonfightTimer += Time::GetDeltaTime();
+		if (nonfightTimer >= nonfightDelay)
+		{
+			fighting = false;
+			healTimer = 0.0f;
+		}
+	}
+	else if (info.HP < info.maxHP)
+	{
+		healTimer += Time::GetDeltaTime();
+		if (healTimer >= healDelay)
+		{
+			info.HP = std::min(info.HP + healHP, info.maxHP);
+			healTimer = 0.0f;
+		}
+	}
+}

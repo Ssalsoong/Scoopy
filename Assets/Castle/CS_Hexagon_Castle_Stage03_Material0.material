@@ -1,0 +1,15 @@
+{
+    "MUID": "742605cc-544c-490b-a917-62c3064c3bf3",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Castle\\PixelTeture.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+    }
+}

@@ -1,0 +1,33 @@
+#include "rttr/type"
+#include "ScriptBehaviour.h"
+#include "UserScriptsCommon.h"
+#include "SimpleMath.h"
+
+namespace MMMEngine
+{
+    class USERSCRIPTS Buildingball : public ScriptBehaviour
+    {
+    private:
+        RTTR_ENABLE(ScriptBehaviour)
+        RTTR_REGISTRATION_FRIEND
+    public:
+        Buildingball()
+        {
+        REGISTER_BEHAVIOUR_MESSAGE(Start);
+        REGISTER_BEHAVIOUR_MESSAGE(Update);
+
+        }
+
+        void Start();
+
+        void Update();
+        int atk = 4;
+        float speed = 20.f;
+        float hitRadius = 0.25f;
+        ObjPtr<GameObject> owner;
+        ObjPtr<GameObject> target;
+        DirectX::SimpleMath::Vector3 targetpos;
+        void SetOwner(ObjPtr<GameObject> obj) { owner = obj; }
+        void SetTarget(ObjPtr<GameObject>obj) { target = obj; }
+    };
+}

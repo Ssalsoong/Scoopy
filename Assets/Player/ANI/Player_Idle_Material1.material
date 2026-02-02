@@ -1,0 +1,19 @@
+{
+    "MUID": "9541e4dd-d034-4aee-9de8-8541b14d78d8",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Player\\ANI\\Pink_Expressions.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Assets\\Player\\ANI\\Pink_Expressions.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+    }
+}

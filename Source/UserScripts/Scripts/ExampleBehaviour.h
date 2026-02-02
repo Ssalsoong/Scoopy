@@ -13,8 +13,9 @@ namespace MMMEngine
     public:
         ExampleBehaviour()
         {
-            REGISTER_BEHAVIOUR_MESSAGE(Start)
-            REGISTER_BEHAVIOUR_MESSAGE(Update)
+        REGISTER_BEHAVIOUR_MESSAGE(Start);
+        REGISTER_BEHAVIOUR_MESSAGE(Update);
+
         }
 
         bool isCustomBool = true;
