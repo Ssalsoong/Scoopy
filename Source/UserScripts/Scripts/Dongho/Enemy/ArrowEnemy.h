@@ -1,4 +1,4 @@
-#include "rttr/type"
+﻿#include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include "StaticMesh.h"

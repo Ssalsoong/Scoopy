@@ -1,4 +1,4 @@
-// Auto-generated. Do not edit.
+﻿// Auto-generated. Do not edit.
 #include "Export.h"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "ScriptBehaviour.h"
 #include <SimpleMath.h>
 #include "rttr/type"

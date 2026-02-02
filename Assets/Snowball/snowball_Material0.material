@@ -1,10 +1,10 @@
 {
-    "MUID": "e0681766-d66b-4da6-a78c-0e30f6162558",
+    "MUID": "b923534b-6d16-4608-93d5-a04d618f0417",
     "properties": {},
     "pshader": {
         "file": "Shader/PBR/PS/BRDFShader.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
     }
 }
