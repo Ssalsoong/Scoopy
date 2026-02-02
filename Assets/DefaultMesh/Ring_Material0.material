@@ -1,0 +1,15 @@
+{
+    "MUID": "0d0ff054-b337-4e62-aec1-b9226cd7b5cc",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\DefaultMesh\\Default_White.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+    }
+}

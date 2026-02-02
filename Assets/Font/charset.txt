@@ -1,0 +1,6 @@
+가나다라마바사아자차카타파하
+UI텍스트들 여기다 모아놓기
+0123456789
+ABCDEFGHIJKLMNOPQRSTUVWXYZ
+abcdefghijklmnopqrstuvwxyz
+.,!?()[]{}-+*/:;'" 
