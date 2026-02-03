@@ -57,7 +57,6 @@ namespace MMMEngine {
 			float checkdist = 0.f;
 		};
 		EnemyStats stats;
-		float playerLostdist = 50.0f;
 		void GetDamage(int t) { stats.HP -= t; stats.HP = std::max(stats.HP, 0); };
 		void PlayerHitMe();
 		int GetHP() { return stats.HP; }

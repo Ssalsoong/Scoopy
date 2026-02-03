@@ -1,0 +1,19 @@
+{
+    "MUID": "443a7b85-812b-4835-b642-c25f209206e7",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_BaseColor.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_Metallic.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "MUID": "f0a809f6-08eb-4515-af1a-c861b42823cd",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Enemy\\FBX\\T_Goblin_Warrior.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

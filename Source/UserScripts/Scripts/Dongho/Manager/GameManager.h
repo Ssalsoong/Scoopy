@@ -4,8 +4,13 @@
 #include "UserScriptsCommon.h"
 #include "rttr/type"
 #include "StaticMesh.h"
+#include "SimpleMath.h"
+#include <array>
 
+using DirectX::SimpleMath::Vector3;
 namespace MMMEngine {
+	class Player;
+	class Castle;
 	class USERSCRIPTS GameManager : public ScriptBehaviour
 	{
 	private:
@@ -21,17 +26,18 @@ namespace MMMEngine {
 		void Start();
 		void Update();
 		float settingfullTime = 30.0f;
-		float NorenemySpawnDelay = 10.0f;
-		float ArenemySpawnDelay = 15.0f;
+		float enemySpawnDelay = 0.5f;
+		float enemySpawnTimer = 0.0f;
 		float settingTimer = 0.0f;
-		float NorenemySpawnTimer = 0.0f;
-		float ArenemySpawnTimer = 0.0f;
+
 		bool GameOver = false;
 		bool nowSetting = true;
+		int wave = 1;
+
 		ObjPtr<GameObject> player;
 		ObjPtr<GameObject> castle;
-		ResPtr<StaticMesh> playermesh;
-		ResPtr<StaticMesh> castlemesh;
+		ObjPtr<Player> playercomp;
+		ObjPtr<Castle> castlecomp;
 		static ObjPtr<GameManager> instance;
 	};
 }

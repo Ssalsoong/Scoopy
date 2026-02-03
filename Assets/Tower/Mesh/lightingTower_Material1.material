@@ -1,0 +1,19 @@
+{
+    "MUID": "6aba9531-7beb-4de8-9684-2f51d4db9c3a",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\lambert1_Base_Color.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Assets\\Tower\\FBX\\lambert1_Metallic.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

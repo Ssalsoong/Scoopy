@@ -1,0 +1,19 @@
+{
+    "MUID": "efa70b4c-93bd-4698-8973-932fc40dd444",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\PortalTowerPropsGold_BaseColor.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Assets\\Tower\\FBX\\PortalTowerProps_Metallic.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

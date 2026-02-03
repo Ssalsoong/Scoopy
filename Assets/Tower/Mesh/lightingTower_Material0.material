@@ -1,0 +1,19 @@
+{
+    "MUID": "f0c91f90-2b04-4bf2-9cc4-146c185593e9",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_BaseColor.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_Metallic.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

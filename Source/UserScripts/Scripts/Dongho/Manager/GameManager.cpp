@@ -8,6 +8,7 @@
 #include "StaticMesh.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
+#include "BuildingManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -28,67 +29,36 @@ MMMEngine::ObjPtr<MMMEngine::GameManager> MMMEngine::GameManager::instance = nul
 
 void MMMEngine::GameManager::Start()
 {
-	castlemesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Castle/CS_Hexagon_Castle_Stage01_StaticMesh.staticmesh");
-	castle = NewObject<GameObject>();
-	castle->SetName("Castle");
-	castle->SetTag("Castle");
-	castle->AddComponent<Castle>();
-	castle->AddComponent<MeshRenderer>();
-	castle->GetComponent<MeshRenderer>()->SetMesh(castlemesh);
-	castle->GetTransform()->SetWorldPosition(0.f, 0.f, 0.f);
-	castle->GetTransform()->SetWorldScale(0.17f, 0.17f, 0.17f);
-	DirectX::SimpleMath::Quaternion euler{0.f,1.f,0.f,0.f};
-	castle->GetTransform()->SetWorldRotation(euler);
-	playermesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Player/ANI/Player_Idle_StaticMesh.staticmesh");
-	player = NewObject<GameObject>();
-	player->SetName("Player");
-	player->SetTag("Player");
-	player->AddComponent<Player>();
-	player->AddComponent<MeshRenderer>();
-	player->GetComponent<MeshRenderer>()->SetMesh(playermesh);
-	player->GetTransform()->SetWorldPosition(0.f, 0.f, 0.f);
-	player->GetTransform()->SetWorldScale(1.2f, 1.2f, 1.2f);
-	//player->GetTransform()->SetWorldRotation(euler);
-
+	player = GetGameObject()->Find("Player");
+	castle = GetGameObject()->Find("Castle");
+	playercomp = player->GetComponent<Player>();
+	castlecomp = castle->GetComponent<Castle>();
 	instance = GetGameObject()->GetComponent<GameManager>();
 }
 
 void MMMEngine::GameManager::Update()
 {
-	auto playercomp = player->GetComponent<Player>();
-	auto castlecomp = castle->GetComponent<Castle>();
 
-	/*if (nowSetting)
+	if (nowSetting)
 	{
 		settingTimer += Time::GetDeltaTime();
 		if (settingTimer >= settingfullTime)
 		{
+			EnemySpawner::instance->WaveSetting(wave);
 			nowSetting = false;
 			settingTimer = 0.0f;
+			playercomp->buildchance = false;
 		}
 	}
 	else
 	{
-		NorenemySpawnTimer += Time::GetDeltaTime();
-		if (NorenemySpawnTimer >= NorenemySpawnDelay) {
-			EnemySpawner::instance->SpawnNormalEnemy();
-			NorenemySpawnTimer = 0.0f;
+		if (!EnemySpawner::instance->WaveSpawn(wave))
+		{
+			nowSetting = true;
+			wave += 1;
+			BuildingManager::instance->BuildingReturn();
+			playercomp->buildchance = true;
 		}
-		ArenemySpawnTimer += Time::GetDeltaTime();
-		if (ArenemySpawnTimer >= ArenemySpawnDelay) {
-			EnemySpawner::instance->SpawnArrowEnemy();
-			ArenemySpawnTimer = 0.0f;
-		}
-	}*/
-	NorenemySpawnTimer += Time::GetDeltaTime();
-	if (NorenemySpawnTimer >= NorenemySpawnDelay) {
-		EnemySpawner::instance->SpawnNormalEnemy();
-		NorenemySpawnTimer = 0.0f;
-	}
-	ArenemySpawnTimer += Time::GetDeltaTime();
-	if (ArenemySpawnTimer >= ArenemySpawnDelay) {
-		EnemySpawner::instance->SpawnArrowEnemy();
-		ArenemySpawnTimer = 0.0f;
 	}
 
 

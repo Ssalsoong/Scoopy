@@ -221,7 +221,7 @@ void MMMEngine::Enemy::Dead()
 {
 	GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 	ChangeState(EnemyState::GoToCastle);
-	EnemySpawner::instance->ReturnEnemy(GetGameObject());
+	EnemySpawner::instance->EnemyDeath(GetGameObject());
 	GetGameObject()->SetActive(false);
 }
 
@@ -249,9 +249,11 @@ bool MMMEngine::Enemy::FindNearBuilding()
 	}
 	if (best)
 	{
-		buildingTarget = best;
-		buildingpos = buildingTarget->GetTransform()->GetWorldPosition();
-		return true;
+		if (!best->GetComponent<Building>()->isDead) {
+			buildingTarget = best;
+			buildingpos = buildingTarget->GetTransform()->GetWorldPosition();
+			return true;
+		}
 	}
 	return false;
 }
@@ -300,7 +302,7 @@ bool MMMEngine::Enemy::LostPlayer()
 	float dz = playerpos.z - pos.z;
 	float dist2 = dx * dx + dz * dz;
 
-	if (dist2 > playerLostdist * playerLostdist) {
+	if (dist2 > stats.checkdist * stats.checkdist) {
 		return true;
 	}
 	return false;

@@ -1,0 +1,19 @@
+{
+    "MUID": "2e2bb691-de74-45f6-93c3-56429d367dcd",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\Firetower_props_Base_Color.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Assets\\Tower\\FBX\\Firetower_props_Metallic.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

@@ -11,6 +11,7 @@
 #include "../Building/BuffBuilding.h"
 #include "../Building/DebuffBuilding.h"
 #include "../Building/SnowBuilding.h"
+#include "../Building/BuildingPoint.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -32,16 +33,46 @@ MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instan
 
 void MMMEngine::BuildingManager::Start()
 {
-	buildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
-	HPbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
-	buffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
-	debuffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
-	snowbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
+	buildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomalTower_StaticMesh.staticmesh");
+	HPbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomal2Tower_StaticMesh.staticmesh");
+	buffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/lightingTower_StaticMesh.staticmesh");
+	debuffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/fireTower_StaticMesh.staticmesh");
+	snowbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/iceTower_StaticMesh.staticmesh");
+
+	for (int i = 0; i < BuildingPointCount; ++i)
+	{
+		auto obj = NewObject<GameObject>();
+		obj->SetName("BuildingPoint");
+		obj->SetTag("BuildingPoint");
+		obj->AddComponent<BuildingPoint>();
+		obj->GetTransform()->SetWorldScale(1.f, 1.f, 1.f);
+		obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
+		obj->GetTransform()->SetParent(GetTransform());
+		buildingpoints.push_back(obj);
+	}
+
 	instance = GetGameObject()->GetComponent<BuildingManager>();
 }
 
 void MMMEngine::BuildingManager::Update()
 {
+}
+
+void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
+{
+	auto it = std::find(buildingpoints.begin(), buildingpoints.end(), obj);
+	if (it == buildingpoints.end())
+		return;
+	buildingpoints.erase(it);
+
+	Destroy(obj->GetComponent<BuildingPoint>());
+	obj->SetName("Building");
+	obj->SetTag("Building");
+	obj->AddComponent<Building>();
+	obj->AddComponent<MeshRenderer>();
+	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
+	obj->GetTransform()->SetWorldScale(buildingscale);
+	Buildings.push_back(obj);
 }
 
 void MMMEngine::BuildingManager::BuildingReturn()
@@ -57,18 +88,18 @@ void MMMEngine::BuildingManager::BuildingReturn()
 	}
 }
 
-void MMMEngine::BuildingManager::MakeBuilding(const DirectX::SimpleMath::Vector3 pos)
-{
-	auto obj = NewObject<GameObject>();
-	obj->SetName("Building");
-	obj->SetTag("Building");
-	obj->AddComponent<Building>();
-	obj->AddComponent<MeshRenderer>();
-	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
-	obj->GetTransform()->SetWorldPosition(pos);
-	obj->GetTransform()->SetWorldScale(buildingscale);
-	Buildings.push_back(obj);
-}
+//void MMMEngine::BuildingManager::MakeBuilding(const DirectX::SimpleMath::Vector3 pos)
+//{
+//	auto obj = NewObject<GameObject>();
+//	obj->SetName("Building");
+//	obj->SetTag("Building");
+//	obj->AddComponent<Building>();
+//	obj->AddComponent<MeshRenderer>();
+//	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
+//	obj->GetTransform()->SetWorldPosition(pos);
+//	obj->GetTransform()->SetWorldScale(buildingscale);
+//	Buildings.push_back(obj);
+//}
 
 void MMMEngine::BuildingManager::LevelUpHP(ObjPtr<GameObject> obj)
 {

@@ -1,0 +1,15 @@
+{
+    "MUID": "5d1196e0-7fd1-4024-8c2d-2b791c291bf9",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\PortalTowerlvl01_BaseColor.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

@@ -1,27 +1,13 @@
 #include "ScriptBehaviour.h"
 #include "Player.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "MMMTime.h"
 #include "MMMInput.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
 #include "../Manager/SnowballManager.h"
 #include "../Snow/Snowball.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-    using namespace rttr;
-    using namespace MMMEngine;
-
-    registration::class_<Player>("Player")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"));
-    registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
-        .constructor(
-            []() {
-                return Object::NewObject<Player>();
-	}).method("Inject", &ObjPtr<Player>::Inject);;
-}
+#include "../Building/BuildingPoint.h"
+#include "../Manager/BuildingManager.h"
 
 void MMMEngine::Player::Start()
 {
@@ -31,6 +17,8 @@ void MMMEngine::Player::Update()
 {
 	pos = GetTransform()->GetWorldPosition();
 	HandleMovement();
+	if(buildchance)
+		BuildOn();
 	UpdateScoop();
 	HandleAttack();
 	AutoHeal();
@@ -149,7 +137,7 @@ void MMMEngine::Player::HandleAttack()
 	auto enemies = GameObject::FindGameObjectsWithTag("Enemy");
 
 
-	const float range = info.battledist;
+	const float range = battledist;
 	const float rangeSq = range * range;
 
 	bool hasEnemyInRange = false;
@@ -184,7 +172,7 @@ void MMMEngine::Player::HandleAttack()
 
 	attackTimer += Time::GetDeltaTime();
 
-	if (attackTimer < info.attackDelay)
+	if (attackTimer < attackDelay)
 		return;
 
 	attackTimer = 0.0f;
@@ -204,7 +192,7 @@ void MMMEngine::Player::HandleAttack()
 		if (dx * dx + dz * dz > rangeSq)
 			continue;
 
-		tec->GetDamage(info.atk);
+		tec->GetDamage(atk);
 		tec->PlayerHitMe();
 	}
 }
@@ -214,8 +202,8 @@ void MMMEngine::Player::GetDamage(int t)
 	if (damageTimer > 0.0f)
 		return; // 무적 시간 중이면 데미지 무시
 
-	info.HP -= t;
-	info.HP = std::max(info.HP, 0);
+	HP -= t;
+	HP = std::max(HP, 0);
 
 	damageTimer = damageDelay; // 무적 타이머 시작
 }
@@ -226,12 +214,12 @@ void MMMEngine::Player::AutoHeal()
 	{
 		damageTimer -= Time::GetDeltaTime();
 	}
-	if (prevHP > info.HP)
+	if (prevHP > HP)
 	{
 		fighting = true;
 		nonfightTimer = 0.0f;
 	}
-	prevHP = info.HP;
+	prevHP = HP;
 	if (fighting)
 	{
 		nonfightTimer += Time::GetDeltaTime();
@@ -241,13 +229,29 @@ void MMMEngine::Player::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
-	else if (info.HP < info.maxHP)
+	else if (HP < maxHP)
 	{
 		healTimer += Time::GetDeltaTime();
 		if (healTimer >= healDelay)
 		{
-			info.HP = std::min(info.HP + healHP, info.maxHP);
+			HP = std::min(HP + healHP, maxHP);
 			healTimer = 0.0f;
 		}
+	}
+}
+
+void MMMEngine::Player::BuildOn()
+{
+	if (Input::GetKeyDown(KeyCode::LeftControl))
+	{
+		auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
+		for (auto& bp : buildingpoints)
+		{
+			if (bp->GetComponent<BuildingPoint>()->canBuild) {
+				BuildingManager::instance->Build(bp);
+				buildchance = false;
+			}
+		}
+		
 	}
 }

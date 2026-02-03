@@ -1,0 +1,15 @@
+{
+    "MUID": "71ced9bc-4df9-487b-a603-0a0689db0b40",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Enemy\\FBX\\T_Goblin_Scout.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

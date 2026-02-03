@@ -17,18 +17,20 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
-		struct PlayerInfo
-		{
-			int HP = 100;
-			int maxHP = 100;
-
-			float battledist = 3.5f;
-			int atk = 10;
-			float attackDelay = 0.65f;
-			int maxpoint = 10;
-		};
+		USCRIPT_PROPERTY()
+		int HP = 100;
+		USCRIPT_PROPERTY()
+		int maxHP = 100;
+		USCRIPT_PROPERTY()
+		float battledist = 3.5f;
+		USCRIPT_PROPERTY()
+		int atk = 10;
+		float attackDelay = 0.65f;
+		int maxpoint = 10;
 		float velocity = 5.0f;
 		int healHP = 10;
 		float healDelay = 1.0f;
@@ -44,6 +46,7 @@ namespace MMMEngine
 		float damageTimer = 0.0f;
 		bool isMoving = false;
 		bool scoopHeld = false;
+		bool buildchance = true;
 
 		DirectX::SimpleMath::Vector3 pos;
 		ObjPtr<GameObject> matchedSnowball = nullptr;
@@ -51,13 +54,14 @@ namespace MMMEngine
 		void AutoHeal();
 		void HandleAttack();
 		void UpdateScoop();
-		PlayerInfo info;
 		void GetDamage(int t);
-		bool PlayerDeath() const { return info.HP <= 0; }
+		bool PlayerDeath() const { return HP <= 0; }
 		bool AttachSnowball(ObjPtr<GameObject> snow);
 		void DetachSnowball();
 		void SnapToSnowball();
 		void LookAt(const DirectX::SimpleMath::Vector3& target);
 		ObjPtr<GameObject> GetMatchedSnowball()const { return matchedSnowball; }
+
+		void BuildOn();
     };
 }

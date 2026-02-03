@@ -1,0 +1,15 @@
+{
+    "MUID": "04136972-6c6a-4a87-a895-86b158afbfb5",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Enemy\\FBX\\T_Goblin_Archer.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

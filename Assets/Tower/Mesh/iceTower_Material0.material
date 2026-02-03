@@ -1,0 +1,15 @@
+{
+    "MUID": "c7daeb69-3269-424c-9069-0eabff3e7502",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Tower\\FBX\\IceTowerlvl01_BaseColor.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}
