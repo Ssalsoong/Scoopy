@@ -33,10 +33,10 @@ void MMMEngine::NormalEnemy::ApplyStats()
 	if (!GetGameObject()->GetComponent<Enemy>())
 		return;
 	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	Enemycomp->stats.HP = HP;
-	Enemycomp->stats.atk = atk;
-	Enemycomp->stats.velocity = velocity;
-	Enemycomp->stats.attackDelay = attackDelay;
-	Enemycomp->stats.battledist = battledist;
-	Enemycomp->stats.checkdist = checkdist;
+	Enemycomp->HP = HP;
+	Enemycomp->atk = atk;
+	Enemycomp->velocity = velocity;
+	Enemycomp->attackDelay = attackDelay;
+	Enemycomp->battledist = battledist;
+	Enemycomp->checkdist = checkdist;
 }

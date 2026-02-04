@@ -20,7 +20,9 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		enum class EnemyState
 		{
@@ -40,26 +42,26 @@ namespace MMMEngine {
 		ObjPtr<Transform> tr;
 		DirectX::SimpleMath::Vector3 pos;
 		ObjPtr<GameObject> player;
-		ObjPtr<Player> playercomp;
 		ObjPtr<Transform> playertr;
 		DirectX::SimpleMath::Vector3 playerpos;
 		ObjPtr<GameObject> castle;
-		ObjPtr<Castle> castlecomp;
 		ObjPtr<Transform> castletr;
 		DirectX::SimpleMath::Vector3 castlepos;
-		struct EnemyStats
-		{
-			int HP = 0;
-			int atk = 0;
-			float velocity = 0.f;
-			float attackDelay = 0.f;
-			float battledist = 0.f;
-			float checkdist = 0.f;
-		};
-		EnemyStats stats;
-		void GetDamage(int t) { stats.HP -= t; stats.HP = std::max(stats.HP, 0); };
+		USCRIPT_PROPERTY()
+		int HP = 0;
+		USCRIPT_PROPERTY()
+		int atk = 0;
+		USCRIPT_PROPERTY()
+		float velocity = 0.f;
+		USCRIPT_PROPERTY()
+		float attackDelay = 0.f;
+		USCRIPT_PROPERTY()
+		float battledist = 0.f;
+		USCRIPT_PROPERTY()
+		float checkdist = 0.f;
+
+		void GetDamage(int t) { HP -= t; HP = std::max(HP, 0); };
 		void PlayerHitMe();
-		int GetHP() { return stats.HP; }
 		bool MoveToTarget(const DirectX::SimpleMath::Vector3& target, float stopDist);
 		bool CheckPlayer();
 		bool LostPlayer();

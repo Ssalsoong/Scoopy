@@ -29,7 +29,7 @@ namespace MMMEngine {
 		int level = 0;
 		float attackDelay = 1.0f;
 		float attackTimer = 0.0f;
-		float attackdist = 10.0f;
+		float attackdist = 3.0f;
 		bool isDead = false;
 		std::queue<ObjPtr<GameObject>> Buildingballs;
 		ResPtr<StaticMesh> buildingballmesh;

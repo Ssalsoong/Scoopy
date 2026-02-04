@@ -39,6 +39,7 @@ void MMMEngine::Snowball::RollSnow()
 	// 스케일 계산 (포인트 기반)
 	point = std::min(point, carrier->maxpoint);
 	scale = minscale + scaleup * point;
+	scale = std::min(scale, maxscale);
 	float r = baseRadius * scale;
 	float distance = r * k;
 	GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);

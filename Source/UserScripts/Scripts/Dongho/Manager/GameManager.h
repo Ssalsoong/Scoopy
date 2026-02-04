@@ -23,7 +23,9 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		float settingfullTime = 30.0f;
 		float enemySpawnDelay = 0.5f;

@@ -17,9 +17,7 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-
         void Start();
-
         void Update();
         int atk = 4;
         float speed = 20.f;

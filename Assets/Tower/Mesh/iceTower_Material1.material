@@ -1,8 +1,12 @@
 {
-    "MUID": "443a7b85-812b-4835-b642-c25f209206e7",
+    "MUID": "7273d494-c864-470e-b281-f11cd9d6a6f4",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\IceTowerProps_BaseColor.png",
+            "type": "Texture2D"
+        },
+        "_emissive": {
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_Emissive.png",
             "type": "Texture2D"
         },
         "_metallic": {

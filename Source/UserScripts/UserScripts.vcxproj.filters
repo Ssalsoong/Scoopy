@@ -20,6 +20,7 @@
     <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Enemy\NormalEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Enemy\ThiefEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Dongho\Manager\BattleManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -42,6 +43,7 @@
     <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Enemy\NormalEnemy.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Enemy\ThiefEnemy.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Dongho\Manager\BattleManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h"><Filter>Scripts</Filter></ClInclude>

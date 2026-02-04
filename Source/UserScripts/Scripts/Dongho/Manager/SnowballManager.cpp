@@ -54,6 +54,7 @@ void MMMEngine::SnowballManager::OnScoopStart(Player& player)
 	if (player.GetMatchedSnowball()) return;
 	ObjPtr<GameObject> nearest = nullptr;
 	auto playerPos = player.GetTransform()->GetWorldPosition();
+	float nearestD2 = FLT_MAX;
 	for (auto& sObj : Snows)
 	{
 		if (!sObj) continue;
@@ -62,22 +63,22 @@ void MMMEngine::SnowballManager::OnScoopStart(Player& player)
 		if (sc->IsCarried()) continue;
 
 		auto snowPos = sObj->GetTransform()->GetWorldPosition();
-		float bestD = sc->GetScale() * 2.8f;
+		float bestD = sc->GetScale() * 1.0f;
 		float bestD2 = bestD * bestD;
 		float dx = snowPos.x - playerPos.x;
 		float dz = snowPos.z - playerPos.z;
 		float d2 = dx * dx + dz * dz;
 
-		if (d2 < bestD2) {
-			bestD2 = d2;
+		if (d2 <= bestD2 && d2 < nearestD2) {
+			nearestD2 = d2;
 			nearest = sObj;
 		}
 	}
 	if (nearest)
 	{
 		nearest->GetComponent<Snowball>()->carrier = &player;
+		player.SnapToSnowball(nearest);
 		player.AttachSnowball(nearest);
-		player.SnapToSnowball();
 		scoopStates[&player] = {};
 	}
 	else

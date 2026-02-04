@@ -18,7 +18,14 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
+		void Start();
+		USCRIPT_MESSAGE()
+		void Update();
 		DirectX::SimpleMath::Vector3 pos;
+		USCRIPT_PROPERTY()
+		int level = 0;
+		USCRIPT_PROPERTY()
 		int HP = 300;
 		int maxHP = 300;
 		int healHP = 10;
@@ -33,12 +40,10 @@ namespace MMMEngine {
 		float healTimer = 0.0f;
 		float NonfightTimer = 0.0f;
 		float attackTimer = 0.0f;
-		float attackdist = 10.0f;
+		float attackdist = 5.0f;
 		std::queue<ObjPtr<GameObject>> Castleballs;
 		ResPtr<StaticMesh> castleballmesh;
 		ObjPtr<GameObject> enemyTarget;
-		void Start();
-		void Update();
 		void PointUp(int t);
 		void GetDamage(int t) { HP -= t; HP = std::max(HP, 0); };
 		void CheckEnemy();
@@ -46,5 +51,6 @@ namespace MMMEngine {
 		void AutoHeal();
 		void ReturnBall(ObjPtr<GameObject> obj);
 		bool CastleDeath() const { return HP <= 0; }
+		void LevelUp();
 	};
 }

@@ -140,6 +140,37 @@ void MMMEngine::EnemySpawner::EnemyDeath(ObjPtr<GameObject> obj)
 		aliveCount--;
 }
 
+void MMMEngine::EnemySpawner::EnemyUpgrade()
+{
+	size_t n = NormalEnemys.size();
+	for (size_t i = 0; i < n; ++i)
+	{
+		auto e = NormalEnemys.front();
+		NormalEnemys.pop();
+		if (e)
+			e->GetComponent<NormalEnemy>()->HP += 3;
+		NormalEnemys.push(e);
+	}
+	size_t a = ArrowEnemys.size();
+	for (size_t i = 0; i < a; ++i)
+	{
+		auto e = ArrowEnemys.front();
+		ArrowEnemys.pop();
+		if (e)
+			e->GetComponent<ArrowEnemy>()->HP += 1;
+		ArrowEnemys.push(e);
+	}
+	size_t t = ThiefEnemys.size();
+	for (size_t i = 0; i < t; ++i)
+	{
+		auto e = ThiefEnemys.front();
+		ThiefEnemys.pop();
+		if (e)
+			e->GetComponent<ThiefEnemy>()->HP += 2;
+		ThiefEnemys.push(e);
+	}
+}
+
 void MMMEngine::EnemySpawner::WaveSetting(int wave)
 {
 	if (wave < 1) return;

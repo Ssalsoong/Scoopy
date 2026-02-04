@@ -3,6 +3,7 @@
 #include "BuildingPoint.h"
 #include "../Player/Player.h"
 #include "Transform.h"
+#include "MeshRenderer.h"
 
 void MMMEngine::BuildingPoint::Start()
 {

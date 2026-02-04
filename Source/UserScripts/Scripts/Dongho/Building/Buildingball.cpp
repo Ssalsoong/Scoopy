@@ -7,6 +7,7 @@
 #include "Building.h"
 #include "Transform.h"
 #include "MMMTime.h"
+#include "../Manager/BattleManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -14,14 +15,14 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<Buildingball>("Buildingball")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<Buildingball>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Buildingball>"));
 
 	registration::class_<ObjPtr<Buildingball>>("ObjPtr<Buildingball>")
 		.constructor(
 			[]() {
 				return Object::NewObject<Buildingball>();
 			})
-        .method("Inject", &ObjPtr<Buildingball>::Inject);
+		.method("Inject", &ObjPtr<Buildingball>::Inject);
 }
 
 void MMMEngine::Buildingball::Start()
@@ -70,7 +71,7 @@ void MMMEngine::Buildingball::Update()
 	if (left.LengthSquared() <= hitRadius * hitRadius)
 	{
 		// 데미지(컴포넌트로 판별)
-		target->GetComponent<Enemy>()->GetDamage(atk);
+		BattleManager::instance->Attack(target, atk);
 
 		owner->GetComponent<Building>()->ReturnBall(GetGameObject());
 		target = nullptr;

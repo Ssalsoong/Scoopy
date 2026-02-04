@@ -24,7 +24,6 @@ namespace MMMEngine
         void Start();
 
         void Update();
-        /*void MakeBuilding(const DirectX::SimpleMath::Vector3 pos);*/
         void Build(ObjPtr<GameObject> obj);
         void LevelUpHP(ObjPtr<GameObject> obj);
         void LevelUpBuff(ObjPtr<GameObject> obj);

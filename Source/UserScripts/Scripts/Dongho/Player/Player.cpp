@@ -8,6 +8,7 @@
 #include "../Snow/Snowball.h"
 #include "../Building/BuildingPoint.h"
 #include "../Manager/BuildingManager.h"
+#include "../Manager/BattleManager.h"
 
 void MMMEngine::Player::Start()
 {
@@ -17,6 +18,7 @@ void MMMEngine::Player::Update()
 {
 	pos = GetTransform()->GetWorldPosition();
 	HandleMovement();
+	Velocitydown();
 	if(buildchance)
 		BuildOn();
 	UpdateScoop();
@@ -39,8 +41,8 @@ void MMMEngine::Player::HandleMovement()
 		dx /= len;
 		dz /= len;
 
-		pos.x += dx * velocity * Time::GetDeltaTime();
-		pos.z += dz * velocity * Time::GetDeltaTime();
+		pos.x += dx * (velocity - velocitydown) * Time::GetDeltaTime();
+		pos.z += dz * (velocity - velocitydown) * Time::GetDeltaTime();
 		GetTransform()->SetWorldPosition(pos);
 	}
 }
@@ -71,7 +73,7 @@ bool MMMEngine::Player::AttachSnowball(ObjPtr<GameObject> snow)
 	matchedSnowball->GetTransform()->SetParent(GetTransform());
 	float scale = matchedSnowball->GetComponent<Snowball>()->GetScale();
 	float distance = baseRadius * scale * k;
-	matchedSnowball->GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Forward * distance);
+	matchedSnowball->GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
 	return true;
 }
 
@@ -82,15 +84,15 @@ void MMMEngine::Player::DetachSnowball()
 	matchedSnowball = nullptr;
 }
 
-void MMMEngine::Player::SnapToSnowball()
+void MMMEngine::Player::SnapToSnowball(ObjPtr<GameObject> snow)
 {
-	if (!matchedSnowball) return;
+	if (!snow) return;
 
 	auto tr = GetTransform();
-	auto sTr = matchedSnowball->GetTransform();
+	auto sTr = snow->GetTransform();
 	if (!tr || !sTr) return;
 
-	auto sc = matchedSnowball->GetComponent<Snowball>();
+	auto sc = snow->GetComponent<Snowball>();
 	if (!sc) return;
 
 	auto snowPos = sTr->GetWorldPosition();
@@ -140,6 +142,13 @@ void MMMEngine::Player::HandleAttack()
 	const float range = battledist;
 	const float rangeSq = range * range;
 
+	const float cosHalfFov = 0.5f;
+
+	// 플레이어 Forward (XZ 평면 기준)
+	Vector3 forward = -GetTransform()->GetWorldMatrix().Forward();
+	forward.y = 0.0f;
+	forward.Normalize();
+
 	bool hasEnemyInRange = false;
 
 	// 범위 안 적이 있는지 체크
@@ -154,14 +163,21 @@ void MMMEngine::Player::HandleAttack()
 		if (!tr) continue;
 
 		auto p = tr->GetWorldPosition();
-		float dx = p.x - pos.x;
-		float dz = p.z - pos.z;
+		Vector3 toEnemy = p - pos;
+		toEnemy.y = 0.0f;
 
-		if (dx * dx + dz * dz <= rangeSq)
-		{
-			hasEnemyInRange = true;
-			break;
-		}
+		float distSq = toEnemy.LengthSquared();
+		if (distSq > rangeSq)
+			continue;
+
+		toEnemy.Normalize();
+
+		float dot = forward.Dot(toEnemy);
+		if (dot < cosHalfFov)
+			continue;
+
+		hasEnemyInRange = true;
+		break;
 	}
 
 	if (!hasEnemyInRange)
@@ -186,13 +202,21 @@ void MMMEngine::Player::HandleAttack()
 		if (!tr) continue;
 
 		auto p = tr->GetWorldPosition();
-		float dx = p.x - pos.x;
-		float dz = p.z - pos.z;
 
-		if (dx * dx + dz * dz > rangeSq)
+		Vector3 toEnemy = p - pos;
+		toEnemy.y = 0.0f;
+
+		float distSq = toEnemy.LengthSquared();
+		if (distSq > rangeSq)
 			continue;
 
-		tec->GetDamage(atk);
+		toEnemy.Normalize();
+
+		float dot = forward.Dot(toEnemy);
+		if (dot < cosHalfFov)
+			continue;
+
+		BattleManager::instance->Attack(e, atk);
 		tec->PlayerHitMe();
 	}
 }
@@ -254,4 +278,21 @@ void MMMEngine::Player::BuildOn()
 		}
 		
 	}
+}
+
+void MMMEngine::Player::Velocitydown()
+{
+	if (GetMatchedSnowball())
+	{
+		velocitydown = matchedSnowball->GetComponent<Snowball>()->GetPoint() * 0.13;
+	}
+}
+
+void MMMEngine::Player::LevelUp()
+{ 
+	if (level >= 10)
+		return;
+	level += 1;
+	maxpoint += 2;
+	atk += 1;
 }

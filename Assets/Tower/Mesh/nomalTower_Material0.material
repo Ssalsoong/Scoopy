@@ -1,12 +1,12 @@
 {
-    "MUID": "83a777f0-2a4a-44b4-9a95-eb20a80df89c",
+    "MUID": "32e24c3a-43de-456c-8898-45d3d7666e22",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\PortalTowerlvl01_BaseColor.png",
             "type": "Texture2D"
         },
-        "_metallic": {
-            "file": "Assets\\Tower\\FBX\\PortalTowerlvl01_Metallic.png",
+        "_emissive": {
+            "file": "Assets\\Tower\\FBX\\PortalTowerlvl01_Emissive.png",
             "type": "Texture2D"
         }
     },

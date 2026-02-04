@@ -10,6 +10,7 @@
 #include "../Player/Player.h"
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
+#include "../Manager/BattleManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -43,7 +44,7 @@ void MMMEngine::Arrow::Update()
 		return;
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();
-	atk = owner->GetComponent<Enemy>()->stats.atk;
+	atk = owner->GetComponent<Enemy>()->atk;
 	auto pos = GetTransform()->GetWorldPosition();
 
 	// 방향/거리
@@ -73,10 +74,7 @@ void MMMEngine::Arrow::Update()
 
 	if (left.LengthSquared() <= hitRadius * hitRadius)
 	{
-		// 데미지(컴포넌트로 판별)
-		if (auto p = target->GetComponent<Player>())        p->GetDamage(atk);
-		else if (auto c = target->GetComponent<Castle>())   c->GetDamage(atk);
-		else if (auto b = target->GetComponent<Building>()) b->GetDamage(atk);
+		BattleManager::instance->Attack(target, atk);
 
 		owner->GetComponent<ArrowEnemy>()->ReturnArrow(GetGameObject());
 		target = nullptr;

@@ -1,12 +1,16 @@
 {
-    "MUID": "efa70b4c-93bd-4698-8973-932fc40dd444",
+    "MUID": "3cd81e0b-baca-40d3-b55c-c1952e12b48b",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\PortalTowerPropsGold_BaseColor.png",
             "type": "Texture2D"
         },
+        "_emissive": {
+            "file": "Assets\\Tower\\FBX\\lambert1_Emissive.png",
+            "type": "Texture2D"
+        },
         "_metallic": {
-            "file": "Assets\\Tower\\FBX\\PortalTowerProps_Metallic.png",
+            "file": "Assets\\Tower\\FBX\\PortalTowerPropsSilver_Metallic.png",
             "type": "Texture2D"
         }
     },

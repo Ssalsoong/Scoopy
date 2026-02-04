@@ -57,7 +57,10 @@ void MMMEngine::GameManager::Update()
 			nowSetting = true;
 			wave += 1;
 			BuildingManager::instance->BuildingReturn();
+			EnemySpawner::instance->EnemyUpgrade();
 			playercomp->buildchance = true;
+			playercomp->HP = playercomp->maxHP;
+			castlecomp->HP = castlecomp->maxHP;
 		}
 	}
 

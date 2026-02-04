@@ -4,6 +4,8 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Building.h"
+#include "../Enemy/Enemy.h"
+#include "Transform.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -29,6 +31,44 @@ void MMMEngine::DebuffBuilding::Start()
 
 void MMMEngine::DebuffBuilding::Update()
 {
+}
+
+void MMMEngine::DebuffBuilding::GiveDebuff()
+{
+	std::unordered_set<ObjPtr<Enemy>> nowInside;
+
+	auto pos = GetTransform()->GetWorldPosition();
+	float bestD2 = debuffdist * debuffdist;
+	auto enemys = GetGameObject()->FindGameObjectsWithTag("Enemy");
+	
+	for (auto& e : enemys)
+	{
+		if (!e) continue;
+
+		auto enemy = e->GetComponent<Enemy>();
+		if (!enemy) continue;
+
+		auto epos = e->GetTransform()->GetWorldPosition();
+
+		float dx = pos.x - epos.x;
+		float dz = pos.z - epos.z;
+		float d2 = dx * dx + dz * dz;
+
+		if (d2 < bestD2)
+			nowInside.insert(enemy);
+	}
+	for (auto& enemy : nowInside)
+	{
+		if (m_inside.find(enemy) == m_inside.end())
+			enemy->attackDelay /= debuff;
+	}
+	for (auto& enemy : m_inside)
+	{
+		if (nowInside.find(enemy) == nowInside.end())
+			enemy->attackDelay *= debuff;
+	}
+	m_inside.swap(nowInside);
+
 }
 
 void MMMEngine::DebuffBuilding::LevelApply(int level)

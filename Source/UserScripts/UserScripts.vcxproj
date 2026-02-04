@@ -116,6 +116,7 @@
     <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp" />
     <ClCompile Include="Scripts\Dongho\Enemy\NormalEnemy.cpp" />
     <ClCompile Include="Scripts\Dongho\Enemy\ThiefEnemy.cpp" />
+    <ClCompile Include="Scripts\Dongho\Manager\BattleManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h" />
     <ClInclude Include="Scripts\Dongho\Enemy\NormalEnemy.h" />
     <ClInclude Include="Scripts\Dongho\Enemy\ThiefEnemy.h" />
+    <ClInclude Include="Scripts\Dongho\Manager\BattleManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h" />
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h" />

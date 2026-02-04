@@ -1,28 +1,12 @@
+#include "Export.h"
+#include "ScriptBehaviour.h"
 #include "Castle.h"
 #include "MMMTime.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "StaticMesh.h"
 #include "MeshRenderer.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
 #include "Castleball.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<Castle>("Castle")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Castle>"))
-		.property_readonly("Point", &Castle::point);
-
-	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
-		.constructor(
-			[]() {
-				return Object::NewObject<Castle>();
-			}).method("Inject", &ObjPtr<Castle>::Inject);
-}
 
 void MMMEngine::Castle::Start()
 {
@@ -151,4 +135,11 @@ void MMMEngine::Castle::PointUp(int t)
 {
 	point += t;
 	exp += 10 * t;
+}
+
+void MMMEngine::Castle::LevelUp()
+{
+	if (level >= 10)
+		return;
+	atk += 2;
 }

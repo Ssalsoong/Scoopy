@@ -20,12 +20,12 @@ namespace MMMEngine
 
         void Start();
         void Update();
-		int HP = 10;
-		int atk = 4;
-		float velocity = 13.0f;
-		float attackDelay = 1.0f;
-		float battledist = 10.0f;
-		float checkdist = 12.0f;
+		int HP = 15;
+		int atk = 2;
+		float velocity = 8.0f;
+		float attackDelay = 0.4f;
+		float battledist = 2.0f;
+		float checkdist = 4.0f;
         std::queue<ObjPtr<GameObject>> Arrows;
         ResPtr<StaticMesh> arrowmesh;
         ObjPtr<GameObject> target;

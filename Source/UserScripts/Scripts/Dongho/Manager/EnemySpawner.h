@@ -28,6 +28,7 @@ namespace MMMEngine {
 		void EnemyDeath(ObjPtr<GameObject> obj);
 		void WaveSetting(int wave);
 		bool WaveSpawn(int wave);
+		void EnemyUpgrade();
 		float spawnTimer = 0.0f;
 		float spawnDelay = 0.5f;
 		static constexpr int SpawnPointCount = 12;

@@ -1,8 +1,12 @@
 {
-    "MUID": "3993c6f3-dbbb-4e1d-a502-6bafc471ac93",
+    "MUID": "6884e4cd-83e3-4c25-9dfa-24831d60746a",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\PortalTowerPropsSilver_ BaseColor.png",
+            "type": "Texture2D"
+        },
+        "_emissive": {
+            "file": "Assets\\Tower\\FBX\\lambert1_Emissive.png",
             "type": "Texture2D"
         },
         "_metallic": {

@@ -1,12 +1,12 @@
 {
-    "MUID": "6aba9531-7beb-4de8-9684-2f51d4db9c3a",
+    "MUID": "c9a48e12-87a4-4c3e-bd06-e51b19acf25f",
     "properties": {
         "_albedo": {
-            "file": "Assets\\Tower\\FBX\\lambert1_Base_Color.png",
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_BaseColor.png",
             "type": "Texture2D"
         },
-        "_metallic": {
-            "file": "Assets\\Tower\\FBX\\lambert1_Metallic.png",
+        "_emissive": {
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_Emissive.png",
             "type": "Texture2D"
         }
     },

@@ -4,6 +4,7 @@
 
 namespace MMMEngine
 {
+    class Enemy;
     class USERSCRIPTS DebuffBuilding : public ScriptBehaviour
     {
     private:
@@ -17,8 +18,11 @@ namespace MMMEngine
 
         }
         float debuff = 0.8f;
+        float debuffdist = 3.0f;
+        std::unordered_set<ObjPtr<Enemy>> m_inside;
         void Start();
         void Update();
+        void GiveDebuff();
         void LevelApply(int level);
     };
 }
