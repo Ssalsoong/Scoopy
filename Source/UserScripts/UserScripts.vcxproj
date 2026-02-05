@@ -124,6 +124,7 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\TestValidFade.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
+    <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\TestValidFade.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h" />

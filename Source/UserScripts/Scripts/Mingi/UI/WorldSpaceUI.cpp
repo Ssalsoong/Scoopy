@@ -82,11 +82,15 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 			{
 				// 화면 내에 존재함
 				m_rectGraphic->SetEnabled(false);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(false);
 			}
 			else
 			{
 				// 화면 밖에 존재함
 				m_rectGraphic->SetEnabled(true);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(true);
 			}
 		}
 

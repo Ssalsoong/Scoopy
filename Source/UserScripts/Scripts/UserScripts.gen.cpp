@@ -12,6 +12,7 @@
 #include "ChangeScreen.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/UI/FadeInOutFX.h"
+#include "Mingi/UI/RotateTrakingUI.h"
 #include "Mingi/UI/TestValidFade.h"
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
@@ -48,6 +49,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<FadeInOutFX>>("ObjPtr<FadeInOutFX>")
 		.constructor([]() { return Object::NewObject<FadeInOutFX>(); })
 		.method("Inject", &ObjPtr<FadeInOutFX>::Inject);
+
+	registration::class_<RotateTrakingUI>("RotateTrakingUI")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<RotateTrakingUI>"))
+		.property("WorldSpaceUI", &RotateTrakingUI::WorldSpaceUI);
+
+	registration::class_<ObjPtr<RotateTrakingUI>>("ObjPtr<RotateTrakingUI>")
+		.constructor([]() { return Object::NewObject<RotateTrakingUI>(); })
+		.method("Inject", &ObjPtr<RotateTrakingUI>::Inject);
 
 	registration::class_<TestValidFade>("TestValidFade")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TestValidFade>"));
