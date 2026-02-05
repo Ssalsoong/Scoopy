@@ -7,6 +7,11 @@
 
 //WorldSpaceUIManager가 targetPos를 받아서 z축으로 UIRenderOrder를 설정해주도록 변경할 예정
 
+bool MMMEngine::WorldSpaceUI::IsTargetInScreen()
+{
+	return m_isTargetInScreen;
+}
+
 void MMMEngine::WorldSpaceUI::Awake()
 {
 	//WorldSpaceUI 매니저에 자신을 등록시키기
@@ -74,11 +79,11 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 
 
 		Vector2 canSize = canvas->GetCanvasSize();
-
+		m_isTargetInScreen = targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset;
 
 		if (HideWhenOutsideScreen)
 		{
-			if (targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset)
+			if (m_isTargetInScreen)
 			{
 				// 화면 내에 존재함
 				m_rectGraphic->SetEnabled(false);

@@ -12,7 +12,8 @@ namespace MMMEngine
     private:
         RTTR_ENABLE(ScriptBehaviour)
         RTTR_REGISTRATION_FRIEND
-		float m_lastDistance = 0.0f;    
+		float m_lastDistance = 0.0f;   
+        bool m_isTargetInScreen = false;
     public:
         WorldSpaceUI()
         {
@@ -25,6 +26,8 @@ namespace MMMEngine
 
         float GetLastDistance() const { return m_lastDistance; }
         void SetUIRenderOrder(int order) { if (m_rectGraphic.IsValid()) m_rectGraphic->SetRenderOrder(order); }
+
+        bool IsTargetInScreen();
 
         USCRIPT_MESSAGE()
         void Awake();

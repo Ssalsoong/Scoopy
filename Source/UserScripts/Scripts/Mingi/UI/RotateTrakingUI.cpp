@@ -20,7 +20,15 @@ void MMMEngine::RotateTrakingUI::Update()
 	if (!WorldSpaceUI.IsValid())
 		return;
 
+
+	if (WorldSpaceUI->IsTargetInScreen())
+	{
+		GetTransform()->SetWorldEulerRotation({ 0.0f, 0.0f, 0 });
+		return;
+	}
+
 	auto target = WorldSpaceUI->TargetTransform;
+
 
 	if (target.IsValid() && !target->IsDestroyed())
 	{
