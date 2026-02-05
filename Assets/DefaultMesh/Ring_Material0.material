@@ -1,5 +1,5 @@
 {
-    "MUID": "0d0ff054-b337-4e62-aec1-b9226cd7b5cc",
+    "MUID": "d125f4cc-6374-445c-98b6-d307a368b822",
     "properties": {
         "_albedo": {
             "file": "Assets\\DefaultMesh\\Default_White.png",
@@ -10,6 +10,6 @@
         "file": "Shader/PBR/PS/BRDFShader.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
     }
 }

@@ -1,4 +1,5 @@
-﻿#include "rttr/type"
+﻿#pragma once
+#include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "SimpleMath.h"
 #include "UserScriptsCommon.h"
@@ -17,7 +18,9 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		struct PlayerInfo
 		{
@@ -29,9 +32,18 @@ namespace MMMEngine
 			float attackDelay = 0.65f;
 			int maxpoint = 10;
 		};
+
+
+		USCRIPT_PROPERTY()
 		float velocity = 5.0f;
+
+		USCRIPT_PROPERTY()
 		int healHP = 10;
+
+		USCRIPT_PROPERTY()
 		float healDelay = 1.0f;
+
+
 		float nonfightDelay = 10.0f;
 		float damageDelay = 0.1f;
 		float baseRadius = 0.5f;

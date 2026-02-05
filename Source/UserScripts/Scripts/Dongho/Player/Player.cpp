@@ -9,20 +9,6 @@
 #include "../Manager/SnowballManager.h"
 #include "../Snow/Snowball.h"
 
-RTTR_PLUGIN_REGISTRATION
-{
-    using namespace rttr;
-    using namespace MMMEngine;
-
-    registration::class_<Player>("Player")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"));
-    registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
-        .constructor(
-            []() {
-                return Object::NewObject<Player>();
-	}).method("Inject", &ObjPtr<Player>::Inject);;
-}
-
 void MMMEngine::Player::Start()
 {
 }
