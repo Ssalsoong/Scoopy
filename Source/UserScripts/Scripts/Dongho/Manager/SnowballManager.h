@@ -35,7 +35,9 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		void OnScoopStart(Player& player);
 		void OnScoopHold(Player& player);
@@ -49,5 +51,8 @@ namespace MMMEngine {
 		ResPtr<StaticMesh> snowmesh;
 		DirectX::SimpleMath::Vector3 castlepos;
 		static ObjPtr<SnowballManager> instance;
+
+		USCRIPT_PROPERTY()
+		ObjPtr<GameObject> m_Player;
 	};
 }

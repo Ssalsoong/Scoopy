@@ -32,6 +32,7 @@ namespace MMMEngine {
 		float enemySpawnTimer = 0.0f;
 		float settingTimer = 0.0f;
 
+		bool GameWin = false;
 		bool GameOver = false;
 		bool nowSetting = true;
 		int wave = 1;

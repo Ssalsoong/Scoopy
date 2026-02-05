@@ -6,24 +6,8 @@
 #include "Transform.h"
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "MeshRenderer.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<SnowballManager>("SnowballManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager>"));
-
-	registration::class_<ObjPtr<SnowballManager>>("ObjPtr<SnowballManager>")
-		.constructor(
-			[]() {
-				return Object::NewObject<SnowballManager>();
-			}).method("Inject", &ObjPtr<SnowballManager>::Inject);
-}
+#include "../../test/PlayerMove.h"
 
 MMMEngine::ObjPtr<MMMEngine::SnowballManager> MMMEngine::SnowballManager::instance = nullptr;
 
@@ -77,6 +61,13 @@ void MMMEngine::SnowballManager::OnScoopStart(Player& player)
 	if (nearest)
 	{
 		nearest->GetComponent<Snowball>()->carrier = &player;
+		
+		if (m_Player.IsValid())
+		{
+			auto t_move = m_Player->GetComponent<PlayerMove>();
+			t_move->SetScoopMode(true, nearest);
+		}
+
 		player.SnapToSnowball(nearest);
 		player.AttachSnowball(nearest);
 		scoopStates[&player] = {};
@@ -119,6 +110,11 @@ void MMMEngine::SnowballManager::OnScoopHold(Player& player)
 	if (auto sc = obj->GetComponent<Snowball>())
 	{
 		sc->carrier = &player;
+	}
+	if (m_Player.IsValid())
+	{
+		auto t_move = m_Player->GetComponent<PlayerMove>();
+		t_move->SetScoopMode(true, obj);
 	}
 	player.AttachSnowball(obj);
 

@@ -14,6 +14,14 @@ void MMMEngine::BuildingPoint::Update()
 {
 	if (!player) return;
 	playerpos = player->GetTransform()->GetWorldPosition();
+	if (player->GetComponent<Player>()->buildchance)
+	{
+		GetComponent<MeshRenderer>()->SetEnabled(true);
+	}
+	else
+	{
+		GetComponent<MeshRenderer>()->SetEnabled(false);
+	}
 	CheckPlayer();
 }
 

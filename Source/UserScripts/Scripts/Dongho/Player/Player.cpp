@@ -9,6 +9,7 @@
 #include "../Building/BuildingPoint.h"
 #include "../Manager/BuildingManager.h"
 #include "../Manager/BattleManager.h"
+#include "../../test/PlayerMove.h"
 
 void MMMEngine::Player::Start()
 {
@@ -17,7 +18,7 @@ void MMMEngine::Player::Start()
 void MMMEngine::Player::Update()
 {
 	pos = GetTransform()->GetWorldPosition();
-	HandleMovement();
+	//HandleMovement();
 	Velocitydown();
 	if(buildchance)
 		BuildOn();
@@ -82,6 +83,10 @@ void MMMEngine::Player::DetachSnowball()
 	if (!matchedSnowball) return;
 	matchedSnowball->GetTransform()->SetParent(nullptr);
 	matchedSnowball = nullptr;
+	
+	auto t_move = GetComponent<PlayerMove>();
+	t_move->SetScoopMode(false, nullptr);
+	
 }
 
 void MMMEngine::Player::SnapToSnowball(ObjPtr<GameObject> snow)

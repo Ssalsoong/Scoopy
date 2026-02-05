@@ -1,17 +1,107 @@
 {
-    "MUID": "7ac72d95-f45d-49f6-a95b-1876b8aeff75",
+    "MUID": "7077f3ea-d08c-48a6-a902-c795cd266e3d",
     "properties": {
         "_albedo": {
-            "file": "Assets\\Tower\\FBX\\Firetower_props_Base_Color.png",
+            "file": "",
+            "type": "Texture2D"
+        },
+        "_ambientOcclusion": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_brdflut": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
         "_emissive": {
-            "file": "Assets\\Tower\\FBX\\Firetower_props_Emissive.png",
+            "file": "",
+            "type": "Texture2D"
+        },
+        "_irradiance": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
         "_metallic": {
-            "file": "Assets\\Tower\\FBX\\Firetower_props_Metallic.png",
+            "file": "",
             "type": "Texture2D"
+        },
+        "_normal": {
+            "file": "Shader/Resource/Default_Texture/Default_Normal.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_roughness": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_shadowmap": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_specular": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "mAoStrength": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mBaseColor": {
+            "type": "Vector4",
+            "value": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mEmissive": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mIntensity": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightColor": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightDir": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightPadding": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightPos": {
+            "type": "Vector4",
+            "value": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mMetallic": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoughness": {
+            "type": "float",
+            "value": 0.0
         }
     },
     "pshader": {

@@ -25,7 +25,7 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::Building::Start()
 {
-	buildingballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Sphere_StaticMesh.staticmesh");
+	buildingballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
 	for (int i = 0; i < 10;++i)
 	{
 		auto obj = NewObject<GameObject>();
@@ -104,22 +104,21 @@ void MMMEngine::Building::AutoAttack()
 		attackTimer = 0.0f;
 		return;
 	}
+	attackTimer += Time::GetDeltaTime();
 	if (attackTimer == 0.0f)
 	{
-		if (Buildingballs.empty())
+		if (Buildingballs.empty()){
+			attackTimer = 0.0f;
 			return;
+		}
 		auto obj = Buildingballs.front();
 		Buildingballs.pop();
 		if (!obj)
 			return;
 		obj->SetActive(true);
 		obj->GetComponent<Buildingball>()->SetTarget(enemyTarget);
-		point--;
-	}
-	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= attackDelay)
-	{
 		attackTimer = 0.0f;
+		point--;
 	}
 }
 

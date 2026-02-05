@@ -1,9 +1,107 @@
 {
-    "MUID": "844fa07d-5a54-4455-bb19-656376d1dd33",
+    "MUID": "28e3758f-26ce-4db2-8d96-ad182d47ba77",
     "properties": {
         "_albedo": {
             "file": "Assets\\DefaultMesh\\Default_White.png",
             "type": "Texture2D"
+        },
+        "_ambientOcclusion": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_brdflut": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_emissive": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_irradiance": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_metallic": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_normal": {
+            "file": "Shader/Resource/Default_Texture/Default_Normal.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_roughness": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_shadowmap": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_specular": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "mAoStrength": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mBaseColor": {
+            "type": "Vector4",
+            "value": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mEmissive": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mIntensity": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightColor": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightDir": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightPadding": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightPos": {
+            "type": "Vector4",
+            "value": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mMetallic": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoughness": {
+            "type": "float",
+            "value": 0.0
         }
     },
     "pshader": {

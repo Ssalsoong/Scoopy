@@ -38,6 +38,15 @@ void MMMEngine::GameManager::Start()
 
 void MMMEngine::GameManager::Update()
 {
+	if (GameWin)
+	{
+
+	}
+
+	if (GameOver)
+	{
+
+	}
 
 	if (nowSetting)
 	{
@@ -54,6 +63,10 @@ void MMMEngine::GameManager::Update()
 	{
 		if (!EnemySpawner::instance->WaveSpawn(wave))
 		{
+			if (wave == 10) {
+				GameWin = true;
+				return;
+			}
 			nowSetting = true;
 			wave += 1;
 			BuildingManager::instance->BuildingReturn();
@@ -69,5 +82,6 @@ void MMMEngine::GameManager::Update()
 	if (playercomp->PlayerDeath() || castlecomp->CastleDeath())
 	{
 		GameOver = true;
+		return;
 	}
 }
