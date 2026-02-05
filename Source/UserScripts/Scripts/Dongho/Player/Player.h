@@ -24,8 +24,6 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
 		int level = 0;
 		USCRIPT_PROPERTY()
-		int HP = 100;
-		USCRIPT_PROPERTY()
 		int maxHP = 100;
 		USCRIPT_PROPERTY()
 		float battledist = 0.7f;
@@ -58,8 +56,6 @@ namespace MMMEngine
 		void AutoHeal();
 		void HandleAttack();
 		void UpdateScoop();
-		void GetDamage(int t);
-		bool PlayerDeath() const { return HP <= 0; }
 		bool AttachSnowball(ObjPtr<GameObject> snow);
 		void DetachSnowball();
 		void SnapToSnowball(ObjPtr<GameObject> snow);
@@ -69,5 +65,9 @@ namespace MMMEngine
 		void BuildOn();
 		void LevelUp();
 		void Velocitydown();
+
+		void CalDamageDelay();
+		void GetDamage(int t);
+		void Dead();
     };
 }

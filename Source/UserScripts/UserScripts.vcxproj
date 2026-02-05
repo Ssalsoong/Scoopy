@@ -102,6 +102,7 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <ClCompile Include="Scripts\Dongho\Battlestats.cpp" />
     <ClCompile Include="Scripts\Dongho\Building\BuffBuilding.cpp" />
     <ClCompile Include="Scripts\Dongho\Building\Building.cpp" />
     <ClCompile Include="Scripts\Dongho\Building\BuildingPoint.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="Scripts\test\SnowCollider.cpp" />
     <ClCompile Include="Scripts\test\SnowTrigger.cpp" />
     <ClCompile Include="Scripts\test\TileMap.cpp" />
+    <ClInclude Include="Scripts\Dongho\Battlestats.h" />
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h" />
     <ClInclude Include="Scripts\Dongho\Building\Building.h" />
     <ClInclude Include="Scripts\Dongho\Building\BuildingPoint.h" />

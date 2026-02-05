@@ -1,8 +1,8 @@
 {
-    "MUID": "2277e91c-73af-475d-956f-65bf4d86a099",
+    "MUID": "3733484c-c3e8-401f-8105-b316f35b8c05",
     "properties": {
         "_albedo": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_BaseColor.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -14,7 +14,7 @@
             "type": "Texture2D"
         },
         "_emissive": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_Emissive.png",
             "type": "Texture2D"
         },
         "_irradiance": {
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

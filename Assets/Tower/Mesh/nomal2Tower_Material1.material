@@ -1,8 +1,8 @@
 {
-    "MUID": "a9c6f205-3afa-4bc0-be67-c0657c45c972",
+    "MUID": "3f94cfd0-658b-4ceb-a2df-3a9e4fa4c2b6",
     "properties": {
         "_albedo": {
-            "file": "D:/Project/Scoopy/Assets/Tower/FBX/PortalTowerlvl01_BaseColor.png",
+            "file": "Assets\\Tower\\FBX\\PortalTowerPropsGold_BaseColor.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -47,20 +47,20 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {
             "type": "float",
-            "value": 0.5210420841683366
+            "value": 0.0
         },
         "mIntensity": {
             "type": "float",

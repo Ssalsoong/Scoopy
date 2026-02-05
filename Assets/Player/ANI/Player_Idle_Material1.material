@@ -1,5 +1,5 @@
 {
-    "MUID": "400d91c3-7307-4555-9c1d-8735a7f5e0b2",
+    "MUID": "df62b0b1-1555-4cab-af17-141662e7e2dc",
     "properties": {
         "_albedo": {
             "file": "Assets\\Player\\ANI\\Pink_Expressions.png",
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

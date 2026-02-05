@@ -1,8 +1,8 @@
 {
-    "MUID": "6a24b5e2-24ff-4a15-9462-7aca65d35858",
+    "MUID": "24a4e834-b1c4-46cd-b902-a910891b63d8",
     "properties": {
         "_albedo": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_BaseColor.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -14,7 +14,7 @@
             "type": "Texture2D"
         },
         "_emissive": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_Emissive.png",
             "type": "Texture2D"
         },
         "_irradiance": {
@@ -22,7 +22,7 @@
             "type": "Texture2D"
         },
         "_metallic": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\IceTowerProps_Metallic.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

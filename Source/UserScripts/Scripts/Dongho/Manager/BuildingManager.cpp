@@ -12,6 +12,7 @@
 #include "../Building/DebuffBuilding.h"
 #include "../Building/SnowBuilding.h"
 #include "../Building/BuildingPoint.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -71,6 +72,8 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	obj->SetName("Building");
 	obj->SetTag("Building");
 	obj->AddComponent<Building>();
+	obj->AddComponent<Battlestats>();
+	obj->GetComponent<Battlestats>()->HP = 50;
 	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
 	obj->GetTransform()->SetWorldScale(buildingscale);
 	Buildings.push_back(obj);
@@ -84,8 +87,8 @@ void MMMEngine::BuildingManager::BuildingReturn()
 		{
 			obj->GetComponent<Building>()->isDead = false;
 			obj->SetActive(true);
-			obj->GetComponent<Building>()->HP = obj->GetComponent<Building>()->maxHP;
 		}
+		obj->GetComponent<Battlestats>()->HP = obj->GetComponent<Building>()->maxHP;
 	}
 }
 

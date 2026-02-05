@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
 #include "Castleball.h"
+#include "../Manager/GameManager.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Castle::Start()
 {
@@ -104,6 +106,7 @@ void MMMEngine::Castle::ReturnBall(ObjPtr<GameObject> obj)
 
 void MMMEngine::Castle::AutoHeal()
 {
+	auto HP = GetComponent<Battlestats>()->HP;
 	if (prevHP > HP)
 	{
 		fighting = true;
@@ -128,6 +131,7 @@ void MMMEngine::Castle::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
+	GetComponent<Battlestats>()->HP = HP;
 }
 
 void MMMEngine::Castle::PointUp(int t)
@@ -141,4 +145,9 @@ void MMMEngine::Castle::LevelUp()
 	if (level >= 10)
 		return;
 	atk += 2;
+}
+
+void MMMEngine::Castle::Dead()
+{
+	GameManager::instance->GameOver = true;
 }

@@ -9,6 +9,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "BuildingManager.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -72,16 +73,8 @@ void MMMEngine::GameManager::Update()
 			BuildingManager::instance->BuildingReturn();
 			EnemySpawner::instance->EnemyUpgrade();
 			playercomp->buildchance = true;
-			playercomp->HP = playercomp->maxHP;
-			castlecomp->HP = castlecomp->maxHP;
+			player->GetComponent<Battlestats>()->HP = playercomp->maxHP;
+			castle->GetComponent<Battlestats>()->HP = castlecomp->maxHP;
 		}
-	}
-
-
-
-	if (playercomp->PlayerDeath() || castlecomp->CastleDeath())
-	{
-		GameOver = true;
-		return;
 	}
 }
