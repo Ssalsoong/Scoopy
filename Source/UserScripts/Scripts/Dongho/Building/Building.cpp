@@ -42,11 +42,11 @@ void MMMEngine::Building::Start()
 		obj->SetActive(false);
 		Buildingballs.push(obj);
 	}
+	pos = GetTransform()->GetWorldPosition();
 }
 
 void MMMEngine::Building::Update()
 {
-	pos = GetTransform()->GetWorldPosition();
 	CheckEnemy();
 	AutoAttack();
 }

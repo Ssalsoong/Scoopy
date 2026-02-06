@@ -126,11 +126,15 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
+    <ClCompile Include="Scripts\test\CastleManager.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
+    <ClCompile Include="Scripts\test\MeshSize.cpp" />
+    <ClCompile Include="Scripts\test\PlayerController.cpp" />
     <ClCompile Include="Scripts\test\PlayerMove.cpp" />
     <ClCompile Include="Scripts\test\SnowBullet.cpp" />
     <ClCompile Include="Scripts\test\SnowCollider.cpp" />
     <ClCompile Include="Scripts\test\SnowTrigger.cpp" />
+    <ClCompile Include="Scripts\test\SnowballManager2.cpp" />
     <ClCompile Include="Scripts\test\TileMap.cpp" />
     <ClInclude Include="Scripts\Dongho\Battlestats.h" />
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h" />
@@ -155,11 +159,15 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
+    <ClInclude Include="Scripts\test\CastleManager.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
+    <ClInclude Include="Scripts\test\MeshSize.h" />
+    <ClInclude Include="Scripts\test\PlayerController.h" />
     <ClInclude Include="Scripts\test\PlayerMove.h" />
     <ClInclude Include="Scripts\test\SnowBullet.h" />
     <ClInclude Include="Scripts\test\SnowCollider.h" />
     <ClInclude Include="Scripts\test\SnowTrigger.h" />
+    <ClInclude Include="Scripts\test\SnowballManager2.h" />
     <ClInclude Include="Scripts\test\TileMap.h" />
   </ItemGroup>
 

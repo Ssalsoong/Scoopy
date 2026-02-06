@@ -28,11 +28,11 @@ void MMMEngine::Castle::Start()
 		obj->SetActive(false);
 		Castleballs.push(obj);
 	}
+	pos = GetTransform()->GetWorldPosition();
 }
 
 void MMMEngine::Castle::Update()
 {
-	pos = GetTransform()->GetWorldPosition();
 	CheckEnemy();
 	AutoAttack();
 	AutoHeal();
@@ -144,7 +144,9 @@ void MMMEngine::Castle::LevelUp()
 {
 	if (level >= 10)
 		return;
+	level ++;
 	atk += 2;
+	GameManager::instance->levelsum++;
 }
 
 void MMMEngine::Castle::Dead()

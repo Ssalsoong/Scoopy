@@ -14,15 +14,50 @@ namespace MMMEngine
     public:
         SnowCollider()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(FixedUpdate);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
-        REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
         USCRIPT_MESSAGE()
         void Start();
 
+        
         USCRIPT_MESSAGE()
-        void Update();
+        void FixedUpdate();
+
+        bool On_Player = false;
+        ObjPtr<GameObject> m_player;
+        DirectX::SimpleMath::Vector3 curPos{};
+
+        float m_Size = 0.0f;
+        void SetSize(float size);
+
+        USCRIPT_PROPERTY()
+        float m_Rolesmooth = 5.0f;
+            
+        bool m_hasPrevPlayerPos = false;
+
+        void SetOnPlayer(bool value , ObjPtr<GameObject> player);
+
+        ObjPtr<GameObject> TriggerCollider;
+
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> SnowManager;
+
+        DirectX::SimpleMath::Vector3 m_prevPlayerPos;
+        DirectX::SimpleMath::Quaternion m_prevPlayerRot;
+        DirectX::SimpleMath::Vector3 m_localOffset;
+        DirectX::SimpleMath::Quaternion m_localRotOffset;
+
+        DirectX::SimpleMath::Quaternion ComputeRollingRotation(DirectX::SimpleMath::Vector3& delta, float dt) const;
+
+        USCRIPT_PROPERTY()
+        float m_holdDistance = 0.5f;
+
+        float m_holdHeight = 0.0f;
+
+        void SnowDestory();
+
     };
 }

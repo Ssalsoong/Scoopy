@@ -1,9 +1,11 @@
-﻿#include "rttr/type"
+﻿#pragma once
+#include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include "SimpleMath.h"
 #include "StaticMesh.h"
 #include <array>
+#include "Prefab.h"
 
 using DirectX::SimpleMath::Vector3;
 namespace MMMEngine
@@ -50,6 +52,9 @@ namespace MMMEngine
         ResPtr<StaticMesh> snowbuildingmesh;
         std::vector<ObjPtr<GameObject>> buildingpoints;
         std::vector<ObjPtr<GameObject>> Buildings;
+
+        ResPtr<Prefab> m_building;
+
         static ObjPtr<BuildingManager> instance;
     };
 }

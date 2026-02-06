@@ -10,7 +10,7 @@
 #include "../Building/BuildingPoint.h"
 #include "../Manager/BuildingManager.h"
 #include "../Manager/BattleManager.h"
-#include "../../test/PlayerMove.h"
+//#include "../../test/PlayerMove.h"
 #include "../Battlestats.h"
 
 void MMMEngine::Player::Start()
@@ -87,8 +87,8 @@ void MMMEngine::Player::DetachSnowball()
 	matchedSnowball->GetTransform()->SetParent(nullptr);
 	matchedSnowball = nullptr;
 	
-	auto t_move = GetComponent<PlayerMove>();
-	t_move->SetScoopMode(false, nullptr);
+	//auto t_move = GetComponent<PlayerMove>();
+	//t_move->SetScoopMode(false, nullptr);
 	
 }
 
@@ -291,9 +291,10 @@ void MMMEngine::Player::LevelUp()
 { 
 	if (level >= 10)
 		return;
-	level += 1;
+	level ++;
 	maxpoint += 2;
-	atk += 1;
+	atk ++;
+	GameManager::instance->levelsum++;
 }
 
 void MMMEngine::Player::CalDamageDelay()

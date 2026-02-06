@@ -36,6 +36,7 @@ namespace MMMEngine {
 		bool GameOver = false;
 		bool nowSetting = true;
 		int wave = 1;
+		int levelsum = 0;
 
 		ObjPtr<GameObject> player;
 		ObjPtr<GameObject> castle;
