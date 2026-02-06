@@ -11,6 +11,7 @@
 #include "rttr/detail/policies/ctor_policies.h"
 #include "StaticMesh.h"
 #include "../Battlestats.h"
+#include "Prefab.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -18,7 +19,10 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<EnemySpawner>("EnemySpawner")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"))
+		.property("m_normalenemy", &EnemySpawner::m_normalenemy)
+		.property("m_arrowenemy", &EnemySpawner::m_arrowenemy)
+		.property("m_thiefenemy", &EnemySpawner::m_thiefenemy);
 
 	registration::class_<ObjPtr<EnemySpawner>>("ObjPtr<EnemySpawner>")
 		.constructor(
@@ -32,53 +36,26 @@ MMMEngine::ObjPtr<MMMEngine::EnemySpawner> MMMEngine::EnemySpawner::instance = n
 void MMMEngine::EnemySpawner::Start()
 {
 	instance = GetGameObject()->GetComponent<EnemySpawner>();
-	normalenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Enemy/Mesh/Goblin_Warrior_StaticMesh.staticmesh");
 	for (int i = 0; i < 40; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("NormalEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_normalenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<Battlestats>();
-		obj->AddComponent<NormalEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(normalenemymesh);
-		obj->GetTransform()->SetWorldScale(normalsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		NormalEnemys.push(obj);
 	}
-	arrowenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Enemy/Mesh/Goblin_Archer_StaticMesh.staticmesh");
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("ArrowEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_arrowenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<Battlestats>();
-		obj->AddComponent<ArrowEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(arrowenemymesh);
-		obj->GetTransform()->SetWorldScale(arrowsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		ArrowEnemys.push(obj);
 	}
-	thiefenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Enemy/Mesh/Goblin_Scout_StaticMesh.staticmesh");
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("ThiefEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_thiefenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<Battlestats>();
-		obj->AddComponent<ThiefEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(thiefenemymesh);
-		obj->GetTransform()->SetWorldScale(thiefsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		ThiefEnemys.push(obj);

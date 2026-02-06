@@ -61,12 +61,18 @@ void MMMEngine::DebuffBuilding::GiveDebuff()
 	for (auto& enemy : nowInside)
 	{
 		if (m_inside.find(enemy) == m_inside.end())
+		{
+			enemy->velocity *= debuff;
 			enemy->attackDelay /= debuff;
+		}
 	}
 	for (auto& enemy : m_inside)
 	{
 		if (nowInside.find(enemy) == nowInside.end())
+		{
+			enemy->velocity /= debuff;
 			enemy->attackDelay *= debuff;
+		}
 	}
 	m_inside.swap(nowInside);
 
