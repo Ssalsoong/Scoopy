@@ -11,8 +11,10 @@ namespace MMMEngine
 		AT_Player = 0,
 		AT_Archer,
 		AT_Warrior,
-		AT_Scout
+		AT_Scout,
+		AT_END
 	};
+
 	class USERSCRIPTS AnimResourceManager : public ScriptBehaviour
 	{
 	private:
@@ -22,9 +24,12 @@ namespace MMMEngine
 			// AnimType, vec<AnimClip>
 			std::unordered_map<AnimType, std::vector<ResPtr<AnimationClip>>> mAnimClips;
 
+		static ObjPtr<AnimResourceManager> instance;
 	public:
 		AnimResourceManager()
 		{
+        if (AnimResourceManager::Get())
+        Destroy(SelfPtr(this));
         REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
@@ -45,5 +50,7 @@ namespace MMMEngine
 
 		const ResPtr<AnimationClip> GetAnimClip(AnimType _type, std::string _name);
 		const std::vector<ResPtr<AnimationClip>>* GetAnimClips(AnimType _type);
+	
+		static const ObjPtr<AnimResourceManager>& Get() { return instance; }
 	};
 }

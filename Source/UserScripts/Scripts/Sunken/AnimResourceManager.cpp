@@ -3,8 +3,14 @@
 #include "AnimResourceManager.h"
 #include "AnimationClip.h"
 
+
+MMMEngine::ObjPtr<MMMEngine::AnimResourceManager> MMMEngine::AnimResourceManager::instance;
+
 void MMMEngine::AnimResourceManager::Awake()
 {
+	if(!instance)
+		instance = SelfPtr(this);
+
 	// 플레이어 클립
 	mAnimClips[AnimType::AT_Player].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Player/Anims/Player_Idle_0.animclip"));

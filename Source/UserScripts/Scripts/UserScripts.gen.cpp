@@ -106,6 +106,8 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
 		.property("mAnimManager", &EnemyAnimController::mAnimManager)
 		.property("mAnimator", &EnemyAnimController::mAnimator)
+		.property("mEnemy", &EnemyAnimController::mEnemy)
+		.property("mAnimSpeed", &EnemyAnimController::mAnimSpeed)
 		.property("AnimSize", &EnemyAnimController::AnimSize);
 
 	registration::class_<ObjPtr<EnemyAnimController>>("ObjPtr<EnemyAnimController>")
