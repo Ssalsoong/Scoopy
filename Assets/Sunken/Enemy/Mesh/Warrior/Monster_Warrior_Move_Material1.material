@@ -1,0 +1,15 @@
+{
+    "MUID": "7ce5fd22-6993-4baf-ba43-45d7f9ab1495",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Sunken\\Enemy\\FBX\\T_Wood_Shield.png",
+            "type": "Texture2D"
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

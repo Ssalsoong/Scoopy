@@ -4,6 +4,8 @@
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include "Object.h"
+#include "GameObject.h"
+#include "CoreComponents.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 
@@ -13,6 +15,9 @@
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Manager/SnowballManager.h"
 #include "Dongho/Player/Player.h"
+#include "Sunken/AnimResourceManager.h"
+#include "Sunken/EnemyAnimController.h"
+#include "Sunken/PlayerAnimController.h"
 #include "test/EnemyMove.h"
 #include "test/PlayerMove.h"
 #include "test/SnowBullet.h"
@@ -81,6 +86,31 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
 		.constructor([]() { return Object::NewObject<Player>(); })
 		.method("Inject", &ObjPtr<Player>::Inject);
+
+	registration::class_<AnimResourceManager>("AnimResourceManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<AnimResourceManager>"))
+		.property("animSize", &AnimResourceManager::animSize);
+
+	registration::class_<ObjPtr<AnimResourceManager>>("ObjPtr<AnimResourceManager>")
+		.constructor([]() { return Object::NewObject<AnimResourceManager>(); })
+		.method("Inject", &ObjPtr<AnimResourceManager>::Inject);
+
+	registration::class_<EnemyAnimController>("EnemyAnimController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
+		.property("mAnimManager", &EnemyAnimController::mAnimManager)
+		.property("mAnimator", &EnemyAnimController::mAnimator)
+		.property("AnimSize", &EnemyAnimController::AnimSize);
+
+	registration::class_<ObjPtr<EnemyAnimController>>("ObjPtr<EnemyAnimController>")
+		.constructor([]() { return Object::NewObject<EnemyAnimController>(); })
+		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
+
+	registration::class_<PlayerAnimController>("PlayerAnimController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"));
+
+	registration::class_<ObjPtr<PlayerAnimController>>("ObjPtr<PlayerAnimController>")
+		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
+		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
 
 	registration::class_<EnemyMove>("EnemyMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))

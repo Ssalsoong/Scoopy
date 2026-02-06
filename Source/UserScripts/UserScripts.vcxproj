@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
+    <ProjectGuid>{B694363B-9400-5F73-BCCD-8583E0880F59}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -124,6 +124,9 @@
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp" />
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
+    <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp" />
+    <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp" />
+    <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
     <ClCompile Include="Scripts\test\PlayerMove.cpp" />
@@ -153,6 +156,9 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
+    <ClInclude Include="Scripts\Sunken\AnimResourceManager.h" />
+    <ClInclude Include="Scripts\Sunken\EnemyAnimController.h" />
+    <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
     <ClInclude Include="Scripts\test\PlayerMove.h" />
     <ClInclude Include="Scripts\test\SnowBullet.h" />

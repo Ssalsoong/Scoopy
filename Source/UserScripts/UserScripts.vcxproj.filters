@@ -28,6 +28,9 @@
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\EnemyMove.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\PlayerMove.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -57,6 +60,9 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\AnimResourceManager.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\EnemyAnimController.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\EnemyMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\PlayerMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowBullet.h"><Filter>Scripts</Filter></ClInclude>
