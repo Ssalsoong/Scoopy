@@ -1,13 +1,139 @@
 {
-    "MUID": "f5aedba7-2fe6-4a65-a1a6-ef9f3a08c676",
+    "MUID": "9a00c4a9-eebe-45c6-9e89-8d6325b7df84",
     "properties": {
         "_albedo": {
             "file": "Assets\\Sunken\\Enemy\\FBX\\T_Wood_Axe.png",
             "type": "Texture2D"
+        },
+        "_ambientOcclusion": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_brdflut": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_emissive": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_irradiance": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_lutMap": {
+            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
+            "type": "Texture2D"
+        },
+        "_normal": {
+            "file": "Shader/Resource/Default_Texture/Default_Normal.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_roughness": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_shadowmap": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_specular": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "mAoStrength": {
+            "type": "float",
+            "value": 0.5
+        },
+        "mBaseColor": {
+            "type": "Vector4",
+            "value": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+            ]
+        },
+        "mDiffGradientDepth": {
+            "type": "float",
+            "value": 68.32630157470703
+        },
+        "mDiffGradientDistHalf": {
+            "type": "float",
+            "value": 0.15625
+        },
+        "mDiffuseStr": {
+            "type": "float",
+            "value": 0.5
+        },
+        "mEmissive": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mIntensity": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightColor": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightDir": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLightPadding": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mLightPos": {
+            "type": "Vector4",
+            "value": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mLowLut": {
+            "type": "float",
+            "value": 0.5
+        },
+        "mPadding": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mRimLightStr": {
+            "type": "float",
+            "value": 0.5
+        },
+        "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mSpecularStr": {
+            "type": "float",
+            "value": 0.10000000149011612
         }
     },
     "pshader": {
-        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+        "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"

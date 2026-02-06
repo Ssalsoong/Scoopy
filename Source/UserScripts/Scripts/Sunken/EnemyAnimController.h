@@ -24,6 +24,8 @@ namespace MMMEngine
 		AnimType mAnimType = AnimType::AT_END;
 		Enemy::EnemyState prevStat = Enemy::EnemyState::Dead;
 
+		ObjPtr<AnimResourceManager> mAnimManager;
+
 		void UpdateArcher();
 		void UpdateWarrior();
 		void UpdateScout();
@@ -35,8 +37,7 @@ namespace MMMEngine
 
         }
 
-		USCRIPT_PROPERTY()
-			ObjPtr<AnimResourceManager> mAnimManager;
+		
 		USCRIPT_PROPERTY()
 			ObjPtr<Animator> mAnimator;
 

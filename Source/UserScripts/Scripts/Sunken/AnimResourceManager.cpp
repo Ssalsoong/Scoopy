@@ -30,14 +30,20 @@ void MMMEngine::AnimResourceManager::Awake()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Archer/Monster_Archer_Attack_0.animclip"));
 	mAnimClips[AnimType::AT_Archer].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Archer/Monster_Archer_Move_0.animclip"));
+	mAnimClips[AnimType::AT_Archer].push_back(ResourceManager::Get()
+		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Archer/Monster_Archer_dead_0.animclip"));
 	mAnimClips[AnimType::AT_Warrior].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Warrior/Monster_Warrior_Attack_0.animclip"));
 	mAnimClips[AnimType::AT_Warrior].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Warrior/Monster_Warrior_Move_0.animclip"));
+	mAnimClips[AnimType::AT_Warrior].push_back(ResourceManager::Get()
+		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Warrior/Monster_Warrior_dead_0.animclip"));
 	mAnimClips[AnimType::AT_Scout].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Scout/Monster_Scout_Attack_0.animclip"));
 	mAnimClips[AnimType::AT_Scout].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Scout/Monster_Scout_Move_0.animclip"));
+	mAnimClips[AnimType::AT_Scout].push_back(ResourceManager::Get()
+		.Load<AnimationClip>(L"Assets/Sunken/Enemy/Anim/Scout/Monster_Scout_dead_0.animclip"));
 
 	animSize = (int)mAnimClips[AnimType::AT_Archer].size();
 }

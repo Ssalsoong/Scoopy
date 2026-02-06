@@ -29,6 +29,9 @@ void MMMEngine::EnemyAnimController::UpdateArcher()
 		case Enemy::EnemyState::AttackPlayer:
 			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
 			break;
+		case Enemy::EnemyState::Dead:
+			mAnimator->PlayClip("Archer_Dead", false);
+			break;
 		default:
 			break;
 		}
@@ -54,6 +57,9 @@ void MMMEngine::EnemyAnimController::UpdateWarrior()
 			[[fallthrough]];
 		case Enemy::EnemyState::AttackPlayer:
 			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", true);
+			break;
+		case Enemy::EnemyState::Dead:
+			mAnimator->PlayClip("Warrior_Dead", false);
 			break;
 		default:
 			break;
@@ -81,6 +87,9 @@ void MMMEngine::EnemyAnimController::UpdateScout()
 		case Enemy::EnemyState::AttackPlayer:
 			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", true);
 			break;
+		case Enemy::EnemyState::Dead:
+			mAnimator->PlayClip("Scout_Dead", false);
+			break;
 		default:
 			break;
 		}
@@ -89,8 +98,8 @@ void MMMEngine::EnemyAnimController::UpdateScout()
 
 void MMMEngine::EnemyAnimController::Start()
 {
-	// 없으면 찾기
-	if (!mAnimManager) {
+	// 없으면 찾기, 생성
+	if (!mAnimManager.IsValid()) {
 		mAnimManager = AnimResourceManager::Get();
 
 		if (!mAnimManager) {
@@ -99,33 +108,33 @@ void MMMEngine::EnemyAnimController::Start()
 		}
 	}
 
-	if (!mAnimator) {
-		mAnimator = GetComponent<Animator>();
-		if (!mAnimator) {
+	if (!mAnimator.IsValid()) {
+		mAnimator = GetGameObject()->AddComponent<Animator>();
+		if (!mAnimator.IsValid()) {
 			std::cerr << GetName() << "::NO Animator!!!" << std::endl;
 			Destroy(SelfPtr(this));
 		}
 	}
 
-	if (!mEnemy) {
+	if (!mEnemy.IsValid()) {
 		mEnemy = GetComponent<Enemy>();
-		if (!mEnemy) {
+		if (!mEnemy.IsValid()) {
 			std::cerr << GetName() << "::NO Enemy Component!!!" << std::endl;
 			Destroy(SelfPtr(this));
 		}
 	}
 
 	// 에너미 타입 찾기
-	if (!mArcher) {
+	if (!mArcher.IsValid()) {
 		mArcher = GetComponent<ArrowEnemy>();
 		mAnimType = AT_Archer;
-		if (!mArcher) {
+		if (!mArcher.IsValid()) {
 			mWarrior = GetComponent<NormalEnemy>();
 			mAnimType = AT_Warrior;
-			if (!mWarrior) {
+			if (!mWarrior.IsValid()) {
 				mScout = GetComponent<ThiefEnemy>();
 				mAnimType = AT_Scout;
-				if (!mScout) {
+				if (!mScout.IsValid()) {
 					std::cerr << GetName() << "::NO EnemyType!!!" << std::endl;
 					Destroy(SelfPtr(this));
 				}
@@ -153,10 +162,12 @@ void MMMEngine::EnemyAnimController::Update()
 	// TODO::재생속도 설정하기 
 	mAnimator->SetSpeed(mAnimSpeed);
 
-	/*if(InputManager::Get().GetKeyDown(KeyCode::Alpha1))
+	/*if (InputManager::Get().GetKeyDown(KeyCode::Alpha1))
 		mAnimator->PlayClip("Anim_Goblin_Archer_Move", true);
 	else if (InputManager::Get().GetKeyDown(KeyCode::Alpha2))
-		mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);*/
+		mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
+	else if (InputManager::Get().GetKeyDown(KeyCode::Alpha3))
+		mAnimator->PlayClip("Archer_Dead", false);*/
 
 	switch (mAnimType)
 	{

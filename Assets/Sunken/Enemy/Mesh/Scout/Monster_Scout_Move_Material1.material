@@ -1,5 +1,5 @@
 {
-    "MUID": "155d4120-5b00-4722-b921-7ade2207acd2",
+    "MUID": "ca0d252f-356a-4318-9fde-7eea34795905",
     "properties": {
         "_albedo": {
             "file": "Assets\\Sunken\\Enemy\\FBX\\T_Dagger.png",
@@ -21,8 +21,8 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_metallic": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+        "_lutMap": {
+            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -57,6 +57,18 @@
                 1.0,
                 1.0
             ]
+        },
+        "mDiffGradientDepth": {
+            "type": "float",
+            "value": 68.32630157470703
+        },
+        "mDiffGradientDistHalf": {
+            "type": "float",
+            "value": 0.15625
+        },
+        "mDiffuseStr": {
+            "type": "float",
+            "value": 0.5
         },
         "mEmissive": {
             "type": "float",
@@ -95,17 +107,33 @@
                 0.0
             ]
         },
-        "mMetallic": {
+        "mLowLut": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
+        },
+        "mPadding": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mRimLightStr": {
+            "type": "float",
+            "value": 0.5
         },
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mSpecularStr": {
+            "type": "float",
+            "value": 0.10000000149011612
         }
     },
     "pshader": {
-        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+        "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
