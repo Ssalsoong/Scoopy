@@ -4,6 +4,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Enemy.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -35,7 +36,7 @@ void MMMEngine::ThiefEnemy::ApplyStats()
 	if (!GetGameObject()->GetComponent<Enemy>())
 		return;
 	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	Enemycomp->HP = HP;
+	GetComponent<Battlestats>()->HP = HP;
 	Enemycomp->atk = atk;
 	Enemycomp->velocity = velocity;
 	Enemycomp->attackDelay = attackDelay;

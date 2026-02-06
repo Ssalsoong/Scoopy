@@ -26,7 +26,6 @@ namespace MMMEngine {
 		USCRIPT_PROPERTY()
 		int level = 0;
 		USCRIPT_PROPERTY()
-		int HP = 300;
 		int maxHP = 300;
 		int healHP = 10;
 		float healDelay = 1.0f;
@@ -45,12 +44,11 @@ namespace MMMEngine {
 		ResPtr<StaticMesh> castleballmesh;
 		ObjPtr<GameObject> enemyTarget;
 		void PointUp(int t);
-		void GetDamage(int t) { HP -= t; HP = std::max(HP, 0); };
 		void CheckEnemy();
 		void AutoAttack();
 		void AutoHeal();
 		void ReturnBall(ObjPtr<GameObject> obj);
-		bool CastleDeath() const { return HP <= 0; }
+		void Dead();
 		void LevelUp();
 	};
 }

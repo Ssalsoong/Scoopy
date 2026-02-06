@@ -8,6 +8,7 @@
 #include "StaticMesh.h"
 #include "Transform.h"
 #include "Arrow.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -53,7 +54,7 @@ void MMMEngine::ArrowEnemy::ApplyStats()
 	if (!GetGameObject()->GetComponent<Enemy>())
 		return;
 	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	Enemycomp->HP = HP;
+	GetComponent<Battlestats>()->HP = HP;
 	Enemycomp->atk = atk;
 	Enemycomp->velocity = velocity;
 	Enemycomp->attackDelay = attackDelay;

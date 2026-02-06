@@ -1,8 +1,8 @@
 {
-    "MUID": "15364a18-aa9c-45cd-94c4-d85831d8934f",
+    "MUID": "fd2ddbec-a840-4f1a-82a7-211d04976aeb",
     "properties": {
         "_albedo": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\lambert1_Base_Color.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -22,7 +22,7 @@
             "type": "Texture2D"
         },
         "_metallic": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\lambert1_Metallic.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

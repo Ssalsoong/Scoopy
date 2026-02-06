@@ -1,8 +1,8 @@
 {
-    "MUID": "ab815cb9-cb35-4204-8d74-e78d34e34bc1",
+    "MUID": "a45b3f54-816d-4e13-864f-30b80bc7fd95",
     "properties": {
         "_albedo": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\Firetowerlvl01_BaseColor.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -21,8 +21,8 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_metallic": {
-            "file": "",
+        "_lutMap": {
+            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -47,16 +47,28 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
+        },
+        "mDiffGradientDepth": {
+            "type": "float",
+            "value": 68.32630157470703
+        },
+        "mDiffGradientDistHalf": {
+            "type": "float",
+            "value": 0.15625
+        },
+        "mDiffuseStr": {
+            "type": "float",
+            "value": 0.5
         },
         "mEmissive": {
             "type": "float",
@@ -95,17 +107,33 @@
                 0.0
             ]
         },
-        "mMetallic": {
+        "mLowLut": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
+        },
+        "mPadding": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mRimLightStr": {
+            "type": "float",
+            "value": 0.5
         },
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mSpecularStr": {
+            "type": "float",
+            "value": 0.10000000149011612
         }
     },
     "pshader": {
-        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+        "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"

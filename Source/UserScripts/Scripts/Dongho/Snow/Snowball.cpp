@@ -42,7 +42,10 @@ void MMMEngine::Snowball::RollSnow()
 	scale = std::min(scale, maxscale);
 	float r = baseRadius * scale;
 	float distance = r * k;
-	GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
+	auto pos = DirectX::SimpleMath::Vector3::Backward * distance;
+	pos.y = scale / 2;
+	GetTransform()->SetLocalPosition(pos);
+	//GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
 	auto worldPos = GetTransform()->GetWorldPosition();
 	if (!hasPrev) { prevWorldPos = worldPos; hasPrev = true; return; }
 	

@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "ArrowEnemy.h"
 #include "../Manager/BattleManager.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Enemy::Start()
 {
@@ -28,7 +29,7 @@ void MMMEngine::Enemy::Update()
 	playerpos = playertr->GetWorldPosition();
 	castlepos = castletr->GetWorldPosition();
 
-	if (HP <= 0) ChangeState(EnemyState::Dead);
+	CalSnowDamageDelay();
 
 	if (state == EnemyState::AttackBuilding)
 	{
@@ -202,6 +203,7 @@ void MMMEngine::Enemy::Dead()
 	ChangeState(EnemyState::GoToCastle);
 	EnemySpawner::instance->EnemyDeath(GetGameObject());
 	GetGameObject()->SetActive(false);
+	GetComponent<Battlestats>()->HP = 1;
 }
 
 bool MMMEngine::Enemy::FindNearBuilding()
@@ -315,4 +317,19 @@ void MMMEngine::Enemy::PlayerHitMe()
 {
 	if( state!=EnemyState::AttackPlayer && state!=EnemyState::ChasePlayer )
 		HitByPlayer = true;
+}
+
+void MMMEngine::Enemy::CalSnowDamageDelay()
+{
+	if (snowDamageTimer > 0.0f)
+	{
+		snowDamageTimer = std::max(snowDamageTimer - Time::GetDeltaTime(), 0.0f);
+	}
+}
+
+bool MMMEngine::Enemy::ApplySnowDamage()
+{
+	if (snowDamageTimer > 0.0f) return false;
+	snowDamageTimer = snowDamageDelay;
+	return true;
 }

@@ -1,8 +1,8 @@
 {
-    "MUID": "87a77e85-6323-4d46-a291-2f115cfdca40",
+    "MUID": "2b8982ce-95d4-4a6f-bd68-eeb72fb7c99f",
     "properties": {
         "_albedo": {
-            "file": "",
+            "file": "Assets\\Tower\\FBX\\IceTowerlvl01_BaseColor.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

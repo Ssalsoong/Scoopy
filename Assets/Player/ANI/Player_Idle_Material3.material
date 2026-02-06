@@ -1,8 +1,8 @@
 {
-    "MUID": "c74c6e71-7179-4f52-8f15-ed137f0d1591",
+    "MUID": "ea0b559e-9397-4398-b436-064082efac70",
     "properties": {
         "_albedo": {
-            "file": "Assets\\Player\\ANI\\H_Holy Cleric_F_txt.png",
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -30,7 +30,7 @@
             "type": "Texture2D"
         },
         "_opacity": {
-            "file": "Assets\\Player\\ANI\\H_Holy Cleric_F_txt.png",
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
         "_roughness": {
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

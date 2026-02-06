@@ -10,6 +10,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "StaticMesh.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -39,6 +40,7 @@ void MMMEngine::EnemySpawner::Start()
 		obj->SetTag("Enemy");
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->AddComponent<Enemy>();
+		obj->AddComponent<Battlestats>();
 		obj->AddComponent<NormalEnemy>();
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(normalenemymesh);
@@ -55,6 +57,7 @@ void MMMEngine::EnemySpawner::Start()
 		obj->SetTag("Enemy");
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->AddComponent<Enemy>();
+		obj->AddComponent<Battlestats>();
 		obj->AddComponent<ArrowEnemy>();
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(arrowenemymesh);
@@ -71,6 +74,7 @@ void MMMEngine::EnemySpawner::Start()
 		obj->SetTag("Enemy");
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->AddComponent<Enemy>();
+		obj->AddComponent<Battlestats>();
 		obj->AddComponent<ThiefEnemy>();
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(thiefenemymesh);

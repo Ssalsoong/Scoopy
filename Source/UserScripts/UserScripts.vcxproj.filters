@@ -6,6 +6,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Scripts\Dongho\Battlestats.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Building\BuffBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Building\Building.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Building\BuildingPoint.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -38,6 +39,7 @@
     <ClCompile Include="Scripts\test\SnowCollider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowTrigger.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\TileMap.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClInclude Include="Scripts\Dongho\Battlestats.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Building\Building.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Building\BuildingPoint.h"><Filter>Scripts</Filter></ClInclude>

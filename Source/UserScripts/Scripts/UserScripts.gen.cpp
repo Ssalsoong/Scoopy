@@ -9,6 +9,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 
+#include "Dongho/Battlestats.h"
 #include "Dongho/Building/BuildingPoint.h"
 #include "Dongho/Castle/Castle.h"
 #include "Dongho/Enemy/Enemy.h"
@@ -30,6 +31,14 @@ using namespace MMMEngine;
 
 RTTR_PLUGIN_REGISTRATION
 {
+	registration::class_<Battlestats>("Battlestats")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Battlestats>"))
+		.property("HP", &Battlestats::HP);
+
+	registration::class_<ObjPtr<Battlestats>>("ObjPtr<Battlestats>")
+		.constructor([]() { return Object::NewObject<Battlestats>(); })
+		.method("Inject", &ObjPtr<Battlestats>::Inject);
+
 	registration::class_<BuildingPoint>("BuildingPoint")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingPoint>"))
 		.property("checkdist", &BuildingPoint::checkdist);
@@ -41,7 +50,7 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<Castle>("Castle")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Castle>"))
 		.property("level", &Castle::level)
-		.property("HP", &Castle::HP);
+		.property("maxHP", &Castle::maxHP);
 
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
@@ -49,7 +58,6 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<Enemy>("Enemy")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Enemy>"))
-		.property("HP", &Enemy::HP)
 		.property("atk", &Enemy::atk)
 		.property("velocity", &Enemy::velocity)
 		.property("attackDelay", &Enemy::attackDelay)
@@ -78,7 +86,6 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
 		.property("level", &Player::level)
-		.property("HP", &Player::HP)
 		.property("maxHP", &Player::maxHP)
 		.property("battledist", &Player::battledist)
 		.property("atk", &Player::atk);

@@ -6,6 +6,7 @@
 #include "Building.h"
 #include "../Enemy/Enemy.h"
 #include "Transform.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -25,7 +26,7 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::DebuffBuilding::Start()
 {
-	GetGameObject()->GetComponent<Building>()->HP = 50;
+	GetGameObject()->GetComponent<Battlestats>()->HP = 50;
 	GetGameObject()->GetComponent<Building>()->maxHP = 50;
 }
 
@@ -76,35 +77,35 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 	if (level == 1)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Building>()->HP =
+		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.8f;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Building>()->HP =
+		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.65f;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Building>()->HP =
+		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.65f;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Building>()->HP =
+		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.5f;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 100;
-		GetGameObject()->GetComponent<Building>()->HP =
+		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.5f;
 	}

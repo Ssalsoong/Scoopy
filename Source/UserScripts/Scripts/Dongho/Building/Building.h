@@ -22,7 +22,6 @@ namespace MMMEngine {
 		void Start();
 		void Update();
 		int maxHP = 50;
-		int HP = 50;
 		int point = 0;
 		int exp = 0;
 		int atk = 10;
@@ -34,9 +33,8 @@ namespace MMMEngine {
 		std::queue<ObjPtr<GameObject>> Buildingballs;
 		ResPtr<StaticMesh> buildingballmesh;
 		ObjPtr<GameObject> enemyTarget;
-		void GetDamage(int t) { HP -= t; HP = std::max(HP, 0); };
 		void PointUp(int t);
-		void CheckDead();
+		void Dead();
 		void CheckEnemy();
 		void AutoAttack();
 		void ReturnBall(ObjPtr<GameObject> obj);

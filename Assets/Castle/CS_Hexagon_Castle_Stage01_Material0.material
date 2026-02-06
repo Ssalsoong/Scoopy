@@ -1,5 +1,5 @@
 {
-    "MUID": "c9b7f40b-6ea0-4b3c-9199-88c9dbd93c04",
+    "MUID": "a47f4b0a-7c4b-408c-b546-4346bd008167",
     "properties": {
         "_albedo": {
             "file": "Assets\\Castle\\PixelTeture.png",
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

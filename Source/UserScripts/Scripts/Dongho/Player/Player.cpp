@@ -4,12 +4,14 @@
 #include "MMMInput.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
+#include "../Manager/GameManager.h"
 #include "../Manager/SnowballManager.h"
 #include "../Snow/Snowball.h"
 #include "../Building/BuildingPoint.h"
 #include "../Manager/BuildingManager.h"
 #include "../Manager/BattleManager.h"
 #include "../../test/PlayerMove.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Player::Start()
 {
@@ -25,6 +27,7 @@ void MMMEngine::Player::Update()
 	UpdateScoop();
 	HandleAttack();
 	AutoHeal();
+	CalDamageDelay();
 }
 
 // 임시 이동이므로 이후 반드시 삭제
@@ -226,23 +229,13 @@ void MMMEngine::Player::HandleAttack()
 	}
 }
 
-void MMMEngine::Player::GetDamage(int t)
-{
-	if (damageTimer > 0.0f)
-		return; // 무적 시간 중이면 데미지 무시
-
-	HP -= t;
-	HP = std::max(HP, 0);
-
-	damageTimer = damageDelay; // 무적 타이머 시작
-}
 
 void MMMEngine::Player::AutoHeal()
 {
-	if (damageTimer > 0.0f)
-	{
-		damageTimer -= Time::GetDeltaTime();
-	}
+	if (!GetComponent<Battlestats>())
+		return;
+	auto HP = GetComponent<Battlestats>()->HP;
+	
 	if (prevHP > HP)
 	{
 		fighting = true;
@@ -267,6 +260,7 @@ void MMMEngine::Player::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
+	GetComponent<Battlestats>()->HP = HP;
 }
 
 void MMMEngine::Player::BuildOn()
@@ -300,4 +294,31 @@ void MMMEngine::Player::LevelUp()
 	level += 1;
 	maxpoint += 2;
 	atk += 1;
+}
+
+void MMMEngine::Player::CalDamageDelay()
+{
+	if (damageTimer > 0.0f)
+	{
+		damageTimer = std::max(damageTimer - Time::GetDeltaTime(), 0.0f);
+	}
+
+}
+
+void MMMEngine::Player::GetDamage(int t)
+{
+	if (damageTimer > 0.0f)
+		return;
+	auto stats = GetComponent<Battlestats>();
+	if (!stats) return;
+	if (stats->HP <= 0)
+		return;
+	stats->HP = std::max(stats->HP - t, 0);
+
+	damageTimer = damageDelay;
+}
+
+void MMMEngine::Player::Dead()
+{
+	GameManager::instance->GameOver = true;
 }

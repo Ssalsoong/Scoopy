@@ -48,8 +48,6 @@ namespace MMMEngine {
 		ObjPtr<Transform> castletr;
 		DirectX::SimpleMath::Vector3 castlepos;
 		USCRIPT_PROPERTY()
-		int HP = 0;
-		USCRIPT_PROPERTY()
 		int atk = 0;
 		USCRIPT_PROPERTY()
 		float velocity = 0.f;
@@ -60,7 +58,6 @@ namespace MMMEngine {
 		USCRIPT_PROPERTY()
 		float checkdist = 0.f;
 
-		void GetDamage(int t) { HP -= t; HP = std::max(HP, 0); };
 		void PlayerHitMe();
 		bool MoveToTarget(const DirectX::SimpleMath::Vector3& target, float stopDist);
 		bool CheckPlayer();
@@ -75,6 +72,11 @@ namespace MMMEngine {
 		void AttackBuilding();
 		bool FindNearBuilding();
 		void Dead();
+
+		float snowDamageTimer = 0.0f;
+		float snowDamageDelay = 0.5f;
+		void CalSnowDamageDelay();
+		bool ApplySnowDamage();
 	};
 }
 
