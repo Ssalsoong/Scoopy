@@ -8,6 +8,11 @@ using namespace MMMEngine;
 
 ObjPtr<FadeInOutFX> FadeInOutFX::Instance = nullptr;
 
+int MMMEngine::FadeInOutFX::GetState()
+{
+	return m_fadeState;
+}
+
 void MMMEngine::FadeInOutFX::Awake()
 {
 	if (!Instance.IsValid())
@@ -40,8 +45,11 @@ void MMMEngine::FadeInOutFX::Update()
 		m_internalTime += Time::GetDeltaTime();
 		if (m_internalTime >= FadeDuration)
 		{
+			m_internalTime = FadeDuration; // clamp
+			if (!FadeCurve.IsEmpty() && FadeImage.IsValid())
+				FadeImage->SetAlpha(FadeCurve.Evaluate(1.0f)); // 마지막 프레임 확정
+			 
 			m_fadeState = 0;
-			m_internalTime = 0.0f;
 		}
 	}
 

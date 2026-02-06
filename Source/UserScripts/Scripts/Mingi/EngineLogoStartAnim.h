@@ -5,13 +5,15 @@
 
 namespace MMMEngine
 {
-    class USERSCRIPTS TestValidFade : public ScriptBehaviour
+    class USERSCRIPTS EngineLogoStartAnim : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+            RTTR_REGISTRATION_FRIEND
+            float m_internalTime = 0.0f;
+        int m_state = 0;
     public:
-        TestValidFade()
+        EngineLogoStartAnim()
         {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
@@ -19,9 +21,9 @@ namespace MMMEngine
         }
 
         USCRIPT_MESSAGE()
-        void Start();
+            void Start();
 
         USCRIPT_MESSAGE()
-        void Update();
+            void Update();
     };
 }

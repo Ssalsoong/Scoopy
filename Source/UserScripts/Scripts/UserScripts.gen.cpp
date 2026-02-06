@@ -11,10 +11,12 @@
 
 #include "ChangeScreen.h"
 #include "Dongho/Player/Player.h"
+#include "Mingi/EngineLogoStartAnim.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/RotateTrakingUI.h"
-#include "Mingi/UI/TestValidFade.h"
+#include "Mingi/UI/TitleMenu.h"
+#include "Mingi/UI/TitleOpeningSequencer.h"
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
 
@@ -40,9 +42,15 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<Player>(); })
 		.method("Inject", &ObjPtr<Player>::Inject);
 
+	registration::class_<EngineLogoStartAnim>("EngineLogoStartAnim")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EngineLogoStartAnim>"));
+
+	registration::class_<ObjPtr<EngineLogoStartAnim>>("ObjPtr<EngineLogoStartAnim>")
+		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
+		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
+
 	registration::class_<FadeInOutFX>("FadeInOutFX")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FadeInOutFX>"))
-		.property("m_internalTime", &FadeInOutFX::m_internalTime)
 		.property("FadeImage", &FadeInOutFX::FadeImage)
 		.property("FadeDuration", &FadeInOutFX::FadeDuration)
 		.property("FadeCurve", &FadeInOutFX::FadeCurve);
@@ -69,12 +77,40 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<RotateTrakingUI>(); })
 		.method("Inject", &ObjPtr<RotateTrakingUI>::Inject);
 
-	registration::class_<TestValidFade>("TestValidFade")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<TestValidFade>"));
+	registration::class_<TitleMenu>("TitleMenu")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TitleMenu>"))
+		.property("playButton", &TitleMenu::playButton)
+		.property("creditButton", &TitleMenu::creditButton)
+		.property("exitButton", &TitleMenu::exitButton)
+		.property("IsControllAble", &TitleMenu::IsControllAble)
+		.property("ButtonOnScaleX", &TitleMenu::ButtonOnScaleX)
+		.property("ButtonOnScaleY", &TitleMenu::ButtonOnScaleY);
 
-	registration::class_<ObjPtr<TestValidFade>>("ObjPtr<TestValidFade>")
-		.constructor([]() { return Object::NewObject<TestValidFade>(); })
-		.method("Inject", &ObjPtr<TestValidFade>::Inject);
+	registration::class_<ObjPtr<TitleMenu>>("ObjPtr<TitleMenu>")
+		.constructor([]() { return Object::NewObject<TitleMenu>(); })
+		.method("Inject", &ObjPtr<TitleMenu>::Inject);
+
+	registration::class_<TitleOpeningSequencer>("TitleOpeningSequencer")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TitleOpeningSequencer>"))
+		.property("titleFadeStartTime", &TitleOpeningSequencer::titleFadeStartTime)
+		.property("titleLoadFadeTime", &TitleOpeningSequencer::titleLoadFadeTime)
+		.property("buttonLoadFadeTime", &TitleOpeningSequencer::buttonLoadFadeTime)
+		.property("buttonAnimOffsetTime", &TitleOpeningSequencer::buttonAnimOffsetTime)
+		.property("buttonAnimYDiff", &TitleOpeningSequencer::buttonAnimYDiff)
+		.property("TitleImage", &TitleOpeningSequencer::TitleImage)
+		.property("PlayImage", &TitleOpeningSequencer::PlayImage)
+		.property("CreditImage", &TitleOpeningSequencer::CreditImage)
+		.property("ExitImage", &TitleOpeningSequencer::ExitImage)
+		.property("TitleRotate", &TitleOpeningSequencer::TitleRotate)
+		.property("TitleScaleX", &TitleOpeningSequencer::TitleScaleX)
+		.property("TitleScaleY", &TitleOpeningSequencer::TitleScaleY)
+		.property("ButtonScaleX", &TitleOpeningSequencer::ButtonScaleX)
+		.property("ButtonScaleY", &TitleOpeningSequencer::ButtonScaleY)
+		.property("TitleMenu", &TitleOpeningSequencer::TitleMenu);
+
+	registration::class_<ObjPtr<TitleOpeningSequencer>>("ObjPtr<TitleOpeningSequencer>")
+		.constructor([]() { return Object::NewObject<TitleOpeningSequencer>(); })
+		.method("Inject", &ObjPtr<TitleOpeningSequencer>::Inject);
 
 	registration::class_<WorldSpaceUI>("WorldSpaceUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<WorldSpaceUI>"))

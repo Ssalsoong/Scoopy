@@ -123,10 +123,12 @@
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp" />
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
+    <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
-    <ClCompile Include="Scripts\Mingi\UI\TestValidFade.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
@@ -151,10 +153,12 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
+    <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />
-    <ClInclude Include="Scripts\Mingi\UI\TestValidFade.h" />
+    <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h" />
+    <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h" />
   </ItemGroup>

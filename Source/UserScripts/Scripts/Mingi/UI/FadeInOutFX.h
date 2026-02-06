@@ -15,7 +15,8 @@ namespace MMMEngine
 
 
             int m_fadeState = 0; // 0 = idle, 1 = in, 2 = out;
-        
+        float m_internalTime = 0.0f;
+
 
     public:
         FadeInOutFX()
@@ -28,8 +29,7 @@ namespace MMMEngine
         }
 
         static ObjPtr<FadeInOutFX> Instance;
-        USCRIPT_PROPERTY()
-        float m_internalTime = 0.0f;
+        
         USCRIPT_PROPERTY()
         ObjPtr<Image> FadeImage;
 
@@ -38,6 +38,8 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
 	    AnimationCurve FadeCurve;
+
+        int GetState();
 
         USCRIPT_MESSAGE()
         void Awake();
