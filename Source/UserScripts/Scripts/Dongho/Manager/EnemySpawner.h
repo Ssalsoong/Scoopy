@@ -5,6 +5,7 @@
 #include "StaticMesh.h"
 #include "SimpleMath.h"
 #include <array>
+#include "Prefab.h"
 
 using DirectX::SimpleMath::Vector3;
 namespace MMMEngine {
@@ -20,7 +21,9 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		void SpawnNormalEnemy(const DirectX::SimpleMath::Vector3& pos);
 		void SpawnArrowEnemy(const DirectX::SimpleMath::Vector3& pos);
@@ -65,13 +68,14 @@ namespace MMMEngine {
 		int aliveCount = 0;
 		static ObjPtr<EnemySpawner> instance;
 		std::queue<ObjPtr<GameObject>> NormalEnemys;
-		ResPtr<StaticMesh> normalenemymesh;
 		std::queue<ObjPtr<GameObject>> ArrowEnemys;
-		ResPtr<StaticMesh> arrowenemymesh;
 		std::queue<ObjPtr<GameObject>> ThiefEnemys;
-		ResPtr<StaticMesh> thiefenemymesh;
-		DirectX::SimpleMath::Vector3 normalsize{ 1.f,1.f,1.f };
-		DirectX::SimpleMath::Vector3 arrowsize{ 1.f,1.f,1.f };
-		DirectX::SimpleMath::Vector3 thiefsize{ 1.f,1.f,1.f };
+
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> m_normalenemy;
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> m_arrowenemy;
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> m_thiefenemy;
 	};
 }

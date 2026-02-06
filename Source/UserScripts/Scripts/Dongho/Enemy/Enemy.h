@@ -32,9 +32,12 @@ namespace MMMEngine {
 			AttackCastle,
 			ChasePlayer,
 			AttackPlayer,
-			Dead
+			Dead,
+			None
 		};
 		EnemyState state = EnemyState::GoToCastle;
+		EnemyState pendingState = EnemyState::None;
+		bool stateLocked = false;
 		ObjPtr<GameObject> buildingTarget = nullptr;
 		DirectX::SimpleMath::Vector3 buildingpos;
 		bool HitByPlayer = false;
@@ -63,6 +66,8 @@ namespace MMMEngine {
 		bool CheckPlayer();
 		bool LostPlayer();
 		void ChangeState(EnemyState next);
+		void RequestState(EnemyState next);
+		void FinishAttackCycle();
 		void LookAt(const DirectX::SimpleMath::Vector3& target);
 		void GoToCastle();
 		void AttackCastle();
