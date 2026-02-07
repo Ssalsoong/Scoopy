@@ -20,9 +20,9 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<EnemySpawner>("EnemySpawner")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"))
-		.property("m_normalenemy", &EnemySpawner::m_normalenemy)
-		.property("m_arrowenemy", &EnemySpawner::m_arrowenemy)
-		.property("m_thiefenemy", &EnemySpawner::m_thiefenemy);
+		.property("pre_normalenemy", &EnemySpawner::pre_normalenemy)
+		.property("pre_arrowenemy", &EnemySpawner::pre_arrowenemy)
+		.property("pre_thiefenemy", &EnemySpawner::pre_thiefenemy);
 
 	registration::class_<ObjPtr<EnemySpawner>>("ObjPtr<EnemySpawner>")
 		.constructor(
@@ -35,10 +35,13 @@ MMMEngine::ObjPtr<MMMEngine::EnemySpawner> MMMEngine::EnemySpawner::instance = n
 
 void MMMEngine::EnemySpawner::Start()
 {
+	pre_normalenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/NormalEnemy.Prefab");
+	pre_arrowenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ArrowEnemy.Prefab");
+	pre_thiefenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ThiefEnemy.Prefab");
 	instance = GetGameObject()->GetComponent<EnemySpawner>();
 	for (int i = 0; i < 40; ++i)
 	{
-		auto obj = Instantiate(m_normalenemy);
+		auto obj = Instantiate(pre_normalenemy);
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
@@ -46,7 +49,7 @@ void MMMEngine::EnemySpawner::Start()
 	}
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = Instantiate(m_arrowenemy);
+		auto obj = Instantiate(pre_arrowenemy);
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
@@ -54,7 +57,7 @@ void MMMEngine::EnemySpawner::Start()
 	}
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = Instantiate(m_thiefenemy);
+		auto obj = Instantiate(pre_thiefenemy);
 		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);

@@ -46,11 +46,11 @@ void MMMEngine::BuffBuilding::GiveBuff()
 	bool nowInRange = (d2 < bestD2);
 	if (nowInRange && !prevInRange)
 	{
-		player->GetComponent<Player>()->velocity*= buff;
+		//player->GetComponent<Player>()->velocity*= buff;
 	}
 	else if(!nowInRange && prevInRange)
 	{
-		player->GetComponent<Player>()->velocity /= buff;
+		//player->GetComponent<Player>()->velocity /= buff;
 	}
 	prevInRange = nowInRange;
 }

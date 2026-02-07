@@ -72,10 +72,10 @@ namespace MMMEngine {
 		std::queue<ObjPtr<GameObject>> ThiefEnemys;
 
 		USCRIPT_PROPERTY()
-		ResPtr<Prefab> m_normalenemy;
+		ResPtr<Prefab> pre_normalenemy;
 		USCRIPT_PROPERTY()
-		ResPtr<Prefab> m_arrowenemy;
+		ResPtr<Prefab> pre_arrowenemy;
 		USCRIPT_PROPERTY()
-		ResPtr<Prefab> m_thiefenemy;
+		ResPtr<Prefab> pre_thiefenemy;
 	};
 }

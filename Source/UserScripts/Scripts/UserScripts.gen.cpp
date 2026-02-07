@@ -14,7 +14,6 @@
 #include "Dongho/Castle/Castle.h"
 #include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
-#include "Dongho/Manager/SnowballManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
 #include "Mingi/UI/CameraMove.h"
@@ -63,7 +62,9 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<Castle>("Castle")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Castle>"))
 		.property("level", &Castle::level)
-		.property("maxHP", &Castle::maxHP);
+		.property("maxHP", &Castle::maxHP)
+		.property("exp", &Castle::exp)
+		.property("point", &Castle::point);
 
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
@@ -88,20 +89,13 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<BattleManager>(); })
 		.method("Inject", &ObjPtr<BattleManager>::Inject);
 
-	registration::class_<SnowballManager>("SnowballManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager>"))
-		.property("m_Player", &SnowballManager::m_Player);
-
-	registration::class_<ObjPtr<SnowballManager>>("ObjPtr<SnowballManager>")
-		.constructor([]() { return Object::NewObject<SnowballManager>(); })
-		.method("Inject", &ObjPtr<SnowballManager>::Inject);
-
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
 		.property("level", &Player::level)
 		.property("maxHP", &Player::maxHP)
 		.property("battledist", &Player::battledist)
-		.property("atk", &Player::atk);
+		.property("atk", &Player::atk)
+		.property("maxpoint", &Player::maxpoint);
 
 	registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
 		.constructor([]() { return Object::NewObject<Player>(); })
@@ -118,9 +112,7 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CameraMove>"))
 		.property("Offset", &CameraMove::Offset)
 		.property("Target", &CameraMove::Target)
-		.property("ChasingSpeed", &CameraMove::ChasingSpeed)
-		.property("XClamp", &CameraMove::XClamp)
-		.property("ZClamp", &CameraMove::ZClamp);
+		.property("ChasingSpeed", &CameraMove::ChasingSpeed);
 
 	registration::class_<ObjPtr<CameraMove>>("ObjPtr<CameraMove>")
 		.constructor([]() { return Object::NewObject<CameraMove>(); })
@@ -293,13 +285,10 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerMove>("PlayerMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerMove>"))
+		.property("basespeed", &PlayerMove::basespeed)
 		.property("isSlow", &PlayerMove::isSlow)
 		.property("turnSpeed", &PlayerMove::turnSpeed)
-		.property("is_Scoop", &PlayerMove::is_Scoop)
-		.property("DefaultSpeed", &PlayerMove::DefaultSpeed)
-		.property("OnSnowSpeed", &PlayerMove::OnSnowSpeed)
-		.property("MinusSpeed", &PlayerMove::MinusSpeed)
-		.property("MinSpeed", &PlayerMove::MinSpeed);
+		.property("is_Scoop", &PlayerMove::is_Scoop);
 
 	registration::class_<ObjPtr<PlayerMove>>("ObjPtr<PlayerMove>")
 		.constructor([]() { return Object::NewObject<PlayerMove>(); })
@@ -317,10 +306,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<SnowCollider>("SnowCollider")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowCollider>"))
 		.property("m_Rolesmooth", &SnowCollider::m_Rolesmooth)
-		.property("TriggerCollider", &SnowCollider::TriggerCollider)
 		.property("SnowManager", &SnowCollider::SnowManager)
-		.property("m_holdDistance", &SnowCollider::m_holdDistance)
-		.property("m_rollSpeed", &SnowCollider::m_rollSpeed);
+		.property("m_holdDistance", &SnowCollider::m_holdDistance);
 
 	registration::class_<ObjPtr<SnowCollider>>("ObjPtr<SnowCollider>")
 		.constructor([]() { return Object::NewObject<SnowCollider>(); })
@@ -336,7 +323,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<SnowballManager2>("SnowballManager2")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager2>"))
 		.property("m_Player", &SnowballManager2::m_Player)
-		.property("Pre_Snow", &SnowballManager2::Pre_Snow);
+		.property("Pre_Snow", &SnowballManager2::Pre_Snow)
+		.property("m_Castle", &SnowballManager2::m_Castle);
 
 	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
 		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
@@ -344,7 +332,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<TileMap>("TileMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
-		.property("P_trans", &TileMap::P_trans)
+		.property("trans", &TileMap::trans)
 		.property("threshold", &TileMap::threshold)
 		.property("box", &TileMap::box);
 

@@ -3,13 +3,13 @@
 #include "SimpleMath.h"
 #include "UserScriptsCommon.h"
 #include "rttr/type"
-#include "SimpleMath.h"
 
 namespace MMMEngine {
 	class Transform;
 	class Player;
 	class USERSCRIPTS Snowball : public ScriptBehaviour
 	{
+	private:
 		RTTR_ENABLE(ScriptBehaviour)
 		RTTR_REGISTRATION_FRIEND
 	public:
@@ -22,20 +22,10 @@ namespace MMMEngine {
 		void Start();
 		void Update();
 		void EatSnow(ObjPtr<GameObject> other);
-		int GetPoint() const { return point; };
-		float GetScale() const { return scale; };
-		Player* carrier = nullptr;
-		bool IsCarried() const { return carrier != nullptr; }
-	private:
-		void RollSnow();
-		float scale = 0.05f;
-		float minscale = 0.05f;
-		float scaleup = 0.05f;
-		float maxscale = 1.0f;
+		void PointUp();
+		int GetPoint() const { return point; }
+
+		ObjPtr<GameObject>m_player;
 		int point = 1;
-		float baseRadius = 0.5f; // Sphere mesh 기본 반지름
-		float k = 1.4f;          // 눈이 플레이어에 얼마나 붙을지 (0.7~1.4 튜닝)
-		DirectX::SimpleMath::Vector3 prevWorldPos{};
-		bool hasPrev = false;
 	};
 }

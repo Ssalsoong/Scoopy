@@ -25,12 +25,10 @@
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -71,12 +69,10 @@
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\CameraMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>

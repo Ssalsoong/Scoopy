@@ -36,7 +36,6 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
         void OnTriggerEnter(MMMEngine::CollisionInfo info);
 
-
         USCRIPT_MESSAGE()
         void OnTriggerExit(MMMEngine::CollisionInfo info);
 

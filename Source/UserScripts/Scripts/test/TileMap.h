@@ -70,6 +70,7 @@ namespace MMMEngine
     private:
         int OneTimeGetValue = 1;
 
+
     public:
         float DistXZ(const Vec2& a, const Vec2& b);
 

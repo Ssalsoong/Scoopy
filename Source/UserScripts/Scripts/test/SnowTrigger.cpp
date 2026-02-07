@@ -26,7 +26,7 @@ void MMMEngine::SnowTrigger::SetTriggerSize(float size)
 	if (ColObj.IsValid())
 	{
 		auto SphereCol = GetComponent<SphereColliderComponent>();
-		SphereCol->SetRadius(size/2 + 0.2f);
+		SphereCol->SetRadius(size/2 + 0.5f);
 		//auto Trans = GetTransform();
 		//if (Trans.IsValid())
 		//{
@@ -39,16 +39,18 @@ void MMMEngine::SnowTrigger::SetTriggerSize(float size)
 
 void MMMEngine::SnowTrigger::OnTriggerEnter(MMMEngine::CollisionInfo info)
 {
-	if (info.other->GetTag() != "Player") return;
+	if (info.other->GetTag() == "Player")
+	{
+		//Parent_Obj->GetComponent<snowscript> 눈의 matrix가 플레이어에 영향받도록
+		is_player = true;
+		auto P_Control = info.other->GetComponent<PlayerController>();
+		if (P_Control.IsValid())
+		{
+			main_Player = P_Control->GetGameObject();
+			main_Player->GetComponent<PlayerController>()->AddSnowList(Parent_Obj);
+		}
 
-	auto P_Control = info.other->GetComponent<PlayerController>();
-	if (!P_Control.IsValid()) return;
-
-	main_Player = P_Control->GetGameObject();
-	P_Control->AddSnowList(Parent_Obj);
-
-	if (P_Control->IsHoldingSpace() && !P_Control->HasCurrentSnow())
-		P_Control->AttachNearestSnow();
+	}
 }
 
 void MMMEngine::SnowTrigger::OnTriggerExit(MMMEngine::CollisionInfo info)

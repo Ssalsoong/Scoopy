@@ -33,7 +33,7 @@ void MMMEngine::BuildingPoint::CheckPlayer()
 	float dz = pos.z - playerpos.z;
 	float d2 = dx * dx + dz * dz;
 
-	if (d2 < bestD2)
+	if (d2 < bestD2 && !alreadybuilt)
 	{
 		canBuild = true;
 	}

@@ -1,4 +1,4 @@
-ï»¿<?xml version="1.0" encoding="utf-8"?>
+Ã¯Â»Â¿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <ItemGroup Label="ProjectConfigurations">
@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1646F854-69B8-5F2D-9BF7-D6AF971EF747}</ProjectGuid>
+    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR ±âº»°ª (¾øÀ¸¸é ÇÁ·ÎÁ§Æ® ±âÁØ »ó´ë°æ·Î) -->
+  <!-- MMMENGINE_DIR Â±Ã¢ÂºÂ»Â°Âª (Â¾Ã¸Ã€Â¸Â¸Ã© Ã‡ÃÂ·ÃŽÃÂ§Ã†Â® Â±Ã¢ÃÃ˜ Â»Ã³Â´Ã«Â°Ã¦Â·ÃŽ) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--ÃƒÃ¢Â·Ã‚ Â°Ã­ÃÂ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>
@@ -126,7 +126,6 @@
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp" />
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp" />
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
@@ -172,7 +171,6 @@
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h" />
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h" />
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h" />
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
