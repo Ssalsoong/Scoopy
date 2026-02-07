@@ -17,7 +17,7 @@ namespace MMMEngine
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+            RTTR_REGISTRATION_FRIEND
     public:
         PlayerMove()
         {
@@ -26,11 +26,10 @@ namespace MMMEngine
 
         }
 
-        USCRIPT_PROPERTY()
-        float basespeed = 7.0f;
+        float basespeed = 80.0f;
 
         USCRIPT_PROPERTY()
-        bool isSlow = false;
+            bool isSlow = false;
         float yawRadians = 0.0f;
 
         float maxYawSpeed = 0.0f;
@@ -42,22 +41,22 @@ namespace MMMEngine
         float alignEps;
 
         USCRIPT_MESSAGE()
-        void Start();
+            void Start();
 
 
         //수치조절
         USCRIPT_PROPERTY()
-        float turnSpeed = 25.0f;
+            float turnSpeed = 25.0f;
 
         USCRIPT_PROPERTY()
-        bool is_Scoop = false;
+            bool is_Scoop = false;
         ObjPtr<GameObject> Snow;
 
-        
+
         bool m_LookTarget = false;
 
         USCRIPT_MESSAGE()
-        void FixedUpdate();
+            void FixedUpdate();
 
 
         DirectX::SimpleMath::Vector3 ComputeDesiredVelocity();
@@ -88,5 +87,19 @@ namespace MMMEngine
         float m_PendingYaw = 0.f;
 
         ObjPtr<RigidBodyComponent> m_rigid;
+
+        float ComputeSpeed();
+
+        USCRIPT_PROPERTY()
+            float DefaultSpeed = 80.f;
+        USCRIPT_PROPERTY()
+            float OnSnowSpeed = 60.f;
+
+        USCRIPT_PROPERTY()
+            float MinusSpeed = 1.5f;
+
+        USCRIPT_PROPERTY()
+            float MinSpeed = 35.f;
+
     };
 }

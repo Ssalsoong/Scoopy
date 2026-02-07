@@ -1,12 +1,18 @@
 #include "Export.h"
 #include "ScriptBehaviour.h"
 #include "TileMap.h"
+#include "PlayerController.h"
 
 
 int GetIndex(int x, int y)
 {
     //return (y + 10) * 21 + (x + 10);
     return y * 30 + x;
+}
+
+void MMMEngine::TileMap::SetOneTimeValue(int value)
+{
+    OneTimeGetValue = value;
 }
 
 float MMMEngine::TileMap::DistXZ(const Vec2& a, const Vec2& b)
@@ -47,7 +53,6 @@ bool MMMEngine::TileMap::TileCheck(const Vec2& pos)
     int ix, iz;
     WorldToTile(pos.x, pos.z, originX, originZ, tileSize, ix, iz);
 
-    //std::cout << u8"현재 x 좌표 " << ix << u8" 현재 z 좌표 : " << iz << std::endl;
 
     bool harvestedNow = false;
 
@@ -62,6 +67,11 @@ bool MMMEngine::TileMap::TileCheck(const Vec2& pos)
             int idx = GetIndex(ix, iz);
             if (0 <= idx && idx < (int)boxlist.size() && boxlist[idx].IsValid())
                 boxlist[idx]->SetActive(false);
+            auto p_Con = P_trans->GetComponent<PlayerController>();
+            if (p_Con.IsValid())
+            {
+                p_Con->AddScoop(OneTimeGetValue);
+            }
         }
     }
 
@@ -72,13 +82,36 @@ bool MMMEngine::TileMap::TileCheck(const Vec2& pos)
 MMMEngine::TileMap::Vec2 MMMEngine::TileMap::GetCurPosXZ() const
 {
     Vec2 pose{};
-    if (!trans) return pose;
+    if (!P_trans) return pose;
 
-    if (!trans.IsValid()) { std::cout << u8"transform 발견못함" << std::endl;};
-    auto world_Position = trans->GetWorldPosition();
+    if (!P_trans.IsValid()) { std::cout << u8"transform 발견못함" << std::endl;};
+    auto world_Position = P_trans->GetWorldPosition();
     pose.x = world_Position.x;
     pose.z = world_Position.z;
     return pose;
+}
+
+void MMMEngine::TileMap::ResetTile()
+{
+    for (int iz = 0; iz < GRID_H; ++iz)
+    {
+        for (int ix = 0; ix < GRID_W; ++ix)
+        {
+            gained[ix][iz] = true;
+            accum[ix][iz] = 0.0f;
+            int idx = GetIndex(ix, iz);
+            if (0 <= idx && idx < (int)boxlist.size() && boxlist[idx].IsValid())
+                boxlist[idx]->SetActive(true);
+        }
+    }
+}
+
+bool MMMEngine::TileMap::IsTileClearedAt(float x, float z)
+{
+    int ix, iz;
+    WorldToTile(x, z, originX, originZ, tileSize, ix, iz);
+    if (!InBounds(ix, iz)) return false;
+    return gained[ix][iz];
 }
 
 void MMMEngine::TileMap::NoticePlayer(bool value)
@@ -108,7 +141,8 @@ void MMMEngine::TileMap::Start()
 
     if (auto go = GameObject::Find("Player"); go.IsValid())
     {
-        trans = go->GetTransform();
+        //이거 player임 이름 수정못했음
+        P_trans = go->GetTransform();
     }
 
 
