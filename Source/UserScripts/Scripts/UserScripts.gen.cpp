@@ -363,7 +363,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<SnowballManager2>("SnowballManager2")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager2>"))
 		.property("m_Player", &SnowballManager2::m_Player)
-		.property("Pre_Snow", &SnowballManager2::Pre_Snow);
+		.property("Pre_Snow", &SnowballManager2::Pre_Snow)
+		.property("m_Castle", &SnowballManager2::m_Castle);
 
 	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
 		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
