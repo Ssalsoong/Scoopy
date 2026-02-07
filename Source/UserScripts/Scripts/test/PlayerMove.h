@@ -12,12 +12,15 @@ using namespace DirectX::SimpleMath;
 namespace MMMEngine
 {
     class TileMap;
-
+    class PlayerAnimController;
     class USERSCRIPTS PlayerMove : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+            RTTR_REGISTRATION_FRIEND
+
+            USCRIPT_PROPERTY()
+            ObjPtr<PlayerAnimController> mPAController;
     public:
         PlayerMove()
         {
@@ -26,8 +29,7 @@ namespace MMMEngine
 
         }
 
-        USCRIPT_PROPERTY()
-        float basespeed = 7.0f;
+        float basespeed = 80.0f;
 
         USCRIPT_PROPERTY()
         bool isSlow = false;
@@ -88,5 +90,19 @@ namespace MMMEngine
         float m_PendingYaw = 0.f;
 
         ObjPtr<RigidBodyComponent> m_rigid;
+
+        float ComputeSpeed();
+
+        USCRIPT_PROPERTY()
+        float DefaultSpeed = 80.f;
+        USCRIPT_PROPERTY()
+        float OnSnowSpeed = 60.f;
+
+        USCRIPT_PROPERTY()
+        float MinusSpeed = 1.5f;
+
+        USCRIPT_PROPERTY()
+        float MinSpeed = 35.f;
+
     };
 }
