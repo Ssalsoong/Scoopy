@@ -23,6 +23,7 @@ namespace MMMEngine {
 		void Update();
 		void EatSnow(ObjPtr<GameObject> other);
 		void PointUp();
+		void SetPoint(int t);
 		int GetPoint() const { return point; }
 
 		ObjPtr<GameObject>m_player;

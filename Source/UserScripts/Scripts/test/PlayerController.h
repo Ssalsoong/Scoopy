@@ -8,52 +8,75 @@
 
 namespace MMMEngine
 {
-	class SnowballManager;
-	class USERSCRIPTS PlayerController : public ScriptBehaviour
-	{
-	private:
-		RTTR_ENABLE(ScriptBehaviour)
-			RTTR_REGISTRATION_FRIEND
-	public:
-		PlayerController()
-		{
+    class SnowballManager;
+    class USERSCRIPTS PlayerController : public ScriptBehaviour
+    {
+    private:
+        RTTR_ENABLE(ScriptBehaviour)
+        RTTR_REGISTRATION_FRIEND
+    public:
+        PlayerController()
+        {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
-		USCRIPT_MESSAGE()
-		void Start();
+        USCRIPT_MESSAGE()
+        void Start();
 
-		USCRIPT_MESSAGE()
-		void Update();
+        USCRIPT_MESSAGE()
+        void Update();
 
 
-		void AddSnowList(ObjPtr<GameObject> obj);
+        void AddSnowList(ObjPtr<GameObject> obj);
 
-		void RemoveSnowList(ObjPtr<GameObject> obj);
+        void RemoveSnowList(ObjPtr<GameObject> obj);
 
-		void InPutMove();
+        void InPutMove();
 
-		void InPutHoldSnow();
+        void InPutHoldSnow();
 
-		void HasSnow(bool value);
-	private:
+        void HasSnow(bool value);
 
-		DirectX::SimpleMath::Vector3 m_InputDir;
+        void AddScoop(int SnowCount);
 
-		ObjPtr<Component> MoveComponent;
+        void SetMaxScoop(int MaxCount);
+        
+        void AttachNearestSnow();
 
-		std::unordered_set<ObjPtr<GameObject>> m_Snows;
+        void DetachSnow();
+    private:
 
-		ObjPtr<GameObject> curSnow;
+        DirectX::SimpleMath::Vector3 m_InputDir;
 
-		bool is_Snow = false;
+        ObjPtr<Component> MoveComponent;
 
-	public:
-		USCRIPT_PROPERTY()
-		ObjPtr<GameObject> m_TileMap;
-		USCRIPT_PROPERTY()
-		ObjPtr<GameObject> m_SnowManager;
-	};
+        std::unordered_set<ObjPtr<GameObject>> m_Snows;
+
+        ObjPtr<GameObject> curSnow;
+
+        bool is_Snow = false;
+
+        int SnowScoopCount = 0;
+
+        int MaxPlayerScoop = 10;
+
+        bool m_holdSpace = false;
+
+    public:
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> m_TileMap;
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> m_SnowManager;
+
+        bool IsHoldingSpace() const { return m_holdSpace; }
+        bool HasCurrentSnow() const { return curSnow.IsValid(); }
+
+        bool m_pendingAttach = false;
+        int m_attachDelayFrames = 0;
+
+        int GetScoopCount() const { return SnowScoopCount; }
+
+    };
 }

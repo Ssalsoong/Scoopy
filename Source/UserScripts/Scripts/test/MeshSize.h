@@ -5,23 +5,23 @@
 
 namespace MMMEngine
 {
-	class USERSCRIPTS MeshSize : public ScriptBehaviour
-	{
-	private:
-		RTTR_ENABLE(ScriptBehaviour)
-			RTTR_REGISTRATION_FRIEND
-	public:
-		MeshSize()
-		{
+    class USERSCRIPTS MeshSize : public ScriptBehaviour
+    {
+    private:
+        RTTR_ENABLE(ScriptBehaviour)
+        RTTR_REGISTRATION_FRIEND
+    public:
+        MeshSize()
+        {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
 
         }
 
-		USCRIPT_MESSAGE()
-		void Start();
+        USCRIPT_MESSAGE()
+        void Start();
 
-		ObjPtr<Transform> MeshTrans;
+        ObjPtr<Transform> MeshTrans;
 
-		void SetMatrixMesh(float size);
-	};
+        void SetMatrixMesh(float size);
+    };
 }

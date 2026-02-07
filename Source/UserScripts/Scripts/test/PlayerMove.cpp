@@ -4,6 +4,7 @@
 #include "MMMInput.h"
 #include "TileMap.h"
 #include "RigidBodyComponent.h"
+#include "PlayerController.h"
 
 
 
@@ -29,18 +30,16 @@ void MMMEngine::PlayerMove::FixedUpdate()
 	{
 		m_LookTarget = false;
 
-		if (Snow.IsValid())
+		Vector3 fwd = rb->Px_GetForward(); // 또는 Transform forward
+		fwd.y = 0.f;
+
+		if (fwd.LengthSquared() > 1e-6f)
 		{
-			Vector3 to = Snow->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
-			to.y = 0.f;
-			if (to.LengthSquared() > 1e-6f)
-			{
-				to.Normalize();
-				float targetYaw = std::atan2(to.x, to.z);
-				rb->SnapRotation(Quaternion::CreateFromAxisAngle(Vector3::Up, targetYaw));
-			}
+			fwd.Normalize();
+			float targetYaw = std::atan2(fwd.x, fwd.z);
+			rb->SnapRotation(Quaternion::CreateFromAxisAngle(Vector3::Up, targetYaw));
 		}
-		return; // 이 프레임은 회전만 처리
+		return;
 	}
 
 	ApplyYawFromVelocity(desiredVel);
@@ -58,7 +57,33 @@ Vector3 MMMEngine::PlayerMove::ComputeDesiredVelocity()
 	Vector3 dir(input.x, 0.f, input.z);
 
 	if (dir.LengthSquared() > 1e-6f) dir.Normalize();
-	return dir * basespeed * Time::GetDeltaTime();
+	float speed = ComputeSpeed();
+	return dir * speed * Time::GetFixedDeltaTime();
+}
+
+
+float MMMEngine::PlayerMove::ComputeSpeed()
+{
+	float speed = DefaultSpeed;
+
+	if (T.IsValid())
+	{
+		auto pos = GetTransform()->GetWorldPosition();
+		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
+	}
+
+	int scoop = 0;
+	if (auto pc = GetComponent<PlayerController>(); pc.IsValid())
+		scoop = pc->GetScoopCount();
+
+	if (is_Scoop)
+	{
+		float slowed = speed - (scoop * MinusSpeed);
+		if (slowed < MinSpeed) slowed = MinSpeed;
+		speed = slowed;
+	}
+
+	return speed;
 }
 
 
@@ -109,16 +134,17 @@ float MMMEngine::PlayerMove::WrapPi(float a)
 
 void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 {
+	if (is_Scoop == value && Snow == target) return; // 중복 호출 방지
+
+
 	Snow = target;
 	is_Scoop = value;
 	isSlow = value;
 	m_LookTarget = value;
-	
-	if(value) m_rigid->SetInterpolationMode(RigidBodyComponent::InterpolationMode::None);
-	else m_rigid->SetInterpolationMode(RigidBodyComponent::InterpolationMode::Interpolate);
 }
 
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
 	m_InputDir = vec;
 }
+

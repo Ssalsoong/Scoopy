@@ -285,10 +285,13 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerMove>("PlayerMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerMove>"))
-		.property("basespeed", &PlayerMove::basespeed)
 		.property("isSlow", &PlayerMove::isSlow)
 		.property("turnSpeed", &PlayerMove::turnSpeed)
-		.property("is_Scoop", &PlayerMove::is_Scoop);
+		.property("is_Scoop", &PlayerMove::is_Scoop)
+		.property("DefaultSpeed", &PlayerMove::DefaultSpeed)
+		.property("OnSnowSpeed", &PlayerMove::OnSnowSpeed)
+		.property("MinusSpeed", &PlayerMove::MinusSpeed)
+		.property("MinSpeed", &PlayerMove::MinSpeed);
 
 	registration::class_<ObjPtr<PlayerMove>>("ObjPtr<PlayerMove>")
 		.constructor([]() { return Object::NewObject<PlayerMove>(); })
@@ -306,8 +309,10 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<SnowCollider>("SnowCollider")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowCollider>"))
 		.property("m_Rolesmooth", &SnowCollider::m_Rolesmooth)
+		.property("TriggerCollider", &SnowCollider::TriggerCollider)
 		.property("SnowManager", &SnowCollider::SnowManager)
-		.property("m_holdDistance", &SnowCollider::m_holdDistance);
+		.property("m_holdDistance", &SnowCollider::m_holdDistance)
+		.property("m_rollSpeed", &SnowCollider::m_rollSpeed);
 
 	registration::class_<ObjPtr<SnowCollider>>("ObjPtr<SnowCollider>")
 		.constructor([]() { return Object::NewObject<SnowCollider>(); })
@@ -332,7 +337,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<TileMap>("TileMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
-		.property("trans", &TileMap::trans)
+		.property("P_trans", &TileMap::P_trans)
 		.property("threshold", &TileMap::threshold)
 		.property("box", &TileMap::box);
 

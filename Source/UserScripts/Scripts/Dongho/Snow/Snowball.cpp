@@ -50,3 +50,10 @@ void MMMEngine::Snowball::PointUp()
 	int maxpoint = m_player->GetComponent<Player>()->maxpoint;
 	point = std::min(point, maxpoint);
 }
+
+void MMMEngine::Snowball::SetPoint(int t)
+{
+	point = t;
+	int maxpoint = m_player->GetComponent<Player>()->maxpoint;
+	point = std::min(point, maxpoint);
+}
