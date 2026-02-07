@@ -21,8 +21,11 @@ void MMMEngine::PlayerMove::Start()
 
 	// 애니메이션 컨트롤러 저장
 	mPAController = GetComponent<PlayerAnimController>();
-	if (mPAController) {
+	if (!mPAController) {
 		std::cout << "PlayerMove::PlayerAnimController Not Found !!!" << std::endl;
+	}
+	else {
+		mPAController->SetDefaultSpeed(DefaultSpeed);
 	}
 }
 
@@ -51,6 +54,11 @@ void MMMEngine::PlayerMove::FixedUpdate()
 
 	ApplyYawFromVelocity(desiredVel);
 
+
+	// 애니메이션 설정
+	if (mPAController) {
+		mPAController->SetMoveSpeed(desiredVel.Length());
+	}
 }
 
 
@@ -66,29 +74,31 @@ Vector3 MMMEngine::PlayerMove::ComputeDesiredVelocity()
 	if (dir.LengthSquared() > 1e-6f) dir.Normalize();
 	float speed = ComputeSpeed();
 
-	return dir * speed * Time::GetFixedDeltaTime();
+	Vector3 finalSpeed = dir * speed * Time::GetFixedDeltaTime();
+
+	return finalSpeed;
 }
 
 
 float MMMEngine::PlayerMove::ComputeSpeed()
 {
-	float speed = DefaultSpeed;
-
-	if (T.IsValid())
-	{
-		auto pos = GetTransform()->GetWorldPosition();
-		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
-	}
-
 	int scoop = 0;
 	if (auto pc = GetComponent<PlayerController>(); pc.IsValid())
 		scoop = pc->GetScoopCount();
 
 	if (is_Scoop)
 	{
-		float slowed = speed - (scoop * MinusSpeed);
+		float slowed = DefaultSpeed - (scoop * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
-		speed = slowed;
+		return slowed; // 스쿱 상태면 타일 영향 무시
+	}
+
+	// 스쿱 아닐 때만 타일 속도 적용
+	float speed = DefaultSpeed;
+	if (T.IsValid())
+	{
+		auto pos = GetTransform()->GetWorldPosition();
+		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
 	}
 
 	return speed;
@@ -140,7 +150,7 @@ float MMMEngine::PlayerMove::WrapPi(float a)
 	return a;
 }
 
-void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
+void MMMEngine::PlayerMove::SetScoopMode(bool value, ObjPtr<GameObject> target)
 {
 	if (is_Scoop == value && Snow == target) return; // 중복 호출 방지
 
@@ -158,14 +168,5 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
-	// 애니메이션 세팅
-	if (mPAController) {
-		if(vec != Vector3::Zero)
-			mPAController->SetMoveSpeed(1.0f);
-		else
-			mPAController->SetMoveSpeed(0.0f);
-	}
-
 	m_InputDir = vec;
 }
-
