@@ -15,8 +15,8 @@ namespace MMMEngine
         RTTR_ENABLE(ScriptBehaviour)
         RTTR_REGISTRATION_FRIEND
     private:
-        static constexpr int GRID_W = 21;
-        static constexpr int GRID_H = 21;
+        static constexpr int GRID_W = 30;
+        static constexpr int GRID_H = 30;
     public:
         TileMap()
         {
@@ -26,7 +26,7 @@ namespace MMMEngine
         }
 
         USCRIPT_PROPERTY()
-        ObjPtr<Transform> trans = nullptr;
+        ObjPtr<Transform> P_trans = nullptr;
 
         struct Vec2 { float x, z; };
 
@@ -60,12 +60,15 @@ namespace MMMEngine
         ResPtr<Prefab> box;
 
 
-        int width = 21;
-        int offset = 10;
+        int width = 30;
+        int offset = 15;
 
         int index = 0;
         std::vector<ObjPtr<GameObject>> boxlist;
 
+        void SetOneTimeValue(int value);
+    private:
+        int OneTimeGetValue = 1;
 
     public:
         float DistXZ(const Vec2& a, const Vec2& b);
@@ -80,5 +83,11 @@ namespace MMMEngine
 
         //현재 player위치 얻는 함수
         Vec2 GetCurPosXZ() const;
+
+        void ResetTile();
+
+        bool IsTileClearedAt(float x, float z);
+
+
     };
 }

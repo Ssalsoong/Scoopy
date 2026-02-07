@@ -30,6 +30,12 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         float ChasingSpeed = 12.0f;
 
+        USCRIPT_PROPERTY()
+        DirectX::SimpleMath::Vector2 XClamp = { -55.0f,55.0f };
+
+        USCRIPT_PROPERTY()
+        DirectX::SimpleMath::Vector2 ZClamp = { -55.0f,55.0f };
+
         USCRIPT_MESSAGE()
         void Start();
 

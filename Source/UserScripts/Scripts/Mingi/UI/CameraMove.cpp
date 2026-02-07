@@ -4,6 +4,8 @@
 #include "Transform.h"
 #include "MMMTime.h"
 
+#include <cmath>
+
 void MMMEngine::CameraMove::Start()
 {
 	if (!Target.IsValid())
@@ -21,6 +23,10 @@ void MMMEngine::CameraMove::Update()
 		return;
 
 	auto targetPos = Target->GetWorldPosition();
+
+	targetPos.x = std::clamp(targetPos.x, XClamp.x, XClamp.y);
+	targetPos.z = std::clamp(targetPos.z, ZClamp.x, ZClamp.y);
+
 	m_currentPos = Vector3::Lerp(m_currentPos, targetPos, ChasingSpeed * Time::GetDeltaTime());
 	GetTransform()->SetLocalPosition(m_currentPos + Offset);
 }
