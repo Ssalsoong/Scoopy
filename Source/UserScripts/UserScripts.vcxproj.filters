@@ -6,54 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\MiniMap.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h">
-      <Filter>Scripts</Filter>
-    </ClInclude>
-    <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp">
-      <Filter>Scripts</Filter>
-    </ClCompile>
     <ClCompile Include="Scripts\Dongho\Battlestats.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Building\BuffBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Building\Building.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -77,6 +29,15 @@
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -110,6 +71,15 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\CameraMove.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>

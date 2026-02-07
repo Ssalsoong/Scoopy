@@ -5,7 +5,6 @@
 #include "MMMTime.h"
 #include "Image.h"
 #include "Transform.h"
-#include "../../Dongho/Manager/SnowballManager.h"
 
 using namespace MMMEngine;
 
@@ -39,9 +38,6 @@ int MMMEngine::TitleMenu::GetIdxFromButtonString(std::string name)
 
 void MMMEngine::TitleMenu::MenuControl()
 {
-	if (!SnowballManager::instance.IsValid())
-		auto s = SnowballManager::instance->castlepos;
-
 	// 메뉴 이동
 	int lastSelected = -1;
 	if (Input::GetKeyDown(KeyCode::DownArrow))
