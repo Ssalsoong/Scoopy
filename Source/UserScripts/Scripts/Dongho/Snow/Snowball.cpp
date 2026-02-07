@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
+#include "../../test/SnowCollider.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -11,7 +12,9 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<Snowball>("Snowball")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Snowball>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Snowball>"))
+		.property("point", &Snowball::point)
+		.property("m_player", &Snowball::m_player);
 
 	registration::class_<ObjPtr<Snowball>>("ObjPtr<Snowball>")
 		.constructor(
@@ -22,53 +25,12 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::Snowball::Start()
 {
-
+	m_player = GetGameObject()->Find("Player");
 }
 
 void MMMEngine::Snowball::Update()
 {
-	if (IsCarried())
-	{
-		RollSnow();
-	}
-	GetTransform()->SetWorldScale(scale, scale, scale);
-}
-
-void MMMEngine::Snowball::RollSnow()
-{
-	// 스케일 계산 (포인트 기반)
-	point = std::min(point, carrier->maxpoint);
-	scale = minscale + scaleup * point;
-	scale = std::min(scale, maxscale);
-	float r = baseRadius * scale;
-	float distance = r * k;
-	auto pos = DirectX::SimpleMath::Vector3::Backward * distance;
-	pos.y = scale / 2;
-	GetTransform()->SetLocalPosition(pos);
-	//GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
-	auto worldPos = GetTransform()->GetWorldPosition();
-	if (!hasPrev) { prevWorldPos = worldPos; hasPrev = true; return; }
 	
-	auto delta = worldPos - prevWorldPos;
-	delta.y = 0.0f;
-
-	float ds = delta.Length();
-	if (ds > 1e-5f && r > 1e-5f)
-	{
-		auto dir = delta / ds;
-
-		auto axis = DirectX::SimpleMath::Vector3::Up.Cross(dir);
-		if (axis.LengthSquared() > 1e-8f) axis.Normalize();
-
-		float dTheta = ds / r;
-
-		auto deltaQ = DirectX::SimpleMath::Quaternion::CreateFromAxisAngle(axis, dTheta);
-
-		auto currQ = GetTransform()->GetWorldRotation();
-		auto nextQ = deltaQ * currQ;
-		GetTransform()->SetWorldRotation(nextQ);
-	}
-	prevWorldPos = worldPos;
 }
 
 void MMMEngine::Snowball::EatSnow(ObjPtr<GameObject> other)
@@ -78,6 +40,13 @@ void MMMEngine::Snowball::EatSnow(ObjPtr<GameObject> other)
 	if (snowcomp == nullptr)
 		return;
 	point += snowcomp->GetPoint();
-	point = std::min(point, carrier->maxpoint);
-	Destroy(other);
+	int maxpoint = m_player->GetComponent<Player>()->maxpoint;
+	point = std::min(point, maxpoint);
+}
+
+void MMMEngine::Snowball::PointUp()
+{
+	point++;
+	int maxpoint = m_player->GetComponent<Player>()->maxpoint;
+	point = std::min(point, maxpoint);
 }

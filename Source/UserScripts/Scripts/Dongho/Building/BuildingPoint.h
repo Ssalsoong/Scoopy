@@ -21,6 +21,8 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         float checkdist = 2.f;
         bool canBuild = false;
+        bool alreadybuilt = false;
+        void Setalreadybuilt(bool value) { alreadybuilt = value; }
         ObjPtr<GameObject> player;
         DirectX::SimpleMath::Vector3 playerpos;
         USCRIPT_MESSAGE()

@@ -22,7 +22,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingManager>("BuildingManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("m_building", &BuildingManager::m_building);
+		.property("pre_building", &BuildingManager::pre_building);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor(
@@ -36,7 +36,7 @@ MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instan
 
 void MMMEngine::BuildingManager::Start()
 {
-	m_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
+	pre_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
 
 	buildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomalTower_StaticMesh.staticmesh");
 	HPbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomal2Tower_StaticMesh.staticmesh");
@@ -67,23 +67,11 @@ void MMMEngine::BuildingManager::Update()
 
 void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 {
-	auto it = std::find(buildingpoints.begin(), buildingpoints.end(), obj);
-	if (it == buildingpoints.end())
-		return;
-	buildingpoints.erase(it);
+	obj->GetComponent<BuildingPoint>()->Setalreadybuilt(true);
 
-	Destroy(obj->GetComponent<BuildingPoint>());
-
-	auto building = Instantiate(m_building);
+	auto building = Instantiate(pre_building);
 	building->GetTransform()->SetParent(obj->GetTransform());
 	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
-	/*obj->SetName("Building");
-	obj->SetTag("Building");
-	obj->AddComponent<Building>();
-	obj->AddComponent<Battlestats>();
-	obj->GetComponent<Battlestats>()->HP = 50;
-	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
-	obj->GetTransform()->SetWorldScale(buildingscale);*/
 	Buildings.push_back(building);
 }
 

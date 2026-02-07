@@ -53,7 +53,7 @@ namespace MMMEngine
         std::vector<ObjPtr<GameObject>> buildingpoints;
         std::vector<ObjPtr<GameObject>> Buildings;
 
-        ResPtr<Prefab> m_building;
+        ResPtr<Prefab> pre_building;
 
         static ObjPtr<BuildingManager> instance;
     };

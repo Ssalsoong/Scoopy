@@ -47,7 +47,6 @@ void MMMEngine::SnowCollider::Start()
 		TriggerCollider = childTrans->GetGameObject();
 		TriggerCollider->GetComponent<SnowTrigger>()->SetParentPtr(selfPtr);
 	}
-
 	SetSize(1.0f);
 }
 

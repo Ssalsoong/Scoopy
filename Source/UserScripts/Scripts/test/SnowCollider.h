@@ -25,13 +25,13 @@ namespace MMMEngine
         
         USCRIPT_MESSAGE()
         void FixedUpdate();
-
         bool On_Player = false;
+        bool GetOnPlayer() const{ return On_Player; }
         ObjPtr<GameObject> m_player;
         DirectX::SimpleMath::Vector3 curPos{};
-
         float m_Size = 0.0f;
         void SetSize(float size);
+        float GetSize() {return m_Size;}
 
         USCRIPT_PROPERTY()
         float m_Rolesmooth = 5.0f;
@@ -58,6 +58,5 @@ namespace MMMEngine
         float m_holdHeight = 0.0f;
 
         void SnowDestory();
-
     };
 }

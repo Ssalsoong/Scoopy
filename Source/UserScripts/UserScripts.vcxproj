@@ -121,7 +121,6 @@
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp" />
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp" />
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
@@ -155,7 +154,6 @@
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h" />
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h" />
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h" />
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
