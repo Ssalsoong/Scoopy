@@ -15,11 +15,8 @@ namespace MMMEngine
     private:
         enum PSTAT : int {
             IDLE = 0,
-            MOVE,
             ATTACK,
-            MOVEATTACK,
-            SCOOPIDLE,
-            SCOOPMOVE,
+            SCOOP,
             END
         };
 
@@ -28,10 +25,6 @@ namespace MMMEngine
         RTTR_REGISTRATION_FRIEND
 
         ObjPtr<AnimResourceManager> mAnimManager;
-        
-        float mAtkElipsedTime = 0.0f;
-        bool isAtking = false;
-        float mMoveSpeed = 0.0f;
 
         PSTAT mCurrStat = PSTAT::IDLE;
 
@@ -47,10 +40,19 @@ namespace MMMEngine
         }
 
         USCRIPT_PROPERTY()
-            float mIdleSpeed = 0.01f;
+            float mIdleSpeed = 0.1f;
 
         USCRIPT_PROPERTY()
             float mAnimSpeed = 1.0f;
+
+        USCRIPT_PROPERTY()
+            float mMoveSpeed = 0.0f;
+
+        USCRIPT_PROPERTY()
+            bool mAttacking = false;
+
+        USCRIPT_PROPERTY()
+            bool mScooping = false;
 
 		USCRIPT_PROPERTY()
 			int mAnimSize = 0;
@@ -77,9 +79,5 @@ namespace MMMEngine
         // 현재 공격상태 입력
         USCRIPT_PROPERTY()
             void SetAttack(bool _isAttacking);
-
-        // 공격재생 (분리형)
-		USCRIPT_PROPERTY()
-			void PlayAttack();
     };
 }

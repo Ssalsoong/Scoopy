@@ -104,7 +104,6 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
-		.property("mAnimManager", &EnemyAnimController::mAnimManager)
 		.property("mAnimator", &EnemyAnimController::mAnimator)
 		.property("mEnemy", &EnemyAnimController::mEnemy)
 		.property("mAnimSpeed", &EnemyAnimController::mAnimSpeed)
@@ -115,7 +114,15 @@ RTTR_PLUGIN_REGISTRATION
 		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
 
 	registration::class_<PlayerAnimController>("PlayerAnimController")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"))
+		.property("mIdleSpeed", &PlayerAnimController::mIdleSpeed)
+		.property("mAnimSpeed", &PlayerAnimController::mAnimSpeed)
+		.property("mMoveSpeed", &PlayerAnimController::mMoveSpeed)
+		.property("mAttacking", &PlayerAnimController::mAttacking)
+		.property("mScooping", &PlayerAnimController::mScooping)
+		.property("mAnimSize", &PlayerAnimController::mAnimSize)
+		.property("mAnimator", &PlayerAnimController::mAnimator)
+		.property("mAnimController", &PlayerAnimController::mAnimController);
 
 	registration::class_<ObjPtr<PlayerAnimController>>("ObjPtr<PlayerAnimController>")
 		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
