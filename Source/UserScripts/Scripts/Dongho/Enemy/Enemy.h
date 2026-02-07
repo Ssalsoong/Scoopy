@@ -20,7 +20,9 @@ namespace MMMEngine {
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
 		void Start();
+		USCRIPT_MESSAGE()
 		void Update();
 		enum class EnemyState
 		{
@@ -30,9 +32,12 @@ namespace MMMEngine {
 			AttackCastle,
 			ChasePlayer,
 			AttackPlayer,
-			Dead
+			Dead,
+			None
 		};
 		EnemyState state = EnemyState::GoToCastle;
+		EnemyState pendingState = EnemyState::None;
+		bool stateLocked = false;
 		ObjPtr<GameObject> buildingTarget = nullptr;
 		DirectX::SimpleMath::Vector3 buildingpos;
 		bool HitByPlayer = false;
@@ -40,31 +45,29 @@ namespace MMMEngine {
 		ObjPtr<Transform> tr;
 		DirectX::SimpleMath::Vector3 pos;
 		ObjPtr<GameObject> player;
-		ObjPtr<Player> playercomp;
 		ObjPtr<Transform> playertr;
 		DirectX::SimpleMath::Vector3 playerpos;
 		ObjPtr<GameObject> castle;
-		ObjPtr<Castle> castlecomp;
 		ObjPtr<Transform> castletr;
 		DirectX::SimpleMath::Vector3 castlepos;
-		struct EnemyStats
-		{
-			int HP = 0;
-			int atk = 0;
-			float velocity = 0.f;
-			float attackDelay = 0.f;
-			float battledist = 0.f;
-			float checkdist = 0.f;
-		};
-		EnemyStats stats;
-		float playerLostdist = 50.0f;
-		void GetDamage(int t) { stats.HP -= t; stats.HP = std::max(stats.HP, 0); };
+		USCRIPT_PROPERTY()
+		int atk = 0;
+		USCRIPT_PROPERTY()
+		float velocity = 0.f;
+		USCRIPT_PROPERTY()
+		float attackDelay = 0.f;
+		USCRIPT_PROPERTY()
+		float battledist = 0.f;
+		USCRIPT_PROPERTY()
+		float checkdist = 0.f;
+
 		void PlayerHitMe();
-		int GetHP() { return stats.HP; }
 		bool MoveToTarget(const DirectX::SimpleMath::Vector3& target, float stopDist);
 		bool CheckPlayer();
 		bool LostPlayer();
 		void ChangeState(EnemyState next);
+		void RequestState(EnemyState next);
+		void FinishAttackCycle();
 		void LookAt(const DirectX::SimpleMath::Vector3& target);
 		void GoToCastle();
 		void AttackCastle();
@@ -74,6 +77,11 @@ namespace MMMEngine {
 		void AttackBuilding();
 		bool FindNearBuilding();
 		void Dead();
+
+		float snowDamageTimer = 0.0f;
+		float snowDamageDelay = 0.5f;
+		void CalSnowDamageDelay();
+		bool ApplySnowDamage();
 	};
 }
 

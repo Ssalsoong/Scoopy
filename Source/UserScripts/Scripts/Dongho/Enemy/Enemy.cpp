@@ -5,51 +5,31 @@
 #include "../Manager/EnemySpawner.h"
 #include "MMMTime.h"
 #include "Transform.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "ArrowEnemy.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<Enemy>("Enemy")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Enemy>"))
-		.property_readonly("HP", &Enemy::GetHP);
-
-	registration::class_<ObjPtr<Enemy>>("ObjPtr<Enemy>")
-		.constructor(
-			[]() {
-				return Object::NewObject<Enemy>();
-			}).method("Inject", &ObjPtr<Enemy>::Inject);
-}
+#include "../Manager/BattleManager.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Enemy::Start()
 {
 	tr = GetTransform();
 	player = GameObject::Find("Player");
-	if (player) {
-		playercomp = player->GetComponent<Player>();
+	if (player)
 		playertr = player->GetTransform();
-	}
 
 	castle = GameObject::Find("Castle");
-	if (castle) {
-		castlecomp = castle->GetComponent<Castle>();
+	if (castle)
 		castletr = castle->GetTransform();
-	}
 }
 
 
 void MMMEngine::Enemy::Update()
 {
-	if (!tr || !playertr || !castletr || !playercomp || !castlecomp) return;
+	if (!tr || !playertr || !castletr) return;
 	pos = tr->GetWorldPosition();
 	playerpos = playertr->GetWorldPosition();
 	castlepos = castletr->GetWorldPosition();
 
-	if (stats.HP <= 0) ChangeState(EnemyState::Dead);
+	CalSnowDamageDelay();
 
 	if (state == EnemyState::AttackBuilding)
 	{
@@ -71,9 +51,12 @@ void MMMEngine::Enemy::Update()
 
 	if (FindNearBuilding())
 	{
-		ChangeState(EnemyState::GoToBuilding);
-		GoToBuilding();
-		return;
+		RequestState(EnemyState::GoToBuilding);
+		if (state == EnemyState::GoToBuilding)
+		{
+			GoToBuilding();
+			return;
+		}
 	}
 
 
@@ -82,10 +65,10 @@ void MMMEngine::Enemy::Update()
 		if (HitByPlayer)
 		{
 			HitByPlayer = false;
-			ChangeState(EnemyState::ChasePlayer);
+			RequestState(EnemyState::ChasePlayer);
 		}
 		else if(CheckPlayer())
-			ChangeState(EnemyState::ChasePlayer);
+			RequestState(EnemyState::ChasePlayer);
 	}
 
 	switch (state)
@@ -109,11 +92,49 @@ void MMMEngine::Enemy::ChangeState(EnemyState next)
 	state = next;
 
 	attackTimer = 0.0f;
+	if (next == EnemyState::GoToCastle || next == EnemyState::ChasePlayer || next == EnemyState::GoToBuilding)
+	{
+		stateLocked = false;
+		pendingState = EnemyState::None;
+	}
+	else if (next == EnemyState::AttackCastle || next == EnemyState::AttackPlayer || next == EnemyState::AttackBuilding)
+	{
+		stateLocked = true;
+		pendingState = EnemyState::None;
+	}
+}
+
+void MMMEngine::Enemy::RequestState(EnemyState next)
+{
+	if (state == next)
+		return;
+
+	if (stateLocked)
+	{
+		pendingState = next;
+		return;
+	}
+	ChangeState(next);
+}
+
+void MMMEngine::Enemy::FinishAttackCycle()
+{
+	attackTimer = 0.0f;
+	stateLocked = false;
+
+	if (pendingState != EnemyState::None)
+	{
+		EnemyState next = pendingState;
+		pendingState = EnemyState::None;
+		ChangeState(next);
+	}
+	else
+		stateLocked = true;
 }
 
 void MMMEngine::Enemy::GoToCastle()
 {
-	bool moving = MoveToTarget(castlepos, stats.battledist);
+	bool moving = MoveToTarget(castlepos, battledist+0.5f);
 	if (!moving)
 		ChangeState(EnemyState::AttackCastle);
 }
@@ -122,13 +143,15 @@ void MMMEngine::Enemy::AttackCastle()
 {
 	LookAt(castlepos);
 	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= stats.attackDelay)
+	if (attackTimer >= attackDelay)
 	{
-		if (GetComponent<ArrowEnemy>())
-			GetComponent<ArrowEnemy>()->ArrowAttack(castle);
-		else
-			castlecomp->GetDamage(stats.atk);
-		attackTimer = 0.0f;
+		if (pendingState == EnemyState::None) {
+			if (GetComponent<ArrowEnemy>())
+				GetComponent<ArrowEnemy>()->ArrowAttack(castle);
+			else
+				BattleManager::instance->Attack(castle, atk);
+		}
+		FinishAttackCycle();
 	}
 }
 
@@ -136,10 +159,10 @@ void MMMEngine::Enemy::ChasePlayer()
 {
 	if (LostPlayer())
 	{
-		ChangeState(EnemyState::GoToCastle);
+		RequestState(EnemyState::GoToCastle);
 		return;
 	}
-	bool moving = MoveToTarget(playerpos, stats.battledist);
+	bool moving = MoveToTarget(playerpos, battledist);
 	if (!moving)
 		ChangeState(EnemyState::AttackPlayer);
 }
@@ -148,26 +171,26 @@ void MMMEngine::Enemy::AttackPlayer()
 {
 	if (LostPlayer())
 	{
-		ChangeState(EnemyState::GoToCastle);
-		return;
+		RequestState(EnemyState::GoToCastle);
 	}
 	LookAt(playerpos);
 	float dx = playerpos.x - pos.x;
 	float dz = playerpos.z - pos.z;
 	float d2 = dx * dx + dz * dz;
-	if (d2 > stats.battledist * stats.battledist)
+	if (d2 > battledist * battledist)
 	{
-		ChangeState(EnemyState::ChasePlayer);
-		return;
+		RequestState(EnemyState::ChasePlayer);
 	}
 	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= stats.attackDelay)
+	if (attackTimer >= attackDelay)
 	{
-		if (GetComponent<ArrowEnemy>())
-			GetComponent<ArrowEnemy>()->ArrowAttack(player);
-		else
-			playercomp->GetDamage(stats.atk);
-		attackTimer = 0.0f;
+		if (pendingState == EnemyState::None) {
+			if (GetComponent<ArrowEnemy>())
+				GetComponent<ArrowEnemy>()->ArrowAttack(player);
+			else
+				BattleManager::instance->Attack(player, atk);
+		}
+		FinishAttackCycle();
 	}
 
 }
@@ -179,41 +202,43 @@ void MMMEngine::Enemy::GoToBuilding()
 		buildingTarget->GetComponent<Building>()->isDead)
 	{
 		buildingTarget = nullptr;
-		ChangeState(EnemyState::GoToCastle);
+		RequestState(EnemyState::GoToCastle);
 		return;
 	}
-	bool moving = MoveToTarget(buildingpos, stats.battledist);
+	bool moving = MoveToTarget(buildingpos, battledist);
 	if (!moving)
 		ChangeState(EnemyState::AttackBuilding);
 }
 
 void MMMEngine::Enemy::AttackBuilding()
 {
-	if (!buildingTarget.IsValid() ||
-		buildingTarget->GetComponent<Building>() == nullptr ||
-		buildingTarget->GetComponent<Building>()->isDead)
+	bool invalid = false;
+	if (!buildingTarget.IsValid())
 	{
-		buildingTarget = nullptr;
-		ChangeState(EnemyState::GoToCastle);
-		return;
+		RequestState(EnemyState::GoToCastle);
+		invalid = true;
 	}
-
-	auto b = buildingTarget->GetComponent<Building>();
-	if (!b || b->isDead)
-	{
-		buildingTarget = nullptr;
-		ChangeState(EnemyState::GoToCastle);
-		return;
+	else {
+		auto b = buildingTarget->GetComponent<Building>();
+		if (!b || b->isDead)
+		{
+			RequestState(EnemyState::GoToCastle);
+			invalid = true;
+		}
 	}
-	LookAt(buildingpos);
+	if(!invalid)
+		LookAt(buildingpos);
 	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= stats.attackDelay)
+	if (attackTimer >= attackDelay)
 	{
-		if (GetComponent<ArrowEnemy>())
-			GetComponent<ArrowEnemy>()->ArrowAttack(buildingTarget);
-		else
-			buildingTarget->GetComponent<Building>()->GetDamage(stats.atk);
-		attackTimer = 0.0f;
+		if (!invalid && pendingState == EnemyState::None) {
+			if (GetComponent<ArrowEnemy>())
+				GetComponent<ArrowEnemy>()->ArrowAttack(buildingTarget);
+			else
+				BattleManager::instance->Attack(buildingTarget, atk);
+		}
+		if (invalid) buildingTarget = nullptr;
+		FinishAttackCycle();
 	}
 }
 
@@ -221,8 +246,13 @@ void MMMEngine::Enemy::Dead()
 {
 	GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 	ChangeState(EnemyState::GoToCastle);
-	EnemySpawner::instance->ReturnEnemy(GetGameObject());
+	pendingState = EnemyState::None;
+	attackTimer = 0.0f;
+	HitByPlayer = false;
+	buildingTarget = nullptr;
+	EnemySpawner::instance->EnemyDeath(GetGameObject());
 	GetGameObject()->SetActive(false);
+	GetComponent<Battlestats>()->HP = 1;
 }
 
 bool MMMEngine::Enemy::FindNearBuilding()
@@ -230,7 +260,7 @@ bool MMMEngine::Enemy::FindNearBuilding()
 	auto buildings = GameObject::FindGameObjectsWithTag("Building");
 	if (buildings.empty()) return false;
 
-	float bestD2 = stats.checkdist * stats.checkdist;
+	float bestD2 = checkdist * checkdist;
 	ObjPtr<GameObject> best = nullptr;
 
 	for (auto& b : buildings)
@@ -249,9 +279,11 @@ bool MMMEngine::Enemy::FindNearBuilding()
 	}
 	if (best)
 	{
-		buildingTarget = best;
-		buildingpos = buildingTarget->GetTransform()->GetWorldPosition();
-		return true;
+		if (!best->GetComponent<Building>()->isDead) {
+			buildingTarget = best;
+			buildingpos = buildingTarget->GetTransform()->GetWorldPosition();
+			return true;
+		}
 	}
 	return false;
 }
@@ -284,8 +316,8 @@ bool MMMEngine::Enemy::MoveToTarget(const DirectX::SimpleMath::Vector3& target, 
 	float dist = sqrtf(dist2);
 	dx /= dist; dz /= dist;
 
-	pos.x += dx * stats.velocity * Time::GetDeltaTime();
-	pos.z += dz * stats.velocity * Time::GetDeltaTime();
+	pos.x += dx * velocity * Time::GetDeltaTime();
+	pos.z += dz * velocity * Time::GetDeltaTime();
 	tr->SetWorldPosition(pos);
 
 	float yaw = atan2f(dx, dz);
@@ -300,7 +332,7 @@ bool MMMEngine::Enemy::LostPlayer()
 	float dz = playerpos.z - pos.z;
 	float dist2 = dx * dx + dz * dz;
 
-	if (dist2 > playerLostdist * playerLostdist) {
+	if (dist2 > checkdist * checkdist) {
 		return true;
 	}
 	return false;
@@ -308,7 +340,7 @@ bool MMMEngine::Enemy::LostPlayer()
 
 bool MMMEngine::Enemy::CheckPlayer()
 {
-	auto fwd = tr->GetWorldMatrix().Forward();
+	auto fwd = -tr->GetWorldMatrix().Forward();
 	fwd.y = 0.0f;
 	if (fwd.LengthSquared() < 1e-8f) return false;
 	fwd.Normalize();
@@ -316,7 +348,7 @@ bool MMMEngine::Enemy::CheckPlayer()
 	float vx = playerpos.x - pos.x;
 	float vz = playerpos.z - pos.z;
 	float pd2 = vx * vx + vz * vz;
-	if (pd2 < stats.checkdist * stats.checkdist)
+	if (pd2 < checkdist * checkdist)
 	{
 		float inv = 1.0f / sqrtf(pd2);
 		vx *= inv; vz *= inv;
@@ -334,4 +366,19 @@ void MMMEngine::Enemy::PlayerHitMe()
 {
 	if( state!=EnemyState::AttackPlayer && state!=EnemyState::ChasePlayer )
 		HitByPlayer = true;
+}
+
+void MMMEngine::Enemy::CalSnowDamageDelay()
+{
+	if (snowDamageTimer > 0.0f)
+	{
+		snowDamageTimer = std::max(snowDamageTimer - Time::GetDeltaTime(), 0.0f);
+	}
+}
+
+bool MMMEngine::Enemy::ApplySnowDamage()
+{
+	if (snowDamageTimer > 0.0f) return false;
+	snowDamageTimer = snowDamageDelay;
+	return true;
 }

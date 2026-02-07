@@ -6,24 +6,8 @@
 #include "Transform.h"
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "MeshRenderer.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<SnowballManager>("SnowballManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager>"));
-
-	registration::class_<ObjPtr<SnowballManager>>("ObjPtr<SnowballManager>")
-		.constructor(
-			[]() {
-				return Object::NewObject<SnowballManager>();
-			}).method("Inject", &ObjPtr<SnowballManager>::Inject);
-}
+#include "../../test/PlayerMove.h"
 
 MMMEngine::ObjPtr<MMMEngine::SnowballManager> MMMEngine::SnowballManager::instance = nullptr;
 
@@ -54,6 +38,7 @@ void MMMEngine::SnowballManager::OnScoopStart(Player& player)
 	if (player.GetMatchedSnowball()) return;
 	ObjPtr<GameObject> nearest = nullptr;
 	auto playerPos = player.GetTransform()->GetWorldPosition();
+	float nearestD2 = FLT_MAX;
 	for (auto& sObj : Snows)
 	{
 		if (!sObj) continue;
@@ -62,22 +47,29 @@ void MMMEngine::SnowballManager::OnScoopStart(Player& player)
 		if (sc->IsCarried()) continue;
 
 		auto snowPos = sObj->GetTransform()->GetWorldPosition();
-		float bestD = sc->GetScale() * 2.8f;
+		float bestD = sc->GetScale() * 1.0f;
 		float bestD2 = bestD * bestD;
 		float dx = snowPos.x - playerPos.x;
 		float dz = snowPos.z - playerPos.z;
 		float d2 = dx * dx + dz * dz;
 
-		if (d2 < bestD2) {
-			bestD2 = d2;
+		if (d2 <= bestD2 && d2 < nearestD2) {
+			nearestD2 = d2;
 			nearest = sObj;
 		}
 	}
 	if (nearest)
 	{
 		nearest->GetComponent<Snowball>()->carrier = &player;
+		
+		if (m_Player.IsValid())
+		{
+			auto t_move = m_Player->GetComponent<PlayerMove>();
+			t_move->SetScoopMode(true, nearest);
+		}
+
+		player.SnapToSnowball(nearest);
 		player.AttachSnowball(nearest);
-		player.SnapToSnowball();
 		scoopStates[&player] = {};
 	}
 	else
@@ -118,6 +110,11 @@ void MMMEngine::SnowballManager::OnScoopHold(Player& player)
 	if (auto sc = obj->GetComponent<Snowball>())
 	{
 		sc->carrier = &player;
+	}
+	if (m_Player.IsValid())
+	{
+		auto t_move = m_Player->GetComponent<PlayerMove>();
+		t_move->SetScoopMode(true, obj);
 	}
 	player.AttachSnowball(obj);
 

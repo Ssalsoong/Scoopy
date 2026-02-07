@@ -1,5 +1,5 @@
 {
-    "MUID": "e10cb4fb-67c2-49ed-bb23-9d2c07c5e411",
+    "MUID": "2ea39f20-86d7-497c-924e-e3e95cb91228",
     "properties": {
         "_albedo": {
             "file": "Assets\\DefaultMesh\\Default_White.png",
@@ -47,15 +47,15 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.0
+            "value": 0.5
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                1.0,
+                1.0,
+                1.0,
+                1.0
             ]
         },
         "mEmissive": {

@@ -1,13 +1,17 @@
 #include "ScriptBehaviour.h"
 #include "Player.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "MMMTime.h"
 #include "MMMInput.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
+#include "../Manager/GameManager.h"
 #include "../Manager/SnowballManager.h"
 #include "../Snow/Snowball.h"
+#include "../Building/BuildingPoint.h"
+#include "../Manager/BuildingManager.h"
+#include "../Manager/BattleManager.h"
+#include "../../test/PlayerMove.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Player::Start()
 {
@@ -16,10 +20,14 @@ void MMMEngine::Player::Start()
 void MMMEngine::Player::Update()
 {
 	pos = GetTransform()->GetWorldPosition();
-	HandleMovement();
+	//HandleMovement();
+	Velocitydown();
+	if(buildchance)
+		BuildOn();
 	UpdateScoop();
 	HandleAttack();
 	AutoHeal();
+	CalDamageDelay();
 }
 
 // 임시 이동이므로 이후 반드시 삭제
@@ -37,8 +45,8 @@ void MMMEngine::Player::HandleMovement()
 		dx /= len;
 		dz /= len;
 
-		pos.x += dx * velocity * Time::GetDeltaTime();
-		pos.z += dz * velocity * Time::GetDeltaTime();
+		pos.x += dx * (velocity - velocitydown) * Time::GetDeltaTime();
+		pos.z += dz * (velocity - velocitydown) * Time::GetDeltaTime();
 		GetTransform()->SetWorldPosition(pos);
 	}
 }
@@ -69,7 +77,7 @@ bool MMMEngine::Player::AttachSnowball(ObjPtr<GameObject> snow)
 	matchedSnowball->GetTransform()->SetParent(GetTransform());
 	float scale = matchedSnowball->GetComponent<Snowball>()->GetScale();
 	float distance = baseRadius * scale * k;
-	matchedSnowball->GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Forward * distance);
+	matchedSnowball->GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
 	return true;
 }
 
@@ -78,17 +86,21 @@ void MMMEngine::Player::DetachSnowball()
 	if (!matchedSnowball) return;
 	matchedSnowball->GetTransform()->SetParent(nullptr);
 	matchedSnowball = nullptr;
+	
+	auto t_move = GetComponent<PlayerMove>();
+	t_move->SetScoopMode(false, nullptr);
+	
 }
 
-void MMMEngine::Player::SnapToSnowball()
+void MMMEngine::Player::SnapToSnowball(ObjPtr<GameObject> snow)
 {
-	if (!matchedSnowball) return;
+	if (!snow) return;
 
 	auto tr = GetTransform();
-	auto sTr = matchedSnowball->GetTransform();
+	auto sTr = snow->GetTransform();
 	if (!tr || !sTr) return;
 
-	auto sc = matchedSnowball->GetComponent<Snowball>();
+	auto sc = snow->GetComponent<Snowball>();
 	if (!sc) return;
 
 	auto snowPos = sTr->GetWorldPosition();
@@ -135,8 +147,15 @@ void MMMEngine::Player::HandleAttack()
 	auto enemies = GameObject::FindGameObjectsWithTag("Enemy");
 
 
-	const float range = info.battledist;
+	const float range = battledist;
 	const float rangeSq = range * range;
+
+	const float cosHalfFov = 0.5f;
+
+	// 플레이어 Forward (XZ 평면 기준)
+	Vector3 forward = -GetTransform()->GetWorldMatrix().Forward();
+	forward.y = 0.0f;
+	forward.Normalize();
 
 	bool hasEnemyInRange = false;
 
@@ -152,14 +171,21 @@ void MMMEngine::Player::HandleAttack()
 		if (!tr) continue;
 
 		auto p = tr->GetWorldPosition();
-		float dx = p.x - pos.x;
-		float dz = p.z - pos.z;
+		Vector3 toEnemy = p - pos;
+		toEnemy.y = 0.0f;
 
-		if (dx * dx + dz * dz <= rangeSq)
-		{
-			hasEnemyInRange = true;
-			break;
-		}
+		float distSq = toEnemy.LengthSquared();
+		if (distSq > rangeSq)
+			continue;
+
+		toEnemy.Normalize();
+
+		float dot = forward.Dot(toEnemy);
+		if (dot < cosHalfFov)
+			continue;
+
+		hasEnemyInRange = true;
+		break;
 	}
 
 	if (!hasEnemyInRange)
@@ -170,7 +196,7 @@ void MMMEngine::Player::HandleAttack()
 
 	attackTimer += Time::GetDeltaTime();
 
-	if (attackTimer < info.attackDelay)
+	if (attackTimer < attackDelay)
 		return;
 
 	attackTimer = 0.0f;
@@ -184,40 +210,38 @@ void MMMEngine::Player::HandleAttack()
 		if (!tr) continue;
 
 		auto p = tr->GetWorldPosition();
-		float dx = p.x - pos.x;
-		float dz = p.z - pos.z;
 
-		if (dx * dx + dz * dz > rangeSq)
+		Vector3 toEnemy = p - pos;
+		toEnemy.y = 0.0f;
+
+		float distSq = toEnemy.LengthSquared();
+		if (distSq > rangeSq)
 			continue;
 
-		tec->GetDamage(info.atk);
+		toEnemy.Normalize();
+
+		float dot = forward.Dot(toEnemy);
+		if (dot < cosHalfFov)
+			continue;
+
+		BattleManager::instance->Attack(e, atk);
 		tec->PlayerHitMe();
 	}
 }
 
-void MMMEngine::Player::GetDamage(int t)
-{
-	if (damageTimer > 0.0f)
-		return; // 무적 시간 중이면 데미지 무시
-
-	info.HP -= t;
-	info.HP = std::max(info.HP, 0);
-
-	damageTimer = damageDelay; // 무적 타이머 시작
-}
 
 void MMMEngine::Player::AutoHeal()
 {
-	if (damageTimer > 0.0f)
-	{
-		damageTimer -= Time::GetDeltaTime();
-	}
-	if (prevHP > info.HP)
+	if (!GetComponent<Battlestats>())
+		return;
+	auto HP = GetComponent<Battlestats>()->HP;
+	
+	if (prevHP > HP)
 	{
 		fighting = true;
 		nonfightTimer = 0.0f;
 	}
-	prevHP = info.HP;
+	prevHP = HP;
 	if (fighting)
 	{
 		nonfightTimer += Time::GetDeltaTime();
@@ -227,13 +251,74 @@ void MMMEngine::Player::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
-	else if (info.HP < info.maxHP)
+	else if (HP < maxHP)
 	{
 		healTimer += Time::GetDeltaTime();
 		if (healTimer >= healDelay)
 		{
-			info.HP = std::min(info.HP + healHP, info.maxHP);
+			HP = std::min(HP + healHP, maxHP);
 			healTimer = 0.0f;
 		}
 	}
+	GetComponent<Battlestats>()->HP = HP;
+}
+
+void MMMEngine::Player::BuildOn()
+{
+	if (Input::GetKeyDown(KeyCode::LeftControl))
+	{
+		auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
+		for (auto& bp : buildingpoints)
+		{
+			if (bp->GetComponent<BuildingPoint>()->canBuild) {
+				BuildingManager::instance->Build(bp);
+				buildchance = false;
+			}
+		}
+		
+	}
+}
+
+void MMMEngine::Player::Velocitydown()
+{
+	if (GetMatchedSnowball())
+	{
+		velocitydown = matchedSnowball->GetComponent<Snowball>()->GetPoint() * 0.13;
+	}
+}
+
+void MMMEngine::Player::LevelUp()
+{ 
+	if (level >= 10)
+		return;
+	level += 1;
+	maxpoint += 2;
+	atk += 1;
+}
+
+void MMMEngine::Player::CalDamageDelay()
+{
+	if (damageTimer > 0.0f)
+	{
+		damageTimer = std::max(damageTimer - Time::GetDeltaTime(), 0.0f);
+	}
+
+}
+
+void MMMEngine::Player::GetDamage(int t)
+{
+	if (damageTimer > 0.0f)
+		return;
+	auto stats = GetComponent<Battlestats>();
+	if (!stats) return;
+	if (stats->HP <= 0)
+		return;
+	stats->HP = std::max(stats->HP - t, 0);
+
+	damageTimer = damageDelay;
+}
+
+void MMMEngine::Player::Dead()
+{
+	GameManager::instance->GameOver = true;
 }

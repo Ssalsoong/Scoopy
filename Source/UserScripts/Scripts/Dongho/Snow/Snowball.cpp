@@ -37,11 +37,15 @@ void MMMEngine::Snowball::Update()
 void MMMEngine::Snowball::RollSnow()
 {
 	// 스케일 계산 (포인트 기반)
-	point = std::min(point, carrier->info.maxpoint);
+	point = std::min(point, carrier->maxpoint);
 	scale = minscale + scaleup * point;
+	scale = std::min(scale, maxscale);
 	float r = baseRadius * scale;
 	float distance = r * k;
-	GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
+	auto pos = DirectX::SimpleMath::Vector3::Backward * distance;
+	pos.y = scale / 2;
+	GetTransform()->SetLocalPosition(pos);
+	//GetTransform()->SetLocalPosition(DirectX::SimpleMath::Vector3::Backward * distance);
 	auto worldPos = GetTransform()->GetWorldPosition();
 	if (!hasPrev) { prevWorldPos = worldPos; hasPrev = true; return; }
 	
@@ -74,6 +78,6 @@ void MMMEngine::Snowball::EatSnow(ObjPtr<GameObject> other)
 	if (snowcomp == nullptr)
 		return;
 	point += snowcomp->GetPoint();
-	point = std::min(point, carrier->info.maxpoint);
+	point = std::min(point, carrier->maxpoint);
 	Destroy(other);
 }

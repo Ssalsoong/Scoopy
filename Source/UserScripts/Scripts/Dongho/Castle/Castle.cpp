@@ -1,32 +1,18 @@
+#include "Export.h"
+#include "ScriptBehaviour.h"
 #include "Castle.h"
 #include "MMMTime.h"
-#include "rttr/registration"
-#include "rttr/detail/policies/ctor_policies.h"
 #include "StaticMesh.h"
 #include "MeshRenderer.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
 #include "Castleball.h"
-
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<Castle>("Castle")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Castle>"))
-		.property_readonly("Point", &Castle::point);
-
-	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
-		.constructor(
-			[]() {
-				return Object::NewObject<Castle>();
-			}).method("Inject", &ObjPtr<Castle>::Inject);
-}
+#include "../Manager/GameManager.h"
+#include "../Battlestats.h"
 
 void MMMEngine::Castle::Start()
 {
-	castleballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Sphere_StaticMesh.staticmesh");
+	castleballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
 	for (int i = 0; i < 10;++i)
 	{
 		auto obj = NewObject<GameObject>();
@@ -95,22 +81,21 @@ void MMMEngine::Castle::AutoAttack()
 		attackTimer = 0.0f;
 		return;
 	}
-	if (attackTimer == 0.0f)
+	attackTimer += Time::GetDeltaTime();
+	if (attackTimer >= attackDelay)
 	{
-		if (Castleballs.empty())
+		if (Castleballs.empty()) {
+			attackTimer = 0.0f;
 			return;
+		}
 		auto obj = Castleballs.front();
 		Castleballs.pop();
 		if (!obj)
 			return;
 		obj->SetActive(true);
 		obj->GetComponent<Castleball>()->SetTarget(enemyTarget);
-		point --;
-	}
-	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= attackDelay)
-	{
 		attackTimer = 0.0f;
+		point --;
 	}
 }
 
@@ -121,6 +106,7 @@ void MMMEngine::Castle::ReturnBall(ObjPtr<GameObject> obj)
 
 void MMMEngine::Castle::AutoHeal()
 {
+	auto HP = GetComponent<Battlestats>()->HP;
 	if (prevHP > HP)
 	{
 		fighting = true;
@@ -145,10 +131,23 @@ void MMMEngine::Castle::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
+	GetComponent<Battlestats>()->HP = HP;
 }
 
 void MMMEngine::Castle::PointUp(int t)
 {
 	point += t;
 	exp += 10 * t;
+}
+
+void MMMEngine::Castle::LevelUp()
+{
+	if (level >= 10)
+		return;
+	atk += 2;
+}
+
+void MMMEngine::Castle::Dead()
+{
+	GameManager::instance->GameOver = true;
 }

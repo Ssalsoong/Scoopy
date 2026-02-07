@@ -7,6 +7,7 @@
 #include "MMMTime.h"
 #include "Transform.h"
 #include "../Enemy/Enemy.h"
+#include "../Manager/BattleManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -71,7 +72,7 @@ void MMMEngine::Castleball::Update()
 	if (left.LengthSquared() <= hitRadius * hitRadius)
 	{
 		// 데미지(컴포넌트로 판별)
-		target->GetComponent<Enemy>()->GetDamage(atk);
+		BattleManager::instance->Attack(target, atk);
 
 		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
 		target = nullptr;

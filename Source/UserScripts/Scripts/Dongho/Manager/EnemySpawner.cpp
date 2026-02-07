@@ -10,6 +10,8 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "StaticMesh.h"
+#include "../Battlestats.h"
+#include "Prefab.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -17,7 +19,10 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<EnemySpawner>("EnemySpawner")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"))
+		.property("m_normalenemy", &EnemySpawner::m_normalenemy)
+		.property("m_arrowenemy", &EnemySpawner::m_arrowenemy)
+		.property("m_thiefenemy", &EnemySpawner::m_thiefenemy);
 
 	registration::class_<ObjPtr<EnemySpawner>>("ObjPtr<EnemySpawner>")
 		.constructor(
@@ -31,50 +36,26 @@ MMMEngine::ObjPtr<MMMEngine::EnemySpawner> MMMEngine::EnemySpawner::instance = n
 void MMMEngine::EnemySpawner::Start()
 {
 	instance = GetGameObject()->GetComponent<EnemySpawner>();
-	normalenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Monkey_StaticMesh.staticmesh");
-	for (int i = 0; i < 20; ++i)
+	for (int i = 0; i < 40; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("NormalEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_normalenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<NormalEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(normalenemymesh);
-		obj->GetTransform()->SetWorldScale(normalsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		NormalEnemys.push(obj);
 	}
-	arrowenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Monkey_StaticMesh.staticmesh");
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("ArrowEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_arrowenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<ArrowEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(arrowenemymesh);
-		obj->GetTransform()->SetWorldScale(arrowsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		ArrowEnemys.push(obj);
 	}
-	thiefenemymesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Monkey_StaticMesh.staticmesh");
 	for (int i = 0; i < 20; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("ThiefEnemy");
-		obj->SetTag("Enemy");
+		auto obj = Instantiate(m_thiefenemy);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Enemy>();
-		obj->AddComponent<ThiefEnemy>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(thiefenemymesh);
-		obj->GetTransform()->SetWorldScale(thiefsize);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->SetActive(false);
 		ThiefEnemys.push(obj);
@@ -86,7 +67,7 @@ void MMMEngine::EnemySpawner::Update()
 
 }
 
-void MMMEngine::EnemySpawner::SpawnNormalEnemy()
+void MMMEngine::EnemySpawner::SpawnNormalEnemy(const DirectX::SimpleMath::Vector3& pos)
 {
 	if (NormalEnemys.empty())
 		return;
@@ -95,12 +76,12 @@ void MMMEngine::EnemySpawner::SpawnNormalEnemy()
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(normalspawnpos);
+	obj->GetTransform()->SetWorldPosition(pos);
 	obj->GetComponent<NormalEnemy>()->ApplyStats();
 	obj->SetActive(true);
 }
 
-void MMMEngine::EnemySpawner::SpawnArrowEnemy()
+void MMMEngine::EnemySpawner::SpawnArrowEnemy(const DirectX::SimpleMath::Vector3& pos)
 {
 	if (ArrowEnemys.empty())
 		return;
@@ -109,12 +90,12 @@ void MMMEngine::EnemySpawner::SpawnArrowEnemy()
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(arrowspawnpos);
+	obj->GetTransform()->SetWorldPosition(pos);
 	obj->GetComponent<ArrowEnemy>()->ApplyStats();
 	obj->SetActive(true);
 }
 
-void MMMEngine::EnemySpawner::SpawnThiefEnemy()
+void MMMEngine::EnemySpawner::SpawnThiefEnemy(const DirectX::SimpleMath::Vector3& pos)
 {
 	if (ThiefEnemys.empty())
 		return;
@@ -123,12 +104,12 @@ void MMMEngine::EnemySpawner::SpawnThiefEnemy()
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(thiefspawnpos);
+	obj->GetTransform()->SetWorldPosition(pos);
 	obj->GetComponent<ThiefEnemy>()->ApplyStats();
 	obj->SetActive(true);
 }
 
-void MMMEngine::EnemySpawner::ReturnEnemy(ObjPtr<GameObject> obj)
+void MMMEngine::EnemySpawner::EnemyDeath(ObjPtr<GameObject> obj)
 {
 	if (obj->GetComponent<NormalEnemy>())
 		NormalEnemys.push(obj);
@@ -136,4 +117,119 @@ void MMMEngine::EnemySpawner::ReturnEnemy(ObjPtr<GameObject> obj)
 		ArrowEnemys.push(obj);
 	if (obj->GetComponent<ThiefEnemy>())
 		ThiefEnemys.push(obj);
+	if (aliveCount > 0)
+		aliveCount--;
+}
+
+void MMMEngine::EnemySpawner::EnemyUpgrade()
+{
+	size_t n = NormalEnemys.size();
+	for (size_t i = 0; i < n; ++i)
+	{
+		auto e = NormalEnemys.front();
+		NormalEnemys.pop();
+		if (e)
+			e->GetComponent<NormalEnemy>()->HP += 3;
+		NormalEnemys.push(e);
+	}
+	size_t a = ArrowEnemys.size();
+	for (size_t i = 0; i < a; ++i)
+	{
+		auto e = ArrowEnemys.front();
+		ArrowEnemys.pop();
+		if (e)
+			e->GetComponent<ArrowEnemy>()->HP += 1;
+		ArrowEnemys.push(e);
+	}
+	size_t t = ThiefEnemys.size();
+	for (size_t i = 0; i < t; ++i)
+	{
+		auto e = ThiefEnemys.front();
+		ThiefEnemys.pop();
+		if (e)
+			e->GetComponent<ThiefEnemy>()->HP += 2;
+		ThiefEnemys.push(e);
+	}
+}
+
+void MMMEngine::EnemySpawner::WaveSetting(int wave)
+{
+	if (wave < 1) return;
+	aliveCount = 0;
+	leftCount = waveTable[wave-1];
+	for (int i : leftCount)
+		aliveCount += i;
+	spawnTimer = 0.0f;
+}
+
+bool MMMEngine::EnemySpawner::WaveSpawn(int wave)
+{
+	spawnTimer += Time::GetDeltaTime();
+	if (spawnTimer >= spawnDelay)
+	{
+		switch (wave)
+		{
+		case 1:
+			if (leftCount[1] > 0) { SpawnNormalEnemy(spawnPos[1]); leftCount[1]--; }
+			break;
+
+		case 2:
+			if (leftCount[10] > 0) { SpawnNormalEnemy(spawnPos[10]); leftCount[10]--; }
+			break;
+
+		case 3:
+			if (leftCount[1] > 0) { SpawnArrowEnemy(spawnPos[1]); leftCount[1]--; }
+			if (leftCount[4] > 0) { SpawnNormalEnemy(spawnPos[4]); leftCount[4]--; }
+			break;
+
+		case 4:
+			if (leftCount[10] > 0) { SpawnThiefEnemy(spawnPos[10]); leftCount[10]--; }
+			break;
+
+		case 5:
+			if (leftCount[6] > 0) { SpawnArrowEnemy(spawnPos[6]); leftCount[6]--; }
+			if (leftCount[7] > 0) { SpawnNormalEnemy(spawnPos[7]); leftCount[7]--; }
+			break;
+
+		case 6:
+			if (leftCount[5] > 0) { SpawnNormalEnemy(spawnPos[5]); leftCount[5]--; }
+			if (leftCount[10] > 0) { SpawnArrowEnemy(spawnPos[10]); leftCount[10]--; }
+			break;
+
+		case 7:
+			if (leftCount[0] > 0) { SpawnArrowEnemy(spawnPos[0]); leftCount[0]--; }
+			if (leftCount[1] > 0) { SpawnNormalEnemy(spawnPos[1]); leftCount[1]--; }
+			if (leftCount[2] > 0) { SpawnArrowEnemy(spawnPos[2]); leftCount[2]--; }
+			break;
+
+		case 8:
+			if (leftCount[3] > 0) { SpawnArrowEnemy(spawnPos[3]); leftCount[3]--; }
+			if (leftCount[4] > 0) { SpawnNormalEnemy(spawnPos[4]); leftCount[4]--; }
+			if (leftCount[10] > 0) { SpawnThiefEnemy(spawnPos[10]); leftCount[10]--; }
+			if (leftCount[11] > 0) { SpawnArrowEnemy(spawnPos[11]); leftCount[11]--; }
+			break;
+
+		case 9:
+			if (leftCount[1] > 0) { SpawnThiefEnemy(spawnPos[1]); leftCount[1]--; }
+			if (leftCount[4] > 0) { SpawnNormalEnemy(spawnPos[4]); leftCount[4]--; }
+			if (leftCount[6] > 0) { SpawnArrowEnemy(spawnPos[6]); leftCount[6]--; }
+			if (leftCount[7] > 0) { SpawnNormalEnemy(spawnPos[7]); leftCount[7]--; }
+			break;
+
+		case 10:
+			if (leftCount[1] > 0) { SpawnThiefEnemy(spawnPos[1]); leftCount[1]--; }
+			if (leftCount[4] > 0) { SpawnArrowEnemy(spawnPos[4]); leftCount[4]--; }
+			if (leftCount[7] > 0) { SpawnNormalEnemy(spawnPos[7]); leftCount[7]--; }
+			if (leftCount[8] > 0) { SpawnArrowEnemy(spawnPos[8]); leftCount[8]--; }
+			if (leftCount[10] > 0) { SpawnNormalEnemy(spawnPos[10]); leftCount[10]--; }
+			break;
+
+		default:
+			break;
+		}
+		spawnTimer = 0.0f;
+	}
+	if (aliveCount == 0)
+		return false;
+	return true;
 }

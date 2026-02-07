@@ -3,7 +3,9 @@
 #include "UserScriptsCommon.h"
 #include "SimpleMath.h"
 #include "StaticMesh.h"
+#include <array>
 
+using DirectX::SimpleMath::Vector3;
 namespace MMMEngine
 {
     class USERSCRIPTS BuildingManager : public ScriptBehaviour
@@ -22,18 +24,31 @@ namespace MMMEngine
         void Start();
 
         void Update();
-        void MakeBuilding(const DirectX::SimpleMath::Vector3 pos);
+        void Build(ObjPtr<GameObject> obj);
         void LevelUpHP(ObjPtr<GameObject> obj);
         void LevelUpBuff(ObjPtr<GameObject> obj);
         void LevelUpDeBuff(ObjPtr<GameObject> obj);
         void LevelUpSnow(ObjPtr<GameObject> obj);
         void BuildingReturn();
-        DirectX::SimpleMath::Vector3 buildingscale{0.5f,0.5f,0.5f};
+        static constexpr int BuildingPointCount = 8;
+        std::array<Vector3, BuildingPointCount> BuildingPos =
+        {
+            Vector3{-11.5f,0.f,-11.5f},
+            Vector3{-0.5f,0.f,-9.5f},
+            Vector3{11.5f,0.f,-11.5f},
+            Vector3{9.5f,0.f,-0.5f},
+            Vector3{11.5f,0.f,11.5f},
+            Vector3{0.5f,0.f,9.5f},
+            Vector3{-11.5f,0.f,11.5f},
+            Vector3{-9.5f,0.f,0.5f}
+        };
+        DirectX::SimpleMath::Vector3 buildingscale{15.f,15.f,15.f};
         ResPtr<StaticMesh> buildingmesh;
         ResPtr<StaticMesh> HPbuildingmesh;
         ResPtr<StaticMesh> buffbuildingmesh;
         ResPtr<StaticMesh> debuffbuildingmesh;
         ResPtr<StaticMesh> snowbuildingmesh;
+        std::vector<ObjPtr<GameObject>> buildingpoints;
         std::vector<ObjPtr<GameObject>> Buildings;
         static ObjPtr<BuildingManager> instance;
     };

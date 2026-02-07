@@ -1,6 +1,7 @@
 ﻿#include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
+#include "SimpleMath.h"
 
 namespace MMMEngine
 {
@@ -17,8 +18,13 @@ namespace MMMEngine
 
         }
         float buff = 1.1f;
+        float buffdist = 3.0f;
+        ObjPtr<GameObject> player;
+        DirectX::SimpleMath::Vector3 playerpos;
+        bool prevInRange = false;
         void Start();
         void Update();
+        void GiveBuff();
         void LevelApply(int level);
     };
 }

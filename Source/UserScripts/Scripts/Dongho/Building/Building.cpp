@@ -7,6 +7,7 @@
 #include "MeshRenderer.h"
 #include "StaticMesh.h"
 #include "MMMTime.h"
+#include "../Battlestats.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -25,7 +26,7 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::Building::Start()
 {
-	buildingballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Sphere_StaticMesh.staticmesh");
+	buildingballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
 	for (int i = 0; i < 10;++i)
 	{
 		auto obj = NewObject<GameObject>();
@@ -46,19 +47,15 @@ void MMMEngine::Building::Start()
 void MMMEngine::Building::Update()
 {
 	pos = GetTransform()->GetWorldPosition();
-	CheckDead();
 	CheckEnemy();
 	AutoAttack();
 }
 
-void MMMEngine::Building::CheckDead()
+void MMMEngine::Building::Dead()
 {
-	if (HP <= 0)
-	{
-		isDead = true;
-		GetGameObject()->SetActive(false);
-		return;
-	}
+	isDead = true;
+	GetGameObject()->SetActive(false);
+	GetComponent<Battlestats>()->HP = 1;
 }
 
 void MMMEngine::Building::CheckEnemy()
@@ -104,22 +101,21 @@ void MMMEngine::Building::AutoAttack()
 		attackTimer = 0.0f;
 		return;
 	}
+	attackTimer += Time::GetDeltaTime();
 	if (attackTimer == 0.0f)
 	{
-		if (Buildingballs.empty())
+		if (Buildingballs.empty()){
+			attackTimer = 0.0f;
 			return;
+		}
 		auto obj = Buildingballs.front();
 		Buildingballs.pop();
 		if (!obj)
 			return;
 		obj->SetActive(true);
 		obj->GetComponent<Buildingball>()->SetTarget(enemyTarget);
-		point--;
-	}
-	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= attackDelay)
-	{
 		attackTimer = 0.0f;
+		point--;
 	}
 }
 

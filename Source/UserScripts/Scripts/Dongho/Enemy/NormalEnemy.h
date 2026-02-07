@@ -19,12 +19,12 @@ namespace MMMEngine {
         }
 		void Start();
 		void Update();
-		int HP = 30;
-		int atk = 2;
-		float velocity = 13.0f;
+		int HP = 45;
+		int atk = 4;
+		float velocity = 8.0f;
 		float attackDelay = 0.65f;
-		float battledist = 1.7f;
-		float checkdist = 12.0f;
+		float battledist = 0.5f;
+		float checkdist = 2.5f;
 
 		void ApplyStats();
 	};
