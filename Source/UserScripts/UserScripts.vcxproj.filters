@@ -6,64 +6,182 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Scripts\ChangeScreen.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\BuffBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\Building.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\Buildingball.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\DebuffBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\HPBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Building\SnowBuilding.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Castle\Castle.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Castle\Castleball.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\Arrow.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\ArrowEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\NormalEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\ThiefEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClInclude Include="Scripts\ChangeScreen.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\Building.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\Buildingball.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\DebuffBuilding.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\HPBuilding.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Building\SnowBuilding.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Castle\Castle.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Castle\Castleball.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\Arrow.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\ArrowEnemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\NormalEnemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\ThiefEnemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\GameManager.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h"><Filter>Scripts</Filter></ClInclude>
+    <ClCompile Include="Scripts\ChangeScreen.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\BuffBuilding.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\Building.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\Buildingball.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\DebuffBuilding.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\HPBuilding.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Building\SnowBuilding.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Castle\Castle.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Castle\Castleball.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Enemy\Arrow.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Enemy\ArrowEnemy.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Enemy\NormalEnemy.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Enemy\ThiefEnemy.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Player\Player.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\ExampleBehaviour.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Scripts\UserScripts.gen.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClInclude Include="Scripts\ChangeScreen.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\Building.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\Buildingball.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\DebuffBuilding.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\HPBuilding.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Building\SnowBuilding.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Castle\Castle.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Castle\Castleball.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Enemy\Arrow.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Enemy\ArrowEnemy.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Enemy\NormalEnemy.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Enemy\ThiefEnemy.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Manager\GameManager.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Player\Player.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Dongho\Snow\Snowball.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\ExampleBehaviour.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\MiniMap.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h">
+      <Filter>Scripts</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
