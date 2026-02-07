@@ -2,32 +2,32 @@
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
+#include "Canvas.h"
 
 namespace MMMEngine
 {
-    class USERSCRIPTS ThiefEnemy : public ScriptBehaviour
+    class WorldSpaceUI;
+    class USERSCRIPTS RotateTrakingUI : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+            RTTR_REGISTRATION_FRIEND
+            ObjPtr<Canvas> m_canvas;
     public:
-        ThiefEnemy()
+        RotateTrakingUI()
         {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
+        USCRIPT_MESSAGE()
         void Start();
 
+        USCRIPT_MESSAGE()
         void Update();
-		int HP = 30;
-		int atk = 3;
-		float velocity = 8.0f;
-		float attackDelay = 0.65f;
-		float battledist = 0.5f;
-		float checkdist = 2.5f;
 
-		void ApplyStats();
+        USCRIPT_PROPERTY()
+        ObjPtr<WorldSpaceUI> WorldSpaceUI;
     };
 }
