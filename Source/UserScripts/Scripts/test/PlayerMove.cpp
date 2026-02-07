@@ -5,6 +5,7 @@
 #include "TileMap.h"
 #include "RigidBodyComponent.h"
 #include "PlayerController.h"
+#include "../Sunken/PlayerAnimController.h"
 
 
 
@@ -17,6 +18,15 @@ void MMMEngine::PlayerMove::Start()
 	}
 
 	m_rigid = GetComponent<RigidBodyComponent>();
+
+	// 애니메이션 컨트롤러 저장
+	mPAController = GetComponent<PlayerAnimController>();
+	if (!mPAController) {
+		std::cout << "PlayerMove::PlayerAnimController Not Found !!!" << std::endl;
+	}
+	else {
+		mPAController->SetDefaultSpeed(DefaultSpeed);
+	}
 }
 
 
@@ -30,7 +40,7 @@ void MMMEngine::PlayerMove::FixedUpdate()
 	{
 		m_LookTarget = false;
 
-		Vector3 fwd = rb->Px_GetForward(); // �Ǵ� Transform forward
+		Vector3 fwd = rb->Px_GetForward(); // 또는 Transform forward
 		fwd.y = 0.f;
 
 		if (fwd.LengthSquared() > 1e-6f)
@@ -44,6 +54,11 @@ void MMMEngine::PlayerMove::FixedUpdate()
 
 	ApplyYawFromVelocity(desiredVel);
 
+
+	// 애니메이션 설정
+	if (mPAController) {
+		mPAController->SetMoveSpeed(desiredVel.Length());
+	}
 }
 
 
@@ -58,29 +73,32 @@ Vector3 MMMEngine::PlayerMove::ComputeDesiredVelocity()
 
 	if (dir.LengthSquared() > 1e-6f) dir.Normalize();
 	float speed = ComputeSpeed();
-	return dir * speed * Time::GetFixedDeltaTime();
+
+	Vector3 finalSpeed = dir * speed * Time::GetFixedDeltaTime();
+
+	return finalSpeed;
 }
 
 
 float MMMEngine::PlayerMove::ComputeSpeed()
 {
-	float speed = DefaultSpeed;
-
-	if (T.IsValid())
-	{
-		auto pos = GetTransform()->GetWorldPosition();
-		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
-	}
-
 	int scoop = 0;
 	if (auto pc = GetComponent<PlayerController>(); pc.IsValid())
 		scoop = pc->GetScoopCount();
 
 	if (is_Scoop)
 	{
-		float slowed = speed - (scoop * MinusSpeed);
+		float slowed = DefaultSpeed - (scoop * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
-		speed = slowed;
+		return slowed; // 스쿱 상태면 타일 영향 무시
+	}
+
+	// 스쿱 아닐 때만 타일 속도 적용
+	float speed = DefaultSpeed;
+	if (T.IsValid())
+	{
+		auto pos = GetTransform()->GetWorldPosition();
+		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
 	}
 
 	return speed;
@@ -98,14 +116,14 @@ void MMMEngine::PlayerMove::ApplyYawFromVelocity(const Vector3& v)
 	auto rb = GetComponent<RigidBodyComponent>();
 
 	float targetYaw = std::atan2(f.x, f.z);
-	// ��ǥ�迡 ���� atan2 ��ȣ/�ุ ����
+	// 좌표계에 맞춰 atan2 부호/축만 조정
 	if (!is_Scoop)
 	{
 
 		Quaternion q = Quaternion::CreateFromAxisAngle(Vector3::Up, targetYaw);
 
 
-		rb->SnapRotation(q); // Ȥ�� �ε巴�� �����ؼ� SnapRotation
+		rb->SnapRotation(q); // 혹은 부드럽게 보간해서 SnapRotation
 	}
 	else
 	{
@@ -132,19 +150,23 @@ float MMMEngine::PlayerMove::WrapPi(float a)
 	return a;
 }
 
-void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
+void MMMEngine::PlayerMove::SetScoopMode(bool value, ObjPtr<GameObject> target)
 {
-	if (is_Scoop == value && Snow == target) return; // �ߺ� ȣ�� ����
+	if (is_Scoop == value && Snow == target) return; // 중복 호출 방지
 
 
 	Snow = target;
 	is_Scoop = value;
 	isSlow = value;
 	m_LookTarget = value;
+
+	// 애니메이션 세팅
+	if (mPAController) {
+		mPAController->mScooping = value;
+	}
 }
 
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
 	m_InputDir = vec;
 }
-

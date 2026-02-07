@@ -25,8 +25,11 @@
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
 #include "Sunken/AnimResourceManager.h"
+#include "Sunken/CastleLevelController.h"
 #include "Sunken/EnemyAnimController.h"
+#include "Sunken/LevelUpManager.h"
 #include "Sunken/PlayerAnimController.h"
+#include "Sunken/PrefabTest.h"
 #include "test/CastleManager.h"
 #include "test/EnemyMove.h"
 #include "test/MeshSize.h"
@@ -222,6 +225,21 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<AnimResourceManager>(); })
 		.method("Inject", &ObjPtr<AnimResourceManager>::Inject);
 
+	registration::class_<CastleLevelController>("CastleLevelController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleLevelController>"))
+		.property("mCastle", &CastleLevelController::mCastle)
+		.property("mExpGage", &CastleLevelController::mExpGage)
+		.property("mHpGage", &CastleLevelController::mHpGage)
+		.property("mCanvas", &CastleLevelController::mCanvas)
+		.property("mUIPosOffset", &CastleLevelController::mUIPosOffset)
+		.property("mUIScale", &CastleLevelController::mUIScale)
+		.property("mPadding", &CastleLevelController::mPadding)
+		.property("mDistanceFactor", &CastleLevelController::mDistanceFactor);
+
+	registration::class_<ObjPtr<CastleLevelController>>("ObjPtr<CastleLevelController>")
+		.constructor([]() { return Object::NewObject<CastleLevelController>(); })
+		.method("Inject", &ObjPtr<CastleLevelController>::Inject);
+
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
 		.property("mAnimator", &EnemyAnimController::mAnimator)
@@ -232,6 +250,15 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EnemyAnimController>>("ObjPtr<EnemyAnimController>")
 		.constructor([]() { return Object::NewObject<EnemyAnimController>(); })
 		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
+
+	registration::class_<LevelUpManager>("LevelUpManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpManager>"))
+		.property("mCanvas", &LevelUpManager::mCanvas)
+		.property("mCastleController", &LevelUpManager::mCastleController);
+
+	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
+		.constructor([]() { return Object::NewObject<LevelUpManager>(); })
+		.method("Inject", &ObjPtr<LevelUpManager>::Inject);
 
 	registration::class_<PlayerAnimController>("PlayerAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"))
@@ -247,6 +274,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<PlayerAnimController>>("ObjPtr<PlayerAnimController>")
 		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
 		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
+
+	registration::class_<PrefabTest>("PrefabTest")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
+
+	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
+		.constructor([]() { return Object::NewObject<PrefabTest>(); })
+		.method("Inject", &ObjPtr<PrefabTest>::Inject);
 
 	registration::class_<CastleManager>("CastleManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleManager>"));
@@ -285,6 +319,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerMove>("PlayerMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerMove>"))
+		.property("mPAController", &PlayerMove::mPAController)
 		.property("isSlow", &PlayerMove::isSlow)
 		.property("turnSpeed", &PlayerMove::turnSpeed)
 		.property("is_Scoop", &PlayerMove::is_Scoop)

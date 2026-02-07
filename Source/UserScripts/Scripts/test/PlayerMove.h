@@ -12,12 +12,15 @@ using namespace DirectX::SimpleMath;
 namespace MMMEngine
 {
     class TileMap;
-
+    class PlayerAnimController;
     class USERSCRIPTS PlayerMove : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+            RTTR_REGISTRATION_FRIEND
+
+            USCRIPT_PROPERTY()
+            ObjPtr<PlayerAnimController> mPAController;
     public:
         PlayerMove()
         {
