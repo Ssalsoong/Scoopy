@@ -14,7 +14,7 @@ void MMMEngine::MeshSize::Start()
 
 void MMMEngine::MeshSize::SetMatrixMesh(float size)
 {
-	if (MeshTrans.IsValid())
+	if(MeshTrans.IsValid())
 	{
 		auto scale_vec = Vector3{ size, size, size };
 		MeshTrans->SetLocalScale(scale_vec);

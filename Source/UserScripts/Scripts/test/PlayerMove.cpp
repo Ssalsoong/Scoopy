@@ -19,7 +19,7 @@ void MMMEngine::PlayerMove::Start()
 
 	m_rigid = GetComponent<RigidBodyComponent>();
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ÄÁÆ®·Ñ·¯ ÀúÀå
+	// ì• ë‹ˆë©”ì´ì…˜ ì»¨íŠ¸ë¡¤ëŸ¬ ì €ì¥
 	mPAController = GetComponent<PlayerAnimController>();
 	if (mPAController) {
 		std::cout << "PlayerMove::PlayerAnimController Not Found !!!" << std::endl;
@@ -37,7 +37,7 @@ void MMMEngine::PlayerMove::FixedUpdate()
 	{
 		m_LookTarget = false;
 
-		Vector3 fwd = rb->Px_GetForward(); // ¶Ç´Â Transform forward
+		Vector3 fwd = rb->Px_GetForward(); // ë˜ëŠ” Transform forward
 		fwd.y = 0.f;
 
 		if (fwd.LengthSquared() > 1e-6f)
@@ -106,14 +106,14 @@ void MMMEngine::PlayerMove::ApplyYawFromVelocity(const Vector3& v)
 	auto rb = GetComponent<RigidBodyComponent>();
 
 	float targetYaw = std::atan2(f.x, f.z);
-	// ÁÂÇ¥°è¿¡ ¸ÂÃç atan2 ºÎÈ£/Ãà¸¸ Á¶Á¤
+	// ì¢Œí‘œê³„ì— ë§ì¶° atan2 ë¶€í˜¸/ì¶•ë§Œ ì¡°ì •
 	if (!is_Scoop)
 	{
 
 		Quaternion q = Quaternion::CreateFromAxisAngle(Vector3::Up, targetYaw);
 
 
-		rb->SnapRotation(q); // È¤Àº ºÎµå·´°Ô º¸°£ÇØ¼­ SnapRotation
+		rb->SnapRotation(q); // í˜¹ì€ ë¶€ë“œëŸ½ê²Œ ë³´ê°„í•´ì„œ SnapRotation
 	}
 	else
 	{
@@ -142,7 +142,7 @@ float MMMEngine::PlayerMove::WrapPi(float a)
 
 void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 {
-	if (is_Scoop == value && Snow == target) return; // Áßº¹ È£Ãâ ¹æÁö
+	if (is_Scoop == value && Snow == target) return; // ì¤‘ë³µ í˜¸ì¶œ ë°©ì§€
 
 
 	Snow = target;
@@ -150,7 +150,7 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 	isSlow = value;
 	m_LookTarget = value;
 
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¼¼ÆÃ
+	// ì• ë‹ˆë©”ì´ì…˜ ì„¸íŒ…
 	if (mPAController) {
 		mPAController->mScooping = value;
 	}
@@ -158,7 +158,7 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
-	// ¾Ö´Ï¸ŞÀÌ¼Ç ¼¼ÆÃ
+	// ì• ë‹ˆë©”ì´ì…˜ ì„¸íŒ…
 	if (mPAController) {
 		if(vec != Vector3::Zero)
 			mPAController->SetMoveSpeed(1.0f);

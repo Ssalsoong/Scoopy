@@ -22,29 +22,29 @@ void MMMEngine::SnowballManager2::Update()
 
 void MMMEngine::SnowballManager2::Make_snow(ObjPtr<GameObject> player)
 {
-	if (Pre_Snow)
+	if (!Pre_Snow) return;
+
+	auto obj_snow = Instantiate(Pre_Snow);
+	Snows.push_back(obj_snow);
+
+	auto p_trans = player->GetTransform();
+
+	if (p_trans.IsValid())
 	{
-		auto obj_snow = Instantiate(Pre_Snow);
-		Snows.push_back(obj_snow);
+		auto PlayerPosition = p_trans->GetWorldPosition();
+		PlayerPosition.y = 0;
+		auto PlayerForward = p_trans->GetWorldMatrix().Backward();
+		//PlayerPosition.x += (0.2 * PlayerForward.z);
+		auto targetPos = PlayerPosition + PlayerForward * 0.3;
 
-		auto p_trans = player->GetTransform();
-
-		if (p_trans.IsValid())
-		{
-			auto PlayerPosition = p_trans->GetWorldPosition();
-			PlayerPosition.y = 0;
-			auto PlayerForward = p_trans->GetWorldMatrix().Backward();
-			//PlayerPosition.x += (0.2 * PlayerForward.z);
-			auto targetPos = PlayerPosition + PlayerForward * 0.3;
-
-			obj_snow->GetTransform()->SetWorldPosition(targetPos);
-		}
-
-		obj_snow->GetComponent<SnowCollider>()->Start();
-		obj_snow->GetComponent<SnowCollider>()->SetSize(1);
-		obj_snow->GetComponent<SnowCollider>()->SetOnPlayer(true, player);
+		obj_snow->GetTransform()->SetWorldPosition(targetPos);
 	}
+
+	//obj_snow->GetComponent<SnowCollider>()->Start();
+	obj_snow->GetComponent<SnowCollider>()->SetSize(0.1);
+	//obj_snow->GetComponent<SnowCollider>()->SetOnPlayer(true, player);
 }
+
 
 
 
@@ -66,7 +66,7 @@ void MMMEngine::SnowballManager2::AssembleSnow()
 
 		auto sc = obj->GetComponent<SnowCollider>();
 
-		if (sc->GetOnPlayer())
+		if (sc->CheckOnPlayer())
 		{
 			mainObj = obj;
 			mainSnow = obj->GetComponent<Snowball>();
@@ -115,7 +115,7 @@ void MMMEngine::SnowballManager2::ConsumeToCastle()
 
 		auto sc = obj->GetComponent<SnowCollider>();
 
-		if (sc->GetOnPlayer())
+		if (sc->CheckOnPlayer())
 		{
 			mainObj = obj;
 			mainSnow = obj->GetComponent<Snowball>();
@@ -154,7 +154,7 @@ void MMMEngine::SnowballManager2::ConsumeToBuilding()
 
 		auto sc = obj->GetComponent<SnowCollider>();
 
-		if (sc->GetOnPlayer())
+		if (sc->CheckOnPlayer())
 		{
 			mainObj = obj;
 			mainSnow = obj->GetComponent<Snowball>();
