@@ -57,7 +57,7 @@ void MMMEngine::GameManager::Update()
 			EnemySpawner::instance->WaveSetting(wave);
 			nowSetting = false;
 			settingTimer = 0.0f;
-			playercomp->buildchance = false;
+			playercomp->Setbuildchance(false);
 		}
 	}
 	else
@@ -72,9 +72,9 @@ void MMMEngine::GameManager::Update()
 			wave += 1;
 			BuildingManager::instance->BuildingReturn();
 			EnemySpawner::instance->EnemyUpgrade();
-			playercomp->buildchance = true;
-			player->GetComponent<Battlestats>()->HP = playercomp->maxHP;
-			castle->GetComponent<Battlestats>()->HP = castlecomp->maxHP;
+			playercomp->Setbuildchance(true);
+			player->GetComponent<Battlestats>()->HP = playercomp->GetmaxHP();
+			castle->GetComponent<Battlestats>()->HP = castlecomp->GetmaxHP();
 		}
 	}
 }

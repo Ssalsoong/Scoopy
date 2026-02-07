@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <ItemGroup Label="ProjectConfigurations">
@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR 기본�?(?�으�??�로?�트 기�? ?��?경로) -->
+  <!-- MMMENGINE_DIR 기본�?(?�으�??�로?�트 기�? ?��?경로) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--출력 고정: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>
@@ -71,12 +71,14 @@
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>false</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;RTTR_DLL;USERSCRIPTS_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(MMMENGINE_DIR)\MMMEngineShared;$(MMMENGINE_DIR)\MMMEngineShared\dxtk;$(MMMENGINE_DIR)\MMMEngineShared\dxtk\inc;$(MMMENGINE_DIR)\MMMEngineShared\physx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <AdditionalLibraryDirectories>$(MMMENGINE_DIR)\X64\Debug;$(MMMENGINE_DIR)\Common\Lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>MMMEngineShared.lib;DirectXTK.lib;DirectXTex.lib;rttr_core_d.lib;PhysXCommon_64.lib;PhysXCooking_64.lib;PhysXExtensions_static_64.lib;PhysXFoundation_64.lib;assimp-vc143-mt.lib;pugixml.lib;minizip.lib;zlib.lib;kubazip.lib;poly2tri.lib;draco.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -87,6 +89,7 @@
       <WarningLevel>Level3</WarningLevel>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ConformanceMode>false</ConformanceMode>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -94,6 +97,8 @@
       <AdditionalIncludeDirectories>$(MMMENGINE_DIR)\MMMEngineShared;$(MMMENGINE_DIR)\MMMEngineShared\dxtk;$(MMMENGINE_DIR)\MMMEngineShared\dxtk\inc;$(MMMENGINE_DIR)\MMMEngineShared\physx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(MMMENGINE_DIR)\X64\Release;$(MMMENGINE_DIR)\Common\Lib\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -121,11 +126,11 @@
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp" />
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp" />
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
@@ -140,12 +145,15 @@
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp" />
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
+    <ClCompile Include="Scripts\test\CastleManager.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
+    <ClCompile Include="Scripts\test\MeshSize.cpp" />
     <ClCompile Include="Scripts\test\PlayerController.cpp" />
     <ClCompile Include="Scripts\test\PlayerMove.cpp" />
     <ClCompile Include="Scripts\test\SnowBullet.cpp" />
     <ClCompile Include="Scripts\test\SnowCollider.cpp" />
     <ClCompile Include="Scripts\test\SnowTrigger.cpp" />
+    <ClCompile Include="Scripts\test\SnowballManager2.cpp" />
     <ClCompile Include="Scripts\test\TileMap.cpp" />
     <ClInclude Include="Scripts\Dongho\Battlestats.h" />
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h" />
@@ -166,11 +174,11 @@
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h" />
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h" />
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h" />
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
+    <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />
@@ -185,11 +193,15 @@
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
     <ClInclude Include="Scripts\Sunken\PrefabTest.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
+    <ClInclude Include="Scripts\test\CastleManager.h" />
+    <ClInclude Include="Scripts\test\EnemyMove.h" />
+    <ClInclude Include="Scripts\test\MeshSize.h" />
     <ClInclude Include="Scripts\test\PlayerController.h" />
     <ClInclude Include="Scripts\test\PlayerMove.h" />
     <ClInclude Include="Scripts\test\SnowBullet.h" />
     <ClInclude Include="Scripts\test\SnowCollider.h" />
     <ClInclude Include="Scripts\test\SnowTrigger.h" />
+    <ClInclude Include="Scripts\test\SnowballManager2.h" />
     <ClInclude Include="Scripts\test\TileMap.h" />
   </ItemGroup>
 

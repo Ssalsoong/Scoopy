@@ -1,4 +1,5 @@
-﻿#include "rttr/type"
+﻿#pragma once
+#include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "SimpleMath.h"
 #include "UserScriptsCommon.h"
@@ -25,19 +26,19 @@ namespace MMMEngine
 		int level = 0;
 		USCRIPT_PROPERTY()
 		int maxHP = 100;
+		int GetmaxHP() const { return maxHP; }
 		USCRIPT_PROPERTY()
 		float battledist = 0.7f;
 		USCRIPT_PROPERTY()
 		int atk = 15;
 		float attackDelay = 0.65f;
+		USCRIPT_PROPERTY()
 		int maxpoint = 10;
-		float velocity = 8.0f;
+		int Getmaxpoint() const { return maxpoint; };
 		int healHP = 10;
 		float healDelay = 1.0f;
 		float nonfightDelay = 10.0f;
 		float damageDelay = 0.1f;
-		float baseRadius = 0.5f;
-		float k = 1.4f;
 		int prevHP = 100;
 		float attackTimer = 0.0f;
 		float healTimer = 0.0f;
@@ -45,26 +46,15 @@ namespace MMMEngine
 		bool fighting = false;
 		float damageTimer = 0.0f;
 		bool isMoving = false;
-		bool scoopHeld = false;
 		bool buildchance = true;
-
-		float velocitydown = 0.0f;
+		void Setbuildchance(bool value) { buildchance = value; }
 
 		DirectX::SimpleMath::Vector3 pos;
-		ObjPtr<GameObject> matchedSnowball = nullptr;
-		void HandleMovement();
 		void AutoHeal();
 		void HandleAttack();
-		void UpdateScoop();
-		bool AttachSnowball(ObjPtr<GameObject> snow);
-		void DetachSnowball();
-		void SnapToSnowball(ObjPtr<GameObject> snow);
-		void LookAt(const DirectX::SimpleMath::Vector3& target);
-		ObjPtr<GameObject> GetMatchedSnowball()const { return matchedSnowball; }
 
 		void BuildOn();
 		void LevelUp();
-		void Velocitydown();
 
 		void CalDamageDelay();
 		void GetDamage(int t);

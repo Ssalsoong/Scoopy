@@ -6,31 +6,34 @@
 
 namespace MMMEngine
 {
-    class USERSCRIPTS BuildingPoint : public ScriptBehaviour
+    class Transform;
+    class USERSCRIPTS CameraMove : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
         RTTR_REGISTRATION_FRIEND
+        DirectX::SimpleMath::Vector3 m_currentPos;
     public:
-        BuildingPoint()
+        CameraMove()
         {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+
         USCRIPT_PROPERTY()
-        float checkdist = 2.f;
-        bool canBuild = false;
-        bool alreadybuilt = false;
-        void Setalreadybuilt(bool value) { alreadybuilt = value; }
-        ObjPtr<GameObject> player;
-        DirectX::SimpleMath::Vector3 playerpos;
+        DirectX::SimpleMath::Vector3 Offset;
+
+        USCRIPT_PROPERTY()
+        ObjPtr<Transform> Target;
+
+        USCRIPT_PROPERTY()
+        float ChasingSpeed = 12.0f;
+
         USCRIPT_MESSAGE()
         void Start();
 
         USCRIPT_MESSAGE()
         void Update();
-
-        void CheckPlayer();
     };
 }

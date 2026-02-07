@@ -13,6 +13,7 @@
 #include "../Building/SnowBuilding.h"
 #include "../Building/BuildingPoint.h"
 #include "../Battlestats.h"
+#include "Prefab.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -20,7 +21,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<BuildingManager>("BuildingManager")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
+		.property("pre_building", &BuildingManager::pre_building);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor(
@@ -34,6 +36,8 @@ MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instan
 
 void MMMEngine::BuildingManager::Start()
 {
+	pre_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
+
 	buildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomalTower_StaticMesh.staticmesh");
 	HPbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomal2Tower_StaticMesh.staticmesh");
 	buffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/lightingTower_StaticMesh.staticmesh");
@@ -63,20 +67,12 @@ void MMMEngine::BuildingManager::Update()
 
 void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 {
-	auto it = std::find(buildingpoints.begin(), buildingpoints.end(), obj);
-	if (it == buildingpoints.end())
-		return;
-	buildingpoints.erase(it);
+	obj->GetComponent<BuildingPoint>()->Setalreadybuilt(true);
 
-	Destroy(obj->GetComponent<BuildingPoint>());
-	obj->SetName("Building");
-	obj->SetTag("Building");
-	obj->AddComponent<Building>();
-	obj->AddComponent<Battlestats>();
-	obj->GetComponent<Battlestats>()->HP = 50;
-	obj->GetComponent<MeshRenderer>()->SetMesh(buildingmesh);
-	obj->GetTransform()->SetWorldScale(buildingscale);
-	Buildings.push_back(obj);
+	auto building = Instantiate(pre_building);
+	building->GetTransform()->SetParent(obj->GetTransform());
+	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+	Buildings.push_back(building);
 }
 
 void MMMEngine::BuildingManager::BuildingReturn()

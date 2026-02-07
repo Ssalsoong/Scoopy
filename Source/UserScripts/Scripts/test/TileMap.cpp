@@ -6,7 +6,7 @@
 int GetIndex(int x, int y)
 {
     //return (y + 10) * 21 + (x + 10);
-    return y * 21 + x;
+    return y * 30 + x;
 }
 
 float MMMEngine::TileMap::DistXZ(const Vec2& a, const Vec2& b)
@@ -58,24 +58,10 @@ bool MMMEngine::TileMap::TileCheck(const Vec2& pos)
         if (accum[ix][iz] >= threshold)
         {
             gained[ix][iz] = true;
-            harvestedNow = true;
 
-            //std::cout << u8"x 좌표 : " << ix << u8"z 좌표 : " << iz << u8" 타일 활성화됨" << std::endl;
-            // 사운드나 특수효과가 필요하면 여기서 호출함수 넣으면됨
-            
-
-            if (ix >= 0 && ix <= 20 && iz >= 0 && iz <= 20)
-            {
-                int idx = GetIndex(ix, iz);
-
-
-                if (0 <= idx && idx < (int)boxlist.size() && boxlist[idx].IsValid())
-                {
-                    boxlist[idx]->SetActive(false);
-                    std::cout << "tile=(" << ix << "," << iz << ") idx=" << idx << "\n";
-                    std::cout << idx << std::endl;
-                }
-            }
+            int idx = GetIndex(ix, iz);
+            if (0 <= idx && idx < (int)boxlist.size() && boxlist[idx].IsValid())
+                boxlist[idx]->SetActive(false);
         }
     }
 
@@ -88,7 +74,7 @@ MMMEngine::TileMap::Vec2 MMMEngine::TileMap::GetCurPosXZ() const
     Vec2 pose{};
     if (!trans) return pose;
 
-    if (!trans.IsValid()) { std::cout << u8"trans 발견못함" << std::endl;};
+    if (!trans.IsValid()) { std::cout << u8"transform 발견못함" << std::endl;};
     auto world_Position = trans->GetWorldPosition();
     pose.x = world_Position.x;
     pose.z = world_Position.z;
@@ -107,7 +93,7 @@ void MMMEngine::TileMap::NoticePlayer(bool value)
     }
     else
     {
-        // 모션 종료: 다음 시작 때 점프 누적 방지
+        // 모션 종료
         hasPrev = false;
     }
 }
@@ -117,8 +103,8 @@ void MMMEngine::TileMap::Start()
     hasPrev = false;
     isHarvesting = false;
 
-    originX = -10.0f;
-    originZ = -10.0f;
+    originX = -15.0f;
+    originZ = -15.0f;
 
     if (auto go = GameObject::Find("Player"); go.IsValid())
     {
@@ -128,12 +114,16 @@ void MMMEngine::TileMap::Start()
 
     if (box)
     {
-        for (float y = -10; y <= 10; y++)
+        for (int iz = 0; iz < GRID_H; ++iz)
         {
-            for (float x = -10; x <= 10; x++)
+            for (int ix = 0; ix < GRID_W; ++ix)
             {
                 auto obj = Instantiate(box);
-                obj->GetTransform()->SetWorldPosition({ x + 0.5f,  0 , y + 0.5f });
+
+                float wx = originX + (ix + 0.5f) * tileSize;
+                float wz = originZ + (iz + 0.5f) * tileSize;
+
+                obj->GetTransform()->SetWorldPosition({ wx, 0.0f, wz });
                 boxlist.push_back(obj);
             }
         }
