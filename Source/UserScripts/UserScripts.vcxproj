@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1646F854-69B8-5F2D-9BF7-D6AF971EF747}</ProjectGuid>
+    <ProjectGuid>{1D8EC615-C3A4-5AE1-B8E2-5C197897C2F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -54,7 +54,7 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR 기본��?(?�으��??�로?�트 기�? ?��?경로) -->
+  <!-- MMMENGINE_DIR 기본�?(?�으�??�로?�트 기�? ?��?경로) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
@@ -141,6 +141,7 @@
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
+    <ClCompile Include="Scripts\test\PlayerController.cpp" />
     <ClCompile Include="Scripts\test\PlayerMove.cpp" />
     <ClCompile Include="Scripts\test\SnowBullet.cpp" />
     <ClCompile Include="Scripts\test\SnowCollider.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
     <ClInclude Include="Scripts\Sunken\PrefabTest.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
+    <ClInclude Include="Scripts\test\PlayerController.h" />
     <ClInclude Include="Scripts\test\PlayerMove.h" />
     <ClInclude Include="Scripts\test\SnowBullet.h" />
     <ClInclude Include="Scripts\test\SnowCollider.h" />
