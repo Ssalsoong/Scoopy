@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1646F854-69B8-5F2D-9BF7-D6AF971EF747}</ProjectGuid>
+    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -54,7 +54,7 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR 기본��?(?�으��??�로?�트 기�? ?��?경로) -->
+  <!-- MMMENGINE_DIR 기본�?(?�으�??�로?�트 기�? ?��?경로) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
@@ -168,7 +168,6 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h" />
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
-    <ClInclude Include="Scripts\test\CastleManager.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
@@ -180,6 +179,7 @@
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h" />
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h" />
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
+    <ClInclude Include="Scripts\test\CastleManager.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
     <ClInclude Include="Scripts\test\MeshSize.h" />
     <ClInclude Include="Scripts\test\PlayerController.h" />

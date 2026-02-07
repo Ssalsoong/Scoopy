@@ -15,6 +15,17 @@
 #include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Player/Player.h"
+#include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/UI/FadeInOutFX.h"
+#include "Mingi/UI/MiniMap.h"
+#include "Mingi/UI/RotateTrakingUI.h"
+#include "Mingi/UI/TitleMenu.h"
+#include "Mingi/UI/TitleOpeningSequencer.h"
+#include "Mingi/UI/WorldSpaceUI.h"
+#include "Mingi/UI/WorldSpaceUISorter.h"
+#include "Sunken/AnimResourceManager.h"
+#include "Sunken/EnemyAnimController.h"
+#include "Sunken/PlayerAnimController.h"
 #include "test/CastleManager.h"
 #include "test/EnemyMove.h"
 #include "test/MeshSize.h"
@@ -25,23 +36,15 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
-#include "ChangeScreen.h"
-#include "Mingi/EngineLogoStartAnim.h"
-#include "Mingi/UI/FadeInOutFX.h"
-#include "Mingi/UI/MiniMap.h"
-#include "Mingi/UI/RotateTrakingUI.h"
-#include "Mingi/UI/TitleMenu.h"
-#include "Mingi/UI/TitleOpeningSequencer.h"
-#include "Mingi/UI/WorldSpaceUI.h"
-#include "Mingi/UI/WorldSpaceUISorter.h"
 
 using namespace rttr;
 using namespace MMMEngine;
 
 RTTR_PLUGIN_REGISTRATION
 {
-	registration::class_<ChangeScreen>("ChangeScreen")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<ChangeScreen>"));
+	registration::class_<Battlestats>("Battlestats")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Battlestats>"))
+		.property("HP", &Battlestats::HP);
 
 	registration::class_<ObjPtr<Battlestats>>("ObjPtr<Battlestats>")
 		.constructor([]() { return Object::NewObject<Battlestats>(); })
@@ -92,28 +95,11 @@ RTTR_PLUGIN_REGISTRATION
 		.property("battledist", &Player::battledist)
 		.property("atk", &Player::atk)
 		.property("maxpoint", &Player::maxpoint);
-	registration::class_<ObjPtr<ChangeScreen>>("ObjPtr<ChangeScreen>")
-		.constructor([]() { return Object::NewObject<ChangeScreen>(); })
-		.method("Inject", &ObjPtr<ChangeScreen>::Inject);
 
 	registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
 		.constructor([]() { return Object::NewObject<Player>(); })
 		.method("Inject", &ObjPtr<Player>::Inject);
 
-	registration::class_<CastleManager>("CastleManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleManager>"));
-
-	registration::class_<ObjPtr<CastleManager>>("ObjPtr<CastleManager>")
-		.constructor([]() { return Object::NewObject<CastleManager>(); })
-		.method("Inject", &ObjPtr<CastleManager>::Inject);
-
-	registration::class_<EnemyMove>("EnemyMove")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))
-		.property("movespeed", &EnemyMove::movespeed)
-		.property("Obj_target", &EnemyMove::Obj_target)
-		.property("sweepRadius", &EnemyMove::sweepRadius)
-		.property("sweepAhead", &EnemyMove::sweepAhead)
-		.property("avoidGain", &EnemyMove::avoidGain);
 	registration::class_<EngineLogoStartAnim>("EngineLogoStartAnim")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EngineLogoStartAnim>"));
 
@@ -121,28 +107,6 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
 
-	registration::class_<MeshSize>("MeshSize")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<MeshSize>"));
-
-	registration::class_<ObjPtr<MeshSize>>("ObjPtr<MeshSize>")
-		.constructor([]() { return Object::NewObject<MeshSize>(); })
-		.method("Inject", &ObjPtr<MeshSize>::Inject);
-
-	registration::class_<PlayerController>("PlayerController")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
-		.property("m_TileMap", &PlayerController::m_TileMap)
-		.property("m_SnowManager", &PlayerController::m_SnowManager);
-
-	registration::class_<ObjPtr<PlayerController>>("ObjPtr<PlayerController>")
-		.constructor([]() { return Object::NewObject<PlayerController>(); })
-		.method("Inject", &ObjPtr<PlayerController>::Inject);
-
-	registration::class_<PlayerMove>("PlayerMove")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerMove>"))
-		.property("basespeed", &PlayerMove::basespeed)
-		.property("isSlow", &PlayerMove::isSlow)
-		.property("turnSpeed", &PlayerMove::turnSpeed)
-		.property("is_Scoop", &PlayerMove::is_Scoop);
 	registration::class_<FadeInOutFX>("FadeInOutFX")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FadeInOutFX>"))
 		.property("FadeImage", &FadeInOutFX::FadeImage)
@@ -163,11 +127,6 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<MiniMap>(); })
 		.method("Inject", &ObjPtr<MiniMap>::Inject);
 
-	registration::class_<SnowCollider>("SnowCollider")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowCollider>"))
-		.property("m_Rolesmooth", &SnowCollider::m_Rolesmooth)
-		.property("SnowManager", &SnowCollider::SnowManager)
-		.property("m_holdDistance", &SnowCollider::m_holdDistance);
 	registration::class_<RotateTrakingUI>("RotateTrakingUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<RotateTrakingUI>"))
 		.property("WorldSpaceUI", &RotateTrakingUI::WorldSpaceUI);
@@ -196,21 +155,6 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<TitleMenu>(); })
 		.method("Inject", &ObjPtr<TitleMenu>::Inject);
 
-	registration::class_<SnowballManager2>("SnowballManager2")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager2>"))
-		.property("m_Player", &SnowballManager2::m_Player)
-		.property("Pre_Snow", &SnowballManager2::Pre_Snow)
-		.property("m_Castle", &SnowballManager2::m_Castle);
-
-	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
-		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
-		.method("Inject", &ObjPtr<SnowballManager2>::Inject);
-
-	registration::class_<TileMap>("TileMap")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
-		.property("trans", &TileMap::trans)
-		.property("threshold", &TileMap::threshold)
-		.property("box", &TileMap::box);
 	registration::class_<TitleOpeningSequencer>("TitleOpeningSequencer")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TitleOpeningSequencer>"))
 		.property("titleFadeStartTime", &TitleOpeningSequencer::titleFadeStartTime)
@@ -258,5 +202,131 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<WorldSpaceUISorter>>("ObjPtr<WorldSpaceUISorter>")
 		.constructor([]() { return Object::NewObject<WorldSpaceUISorter>(); })
 		.method("Inject", &ObjPtr<WorldSpaceUISorter>::Inject);
+
+	registration::class_<AnimResourceManager>("AnimResourceManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<AnimResourceManager>"))
+		.property("animSize", &AnimResourceManager::animSize);
+
+	registration::class_<ObjPtr<AnimResourceManager>>("ObjPtr<AnimResourceManager>")
+		.constructor([]() { return Object::NewObject<AnimResourceManager>(); })
+		.method("Inject", &ObjPtr<AnimResourceManager>::Inject);
+
+	registration::class_<EnemyAnimController>("EnemyAnimController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
+		.property("mAnimator", &EnemyAnimController::mAnimator)
+		.property("mEnemy", &EnemyAnimController::mEnemy)
+		.property("mAnimSpeed", &EnemyAnimController::mAnimSpeed)
+		.property("AnimSize", &EnemyAnimController::AnimSize);
+
+	registration::class_<ObjPtr<EnemyAnimController>>("ObjPtr<EnemyAnimController>")
+		.constructor([]() { return Object::NewObject<EnemyAnimController>(); })
+		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
+
+	registration::class_<PlayerAnimController>("PlayerAnimController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"))
+		.property("mIdleSpeed", &PlayerAnimController::mIdleSpeed)
+		.property("mAnimSpeed", &PlayerAnimController::mAnimSpeed)
+		.property("mMoveSpeed", &PlayerAnimController::mMoveSpeed)
+		.property("mAttacking", &PlayerAnimController::mAttacking)
+		.property("mScooping", &PlayerAnimController::mScooping)
+		.property("mAnimSize", &PlayerAnimController::mAnimSize)
+		.property("mAnimator", &PlayerAnimController::mAnimator)
+		.property("mAnimController", &PlayerAnimController::mAnimController);
+
+	registration::class_<ObjPtr<PlayerAnimController>>("ObjPtr<PlayerAnimController>")
+		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
+		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
+
+	registration::class_<CastleManager>("CastleManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleManager>"));
+
+	registration::class_<ObjPtr<CastleManager>>("ObjPtr<CastleManager>")
+		.constructor([]() { return Object::NewObject<CastleManager>(); })
+		.method("Inject", &ObjPtr<CastleManager>::Inject);
+
+	registration::class_<EnemyMove>("EnemyMove")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))
+		.property("movespeed", &EnemyMove::movespeed)
+		.property("Obj_target", &EnemyMove::Obj_target)
+		.property("sweepRadius", &EnemyMove::sweepRadius)
+		.property("sweepAhead", &EnemyMove::sweepAhead)
+		.property("avoidGain", &EnemyMove::avoidGain);
+
+	registration::class_<ObjPtr<EnemyMove>>("ObjPtr<EnemyMove>")
+		.constructor([]() { return Object::NewObject<EnemyMove>(); })
+		.method("Inject", &ObjPtr<EnemyMove>::Inject);
+
+	registration::class_<MeshSize>("MeshSize")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<MeshSize>"));
+
+	registration::class_<ObjPtr<MeshSize>>("ObjPtr<MeshSize>")
+		.constructor([]() { return Object::NewObject<MeshSize>(); })
+		.method("Inject", &ObjPtr<MeshSize>::Inject);
+
+	registration::class_<PlayerController>("PlayerController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
+		.property("m_TileMap", &PlayerController::m_TileMap)
+		.property("m_SnowManager", &PlayerController::m_SnowManager);
+
+	registration::class_<ObjPtr<PlayerController>>("ObjPtr<PlayerController>")
+		.constructor([]() { return Object::NewObject<PlayerController>(); })
+		.method("Inject", &ObjPtr<PlayerController>::Inject);
+
+	registration::class_<PlayerMove>("PlayerMove")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerMove>"))
+		.property("basespeed", &PlayerMove::basespeed)
+		.property("isSlow", &PlayerMove::isSlow)
+		.property("turnSpeed", &PlayerMove::turnSpeed)
+		.property("is_Scoop", &PlayerMove::is_Scoop);
+
+	registration::class_<ObjPtr<PlayerMove>>("ObjPtr<PlayerMove>")
+		.constructor([]() { return Object::NewObject<PlayerMove>(); })
+		.method("Inject", &ObjPtr<PlayerMove>::Inject);
+
+	registration::class_<SnowBullet>("SnowBullet")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowBullet>"))
+		.property("speed", &SnowBullet::speed)
+		.property("target", &SnowBullet::target);
+
+	registration::class_<ObjPtr<SnowBullet>>("ObjPtr<SnowBullet>")
+		.constructor([]() { return Object::NewObject<SnowBullet>(); })
+		.method("Inject", &ObjPtr<SnowBullet>::Inject);
+
+	registration::class_<SnowCollider>("SnowCollider")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowCollider>"))
+		.property("m_Rolesmooth", &SnowCollider::m_Rolesmooth)
+		.property("SnowManager", &SnowCollider::SnowManager)
+		.property("m_holdDistance", &SnowCollider::m_holdDistance);
+
+	registration::class_<ObjPtr<SnowCollider>>("ObjPtr<SnowCollider>")
+		.constructor([]() { return Object::NewObject<SnowCollider>(); })
+		.method("Inject", &ObjPtr<SnowCollider>::Inject);
+
+	registration::class_<SnowTrigger>("SnowTrigger")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowTrigger>"));
+
+	registration::class_<ObjPtr<SnowTrigger>>("ObjPtr<SnowTrigger>")
+		.constructor([]() { return Object::NewObject<SnowTrigger>(); })
+		.method("Inject", &ObjPtr<SnowTrigger>::Inject);
+
+	registration::class_<SnowballManager2>("SnowballManager2")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowballManager2>"))
+		.property("m_Player", &SnowballManager2::m_Player)
+		.property("Pre_Snow", &SnowballManager2::Pre_Snow)
+		.property("m_Castle", &SnowballManager2::m_Castle);
+
+	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
+		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
+		.method("Inject", &ObjPtr<SnowballManager2>::Inject);
+
+	registration::class_<TileMap>("TileMap")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
+		.property("trans", &TileMap::trans)
+		.property("threshold", &TileMap::threshold)
+		.property("box", &TileMap::box);
+
+	registration::class_<ObjPtr<TileMap>>("ObjPtr<TileMap>")
+		.constructor([]() { return Object::NewObject<TileMap>(); })
+		.method("Inject", &ObjPtr<TileMap>::Inject);
 
 }
