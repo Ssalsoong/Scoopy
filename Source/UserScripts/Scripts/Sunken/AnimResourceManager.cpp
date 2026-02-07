@@ -8,6 +8,8 @@ MMMEngine::ObjPtr<MMMEngine::AnimResourceManager> MMMEngine::AnimResourceManager
 
 void MMMEngine::AnimResourceManager::Awake()
 {
+	if (AnimResourceManager::Get())
+		Destroy(SelfPtr(this));
 	if(!instance)
 		instance = SelfPtr(this);
 

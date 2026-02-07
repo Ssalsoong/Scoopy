@@ -126,8 +126,11 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp" />
+    <ClCompile Include="Scripts\Sunken\CastleLevelController.cpp" />
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp" />
+    <ClCompile Include="Scripts\Sunken\LevelUpManager.cpp" />
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp" />
+    <ClCompile Include="Scripts\Sunken\PrefabTest.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
     <ClCompile Include="Scripts\test\PlayerMove.cpp" />
@@ -159,8 +162,11 @@
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h" />
+    <ClInclude Include="Scripts\Sunken\CastleLevelController.h" />
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h" />
+    <ClInclude Include="Scripts\Sunken\LevelUpManager.h" />
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
+    <ClInclude Include="Scripts\Sunken\PrefabTest.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
     <ClInclude Include="Scripts\test\PlayerMove.h" />
     <ClInclude Include="Scripts\test\SnowBullet.h" />

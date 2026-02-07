@@ -28,8 +28,6 @@ namespace MMMEngine
 	public:
 		AnimResourceManager()
 		{
-        if (AnimResourceManager::Get())
-        Destroy(SelfPtr(this));
         REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);

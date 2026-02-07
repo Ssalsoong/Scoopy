@@ -18,7 +18,9 @@
 #include "Dongho/Player/Player.h"
 #include "Sunken/AnimResourceManager.h"
 #include "Sunken/EnemyAnimController.h"
+#include "Sunken/LevelUpManager.h"
 #include "Sunken/PlayerAnimController.h"
+#include "Sunken/PrefabTest.h"
 #include "test/EnemyMove.h"
 #include "test/PlayerMove.h"
 #include "test/SnowBullet.h"
@@ -113,6 +115,15 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EnemyAnimController>(); })
 		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
 
+	registration::class_<LevelUpManager>("LevelUpManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpManager>"))
+		.property("mCastle", &LevelUpManager::mCastle)
+		.property("mPlayer", &LevelUpManager::mPlayer);
+
+	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
+		.constructor([]() { return Object::NewObject<LevelUpManager>(); })
+		.method("Inject", &ObjPtr<LevelUpManager>::Inject);
+
 	registration::class_<PlayerAnimController>("PlayerAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerAnimController>"))
 		.property("mIdleSpeed", &PlayerAnimController::mIdleSpeed)
@@ -127,6 +138,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<PlayerAnimController>>("ObjPtr<PlayerAnimController>")
 		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
 		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
+
+	registration::class_<PrefabTest>("PrefabTest")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
+
+	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
+		.constructor([]() { return Object::NewObject<PrefabTest>(); })
+		.method("Inject", &ObjPtr<PrefabTest>::Inject);
 
 	registration::class_<EnemyMove>("EnemyMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))
