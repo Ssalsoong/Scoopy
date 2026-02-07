@@ -82,9 +82,16 @@ RTTR_PLUGIN_REGISTRATION
 		.property("playButton", &TitleMenu::playButton)
 		.property("creditButton", &TitleMenu::creditButton)
 		.property("exitButton", &TitleMenu::exitButton)
+		.property("creditPopup", &TitleMenu::creditPopup)
 		.property("IsControllAble", &TitleMenu::IsControllAble)
 		.property("ButtonOnScaleX", &TitleMenu::ButtonOnScaleX)
-		.property("ButtonOnScaleY", &TitleMenu::ButtonOnScaleY);
+		.property("ButtonOnScaleY", &TitleMenu::ButtonOnScaleY)
+		.property("ButtonExecuteScaleX", &TitleMenu::ButtonExecuteScaleX)
+		.property("ButtonExecuteScaleY", &TitleMenu::ButtonExecuteScaleY)
+		.property("ButtonExecuteRotZ", &TitleMenu::ButtonExecuteRotZ)
+		.property("PopUpScaleXY", &TitleMenu::PopUpScaleXY)
+		.property("PopUpOffScaleXY", &TitleMenu::PopUpOffScaleXY)
+		.property("popupFadeDuration", &TitleMenu::popupFadeDuration);
 
 	registration::class_<ObjPtr<TitleMenu>>("ObjPtr<TitleMenu>")
 		.constructor([]() { return Object::NewObject<TitleMenu>(); })
