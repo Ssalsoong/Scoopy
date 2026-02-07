@@ -3,6 +3,7 @@
 #include "PlayerMove.h"
 #include "MMMInput.h"
 #include "TileMap.h"
+#include "RigidBodyComponent.h"
 
 
 
@@ -13,74 +14,51 @@ void MMMEngine::PlayerMove::Start()
 	{
 		T = go->GetComponent<TileMap>();
 	}
+
+	m_rigid = GetComponent<RigidBodyComponent>();
 }
 
-void MMMEngine::PlayerMove::Update()
-{
-	float x = 0.f, z = 0.f;
-	if (Input::GetKey(KeyCode::W)) z += 1.f;
-	if (Input::GetKey(KeyCode::S)) z -= 1.f;
-	if (Input::GetKey(KeyCode::D)) x += 1.f;
-	if (Input::GetKey(KeyCode::A)) x -= 1.f;
-
-	if (Input::GetKeyDown(KeyCode::O)) {
-		std::cout << "key down O" << std::endl;
-		if (T.IsValid())	T->NoticePlayer(true);
-		else std::cout << "Tile Not Found" << std::endl;
-	}
-
-	if (Input::GetKeyDown(KeyCode::P)) {
-		std::cout << "key down P" << std::endl;
-		if (T.IsValid()) T->NoticePlayer(false);
-		else std::cout << "Tile Not Found" << std::endl;
-	}
-	m_InputDir = Vector3(x, 0.f, z);
-}
 
 void MMMEngine::PlayerMove::FixedUpdate()
 {
 	auto rb = GetComponent<RigidBodyComponent>();
-
-
 	Vector3 desiredVel = ComputeDesiredVelocity();
-
 	rb->SetLinearVelocity(desiredVel);
 
 	if (m_LookTarget)
 	{
 		m_LookTarget = false;
+
 		if (Snow.IsValid())
 		{
-			Vector3 myPos = GetTransform()->GetWorldPosition();          // 네 API로 교체
-			Vector3 to = Snow->GetTransform()->GetWorldPosition() - myPos;
+			Vector3 to = Snow->GetTransform()->GetWorldPosition() - GetTransform()->GetWorldPosition();
 			to.y = 0.f;
-
 			if (to.LengthSquared() > 1e-6f)
 			{
 				to.Normalize();
 				float targetYaw = std::atan2(to.x, to.z);
 				rb->SnapRotation(Quaternion::CreateFromAxisAngle(Vector3::Up, targetYaw));
-				return;
 			}
 		}
-		return;
+		return; // 이 프레임은 회전만 처리
 	}
 
 	ApplyYawFromVelocity(desiredVel);
+
 }
 
 
 
 Vector3 MMMEngine::PlayerMove::ComputeDesiredVelocity()
 {
-	Vector3 dir = m_InputDir;
-	if (dir.LengthSquared() > 0.f)
-	{
-		dir.Normalize();
-		return dir * basespeed;
-	}
-	return Vector3(0, 0, 0);
+	Vector3 input = m_InputDir;
+	if (input.LengthSquared() <= 0.f) return Vector3(0, 0, 0);
+	input.Normalize();
 
+	Vector3 dir(input.x, 0.f, input.z);
+
+	if (dir.LengthSquared() > 1e-6f) dir.Normalize();
+	return dir * basespeed * Time::GetDeltaTime();
 }
 
 
@@ -106,7 +84,8 @@ void MMMEngine::PlayerMove::ApplyYawFromVelocity(const Vector3& v)
 	}
 	else
 	{
-		dt = TimeManager::Get().GetDeltaTime();
+		//dt = TimeManager::Get().GetDeltaTime();
+		dt = TimeManager::Get().GetFixedDeltaTime();
 		curYaw = rb->Px_GetYaw();
 		//forward = rb->Px_GetForward();
 
@@ -131,7 +110,15 @@ float MMMEngine::PlayerMove::WrapPi(float a)
 void MMMEngine::PlayerMove::SetScoopMode(bool value , ObjPtr<GameObject> target)
 {
 	Snow = target;
-	m_LookTarget = value;
 	is_Scoop = value;
 	isSlow = value;
+	m_LookTarget = value;
+	
+	if(value) m_rigid->SetInterpolationMode(RigidBodyComponent::InterpolationMode::None);
+	else m_rigid->SetInterpolationMode(RigidBodyComponent::InterpolationMode::Interpolate);
+}
+
+void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
+{
+	m_InputDir = vec;
 }

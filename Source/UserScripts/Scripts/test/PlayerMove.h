@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -23,10 +23,8 @@ namespace MMMEngine
         {
         REGISTER_BEHAVIOUR_MESSAGE(FixedUpdate);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
-        REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-        
 
         USCRIPT_PROPERTY()
         float basespeed = 7.0f;
@@ -37,19 +35,17 @@ namespace MMMEngine
 
         float maxYawSpeed = 0.0f;
 
-        //PIDÁ¦¾î
+        //PIDì œì–´
         float kp = 0.0f;
 
-        //¶óµğ¾È
+        //ë¼ë””ì•ˆ
         float alignEps;
 
         USCRIPT_MESSAGE()
         void Start();
 
-        USCRIPT_MESSAGE()
-        void Update();
 
-        //¼öÄ¡Á¶Àı
+        //ìˆ˜ì¹˜ì¡°ì ˆ
         USCRIPT_PROPERTY()
         float turnSpeed = 25.0f;
 
@@ -57,20 +53,20 @@ namespace MMMEngine
         bool is_Scoop = false;
         ObjPtr<GameObject> Snow;
 
-        Vector3 m_InputDir;            // Update¿¡¼­ ÀúÀå (Á¤±ÔÈ­ Àü/ÈÄ »ó°ü¾øÀ½)
+        
         bool m_LookTarget = false;
 
         USCRIPT_MESSAGE()
         void FixedUpdate();
 
 
-        Vector3 ComputeDesiredVelocity();
-        void ApplyYawFromVelocity(const Vector3& v);
+        DirectX::SimpleMath::Vector3 ComputeDesiredVelocity();
+        void ApplyYawFromVelocity(const DirectX::SimpleMath::Vector3& v);
 
         float WrapPi(float a);
 
         float curYaw = 0.0f;
-        //Vector3 forward{};
+
         float dt = 0.0f;
 
         bool test = false;
@@ -79,5 +75,18 @@ namespace MMMEngine
 
         void SetScoopMode(bool value, ObjPtr<GameObject> target);
 
+        void SetInputDir(DirectX::SimpleMath::Vector3 vec);
+
+        DirectX::SimpleMath::Vector3 m_InputDir;            // Updateì—ì„œ ì €ì¥ (ì •ê·œí™” ì „/í›„ ìƒê´€ì—†ìŒ)
+
+
+        Vector3 m_lockForward = Vector3::Forward;
+        Vector3 m_lockRight = Vector3::Right;
+        bool    m_hasScoopBasis = false;
+
+        bool makeDirty = false;
+        float m_PendingYaw = 0.f;
+
+        ObjPtr<RigidBodyComponent> m_rigid;
     };
 }

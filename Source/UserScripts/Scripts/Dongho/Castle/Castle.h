@@ -27,12 +27,15 @@ namespace MMMEngine {
 		int level = 0;
 		USCRIPT_PROPERTY()
 		int maxHP = 300;
+		int GetmaxHP() const { return maxHP; }
 		int healHP = 10;
 		float healDelay = 1.0f;
 		float NonfightDelay = 5.0f;
 		float attackDelay = 1.0f;
+		USCRIPT_PROPERTY()
 		int exp = 0;
 		int atk = 10;
+		USCRIPT_PROPERTY()
 		int point = 0;
 		int prevHP = 300;
 		bool fighting = false;

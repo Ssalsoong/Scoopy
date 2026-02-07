@@ -25,12 +25,10 @@
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\GameManager.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Manager\SnowballManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -42,11 +40,15 @@
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\CastleManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\EnemyMove.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\MeshSize.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\PlayerController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\PlayerMove.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowBullet.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowCollider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowTrigger.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\SnowballManager2.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\TileMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClInclude Include="Scripts\Dongho\Battlestats.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h"><Filter>Scripts</Filter></ClInclude>
@@ -67,12 +69,10 @@
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\GameManager.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Manager\SnowballManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Mingi\UI\CameraMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>
@@ -83,11 +83,15 @@
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\CastleManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\EnemyMove.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\MeshSize.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\PlayerController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\PlayerMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowBullet.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowCollider.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowTrigger.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\SnowballManager2.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\TileMap.h"><Filter>Scripts</Filter></ClInclude>
   </ItemGroup>
 </Project>

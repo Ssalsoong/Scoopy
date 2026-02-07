@@ -15,8 +15,8 @@ namespace MMMEngine
         RTTR_ENABLE(ScriptBehaviour)
         RTTR_REGISTRATION_FRIEND
     private:
-        static constexpr int GRID_W = 21;
-        static constexpr int GRID_H = 21;
+        static constexpr int GRID_W = 30;
+        static constexpr int GRID_H = 30;
     public:
         TileMap()
         {
@@ -60,11 +60,12 @@ namespace MMMEngine
         ResPtr<Prefab> box;
 
 
-        int width = 21;
-        int offset = 10;
+        int width = 30;
+        int offset = 15;
 
         int index = 0;
         std::vector<ObjPtr<GameObject>> boxlist;
+
 
 
     public:

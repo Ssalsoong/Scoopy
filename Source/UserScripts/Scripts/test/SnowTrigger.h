@@ -16,6 +16,8 @@ namespace MMMEngine
     public:
         SnowTrigger()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(OnTriggerEnter);
+        REGISTER_BEHAVIOUR_MESSAGE(OnTriggerExit);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -27,10 +29,23 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
         void Update();
 
-        //USCRIPT_MESSAGE()
-        //void OnTriggerEnter(MMMEngine::CollisionInfo info);
+        void SetTriggerSize(float size);
 
-        //USCRIPT_MESSAGE()
-        //void OnTriggerExit(MMMEngine::CollisionInfo info);
+        ObjPtr<ColliderComponent> ColObj;
+
+        USCRIPT_MESSAGE()
+        void OnTriggerEnter(MMMEngine::CollisionInfo info);
+
+        USCRIPT_MESSAGE()
+        void OnTriggerExit(MMMEngine::CollisionInfo info);
+
+        ObjPtr<GameObject> Parent_Obj;
+
+        bool is_player = false;
+        ObjPtr<GameObject> main_Player;
+
+        void SetParentPtr(ObjPtr<GameObject> mamaoooh);
+
+        void DestoryTrigger();
     };
 }
