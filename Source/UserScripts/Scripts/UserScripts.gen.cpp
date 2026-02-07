@@ -16,6 +16,7 @@
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/RotateTrakingUI.h"
@@ -106,6 +107,16 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EngineLogoStartAnim>>("ObjPtr<EngineLogoStartAnim>")
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
+
+	registration::class_<CameraMove>("CameraMove")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<CameraMove>"))
+		.property("Offset", &CameraMove::Offset)
+		.property("Target", &CameraMove::Target)
+		.property("ChasingSpeed", &CameraMove::ChasingSpeed);
+
+	registration::class_<ObjPtr<CameraMove>>("ObjPtr<CameraMove>")
+		.constructor([]() { return Object::NewObject<CameraMove>(); })
+		.method("Inject", &ObjPtr<CameraMove>::Inject);
 
 	registration::class_<FadeInOutFX>("FadeInOutFX")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FadeInOutFX>"))
