@@ -60,7 +60,7 @@ namespace MMMEngine
 
         int SnowScoopCount = 0;
 
-        int MaxPlayerScoop = 10;
+        int MaxPlayerScoop = 9;
 
         bool m_holdSpace = false;
 

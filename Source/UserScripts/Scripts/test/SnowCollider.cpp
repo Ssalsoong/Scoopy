@@ -52,7 +52,7 @@ void MMMEngine::SnowCollider::SetScoopCount(int count)
 	//}
 	scoopCount = std::clamp(count, 0, MaxSnowCount);
 	SetSize(0.1f + 0.05f * scoopCount);
-	GetComponent<Snowball>()->SetPoint(scoopCount);
+	GetComponent<Snowball>()->SetPoint(scoopCount+1);
 }
 
 int MMMEngine::SnowCollider::GetScoopCount()

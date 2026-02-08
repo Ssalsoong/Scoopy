@@ -42,6 +42,7 @@ void MMMEngine::Snowball::EatSnow(ObjPtr<GameObject> other)
 	point += snowcomp->GetPoint();
 	int maxpoint = m_player->GetComponent<Player>()->maxpoint;
 	point = std::min(point, maxpoint);
+	GetComponent<SnowCollider>()->SetScoopCount(point - 1);
 }
 
 void MMMEngine::Snowball::PointUp()
