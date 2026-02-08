@@ -14,7 +14,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<BuffBuilding>("BuffBuilding")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<BuffBuilding>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuffBuilding>"))
+		.property("buff", &BuffBuilding::buff);
 
 	registration::class_<ObjPtr<BuffBuilding>>("ObjPtr<BuffBuilding>")
 		.constructor(
@@ -44,13 +45,16 @@ void MMMEngine::BuffBuilding::GiveBuff()
 	float dz = pos.z - playerpos.z;
 	float d2 = dx * dx + dz * dz;
 	bool nowInRange = (d2 < bestD2);
+	auto playermove = player->GetComponent<PlayerMove>();
+	auto curSpeed = playermove->GetCurSpeed();
 	if (nowInRange && !prevInRange)
 	{
-		//auto curSpeed = player->GetComponent<PlayerMove>()->GetCurSpeed();
+		playermove->SetCurSpeed(curSpeed * buff);
 		//player->GetComponent<Player>()->velocity*= buff;
 	}
 	else if(!nowInRange && prevInRange)
 	{
+		playermove->SetCurSpeed(curSpeed / buff);
 		//player->GetComponent<Player>()->velocity /= buff;
 	}
 	prevInRange = nowInRange;
