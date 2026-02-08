@@ -14,7 +14,8 @@ VS_OUTPUT main(VS_INPUT input)
         0, 0, 0, 1
     };
     
-    if (input.BoneIdx[0] != -1) {
+    if (input.BoneIdx[0] != -1)
+    {
          Matrix tempMat[4] =
         {
             mul(mBoneOffsetMat[input.BoneIdx.x], mBoneMat[input.BoneIdx.x]),

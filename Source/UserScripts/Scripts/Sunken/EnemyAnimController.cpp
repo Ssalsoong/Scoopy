@@ -162,14 +162,14 @@ void MMMEngine::EnemyAnimController::Update()
 	// TODO::재생속도 설정하기 
 	mAnimator->SetSpeed(mAnimSpeed);
 
-	/*if (InputManager::Get().GetKeyDown(KeyCode::Alpha1))
+	if (InputManager::Get().GetKeyDown(KeyCode::Alpha1))
 		mAnimator->PlayClip("Anim_Goblin_Archer_Move", true);
 	else if (InputManager::Get().GetKeyDown(KeyCode::Alpha2))
 		mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
 	else if (InputManager::Get().GetKeyDown(KeyCode::Alpha3))
-		mAnimator->PlayClip("Archer_Dead", false);*/
+		mAnimator->PlayClip("Archer_Dead", false);
 
-	switch (mAnimType)
+	/*switch (mAnimType)
 	{
 	case MMMEngine::AT_Archer:
 		UpdateArcher();
@@ -183,5 +183,5 @@ void MMMEngine::EnemyAnimController::Update()
 	default:
 		Destroy(SelfPtr(this));
 		break;
-	}
+	}*/
 }
