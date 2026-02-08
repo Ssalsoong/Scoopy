@@ -7,8 +7,6 @@
 #include "PlayerController.h"
 #include "../Sunken/PlayerAnimController.h"
 
-
-
 void MMMEngine::PlayerMove::Start()
 {
 	//T = GameObject::Find("TileMap")->GetComponent<TileMap>();
@@ -18,7 +16,6 @@ void MMMEngine::PlayerMove::Start()
 	}
 
 	m_rigid = GetComponent<RigidBodyComponent>();
-
 	// 애니메이션 컨트롤러 저장
 	mPAController = GetComponent<PlayerAnimController>();
 	if (!mPAController) {
@@ -73,10 +70,7 @@ Vector3 MMMEngine::PlayerMove::ComputeDesiredVelocity()
 
 	if (dir.LengthSquared() > 1e-6f) dir.Normalize();
 	float speed = ComputeSpeed();
-
-	Vector3 finalSpeed = dir * speed * Time::GetFixedDeltaTime();
-
-	return finalSpeed;
+	return dir * speed * Time::GetFixedDeltaTime();
 }
 
 
@@ -101,7 +95,14 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 		speed = T->IsTileClearedAt(pos.x, pos.z) ? DefaultSpeed : OnSnowSpeed;
 	}
 
+	CurSpeed = speed;
+
 	return speed;
+}
+
+float MMMEngine::PlayerMove::GetCurSpeed()
+{
+	return CurSpeed;
 }
 
 
