@@ -228,12 +228,18 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<CastleLevelController>("CastleLevelController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleLevelController>"))
 		.property("mCastle", &CastleLevelController::mCastle)
+		.property("mCanvas", &CastleLevelController::mCanvas)
 		.property("mExpGage", &CastleLevelController::mExpGage)
 		.property("mHpGage", &CastleLevelController::mHpGage)
-		.property("mCanvas", &CastleLevelController::mCanvas)
-		.property("mUIPosOffset", &CastleLevelController::mUIPosOffset)
+		.property("mReadyIcon", &CastleLevelController::mReadyIcon)
+		.property("mCastleIcon", &CastleLevelController::mCastleIcon)
+		.property("mScoopIcon", &CastleLevelController::mScoopIcon)
+		.property("mGagePosOffset", &CastleLevelController::mGagePosOffset)
+		.property("mReadyPosOffset", &CastleLevelController::mReadyPosOffset)
+		.property("mSelectPosOffset", &CastleLevelController::mSelectPosOffset)
 		.property("mUIScale", &CastleLevelController::mUIScale)
 		.property("mPadding", &CastleLevelController::mPadding)
+		.property("mSelectPadding", &CastleLevelController::mSelectPadding)
 		.property("mDistanceFactor", &CastleLevelController::mDistanceFactor);
 
 	registration::class_<ObjPtr<CastleLevelController>>("ObjPtr<CastleLevelController>")
@@ -254,7 +260,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<LevelUpManager>("LevelUpManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpManager>"))
 		.property("mCanvas", &LevelUpManager::mCanvas)
-		.property("mCastleController", &LevelUpManager::mCastleController);
+		.property("mPlayer", &LevelUpManager::mPlayer)
+		.property("mCastle", &LevelUpManager::mCastle)
+		.property("mExpGage", &LevelUpManager::mExpGage)
+		.property("mHpGage", &LevelUpManager::mHpGage)
+		.property("mReadyIcon", &LevelUpManager::mReadyIcon)
+		.property("mCastleIcon", &LevelUpManager::mCastleIcon)
+		.property("mScoopIcon", &LevelUpManager::mScoopIcon);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
 		.constructor([]() { return Object::NewObject<LevelUpManager>(); })

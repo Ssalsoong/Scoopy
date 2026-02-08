@@ -13,6 +13,7 @@ namespace MMMEngine
 
     class Player;
     class CastleLevelController;
+    class Castle;
     class USERSCRIPTS LevelUpManager : public ScriptBehaviour
     {
     private:
@@ -21,12 +22,32 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
             ObjPtr<Canvas> mCanvas;
+
         USCRIPT_PROPERTY()
-            ObjPtr<CastleLevelController> mCastleController;
+            ObjPtr<Player> mPlayer;
+
+        USCRIPT_PROPERTY()
+            ObjPtr<Castle> mCastle;
 
         std::vector<int> mCastleExp = { 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 };
 
         static ObjPtr<LevelUpManager> instance;
+
+        int mCastleLevel = 0;
+        int mScoopLevel = 0;
+
+    public:
+        USCRIPT_PROPERTY()
+            ObjPtr<Gage> mExpGage;
+        USCRIPT_PROPERTY()
+            ObjPtr<Gage> mHpGage;
+        USCRIPT_PROPERTY()
+            ObjPtr<Image> mReadyIcon;
+        USCRIPT_PROPERTY()
+            ObjPtr<Image> mCastleIcon;
+        USCRIPT_PROPERTY()
+            ObjPtr<Image> mScoopIcon;
+
     public:
         LevelUpManager()
         {
@@ -49,7 +70,15 @@ namespace MMMEngine
 
         ObjPtr<Canvas> GetCanvas() { return mCanvas; }
 
+        ObjPtr<Castle> GetCastle();
+
+        void AddCastleLevel(int _val = 1);
+
+        void AddScoopLevel(int _val = 1);
+
         int GetExpPoint(EXPTYPE _type, int _level);
+
+        int GetMaxLevel(EXPTYPE _type);
 
         static const ObjPtr<LevelUpManager>& Get() { return instance; }
     };

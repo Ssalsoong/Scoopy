@@ -2,6 +2,8 @@
 #include "ScriptBehaviour.h"
 #include "LevelUpManager.h"
 #include "CastleLevelController.h"
+#include "../Dongho/Castle/Castle.h"
+#include "../Dongho/Player/Player.h"
 
 MMMEngine::ObjPtr<MMMEngine::LevelUpManager> MMMEngine::LevelUpManager::instance;
 
@@ -14,15 +16,20 @@ void MMMEngine::LevelUpManager::Awake()
 
 	//Instantiate(ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/TestPrefab.prefab"));
 
-	if (!mCanvas.IsValid()) {
-		std::cout << "LevelManager::Canvas Not Found!!" << std::endl;
+	if (!mCanvas) {
+		std::cerr << "LevelManager::No Canvas!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
 
-	if (!mCastleController.IsValid()) {
-		std::cout << "LevelManager::Castle Not Found!!" << std::endl;
+	if (!mCastle) {
+		std::cerr << "LevelManager::No Castle!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
+
+	/*if (!mCastleController.IsValid()) {
+		std::cout << "LevelManager::Castle Not Found!!" << std::endl;
+		GetGameObject()->SetActive(false);
+	}*/
 
 	/*if (!mPlayer.IsValid()) {
 		std::cout << "LevelManager::Player Not Found!!" << std::endl;
@@ -32,6 +39,7 @@ void MMMEngine::LevelUpManager::Awake()
 
 void MMMEngine::LevelUpManager::Start()
 {
+	
 }
 
 void MMMEngine::LevelUpManager::Update()
@@ -45,6 +53,43 @@ Vector2 MMMEngine::LevelUpManager::GetCanvasPos(const Vector3& _worldPos)
 	Vector2 canvasPos = mCanvas->ScreenToCanvas(screenPos);
 
 	return canvasPos;
+}
+
+MMMEngine::ObjPtr<MMMEngine::Castle> MMMEngine::LevelUpManager::GetCastle()
+{
+	return mCastle;
+}
+
+void MMMEngine::LevelUpManager::AddCastleLevel(int _val)
+{
+	if (_val > 0) {
+		mCastleLevel += _val;
+		for (int i = 0; i < _val; ++i) {
+			mCastle->LevelUp();
+		}
+	}
+	else if (_val < 0) {
+		mCastleLevel += _val;
+		for (int i = 0; i < -_val; ++i) {
+			//mCastle->LevelDown(); // LevelDown 구현
+		}
+	}
+}
+
+void MMMEngine::LevelUpManager::AddScoopLevel(int _val)
+{
+	if (_val > 0) {
+		mScoopLevel += _val;
+		for (int i = 0; i < _val; ++i) {
+			mPlayer->LevelUp();
+		}
+	}
+	else if (_val < 0) {
+		mScoopLevel += _val;
+		for (int i = 0; i < -_val; ++i) {
+			//mPlayer->LevelDown(); // LevelDown 구현
+		}
+	}
 }
 
 int MMMEngine::LevelUpManager::GetExpPoint(EXPTYPE _type, int _level)
@@ -70,4 +115,23 @@ int MMMEngine::LevelUpManager::GetExpPoint(EXPTYPE _type, int _level)
 
 	std::cout << "LevelUpManager::GetExp::Wrong Index or Type!!" << std::endl;
 	return -1;
+}
+
+int MMMEngine::LevelUpManager::GetMaxLevel(EXPTYPE _type)
+{
+	switch (_type)
+	{
+	case MMMEngine::EXP_CASTLE:
+	{
+		return mCastleExp.size();
+		break;
+	}
+	case MMMEngine::EXP_END:
+		break;
+	default:
+		break;
+	}
+
+	std::cout << "LevelUpManager::GetExp::Wrong Type!!" << std::endl;
+	return 0;
 }
