@@ -200,6 +200,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("EdgeYOffset", &WorldSpaceUI::EdgeYOffset)
 		.property("EdgeXOffset", &WorldSpaceUI::EdgeXOffset)
 		.property("HideWhenOutsideScreen", &WorldSpaceUI::HideWhenOutsideScreen)
+		.property("HideWhenInsideScreen", &WorldSpaceUI::HideWhenInsideScreen)
 		.property("ScaleWithDistance", &WorldSpaceUI::ScaleWithDistance)
 		.property("ReferenceDistance", &WorldSpaceUI::ReferenceDistance)
 		.property("MinScale", &WorldSpaceUI::MinScale)

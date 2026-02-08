@@ -28,5 +28,8 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         int HP = 1;
+
+        int GetHP() const { return HP; }
+        void SetHP(int value) { HP = value; }
     };
 }

@@ -19,10 +19,13 @@ namespace MMMEngine {
 	public:
 		GameManager()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
+		void Awake();
 		USCRIPT_MESSAGE()
 		void Start();
 		USCRIPT_MESSAGE()

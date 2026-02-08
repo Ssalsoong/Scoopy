@@ -28,13 +28,17 @@ RTTR_PLUGIN_REGISTRATION
 
 MMMEngine::ObjPtr<MMMEngine::GameManager> MMMEngine::GameManager::instance = nullptr;
 
+void MMMEngine::GameManager::Awake()
+{
+	instance = GetGameObject()->GetComponent<GameManager>();
+}
+
 void MMMEngine::GameManager::Start()
 {
 	player = GetGameObject()->Find("Player");
 	castle = GetGameObject()->Find("Castle");
 	playercomp = player->GetComponent<Player>();
 	castlecomp = castle->GetComponent<Castle>();
-	instance = GetGameObject()->GetComponent<GameManager>();
 }
 
 void MMMEngine::GameManager::Update()
@@ -73,8 +77,8 @@ void MMMEngine::GameManager::Update()
 			BuildingManager::instance->BuildingReturn();
 			EnemySpawner::instance->EnemyUpgrade();
 			playercomp->Setbuildchance(true);
-			player->GetComponent<Battlestats>()->HP = playercomp->GetmaxHP();
-			castle->GetComponent<Battlestats>()->HP = castlecomp->GetmaxHP();
+			player->GetComponent<Battlestats>()->SetHP(playercomp->GetmaxHP());
+			castle->GetComponent<Battlestats>()->SetHP(castlecomp->GetmaxHP());
 		}
 	}
 }

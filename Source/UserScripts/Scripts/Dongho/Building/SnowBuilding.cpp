@@ -31,9 +31,6 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::SnowBuilding::Start()
 {
-	GetGameObject()->GetComponent<Battlestats>()->HP = 50;
-	GetGameObject()->GetComponent<Building>()->maxHP = 50;
-
 	player = GetGameObject()->Find("Player");
 }
 
@@ -60,36 +57,31 @@ void MMMEngine::SnowBuilding::LevelApply(int level)
 	if (level == 1)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
 		maxsnowpoint = 15;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
 		maxsnowpoint = 20;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 65;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
 		maxsnowpoint = 25;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 65;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
 		maxsnowpoint = 30;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 80;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(80);
 		maxsnowpoint = 35;
 	}
 }

@@ -14,9 +14,11 @@ namespace MMMEngine
         RTTR_REGISTRATION_FRIEND
 		float m_lastDistance = 0.0f;   
         bool m_isTargetInScreen = false;
+        bool m_isBehindCamera = false;
     public:
         WorldSpaceUI()
         {
+        SetExecutionOrder(20);
         REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(LateUpdate);
         REGISTER_BEHAVIOUR_MESSAGE(OnDestroy);
@@ -28,6 +30,7 @@ namespace MMMEngine
         void SetUIRenderOrder(int order) { if (m_rectGraphic.IsValid()) m_rectGraphic->SetRenderOrder(order); }
 
         bool IsTargetInScreen();
+        bool IsBehindCamera();
 
         USCRIPT_MESSAGE()
         void Awake();
@@ -61,6 +64,9 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         bool HideWhenOutsideScreen = false;
+
+        USCRIPT_PROPERTY()
+        bool HideWhenInsideScreen = false;
 
         USCRIPT_PROPERTY()
         bool ScaleWithDistance = true;
