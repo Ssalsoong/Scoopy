@@ -7,6 +7,8 @@
 #include "SnowballManager2.h"
 #include "SphereColliderComponent.h"
 #include "../Dongho/Snow/Snowball.h"
+#include "../Dongho/Castle/Castle.h"
+#include "../Dongho/Building/Building.h"
 
 const float EPS2 = 1e-6f;
 
@@ -247,5 +249,31 @@ void MMMEngine::SnowCollider::SetOnPlayer(bool value, ObjPtr<GameObject> player)
 		m_hasRollAxis = false;
 		m_rollAxis = DirectX::SimpleMath::Vector3::Right;
 
+	}
+}
+
+void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
+{
+	if (info.other->GetTag() == "Castle")
+	{
+		int point = GetComponent<Snowball>()->GetPoint();
+		info.other->GetComponent<Castle>()->PointUp(point);
+		SnowDestory();
+		Destroy(GetGameObject());
+	}
+	else if (info.other->GetTag() == "Building")
+	{
+		int point = GetComponent<Snowball>()->GetPoint();
+		info.other->GetComponent<Building>()->PointUp(point);
+		SnowDestory();
+		Destroy(GetGameObject());
+	}
+	else if (info.other->GetName() == "Snow")
+	{
+		if (!On_Player)
+			return;
+		GetComponent<Snowball>()->EatSnow(info.other);
+		info.other->GetComponent<SnowCollider>()->SnowDestory();
+		Destroy(info.other);
 	}
 }

@@ -10,6 +10,7 @@
 #include "../Manager/BuildingManager.h"
 #include "../Manager/BattleManager.h"
 #include "../Battlestats.h"
+#include "../../test/PlayerController.h"
 
 void MMMEngine::Player::Start()
 {
@@ -29,6 +30,8 @@ void MMMEngine::Player::Update()
 void MMMEngine::Player::HandleAttack()
 {
 	//여기서 스쿱상태일 때 공격을 못하게 막아야 함
+	if (GetComponent<PlayerController>()->IsHoldingSpace())
+		return;
 
 	auto enemies = GameObject::FindGameObjectsWithTag("Enemy");
 
@@ -172,6 +175,7 @@ void MMMEngine::Player::LevelUp()
 	level ++;
 	maxpoint += 2;
 	atk ++;
+	GetComponent<PlayerController>()->SetMaxScoop(maxpoint-1);
 	GameManager::instance->levelsum++;
 }
 

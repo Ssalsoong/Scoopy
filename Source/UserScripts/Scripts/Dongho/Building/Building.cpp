@@ -15,7 +15,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<Building>("Building")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"))
+		.property("point", &Building::point);
 
 	registration::class_<ObjPtr<Building>>("ObjPtr<Building>")
 		.constructor(

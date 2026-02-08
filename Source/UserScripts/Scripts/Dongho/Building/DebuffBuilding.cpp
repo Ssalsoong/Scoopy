@@ -86,6 +86,7 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.8f;
+		debuffdist = 2.0f;
 	}
 	if (level == 2)
 	{
@@ -93,6 +94,7 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.65f;
+		debuffdist = 2.0f;
 	}
 	if (level == 3)
 	{
@@ -100,6 +102,7 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.65f;
+		debuffdist = 3.0f;
 	}
 	if (level == 4)
 	{
@@ -107,6 +110,7 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.5f;
+		debuffdist = 3.0f;
 	}
 	if (level == 5)
 	{
@@ -114,5 +118,6 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		debuff = 0.5f;
+		debuffdist = 4.0f;
 	}
 }
