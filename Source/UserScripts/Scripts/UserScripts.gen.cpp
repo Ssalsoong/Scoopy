@@ -25,6 +25,7 @@
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
 #include "Sunken/AnimResourceManager.h"
+#include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
 #include "Sunken/EnemyAnimController.h"
 #include "Sunken/LevelUpManager.h"
@@ -224,6 +225,22 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<AnimResourceManager>>("ObjPtr<AnimResourceManager>")
 		.constructor([]() { return Object::NewObject<AnimResourceManager>(); })
 		.method("Inject", &ObjPtr<AnimResourceManager>::Inject);
+
+	registration::class_<BuildingLevelController>("BuildingLevelController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingLevelController>"))
+		.property("mBuilding", &BuildingLevelController::mBuilding)
+		.property("mBattleStat", &BuildingLevelController::mBattleStat)
+		.property("mCanvas", &BuildingLevelController::mCanvas)
+		.property("mExpGage", &BuildingLevelController::mExpGage)
+		.property("mHpGage", &BuildingLevelController::mHpGage)
+		.property("mGagePosOffset", &BuildingLevelController::mGagePosOffset)
+		.property("mUIScale", &BuildingLevelController::mUIScale)
+		.property("mPadding", &BuildingLevelController::mPadding)
+		.property("mDistanceFactor", &BuildingLevelController::mDistanceFactor);
+
+	registration::class_<ObjPtr<BuildingLevelController>>("ObjPtr<BuildingLevelController>")
+		.constructor([]() { return Object::NewObject<BuildingLevelController>(); })
+		.method("Inject", &ObjPtr<BuildingLevelController>::Inject);
 
 	registration::class_<CastleLevelController>("CastleLevelController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleLevelController>"))

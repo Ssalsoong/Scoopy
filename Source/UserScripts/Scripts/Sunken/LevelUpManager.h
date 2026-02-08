@@ -8,6 +8,7 @@ namespace MMMEngine
 {
     enum EXPTYPE : int {
         EXP_CASTLE,
+        EXP_BUILD,
         EXP_END
     };
 
@@ -30,6 +31,7 @@ namespace MMMEngine
             ObjPtr<Castle> mCastle;
 
         std::vector<int> mCastleExp = { 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 };
+        std::vector<int> mBuildingExp = { 0, 15, 30, 45, 60, 75 };
 
         static ObjPtr<LevelUpManager> instance;
 
@@ -81,5 +83,16 @@ namespace MMMEngine
         int GetMaxLevel(EXPTYPE _type);
 
         static const ObjPtr<LevelUpManager>& Get() { return instance; }
+
+    public:
+        template <typename T>
+        bool CheckValid(const ObjPtr<T>& obj, const std::string& name)
+        {
+            if (!obj.IsValid()) {
+                std::cerr << "LevelManager::" << name << " Not Found!!" << std::endl;
+                return false;
+            }
+            return true;
+        }
     };
 }

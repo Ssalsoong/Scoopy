@@ -14,27 +14,16 @@ void MMMEngine::LevelUpManager::Awake()
 	if (!instance)
 		instance = SelfPtr(this);
 
-	//Instantiate(ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/TestPrefab.prefab"));
-
-	if (!mCanvas) {
-		std::cerr << "LevelManager::No Canvas!!" << std::endl;
+	if (!CheckValid(mCanvas, "Canvas") ||
+		!CheckValid(mCastle, "Castle") ||
+		!CheckValid(mExpGage, "ExpGage") ||
+		!CheckValid(mHpGage, "HpGage") ||
+		!CheckValid(mReadyIcon, "ReadyIcon") ||
+		!CheckValid(mCastleIcon, "CastleIcon") ||
+		!CheckValid(mScoopIcon, "ScoopIcon"))
+	{
 		GetGameObject()->SetActive(false);
 	}
-
-	if (!mCastle) {
-		std::cerr << "LevelManager::No Castle!!" << std::endl;
-		GetGameObject()->SetActive(false);
-	}
-
-	/*if (!mCastleController.IsValid()) {
-		std::cout << "LevelManager::Castle Not Found!!" << std::endl;
-		GetGameObject()->SetActive(false);
-	}*/
-
-	/*if (!mPlayer.IsValid()) {
-		std::cout << "LevelManager::Player Not Found!!" << std::endl;
-		GetGameObject()->SetActive(false);
-	}*/
 }
 
 void MMMEngine::LevelUpManager::Start()
@@ -107,6 +96,11 @@ int MMMEngine::LevelUpManager::GetExpPoint(EXPTYPE _type, int _level)
 			return mCastleExp[_level];
 		break;
 	}
+	case MMMEngine::EXP_BUILD:
+	{
+		if (_level < (int)mBuildingExp.size())
+			return mBuildingExp[_level];
+	}
 	case MMMEngine::EXP_END:
 		break;
 	default:
@@ -124,6 +118,11 @@ int MMMEngine::LevelUpManager::GetMaxLevel(EXPTYPE _type)
 	case MMMEngine::EXP_CASTLE:
 	{
 		return mCastleExp.size();
+		break;
+	}
+	case MMMEngine::EXP_BUILD:
+	{
+		return mBuildingExp.size();
 		break;
 	}
 	case MMMEngine::EXP_END:
