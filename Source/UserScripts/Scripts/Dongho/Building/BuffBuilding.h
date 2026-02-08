@@ -19,7 +19,7 @@ namespace MMMEngine
 
         }
         float buff = 1.1f;
-        float buffdist = 3.0f;
+        float buffdist = 2.0f;
         ObjPtr<GameObject> player;
         DirectX::SimpleMath::Vector3 playerpos;
         bool prevInRange = false;

@@ -19,7 +19,7 @@ namespace MMMEngine
 
         }
         float debuff = 0.8f;
-        float debuffdist = 3.0f;
+        float debuffdist = 2.0f;
         std::unordered_set<ObjPtr<Enemy>> m_inside;
         void Start();
         void Update();

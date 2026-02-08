@@ -78,5 +78,6 @@ namespace MMMEngine
 
         int GetScoopCount() const { return SnowScoopCount; }
 
+        ObjPtr<GameObject> GetCurSnow() { return curSnow; }
     };
 }

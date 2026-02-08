@@ -6,6 +6,11 @@
 #include "Building.h"
 #include "MMMTime.h"
 #include "../Battlestats.h"
+#include "Transform.h"
+#include "../../test/PlayerController.h"
+#include "../../test/SnowCollider.h"
+#include "../Player/Player.h"
+#include "../Snow/Snowball.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -13,7 +18,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<SnowBuilding>("SnowBuilding")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<SnowBuilding>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowBuilding>"))
+		.property("snowpoint", &SnowBuilding::snowpoint);
 
 	registration::class_<ObjPtr<SnowBuilding>>("ObjPtr<SnowBuilding>")
 		.constructor(
@@ -27,11 +33,15 @@ void MMMEngine::SnowBuilding::Start()
 {
 	GetGameObject()->GetComponent<Battlestats>()->HP = 50;
 	GetGameObject()->GetComponent<Building>()->maxHP = 50;
+
+	player = GetGameObject()->Find("Player");
 }
 
 void MMMEngine::SnowBuilding::Update()
 {
+	playerpos = player->GetTransform()->GetWorldPosition();
 	UpdateSnow();
+	ProvideSnow();
 }
 
 void MMMEngine::SnowBuilding::UpdateSnow()
@@ -81,5 +91,36 @@ void MMMEngine::SnowBuilding::LevelApply(int level)
 		GetGameObject()->GetComponent<Battlestats>()->HP =
 			GetGameObject()->GetComponent<Building>()->maxHP;
 		maxsnowpoint = 35;
+	}
+}
+
+void MMMEngine::SnowBuilding::ProvideSnow()
+{
+	if (snowpoint <= 0)
+		return;
+	auto pos = GetTransform()->GetWorldPosition();
+	float bestD2 = snowProvidedist * snowProvidedist;
+	float dx = pos.x - playerpos.x;
+	float dz = pos.z - playerpos.z;
+	float d2 = dx * dx + dz * dz;
+	bool nowInRange = (d2 < bestD2);
+	if (!nowInRange)
+		return;
+	auto playercontroller = player->GetComponent<PlayerController>();
+	if (playercontroller->HasCurrentSnow())
+	{
+		auto curSnow = playercontroller->GetCurSnow();
+		auto curPoint = curSnow->GetComponent<Snowball>()->GetPoint();
+		auto maxpoint = player->GetComponent<Player>()->Getmaxpoint();
+		if (curPoint >= maxpoint)
+			return;
+		provideTimer += Time::GetDeltaTime();
+		if (provideTimer >= provideDelay)
+		{
+			curSnow->GetComponent<Snowball>()->SetPoint(curPoint + 1);
+			curSnow->GetComponent<SnowCollider>()->SetScoopCount(curPoint);
+			snowpoint--;
+			provideTimer = 0.0f;
+		}
 	}
 }

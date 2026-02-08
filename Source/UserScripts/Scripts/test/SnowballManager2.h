@@ -45,8 +45,8 @@ namespace MMMEngine {
 		void AssembleSnow();
 		USCRIPT_PROPERTY()
 		ObjPtr<GameObject> m_Castle;
-		void ConsumeToCastle();
+		/*void ConsumeToCastle();
 
-		void ConsumeToBuilding();
+		void ConsumeToBuilding();*/
 	};
 }

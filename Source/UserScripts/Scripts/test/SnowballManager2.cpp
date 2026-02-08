@@ -15,9 +15,9 @@ void MMMEngine::SnowballManager2::Start()
 
 void MMMEngine::SnowballManager2::Update()
 {
-	AssembleSnow();
-	ConsumeToCastle();
-	ConsumeToBuilding();
+	//AssembleSnow();
+	//ConsumeToCastle();
+	//ConsumeToBuilding();
 }
 
 void MMMEngine::SnowballManager2::Make_snow(ObjPtr<GameObject> player)
@@ -103,109 +103,109 @@ void MMMEngine::SnowballManager2::AssembleSnow()
 	}
 }
 
-void MMMEngine::SnowballManager2::ConsumeToCastle()
-{
-	ObjPtr<GameObject> mainObj = nullptr;
-	ObjPtr<Snowball> mainSnow = nullptr;
-	ObjPtr<SnowCollider> mainSc = nullptr;
-
-	for (auto& obj : Snows)
-	{
-		if (!obj) continue;
-
-		auto sc = obj->GetComponent<SnowCollider>();
-
-		if (sc->CheckOnPlayer())
-		{
-			mainObj = obj;
-			mainSnow = obj->GetComponent<Snowball>();
-			mainSc = sc;
-			break;
-		}
-	}
-	if (!mainObj || !mainSc) return;
-
-	auto mainPos = mainObj->GetTransform()->GetWorldPosition();
-	float mainR = mainSc->GetSize() / 2;
-
-	auto castlepos = m_Castle->GetTransform()->GetWorldPosition();
-
-	float dx = mainPos.x - castlepos.x;
-	float dz = mainPos.z - castlepos.z;
-	float d2 = dx * dx + dz * dz;
-
-	float sumR = mainR + 0.8f;
-	if (d2 > sumR * sumR)return;
-
-	m_Castle->GetComponent<Castle>()->PointUp(mainSnow->GetPoint());
-	mainSc->SnowDestory();
-	Destroy(mainObj, 0.001f);
-}
-
-void MMMEngine::SnowballManager2::ConsumeToBuilding()
-{
-	ObjPtr<GameObject> mainObj = nullptr;
-	ObjPtr<Snowball> mainSnow = nullptr;
-	ObjPtr<SnowCollider> mainSc = nullptr;
-
-	for (auto& obj : Snows)
-	{
-		if (!obj) continue;
-
-		auto sc = obj->GetComponent<SnowCollider>();
-
-		if (sc->CheckOnPlayer())
-		{
-			mainObj = obj;
-			mainSnow = obj->GetComponent<Snowball>();
-			mainSc = sc;
-			break;
-		}
-	}
-	if (!mainObj || !mainSc) return;
-
-	auto mainPos = mainObj->GetTransform()->GetWorldPosition();
-	float mainR = mainSc->GetSize() / 2;
-
-	auto buildings = GameObject::FindGameObjectsWithTag("Building");
-	if (buildings.empty()) return;
-
-	ObjPtr<GameObject> bestBuildingObj = nullptr;
-	float bestD2 = FLT_MAX;
-
-	const float r = 0.5f + mainR;
-	const float r2 = r * r;
-
-	for (auto& b : buildings)
-	{
-		if (!b) continue;
-
-		auto bcomp = b->GetComponent<Building>();
-		if (!bcomp) continue;
-
-		auto bpos = b->GetTransform()->GetWorldPosition();
-
-		float dx = mainPos.x - bpos.x;
-		float dz = mainPos.z - bpos.z;
-		float d2 = dx * dx + dz * dz;
-
-		if (d2 <= r2 && d2 < bestD2)
-		{
-			bestD2 = d2;
-			bestBuildingObj = b;
-		}
-	}
-
-	if (!bestBuildingObj) return;
-
-	if (auto bcomp = bestBuildingObj->GetComponent<Building>())
-	{
-		bcomp->PointUp(mainSnow->GetPoint());
-		mainSc->SnowDestory();
-		Destroy(mainObj, 0.001f);
-	}
-	else
-	{
-		return;
-	}
-}
+//void MMMEngine::SnowballManager2::ConsumeToCastle()
+//{
+//	ObjPtr<GameObject> mainObj = nullptr;
+//	ObjPtr<Snowball> mainSnow = nullptr;
+//	ObjPtr<SnowCollider> mainSc = nullptr;
+//
+//	for (auto& obj : Snows)
+//	{
+//		if (!obj) continue;
+//
+//		auto sc = obj->GetComponent<SnowCollider>();
+//
+//		if (sc->CheckOnPlayer())
+//		{
+//			mainObj = obj;
+//			mainSnow = obj->GetComponent<Snowball>();
+//			mainSc = sc;
+//			break;
+//		}
+//	}
+//	if (!mainObj || !mainSc) return;
+//
+//	auto mainPos = mainObj->GetTransform()->GetWorldPosition();
+//	float mainR = mainSc->GetSize() / 2;
+//
+//	auto castlepos = m_Castle->GetTransform()->GetWorldPosition();
+//
+//	float dx = mainPos.x - castlepos.x;
+//	float dz = mainPos.z - castlepos.z;
+//	float d2 = dx * dx + dz * dz;
+//
+//	float sumR = mainR + 0.8f;
+//	if (d2 > sumR * sumR)return;
+//
+//	m_Castle->GetComponent<Castle>()->PointUp(mainSnow->GetPoint());
+//	mainSc->SnowDestory();
+//	Destroy(mainObj, 0.001f);
+//}
+//
+//void MMMEngine::SnowballManager2::ConsumeToBuilding()
+//{
+//	ObjPtr<GameObject> mainObj = nullptr;
+//	ObjPtr<Snowball> mainSnow = nullptr;
+//	ObjPtr<SnowCollider> mainSc = nullptr;
+//
+//	for (auto& obj : Snows)
+//	{
+//		if (!obj) continue;
+//
+//		auto sc = obj->GetComponent<SnowCollider>();
+//
+//		if (sc->CheckOnPlayer())
+//		{
+//			mainObj = obj;
+//			mainSnow = obj->GetComponent<Snowball>();
+//			mainSc = sc;
+//			break;
+//		}
+//	}
+//	if (!mainObj || !mainSc) return;
+//
+//	auto mainPos = mainObj->GetTransform()->GetWorldPosition();
+//	float mainR = mainSc->GetSize() / 2;
+//
+//	auto buildings = GameObject::FindGameObjectsWithTag("Building");
+//	if (buildings.empty()) return;
+//
+//	ObjPtr<GameObject> bestBuildingObj = nullptr;
+//	float bestD2 = FLT_MAX;
+//
+//	const float r = 0.5f + mainR;
+//	const float r2 = r * r;
+//
+//	for (auto& b : buildings)
+//	{
+//		if (!b) continue;
+//
+//		auto bcomp = b->GetComponent<Building>();
+//		if (!bcomp) continue;
+//
+//		auto bpos = b->GetTransform()->GetWorldPosition();
+//
+//		float dx = mainPos.x - bpos.x;
+//		float dz = mainPos.z - bpos.z;
+//		float d2 = dx * dx + dz * dz;
+//
+//		if (d2 <= r2 && d2 < bestD2)
+//		{
+//			bestD2 = d2;
+//			bestBuildingObj = b;
+//		}
+//	}
+//
+//	if (!bestBuildingObj) return;
+//
+//	if (auto bcomp = bestBuildingObj->GetComponent<Building>())
+//	{
+//		bcomp->PointUp(mainSnow->GetPoint());
+//		mainSc->SnowDestory();
+//		Destroy(mainObj, 0.001f);
+//	}
+//	else
+//	{
+//		return;
+//	}
+//}

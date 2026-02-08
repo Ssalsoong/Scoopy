@@ -2,6 +2,7 @@
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
+#include "SimpleMath.h"
 
 namespace MMMEngine
 {
@@ -23,9 +24,17 @@ namespace MMMEngine
         void Update();
         void UpdateSnow();
         void LevelApply(int level);
+        void ProvideSnow();
         int snowpoint = 0;
         int maxsnowpoint = 15;
         float chargeDelay = 2.0f;
         float chargeTimer = 0.0f;
+
+        float provideDelay = 0.5f;
+        float provideTimer = 0.0f;
+        float snowProvidedist = 2.0f;
+
+        ObjPtr<GameObject> player;
+        DirectX::SimpleMath::Vector3 playerpos;
     };
 }
