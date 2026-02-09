@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{1646F854-69B8-5F2D-9BF7-D6AF971EF747}</ProjectGuid>
+    <ProjectGuid>{75E614B8-00F5-50DC-8A85-9E4BD561A32D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -130,6 +130,7 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
+    <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
+    <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />

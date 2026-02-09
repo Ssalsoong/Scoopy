@@ -13,6 +13,12 @@ int MMMEngine::FadeInOutFX::GetState()
 	return m_fadeState;
 }
 
+void MMMEngine::FadeInOutFX::OnDestroy()
+{
+	if (Instance == SelfPtr(this))
+		Instance = nullptr;
+}
+
 void MMMEngine::FadeInOutFX::Awake()
 {
 	if (!Instance.IsValid())

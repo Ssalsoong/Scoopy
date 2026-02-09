@@ -6,6 +6,8 @@
 #include "Image.h"
 #include "Transform.h"
 
+#include "../../Mingi/Manager/SoundManager.h"
+
 using namespace MMMEngine;
 
 
@@ -64,6 +66,9 @@ void MMMEngine::TitleMenu::MenuControl()
 		m_internalTimer[0] = 0.0f;
 		prevImage = GetButtonFromIdx(lastSelected);
 		selectedImage->SetRenderOrder(1);
+
+		if (SoundManager::Instance.IsValid())
+			SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
 	}
 
 	if (prevImage.IsValid())
@@ -84,6 +89,13 @@ void MMMEngine::TitleMenu::MenuControl()
 			m_popupOn = true;
 			break;
 		}
+
+
+		if (SoundManager::Instance.IsValid())
+			SoundManager::Instance->PlaySFX2D("GetSnowball", SelfPtr(this));
+
+		if (SoundManager::Instance.IsValid())
+			SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
 
 		m_internalTimer[1] = 0.0f;
 	}
@@ -188,6 +200,9 @@ void MMMEngine::TitleMenu::TurnOffAllButton()
 
 void MMMEngine::TitleMenu::TurnOnPlayButton()
 {
+	if (SoundManager::Instance.IsValid())
+		SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
+
 	m_internalTimer[1] = 300.0f;
 	playButton->SetColor({ 1,1,1,1 });
 	playButton->SetRenderOrder(1);
@@ -196,6 +211,9 @@ void MMMEngine::TitleMenu::TurnOnPlayButton()
 
 void MMMEngine::TitleMenu::TurnOnOneButton(std::string buttonName)
 {
+	if (SoundManager::Instance.IsValid())
+		SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
+
 	int id = GetIdxFromButtonString(buttonName);
 
 	if (id == -1)

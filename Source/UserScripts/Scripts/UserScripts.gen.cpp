@@ -16,6 +16,7 @@
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/Manager/SoundManager.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
@@ -37,6 +38,9 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
+#include "Dongho/Enemy/ArrowEnemy.h"
+#include "Dongho/Enemy/NormalEnemy.h"
+#include "Dongho/Enemy/ThiefEnemy.h"
 
 using namespace rttr;
 using namespace MMMEngine;
@@ -107,6 +111,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EngineLogoStartAnim>>("ObjPtr<EngineLogoStartAnim>")
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
+
+	registration::class_<SoundManager>("SoundManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SoundManager>"));
+
+	registration::class_<ObjPtr<SoundManager>>("ObjPtr<SoundManager>")
+		.constructor([]() { return Object::NewObject<SoundManager>(); })
+		.method("Inject", &ObjPtr<SoundManager>::Inject);
 
 	registration::class_<CameraMove>("CameraMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CameraMove>"))
