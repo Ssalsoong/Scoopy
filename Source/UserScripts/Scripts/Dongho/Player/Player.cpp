@@ -39,8 +39,6 @@ void MMMEngine::Player::HandleAttack()
 	const float range = battledist;
 	const float rangeSq = range * range;
 
-	const float cosHalfFov = 0.5f;
-
 	// 플레이어 Forward (XZ 평면 기준)
 	Vector3 forward = -GetTransform()->GetWorldMatrix().Forward();
 	forward.y = 0.0f;
@@ -92,6 +90,7 @@ void MMMEngine::Player::HandleAttack()
 
 	for (auto& e : enemies)
 	{
+		if (!e) continue;
 		auto tec = e->GetComponent<Enemy>();
 		if (!tec) continue;
 
@@ -112,8 +111,17 @@ void MMMEngine::Player::HandleAttack()
 		float dot = forward.Dot(toEnemy);
 		if (dot < cosHalfFov)
 			continue;
+		float damage = atk;
+		if (criticalOn)
+		{
+			float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
+			if (r < 0.5f)
+			{
+				damage *= 2.0f;
+			}
+		}
 
-		BattleManager::instance->Attack(e, atk);
+		BattleManager::instance->Attack(e, damage);
 		tec->PlayerHitMe();
 	}
 }
@@ -204,4 +212,35 @@ void MMMEngine::Player::GetDamage(int t)
 void MMMEngine::Player::Dead()
 {
 	GameManager::instance->GameOver = true;
+}
+
+void MMMEngine::Player::Level5Apply(int value)
+{
+	if (value != 1 && value != 2)
+		return;
+	if (value == 1)
+	{
+		cosHalfFov = 0.17f;
+		attackDelay = 0.4f;
+	}
+	if (value == 2)
+	{
+		criticalOn = true;
+	}
+}
+
+void MMMEngine::Player::Level10Apply(int value)
+{
+	if (value != 1 && value != 2)
+		return;
+
+	if (value == 1)
+	{
+		reflectOn = true;
+	}
+	else if (value == 2)
+	{
+		maxHP = 150;
+		GetComponent<Battlestats>()->SetHP(maxHP);
+	}
 }

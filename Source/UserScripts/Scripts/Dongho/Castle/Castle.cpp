@@ -9,22 +9,15 @@
 #include "Castleball.h"
 #include "../Manager/GameManager.h"
 #include "../Battlestats.h"
+#include "../../test/SnowBullet.h"
 
 void MMMEngine::Castle::Start()
 {
-	castleballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
 	for (int i = 0; i < 10;++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("Castleball");
-		obj->SetTag("Castleball");
-		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Castleball>();
+		auto obj = Instantiate(pre_bullet);
+		obj->GetTransform()->SetWorldPosition(0.f, 0.f, 0.f);
 		obj->GetComponent<Castleball>()->SetOwner(GetGameObject());
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(castleballmesh);
-		obj->GetTransform()->SetLocalPosition(0.f,0.f,0.f);
-		obj->GetTransform()->SetWorldScale(0.2f, 0.2f, 0.2f);
 		obj->SetActive(false);
 		Castleballs.push(obj);
 	}
@@ -94,6 +87,10 @@ void MMMEngine::Castle::AutoAttack()
 			return;
 		obj->SetActive(true);
 		obj->GetComponent<Castleball>()->SetTarget(enemyTarget);
+		obj->GetComponent<Castleball>()->Setatk(atk);
+		auto bulletpos = pos;
+		bulletpos.y = 1.5f;
+		obj->GetComponent<SnowBullet>()->StartBullet(bulletpos, bulletsize, bulletSpeed, enemyTarget);
 		attackTimer = 0.0f;
 		point --;
 	}
@@ -152,4 +149,14 @@ void MMMEngine::Castle::LevelUp()
 void MMMEngine::Castle::Dead()
 {
 	GameManager::instance->GameOver = true;
+}
+
+void MMMEngine::Castle::Level5Apply(int value)
+{
+
+}
+
+void MMMEngine::Castle::Level10Apply(int value)
+{
+
 }
