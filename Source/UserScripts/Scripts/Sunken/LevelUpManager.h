@@ -30,8 +30,8 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
             ObjPtr<Castle> mCastle;
 
-        std::vector<int> mCastleExp = { 20, 30, 40, 50, 60, 70, 80, 90, 100, 110 };
-        std::vector<int> mBuildingExp = { 0, 15, 30, 45, 60, 75 };
+        std::vector<int> mCastleExp = { 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100 };
+        std::vector<int> mBuildingExp = { 150, 300, 450, 600, 750 };
 
         static ObjPtr<LevelUpManager> instance;
 
@@ -49,6 +49,21 @@ namespace MMMEngine
             ObjPtr<Image> mCastleIcon;
         USCRIPT_PROPERTY()
             ObjPtr<Image> mScoopIcon;
+
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mHPIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mBuffIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mDeBuffIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mSnowIcon;
+
+
+		USCRIPT_PROPERTY()
+			ResPtr<Prefab> mReadyPrefab;
+		USCRIPT_PROPERTY()
+            ResPtr<Prefab> mGagePrefab;
 
     public:
         LevelUpManager()

@@ -6,11 +6,14 @@
 
 namespace MMMEngine
 {
+	class PlayerAnimController;
     class USERSCRIPTS Player : public ScriptBehaviour
     {
     private:
-        RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+		RTTR_ENABLE(ScriptBehaviour)
+			RTTR_REGISTRATION_FRIEND
+
+			ObjPtr<PlayerAnimController> mPAController;
     public:
 		Player()
 		{

@@ -15,23 +15,6 @@
 #include "../Battlestats.h"
 #include "Prefab.h"
 
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<BuildingManager>("BuildingManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("pre_building", &BuildingManager::pre_building);
-
-	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
-		.constructor(
-			[]() {
-				return Object::NewObject<BuildingManager>();
-			})
-        .method("Inject", &ObjPtr<BuildingManager>::Inject);
-}
-
 MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instance = nullptr;
 
 void MMMEngine::BuildingManager::Awake()

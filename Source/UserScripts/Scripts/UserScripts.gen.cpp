@@ -14,6 +14,7 @@
 #include "Dongho/Castle/Castle.h"
 #include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
+#include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
 #include "Mingi/UI/CameraMove.h"
@@ -92,6 +93,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<BattleManager>>("ObjPtr<BattleManager>")
 		.constructor([]() { return Object::NewObject<BattleManager>(); })
 		.method("Inject", &ObjPtr<BattleManager>::Inject);
+
+	registration::class_<BuildingManager>("BuildingManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
+		.property("pre_building", &BuildingManager::pre_building);
+
+	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
+		.constructor([]() { return Object::NewObject<BuildingManager>(); })
+		.method("Inject", &ObjPtr<BuildingManager>::Inject);
 
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
@@ -230,13 +239,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<BuildingLevelController>("BuildingLevelController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingLevelController>"))
 		.property("mBuilding", &BuildingLevelController::mBuilding)
+		.property("mPlayer", &BuildingLevelController::mPlayer)
 		.property("mBattleStat", &BuildingLevelController::mBattleStat)
-		.property("mCanvas", &BuildingLevelController::mCanvas)
-		.property("mExpGage", &BuildingLevelController::mExpGage)
-		.property("mHpGage", &BuildingLevelController::mHpGage)
 		.property("mGagePosOffset", &BuildingLevelController::mGagePosOffset)
+		.property("mReadyPosOffset", &BuildingLevelController::mReadyPosOffset)
+		.property("mSelectPosOffset", &BuildingLevelController::mSelectPosOffset)
 		.property("mUIScale", &BuildingLevelController::mUIScale)
 		.property("mPadding", &BuildingLevelController::mPadding)
+		.property("mSelectPadding", &BuildingLevelController::mSelectPadding)
 		.property("mDistanceFactor", &BuildingLevelController::mDistanceFactor);
 
 	registration::class_<ObjPtr<BuildingLevelController>>("ObjPtr<BuildingLevelController>")
@@ -245,13 +255,6 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<CastleLevelController>("CastleLevelController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleLevelController>"))
-		.property("mCastle", &CastleLevelController::mCastle)
-		.property("mCanvas", &CastleLevelController::mCanvas)
-		.property("mExpGage", &CastleLevelController::mExpGage)
-		.property("mHpGage", &CastleLevelController::mHpGage)
-		.property("mReadyIcon", &CastleLevelController::mReadyIcon)
-		.property("mCastleIcon", &CastleLevelController::mCastleIcon)
-		.property("mScoopIcon", &CastleLevelController::mScoopIcon)
 		.property("mGagePosOffset", &CastleLevelController::mGagePosOffset)
 		.property("mReadyPosOffset", &CastleLevelController::mReadyPosOffset)
 		.property("mSelectPosOffset", &CastleLevelController::mSelectPosOffset)
@@ -284,7 +287,13 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mHpGage", &LevelUpManager::mHpGage)
 		.property("mReadyIcon", &LevelUpManager::mReadyIcon)
 		.property("mCastleIcon", &LevelUpManager::mCastleIcon)
-		.property("mScoopIcon", &LevelUpManager::mScoopIcon);
+		.property("mScoopIcon", &LevelUpManager::mScoopIcon)
+		.property("mHPIcon", &LevelUpManager::mHPIcon)
+		.property("mBuffIcon", &LevelUpManager::mBuffIcon)
+		.property("mDeBuffIcon", &LevelUpManager::mDeBuffIcon)
+		.property("mSnowIcon", &LevelUpManager::mSnowIcon)
+		.property("mReadyPrefab", &LevelUpManager::mReadyPrefab)
+		.property("mGagePrefab", &LevelUpManager::mGagePrefab);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
 		.constructor([]() { return Object::NewObject<LevelUpManager>(); })

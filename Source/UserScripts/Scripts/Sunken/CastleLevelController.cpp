@@ -134,7 +134,7 @@ void MMMEngine::CastleLevelController::UpdateSelectIcon()
 			++mSelectIndex;
 	}
 	else if (input.GetKeyDown(KeyCode::Space)) {
-		std::cout << "CastleLVController::Selected" << std::endl;
+		//std::cout << "CastleLVController::Selected" << std::endl;
 		SetLVManager(mSelectIndex);
 		mUpPending--;
 	}
@@ -165,36 +165,26 @@ void MMMEngine::CastleLevelController::Start()
 		std::cout << "CastleLVController::No EXPGage!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
-	else
-		mExpGage->GetGameObject()->SetActive(false);
 
 	if (!mHpGage.IsValid()) {
 		std::cout << "CastleLVController::No HpGage!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
-	else
-		mHpGage->GetGameObject()->SetActive(false);
 
 	if (!mReadyIcon.IsValid()) {
 		std::cout << "CastleLVController::No ReadyIcon!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
-	else
-		mReadyIcon->GetGameObject()->SetActive(false);
 
 	if (!mCastleIcon.IsValid()) {
 		std::cout << "CastleLVController::No CastleIcon!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
-	else
-		mCastleIcon->GetGameObject()->SetActive(false);
 
 	if (!mScoopIcon.IsValid()) {
 		std::cout << "CastleLVController::No mScoopIcon!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
-	else
-		mScoopIcon->GetGameObject()->SetActive(false);
 }
 
 

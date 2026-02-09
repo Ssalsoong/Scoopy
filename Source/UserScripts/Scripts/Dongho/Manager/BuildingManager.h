@@ -56,6 +56,7 @@ namespace MMMEngine
         std::vector<ObjPtr<GameObject>> buildingpoints;
         std::vector<ObjPtr<GameObject>> Buildings;
 
+        USCRIPT_PROPERTY()
         ResPtr<Prefab> pre_building;
 
         static ObjPtr<BuildingManager> instance;

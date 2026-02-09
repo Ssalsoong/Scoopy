@@ -16,7 +16,8 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<Building>("Building")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"))
-		.property("point", &Building::point);
+		.property("point", &Building::point)
+		.property("exp", &Building::exp);
 
 	registration::class_<ObjPtr<Building>>("ObjPtr<Building>")
 		.constructor(

@@ -16,22 +16,14 @@ namespace MMMEngine
 
         bool isActive = false;
 
-        USCRIPT_PROPERTY()
         ObjPtr<Castle> mCastle;
-
-        USCRIPT_PROPERTY()
         ObjPtr<Canvas> mCanvas;
-        USCRIPT_PROPERTY()
         ObjPtr<Gage> mExpGage;
-        USCRIPT_PROPERTY()
         ObjPtr<Gage> mHpGage;
-        USCRIPT_PROPERTY()
         ObjPtr<Image> mReadyIcon;
 
-        USCRIPT_PROPERTY()
-            ObjPtr<Image> mCastleIcon;
-        USCRIPT_PROPERTY()
-            ObjPtr<Image> mScoopIcon;
+        ObjPtr<Image> mCastleIcon;
+        ObjPtr<Image> mScoopIcon;
 
         int mCurrLevel = 0;
         int mReqExp = 0;

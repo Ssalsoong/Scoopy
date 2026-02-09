@@ -20,9 +20,19 @@ void MMMEngine::LevelUpManager::Awake()
 		!CheckValid(mHpGage, "HpGage") ||
 		!CheckValid(mReadyIcon, "ReadyIcon") ||
 		!CheckValid(mCastleIcon, "CastleIcon") ||
-		!CheckValid(mScoopIcon, "ScoopIcon"))
+		!CheckValid(mScoopIcon, "ScoopIcon") ||
+		!CheckValid(mHPIcon, "HPIcon") ||
+		!CheckValid(mBuffIcon, "BuffIcon") ||
+		!CheckValid(mDeBuffIcon, "DeBuffIcon") ||
+		!CheckValid(mSnowIcon, "SnowIcon"))
 	{
-		GetGameObject()->SetActive(false);
+		Destroy(SelfPtr(this));
+	}
+
+	if (!mReadyPrefab || !mGagePrefab)
+	{
+		std::cerr << "LevelManager::Prefab Not Found!!" << std::endl;
+		Destroy(SelfPtr(this));
 	}
 }
 
@@ -94,12 +104,15 @@ int MMMEngine::LevelUpManager::GetExpPoint(EXPTYPE _type, int _level)
 	{
 		if (_level < (int)mCastleExp.size())
 			return mCastleExp[_level];
+		return 0;
 		break;
 	}
 	case MMMEngine::EXP_BUILD:
 	{
 		if (_level < (int)mBuildingExp.size())
 			return mBuildingExp[_level];
+		return 0;
+		break;
 	}
 	case MMMEngine::EXP_END:
 		break;

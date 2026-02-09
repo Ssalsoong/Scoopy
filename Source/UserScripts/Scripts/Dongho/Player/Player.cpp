@@ -11,9 +11,15 @@
 #include "../Manager/BattleManager.h"
 #include "../Battlestats.h"
 #include "../../test/PlayerController.h"
+#include "../../Sunken/PlayerAnimController.h"
 
 void MMMEngine::Player::Start()
 {
+	mPAController = GetComponent<PlayerAnimController>();
+
+	if (!mPAController) {
+		std::cout << "Player::PAController Not Found!!" << std::endl;
+	}
 }
 
 void MMMEngine::Player::Update()
@@ -80,9 +86,11 @@ void MMMEngine::Player::HandleAttack()
 	if (!hasEnemyInRange)
 	{
 		attackTimer = 0.0f;
+		mPAController->SetAttack(false);
 		return;
 	}
 
+	mPAController->SetAttack(true);
 	attackTimer += Time::GetDeltaTime();
 
 	if (attackTimer < attackDelay)
