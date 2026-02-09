@@ -375,7 +375,6 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowCollider>"))
 		.property("m_Rolesmooth", &SnowCollider::m_Rolesmooth)
 		.property("TriggerCollider", &SnowCollider::TriggerCollider)
-		.property("SnowManager", &SnowCollider::SnowManager)
 		.property("m_holdDistance", &SnowCollider::m_holdDistance)
 		.property("m_rollSpeed", &SnowCollider::m_rollSpeed);
 

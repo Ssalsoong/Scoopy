@@ -6,6 +6,13 @@
 #include "SnowCollider.h"
 #include "../Dongho/Snow/Snowball.h"
 
+MMMEngine::ObjPtr<MMMEngine::SnowballManager2> MMMEngine::SnowballManager2::instance = nullptr;
+
+void MMMEngine::SnowballManager2::Awake()
+{
+	instance = GetGameObject()->GetComponent<SnowballManager2>();
+}
+
 void MMMEngine::SnowballManager2::Start()
 {
 
