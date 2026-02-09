@@ -41,6 +41,7 @@
     <ClCompile Include="Scripts\Sunken\BuildingLevelController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\CastleLevelController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\LevelUpBubble.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\LevelUpManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -90,6 +91,7 @@
     <ClInclude Include="Scripts\Sunken\BuildingLevelController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\CastleLevelController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\LevelUpBubble.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\LevelUpManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PrefabTest.h"><Filter>Scripts</Filter></ClInclude>

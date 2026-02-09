@@ -76,6 +76,8 @@ namespace MMMEngine
             float mDistanceFactor = 1.0f;
     
     public:
+        void SetLevelSelection(int _idx);
+
         BuildingLevelController()
         {
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerEnter);

@@ -46,6 +46,7 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerExit);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
+
         }
 
         USCRIPT_PROPERTY()
@@ -77,5 +78,7 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
             void OnTriggerExit(MMMEngine::CollisionInfo info);
+
+        void SetLevelSelection(int _index);
     };
 }

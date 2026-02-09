@@ -6,6 +6,7 @@
 #include "LevelUpManager.h"
 
 #include "InputManager.h"
+#include <StringHelper.h>
 
 void MMMEngine::CastleLevelController::UpLevel()
 {
@@ -39,7 +40,7 @@ void MMMEngine::CastleLevelController::SetUITrans(ObjPtr<RectTransform> _rectTra
 	_rectTrans->SetAnchoredPosition(((canvasPos - achPos) + (_offset / distFactor)) + paddingFactor / 2.0f );
 
 	auto defaultSize = Vector3{ 1.0f, 1.0f, 1.0f };
-	_rectTrans->SetWorldScale(defaultSize / distFactor);
+	_rectTrans->SetWorldScale((defaultSize / mUIScale) / distFactor);
 }
 
 void MMMEngine::CastleLevelController::SetLVManager(int _upIndex)
@@ -64,12 +65,15 @@ void MMMEngine::CastleLevelController::UpdateGuage()
 
 	mHpGage->GetGameObject()->SetActive(true);
 	mExpGage->GetGameObject()->SetActive(true);
+	mCountIcon->GetGameObject()->SetActive(true);
 
 	auto expRect = mExpGage->GetRectTransform();
 	auto hpRect = mHpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
 
 	SetUITrans(expRect, mGagePosOffset ,mPadding);
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mCastle->maxHP;
 	auto currHP = mCastle->prevHP;
@@ -82,6 +86,11 @@ void MMMEngine::CastleLevelController::UpdateGuage()
 		expFactor = 1.0f;
 	else
 		expFactor = (float)mCastle->exp / (float)mReqExp;
+
+	// 현재 눈 갯수 출력
+	auto text = mCountIcon->GetTransform()->GetChild(0)->GetComponent<Text>();
+	int snowCount = mCastle->point;
+	text->SetText(std::to_wstring(snowCount));
 
 	mExpGage->SetValue(expFactor);
 }
@@ -157,6 +166,9 @@ void MMMEngine::CastleLevelController::Start()
 	mScoopIcon = LevelUpManager::Get()->mScoopIcon;
 	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
 
+	mCountIcon->GetTransform()->SetParent(mCanvas->GetTransform());
+	mCountIcon->GetGameObject()->SetActive(false);
+
 	if (!mCastle.IsValid()) {
 		std::cout << "CastleLVController::No Castle!!!" << std::endl;
 		Destroy(SelfPtr(this));
@@ -186,6 +198,8 @@ void MMMEngine::CastleLevelController::Start()
 		std::cout << "CastleLVController::No mScoopIcon!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
+
+
 }
 
 
@@ -223,6 +237,13 @@ void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::CollisionInfo in
 		mExpGage->GetGameObject()->SetActive(false);
 		mCastleIcon->GetGameObject()->SetActive(false);
 		mScoopIcon->GetGameObject()->SetActive(false);
+		mCountIcon->GetGameObject()->SetActive(false);
 		isActive = false;
 	}
+}
+
+void MMMEngine::CastleLevelController::SetLevelSelection(int _index)
+{
+	SetLVManager(mSelectIndex);
+	mUpPending--;
 }

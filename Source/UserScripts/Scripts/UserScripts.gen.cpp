@@ -29,6 +29,7 @@
 #include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
 #include "Sunken/EnemyAnimController.h"
+#include "Sunken/LevelUpBubble.h"
 #include "Sunken/LevelUpManager.h"
 #include "Sunken/PlayerAnimController.h"
 #include "Sunken/PrefabTest.h"
@@ -265,6 +266,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mGagePosOffset", &CastleLevelController::mGagePosOffset)
 		.property("mReadyPosOffset", &CastleLevelController::mReadyPosOffset)
 		.property("mSelectPosOffset", &CastleLevelController::mSelectPosOffset)
+		.property("mCountPosOffset", &CastleLevelController::mCountPosOffset)
 		.property("mUIScale", &CastleLevelController::mUIScale)
 		.property("mPadding", &CastleLevelController::mPadding)
 		.property("mSelectPadding", &CastleLevelController::mSelectPadding)
@@ -285,11 +287,28 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EnemyAnimController>(); })
 		.method("Inject", &ObjPtr<EnemyAnimController>::Inject);
 
+	registration::class_<LevelUpBubble>("LevelUpBubble")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
+		.property("mUIScale", &LevelUpBubble::mUIScale)
+		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
+		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
+		.property("mIconOffset", &LevelUpBubble::mIconOffset)
+		.property("mIconPadding", &LevelUpBubble::mIconPadding)
+		.property("mHeadlineOffset", &LevelUpBubble::mHeadlineOffset)
+		.property("mScriptOffset", &LevelUpBubble::mScriptOffset)
+		.property("mSelectIconSize", &LevelUpBubble::mSelectIconSize)
+		.property("mDeselectIconSize", &LevelUpBubble::mDeselectIconSize);
+
+	registration::class_<ObjPtr<LevelUpBubble>>("ObjPtr<LevelUpBubble>")
+		.constructor([]() { return Object::NewObject<LevelUpBubble>(); })
+		.method("Inject", &ObjPtr<LevelUpBubble>::Inject);
+
 	registration::class_<LevelUpManager>("LevelUpManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpManager>"))
 		.property("mCanvas", &LevelUpManager::mCanvas)
 		.property("mPlayer", &LevelUpManager::mPlayer)
 		.property("mCastle", &LevelUpManager::mCastle)
+		.property("mSpeechBubble", &LevelUpManager::mSpeechBubble)
 		.property("mExpGage", &LevelUpManager::mExpGage)
 		.property("mHpGage", &LevelUpManager::mHpGage)
 		.property("mReadyIcon", &LevelUpManager::mReadyIcon)
@@ -299,7 +318,11 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mBuffIcon", &LevelUpManager::mBuffIcon)
 		.property("mDeBuffIcon", &LevelUpManager::mDeBuffIcon)
 		.property("mSnowIcon", &LevelUpManager::mSnowIcon)
+		.property("mSpeechBubbleIcon", &LevelUpManager::mSpeechBubbleIcon)
+		.property("mHeadlineText", &LevelUpManager::mHeadlineText)
+		.property("mScriptText", &LevelUpManager::mScriptText)
 		.property("mReadyPrefab", &LevelUpManager::mReadyPrefab)
+		.property("mCountPrefab", &LevelUpManager::mCountPrefab)
 		.property("mGagePrefab", &LevelUpManager::mGagePrefab);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")

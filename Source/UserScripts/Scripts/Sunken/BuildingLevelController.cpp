@@ -11,6 +11,12 @@
 #include "../Dongho/Building/SnowBuilding.h"
 #include "InputManager.h"
 
+void MMMEngine::BuildingLevelController::SetLevelSelection(int _idx)
+{
+	SetLVManager(mSelectIndex);
+	mUpPending--;
+}
+
 void MMMEngine::BuildingLevelController::Start()
 {
 	if (!LevelUpManager::Get()) {
@@ -328,11 +334,26 @@ void MMMEngine::BuildingLevelController::Update()
 	if (isActive)
 		UpdateGuage();
 
-	if (isReady && !isActive) {
+	/*if (isReady && !isActive) {
 		UpdateReadyIcon();
 	}
 	else if (isReady && isActive) {
 		UpdateSelectIcon();
+	}*/
+
+	static bool prevActive = false;
+	if (isReady) {
+		if (prevActive != isActive) {
+			prevActive = isActive;
+			if (isActive) {
+				std::vector<ObjPtr<Image>> icons{ mHPIcon , mBuffIcon, mDeBuffIcon, mSnowIcon };
+				auto object = GetGameObject();
+				LevelUpManager::Get()->SetPBubble(EXP_BUILD, object, icons);
+			}
+			else {
+				LevelUpManager::Get()->RemovePBubble();
+			}
+		}
 	}
 
 	auto currEXP = mBuilding->exp;

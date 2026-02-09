@@ -1,8 +1,8 @@
 {
-    "MUID": "36085d94-0e8a-4a63-a01c-ae6223aa40ff",
+    "MUID": "5c34d8ac-97d9-48e1-a6dd-f6dfe35e69ae",
     "properties": {
         "_albedo": {
-            "file": "Assets\\DefaultMesh\\Default_White.png",
+            "file": "Assets\\Sunken\\Enemy\\FBX\\T_Wood_Crossbow.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -21,8 +21,8 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_lutMap": {
-            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
+        "_metallic": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -52,23 +52,11 @@
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.9,
+                1.0,
                 1.0,
                 1.0,
                 1.0
             ]
-        },
-        "mDiffGradientDepth": {
-            "type": "float",
-            "value": 68.32630157470703
-        },
-        "mDiffGradientDistHalf": {
-            "type": "float",
-            "value": 0.15625
-        },
-        "mDiffuseStr": {
-            "type": "float",
-            "value": 0.5
         },
         "mEmissive": {
             "type": "float",
@@ -107,33 +95,17 @@
                 0.0
             ]
         },
-        "mLowLut": {
+        "mMetallic": {
             "type": "float",
-            "value": 0.5
-        },
-        "mPadding": {
-            "type": "Vector3",
-            "value": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "mRimLightStr": {
-            "type": "float",
-            "value": 0.5
+            "value": 0.0
         },
         "mRoughness": {
             "type": "float",
             "value": 0.0
-        },
-        "mSpecularStr": {
-            "type": "float",
-            "value": 0.10000000149011612
         }
     },
     "pshader": {
-        "file": "Shader/TOON/ToonPS.hlsl"
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"

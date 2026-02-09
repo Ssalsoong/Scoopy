@@ -4,6 +4,8 @@
 #include "CastleLevelController.h"
 #include "../Dongho/Castle/Castle.h"
 #include "../Dongho/Player/Player.h"
+#include "BuildingLevelController.h"
+#include "LevelUpBubble.h"
 
 MMMEngine::ObjPtr<MMMEngine::LevelUpManager> MMMEngine::LevelUpManager::instance;
 
@@ -24,7 +26,11 @@ void MMMEngine::LevelUpManager::Awake()
 		!CheckValid(mHPIcon, "HPIcon") ||
 		!CheckValid(mBuffIcon, "BuffIcon") ||
 		!CheckValid(mDeBuffIcon, "DeBuffIcon") ||
-		!CheckValid(mSnowIcon, "SnowIcon"))
+		!CheckValid(mSnowIcon, "SnowIcon") ||
+		!CheckValid(mSpeechBubble, "SpeechBubble") ||
+		!CheckValid(mSpeechBubbleIcon, "SpeechBubbleIcon") ||
+		!CheckValid(mHeadlineText, "HeadlineText") || 
+		!CheckValid(mScriptText, "ScriptText"))
 	{
 		Destroy(SelfPtr(this));
 	}
@@ -38,7 +44,15 @@ void MMMEngine::LevelUpManager::Awake()
 
 void MMMEngine::LevelUpManager::Start()
 {
-	
+	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"체력건물");
+	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"버프건물");
+	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"디버프건물");
+	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"수급건물");
+
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"건물의 체력이 상승합니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처에 있으면 이속이 빨라집니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처의 적의 이속이 느려집니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"일정 시간마다 눈을 저장합니다.");
 }
 
 void MMMEngine::LevelUpManager::Update()
@@ -146,4 +160,83 @@ int MMMEngine::LevelUpManager::GetMaxLevel(EXPTYPE _type)
 
 	std::cout << "LevelUpManager::GetExp::Wrong Type!!" << std::endl;
 	return 0;
+}
+
+void MMMEngine::LevelUpManager::SetPBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons)
+{
+	mPendingType = _type;
+	mLevelPendingObj = _target;
+
+	mSpeechBubble->SetActive(true);
+	mSpeechBubble->SetIcons(_icons);
+
+	// SetHeadline과 SetScript는 버블 안에서 해결
+}
+
+void MMMEngine::LevelUpManager::RemovePBubble()
+{
+	mPendingType = EXPTYPE::EXP_END;
+	mLevelPendingObj.Reset();
+	mSpeechBubble->SetActive(false);
+}
+
+void MMMEngine::LevelUpManager::SetSelection(int _selectionIdx)
+{
+	switch (mPendingType)
+	{
+	case MMMEngine::EXP_CASTLE:
+	{
+		auto controller = mLevelPendingObj->GetComponent<CastleLevelController>();
+		
+		if (controller) {
+			controller->SetLevelSelection(_selectionIdx);
+			return;
+		}
+		break;
+	}
+	case MMMEngine::EXP_BUILD:
+	{
+		auto controller = mLevelPendingObj->GetComponent<BuildingLevelController>();
+		if (controller) {
+			controller->SetLevelSelection(_selectionIdx);
+			return;
+		}
+		break;
+	}
+	case MMMEngine::EXP_END:
+		[[fallthrough]];
+	default:
+		break;
+	}
+
+	std::cout << "LevelUpManager::SetSelection::Wrong Type!!" << std::endl;
+	return;
+}
+
+const std::wstring& MMMEngine::LevelUpManager::GetHeadline(int _idx)
+{
+	auto it = mHeadlineMap.find(mPendingType);
+
+	if (it != mHeadlineMap.end()) {
+		if (_idx < it->second.size()) {
+			return it->second[_idx];
+		}
+	}
+
+	std::cout << "LevelUpManager::No Bubble Headline!!" << std::endl;
+	return L"";
+}
+
+const std::wstring& MMMEngine::LevelUpManager::GetScripts(int _idx)
+{
+	auto it = mScriptMap.find(mPendingType);
+
+	if (it != mScriptMap.end()) {
+		if (_idx < it->second.size()) {
+			return it->second[_idx];
+		}
+	}
+
+	std::cout << "LevelUpManager::No Bubble Script!!" << std::endl;
+	return L"";
 }
