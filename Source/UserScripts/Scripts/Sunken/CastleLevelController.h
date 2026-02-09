@@ -15,22 +15,30 @@ namespace MMMEngine
             RTTR_REGISTRATION_FRIEND
 
         bool isActive = false;
-        bool isUpgrade = false;
 
-        USCRIPT_PROPERTY()
         ObjPtr<Castle> mCastle;
-        USCRIPT_PROPERTY()
-        ObjPtr<Gage> mExpGage;
-        USCRIPT_PROPERTY()
-        ObjPtr<Gage> mHpGage;
-        USCRIPT_PROPERTY()
         ObjPtr<Canvas> mCanvas;
+        ObjPtr<Gage> mExpGage;
+        ObjPtr<Gage> mHpGage;
+        ObjPtr<Image> mReadyIcon;
+
+        ObjPtr<Image> mCastleIcon;
+        ObjPtr<Image> mScoopIcon;
+        ObjPtr<Image> mCountIcon;
 
         int mCurrLevel = 0;
         int mReqExp = 0;
+        int mUpPending = 0;
 
+        int mSelectIndex = 0;
+        
         void UpLevel();
+        void SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding);
+        void SetLVManager(int _upIndex);
+
         void UpdateGuage();
+        void UpdateReadyIcon();
+        void UpdateSelectIcon();
     public:
         CastleLevelController()
         {
@@ -42,11 +50,19 @@ namespace MMMEngine
         }
 
         USCRIPT_PROPERTY()
-            Vector2 mUIPosOffset;
+            Vector2 mGagePosOffset;
+        USCRIPT_PROPERTY()
+            Vector2 mReadyPosOffset;
+        USCRIPT_PROPERTY()
+            Vector2 mSelectPosOffset;
+        USCRIPT_PROPERTY()
+            Vector2 mCountPosOffset;
         USCRIPT_PROPERTY()
             float mUIScale = 1.0f;
         USCRIPT_PROPERTY()
-            float mPadding = 10.0f;
+            Vector2 mPadding = { 0.0f, 10.0f };
+        USCRIPT_PROPERTY()
+            Vector2 mSelectPadding = { 10.0f, 0.0f };
         USCRIPT_PROPERTY()
             float mDistanceFactor = 1.0f;
 

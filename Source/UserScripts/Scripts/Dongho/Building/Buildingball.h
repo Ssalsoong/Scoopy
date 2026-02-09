@@ -21,12 +21,12 @@ namespace MMMEngine
         void Start();
         void Update();
         int atk = 4;
-        float speed = 20.f;
-        float hitRadius = 0.25f;
+        float hitRadius = 0.1f;
         ObjPtr<GameObject> owner;
         ObjPtr<GameObject> target;
         DirectX::SimpleMath::Vector3 targetpos;
         void SetOwner(ObjPtr<GameObject> obj) { owner = obj; }
         void SetTarget(ObjPtr<GameObject>obj) { target = obj; }
+        void Setatk(int value) { atk = value; }
     };
 }

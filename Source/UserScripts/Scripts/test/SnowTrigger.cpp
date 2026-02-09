@@ -45,6 +45,7 @@ void MMMEngine::SnowTrigger::OnTriggerEnter(MMMEngine::CollisionInfo info)
 	if (!P_Control.IsValid()) return;
 
 	main_Player = P_Control->GetGameObject();
+	is_player = true;
 	P_Control->AddSnowList(Parent_Obj);
 
 	if (P_Control->IsHoldingSpace() && !P_Control->HasCurrentSnow())

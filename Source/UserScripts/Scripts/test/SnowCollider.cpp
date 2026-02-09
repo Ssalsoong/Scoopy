@@ -9,6 +9,8 @@
 #include "../Dongho/Snow/Snowball.h"
 #include "../Dongho/Castle/Castle.h"
 #include "../Dongho/Building/Building.h"
+#include "PlayerController.h"
+#include "../Dongho/Manager/BattleManager.h"
 
 const float EPS2 = 1e-6f;
 
@@ -39,6 +41,15 @@ DirectX::SimpleMath::Quaternion MMMEngine::SnowCollider::ComputeRollingRotation(
 void MMMEngine::SnowCollider::SnowDestory()
 {
 	auto my_ptr = GetGameObject();
+	if (On_Player && m_player.IsValid())
+	{
+		auto playercon = m_player->GetComponent<PlayerController>();
+		if (playercon.IsValid())
+		{
+			playercon->HasSnow(false);
+			playercon->RemoveSnowList(my_ptr);
+		}
+	}
 	SnowballManager2::instance->RemoveFromList(my_ptr);
 	TriggerCollider->GetComponent<SnowTrigger>()->DestoryTrigger();
 }
@@ -275,5 +286,12 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 		GetComponent<Snowball>()->EatSnow(info.other);
 		info.other->GetComponent<SnowCollider>()->SnowDestory();
 		Destroy(info.other);
+	}
+	else if (info.other->GetTag() == "Enemy")
+	{
+		if (!On_Player)
+			return;
+		int damage = GetComponent<Snowball>()->GetPoint();
+		BattleManager::instance->Attack(GetGameObject(), info.other, damage);
 	}
 }

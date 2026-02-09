@@ -98,6 +98,38 @@ void MMMEngine::PlayerController::InPutHoldSnow()
 void MMMEngine::PlayerController::HasSnow(bool value)
 {
 	is_Snow = value;
+	if (is_Snow)
+		return;
+
+	// snow destroyed or removed
+	if (curSnow.IsValid())
+	{
+		if (auto sc = curSnow->GetComponent<SnowCollider>(); sc)
+			sc->SetOnPlayer(false, nullptr);
+	}
+
+	curSnow = nullptr;
+	SnowScoopCount = 0;
+	m_pendingAttach = false;
+	m_attachDelayFrames = 0;
+
+	// keep harvesting if the player is still holding space
+	if (m_holdSpace)
+	{
+		if (m_TileMap.IsValid())
+			m_TileMap->GetComponent<TileMap>()->NoticePlayer(true);
+
+		if (auto mv = GetComponent<PlayerMove>(); mv.IsValid())
+			mv->SetScoopMode(true, nullptr);
+	}
+	else
+	{
+		if (m_TileMap.IsValid())
+			m_TileMap->GetComponent<TileMap>()->NoticePlayer(false);
+
+		if (auto mv = GetComponent<PlayerMove>(); mv.IsValid())
+			mv->SetScoopMode(false, nullptr);
+	}
 }
 
 void MMMEngine::PlayerController::AddScoop(int SnowCount)

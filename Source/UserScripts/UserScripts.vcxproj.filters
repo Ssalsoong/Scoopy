@@ -41,6 +41,7 @@
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUISorter.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\BuildingLevelController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\CastleLevelController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\LevelUpManager.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -92,6 +93,7 @@
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUISorter.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\BuildingLevelController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\CastleLevelController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\LevelUpManager.h"><Filter>Scripts</Filter></ClInclude>

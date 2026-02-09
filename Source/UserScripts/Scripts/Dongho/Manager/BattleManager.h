@@ -28,7 +28,6 @@ namespace MMMEngine
         void Update();
         static ObjPtr<BattleManager> instance;
 
-        void Attack(ObjPtr<GameObject> target, int damage);
-        void SnowAttack(ObjPtr<GameObject> target, int point);
+        void Attack(ObjPtr<GameObject>attacker, ObjPtr<GameObject> target, int damage);
     };
 }
