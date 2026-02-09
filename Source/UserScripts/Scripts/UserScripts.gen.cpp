@@ -16,6 +16,7 @@
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/FXSnowFall.h"
 #include "Mingi/Manager/SoundManager.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
@@ -111,6 +112,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EngineLogoStartAnim>>("ObjPtr<EngineLogoStartAnim>")
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
+
+	registration::class_<FXSnowFall>("FXSnowFall")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));
+
+	registration::class_<ObjPtr<FXSnowFall>>("ObjPtr<FXSnowFall>")
+		.constructor([]() { return Object::NewObject<FXSnowFall>(); })
+		.method("Inject", &ObjPtr<FXSnowFall>::Inject);
 
 	registration::class_<SoundManager>("SoundManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SoundManager>"));
@@ -210,6 +218,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("EdgeYOffset", &WorldSpaceUI::EdgeYOffset)
 		.property("EdgeXOffset", &WorldSpaceUI::EdgeXOffset)
 		.property("HideWhenOutsideScreen", &WorldSpaceUI::HideWhenOutsideScreen)
+		.property("HideWhenInsideScreen", &WorldSpaceUI::HideWhenInsideScreen)
 		.property("ScaleWithDistance", &WorldSpaceUI::ScaleWithDistance)
 		.property("ReferenceDistance", &WorldSpaceUI::ReferenceDistance)
 		.property("MinScale", &WorldSpaceUI::MinScale)

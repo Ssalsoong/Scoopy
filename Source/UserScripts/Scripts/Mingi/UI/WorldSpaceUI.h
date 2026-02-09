@@ -11,12 +11,14 @@ namespace MMMEngine
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
-		float m_lastDistance = 0.0f;   
+            RTTR_REGISTRATION_FRIEND
+            float m_lastDistance = 0.0f;
         bool m_isTargetInScreen = false;
+        bool m_isBehindCamera = false;
     public:
         WorldSpaceUI()
         {
+        SetExecutionOrder(20);
         REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(LateUpdate);
         REGISTER_BEHAVIOUR_MESSAGE(OnDestroy);
@@ -28,53 +30,57 @@ namespace MMMEngine
         void SetUIRenderOrder(int order) { if (m_rectGraphic.IsValid()) m_rectGraphic->SetRenderOrder(order); }
 
         bool IsTargetInScreen();
+        bool IsBehindCamera();
 
         USCRIPT_MESSAGE()
-        void Awake();
+            void Awake();
 
         USCRIPT_MESSAGE()
-        void Start();
+            void Start();
 
         USCRIPT_PROPERTY()
-        ObjPtr<RectTransform> SelfRect;  
+            ObjPtr<RectTransform> SelfRect;
 
-		USCRIPT_PROPERTY()
-        ObjPtr<Transform> TargetTransform;
+        USCRIPT_PROPERTY()
+            ObjPtr<Transform> TargetTransform;
 
         USCRIPT_MESSAGE()
-        void LateUpdate();
+            void LateUpdate();
 
         USCRIPT_MESSAGE()
-        void OnDestroy();
+            void OnDestroy();
 
         USCRIPT_PROPERTY()
-		bool DontSortByDistance = false;
+            bool DontSortByDistance = false;
 
         USCRIPT_PROPERTY()
-        bool ClampToScreenEdge = false;
+            bool ClampToScreenEdge = false;
 
         USCRIPT_PROPERTY()
-        float EdgeYOffset = 25.0f;
+            float EdgeYOffset = 25.0f;
 
         USCRIPT_PROPERTY()
-        float EdgeXOffset = 25.0f;
+            float EdgeXOffset = 25.0f;
 
         USCRIPT_PROPERTY()
-        bool HideWhenOutsideScreen = false;
+            bool HideWhenOutsideScreen = false;
 
         USCRIPT_PROPERTY()
-        bool ScaleWithDistance = true;
+            bool HideWhenInsideScreen = false;
 
         USCRIPT_PROPERTY()
-        float ReferenceDistance = 10.0f; // 기준 거리 (이 거리일 때 스케일이 1.0)
+            bool ScaleWithDistance = true;
 
         USCRIPT_PROPERTY()
-        float MinScale = 0.3f; // 최소 크기 제한
+            float ReferenceDistance = 10.0f; // 기준 거리 (이 거리일 때 스케일이 1.0)
 
         USCRIPT_PROPERTY()
-        float MaxScale = 2.0f; // 최대 크기 제한
+            float MinScale = 0.3f; // 최소 크기 제한
+
+        USCRIPT_PROPERTY()
+            float MaxScale = 2.0f; // 최대 크기 제한
 
     private:
-		ObjPtr<Graphic> m_rectGraphic;
+        ObjPtr<Graphic> m_rectGraphic;
     };
 }

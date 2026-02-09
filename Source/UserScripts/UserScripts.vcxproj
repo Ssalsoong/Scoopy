@@ -130,6 +130,7 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
+    <ClCompile Include="Scripts\Mingi\FXSnowFall.cpp" />
     <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
+    <ClInclude Include="Scripts\Mingi\FXSnowFall.h" />
     <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />

@@ -5,23 +5,28 @@
 #include "Camera.h"
 #include "Canvas.h"
 
-//WorldSpaceUIManager°¡ targetPos¸¦ ¹Ş¾Æ¼­ zÃàÀ¸·Î UIRenderOrder¸¦ ¼³Á¤ÇØÁÖµµ·Ï º¯°æÇÒ ¿¹Á¤
+//WorldSpaceUIManagerê°€ targetPosë¥¼ ë°›ì•„ì„œ zì¶•ìœ¼ë¡œ UIRenderOrderë¥¼ ì„¤ì •í•´ì£¼ë„ë¡ ë³€ê²½í•  ì˜ˆì •
 
 bool MMMEngine::WorldSpaceUI::IsTargetInScreen()
 {
 	return m_isTargetInScreen;
 }
 
+bool MMMEngine::WorldSpaceUI::IsBehindCamera()
+{
+	return m_isBehindCamera;
+}
+
 void MMMEngine::WorldSpaceUI::Awake()
 {
-	//WorldSpaceUI ¸Å´ÏÀú¿¡ ÀÚ½ÅÀ» µî·Ï½ÃÅ°±â
-	//¸Å´ÏÀú°¡ ¾ø´Â °æ¿ì °æ°í ·Î±× Ãâ·Â
+	//WorldSpaceUI ë§¤ë‹ˆì €ì— ìì‹ ì„ ë“±ë¡ì‹œí‚¤ê¸°
+	//ë§¤ë‹ˆì €ê°€ ì—†ëŠ” ê²½ìš° ê²½ê³  ë¡œê·¸ ì¶œë ¥
 
 	if (WorldSpaceUISorter::Instance.IsValid()) {
 		WorldSpaceUISorter::Instance->RegisterUI(SelfPtr(this));
 	}
 	else {
-		// °æ°í ·Î±× (¿£Áø ·Î±× ÇÔ¼ö »ç¿ë)
+		// ê²½ê³  ë¡œê·¸ (ì—”ì§„ ë¡œê·¸ í•¨ìˆ˜ ì‚¬ìš©)
 	}
 }
 
@@ -32,7 +37,7 @@ void MMMEngine::WorldSpaceUI::Start()
 
 void MMMEngine::WorldSpaceUI::LateUpdate()
 {
-	if(!SelfRect.IsValid() || !TargetTransform.IsValid() || !m_rectGraphic.IsValid())
+	if (!SelfRect.IsValid() || !TargetTransform.IsValid() || !m_rectGraphic.IsValid())
 		return;
 
 	//if (!SelfRect->GetGameObject().IsValid() || SelfRect->GetGameObject()->IsDestroyed())
@@ -43,11 +48,13 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 
 	auto mainCam = Camera::GetMainCamera();
 
-	if(!mainCam.IsValid() || mainCam->IsDestroyed())
+	if (!mainCam.IsValid() || mainCam->IsDestroyed())
 		return;
 
 	Vector3 targetWorldPos = TargetTransform->GetWorldPosition();
-	Vector2 targetScreenPos = mainCam->WorldToScreenPoint(targetWorldPos);
+	Vector3 targetScreenPos3 = mainCam->WorldToScreenPoint(targetWorldPos);
+	Vector2 targetScreenPos(targetScreenPos3.x, targetScreenPos3.y);
+	m_isBehindCamera = targetScreenPos3.z < 0.0f;
 	Vector3 camPos = mainCam->GetGameObject()->GetTransform()->GetWorldPosition();
 
 	auto canvas = m_rectGraphic->GetCanvas();
@@ -58,44 +65,64 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 
 		if (ScaleWithDistance && m_lastDistance > 0.001f)
 		{
-			// °ø½Ä: (±âÁØ °Å¸® / ÇöÀç °Å¸®)
+			// ê³µì‹: (ê¸°ì¤€ ê±°ë¦¬ / í˜„ì¬ ê±°ë¦¬)
 			float scaleFactor = ReferenceDistance / m_lastDistance;
 
-			// ÃÖ¼Ò/ÃÖ´ë Á¦ÇÑ (Clamping)
+			// ìµœì†Œ/ìµœëŒ€ ì œí•œ (Clamping)
 			if (scaleFactor < MinScale) scaleFactor = MinScale;
 			if (scaleFactor > MaxScale) scaleFactor = MaxScale;
 
 			SelfRect->SetLocalScale(Vector3(scaleFactor, scaleFactor, 1.0f));
 		}
 
-		// ScaleWithScreenSize ´ëÀÀ
+		// ScaleWithScreenSize ëŒ€ì‘
 		Vector2 scale = canvas->GetScaleToScene();
 		Vector2 offset = canvas->GetSceneOffset();
 
-		// ½ºÅ©¸° ÁÂÇ¥ -> Äµ¹ö½º ÁÂÇ¥
+		// ìŠ¤í¬ë¦° ì¢Œí‘œ -> ìº”ë²„ìŠ¤ ì¢Œí‘œ
 		targetScreenPos.x = (targetScreenPos.x - offset.x) / (scale.x != 0 ? scale.x : 1.0f);
 		targetScreenPos.y = (targetScreenPos.y - offset.y) / (scale.y != 0 ? scale.y : 1.0f);
 
-
-
 		Vector2 canSize = canvas->GetCanvasSize();
-		m_isTargetInScreen = targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset;
+		if (m_isBehindCamera)
+		{
+			Vector2 center = Vector2(canSize.x * 0.5f, canSize.y * 0.5f);
+			targetScreenPos = center + (center - targetScreenPos);
+		}
+		m_isTargetInScreen = !m_isBehindCamera && targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset;
 
-		if (HideWhenOutsideScreen)
+		if (HideWhenInsideScreen)
 		{
 			if (m_isTargetInScreen)
 			{
-				// È­¸é ³»¿¡ Á¸ÀçÇÔ
+				// í™”ë©´ ë‚´ì— ì¡´ì¬í•¨
 				m_rectGraphic->SetEnabled(false);
 				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
 					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(false);
 			}
 			else
 			{
-				// È­¸é ¹Û¿¡ Á¸ÀçÇÔ
+				// í™”ë©´ ë°–ì— ì¡´ì¬í•¨
 				m_rectGraphic->SetEnabled(true);
 				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
 					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(true);
+			}
+		}
+		else if (HideWhenOutsideScreen)
+		{
+			if (m_isTargetInScreen)
+			{
+				// í™”ë©´ ë‚´ì— ì¡´ì¬í•¨
+				m_rectGraphic->SetEnabled(true);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(true);
+			}
+			else
+			{
+				// í™”ë©´ ë°–ì— ì¡´ì¬í•¨
+				m_rectGraphic->SetEnabled(false);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(false);
 			}
 		}
 
@@ -114,8 +141,8 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 
 void MMMEngine::WorldSpaceUI::OnDestroy()
 {
-	//WorldSpaceUI ¸Å´ÏÀú¿¡¼­ ÀÚ½ÅÀ» ÇØÁ¦½ÃÅ°±â
-	//SceneChangeÀÇ °æ¿ì ¸Å´ÏÀú°¡ ÆÄ±«µÇ¾úÀ» ¼öµµ ÀÖÀ¸´Ï ²À Valid + IsDestroyed Ã¼Å©ÇÒ °Í
+	//WorldSpaceUI ë§¤ë‹ˆì €ì—ì„œ ìì‹ ì„ í•´ì œì‹œí‚¤ê¸°
+	//SceneChangeì˜ ê²½ìš° ë§¤ë‹ˆì €ê°€ íŒŒê´´ë˜ì—ˆì„ ìˆ˜ë„ ìˆìœ¼ë‹ˆ ê¼­ Valid + IsDestroyed ì²´í¬í•  ê²ƒ
 	if (WorldSpaceUISorter::Instance.IsValid() && !WorldSpaceUISorter::Instance->IsDestroyed()) {
 		WorldSpaceUISorter::Instance->UnregisterUI(SelfPtr(this));
 	}
