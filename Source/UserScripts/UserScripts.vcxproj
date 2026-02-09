@@ -75,6 +75,7 @@
       <DisableSpecificWarnings>4819;4251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;RTTR_DLL;USERSCRIPTS_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(MMMENGINE_DIR)\MMMEngineShared;$(MMMENGINE_DIR)\MMMEngineShared\dxtk;$(MMMENGINE_DIR)\MMMEngineShared\dxtk\inc;$(MMMENGINE_DIR)\MMMEngineShared\physx;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -132,6 +133,7 @@
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
     <ClCompile Include="Scripts\Mingi\FXSnowFall.cpp" />
     <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
+    <ClCompile Include="Scripts\Mingi\RedLine.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
@@ -182,6 +184,7 @@
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
     <ClInclude Include="Scripts\Mingi\FXSnowFall.h" />
     <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
+    <ClInclude Include="Scripts\Mingi\RedLine.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />

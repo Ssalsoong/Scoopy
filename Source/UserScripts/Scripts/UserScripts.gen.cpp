@@ -1,5 +1,4 @@
 ﻿// Auto-generated. Do not edit.
-#pragma optimize("", off)
 #include "Export.h"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -16,6 +15,9 @@
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/FXSnowFall.h"
+#include "Mingi/Manager/SoundManager.h"
+#include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
@@ -40,6 +42,9 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
+#include "Dongho/Enemy/ArrowEnemy.h"
+#include "Dongho/Enemy/NormalEnemy.h"
+#include "Dongho/Enemy/ThiefEnemy.h"
 
 using namespace rttr;
 using namespace MMMEngine;
@@ -111,11 +116,39 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
 
+	registration::class_<FXSnowFall>("FXSnowFall")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));
+
+	registration::class_<ObjPtr<FXSnowFall>>("ObjPtr<FXSnowFall>")
+		.constructor([]() { return Object::NewObject<FXSnowFall>(); })
+		.method("Inject", &ObjPtr<FXSnowFall>::Inject);
+
+	registration::class_<SoundManager>("SoundManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SoundManager>"));
+
+	registration::class_<ObjPtr<SoundManager>>("ObjPtr<SoundManager>")
+		.constructor([]() { return Object::NewObject<SoundManager>(); })
+		.method("Inject", &ObjPtr<SoundManager>::Inject);
+
+	registration::class_<RedLine>("RedLine")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<RedLine>"))
+		.property("CheckDistance", &RedLine::CheckDistance)
+		.property("CheckYPos", &RedLine::CheckYPos)
+		.property("CheckXPos", &RedLine::CheckXPos)
+		.property("PlayerTr", &RedLine::PlayerTr)
+		.property("ReddoLine", &RedLine::ReddoLine);
+
+	registration::class_<ObjPtr<RedLine>>("ObjPtr<RedLine>")
+		.constructor([]() { return Object::NewObject<RedLine>(); })
+		.method("Inject", &ObjPtr<RedLine>::Inject);
+
 	registration::class_<CameraMove>("CameraMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CameraMove>"))
 		.property("Offset", &CameraMove::Offset)
 		.property("Target", &CameraMove::Target)
-		.property("ChasingSpeed", &CameraMove::ChasingSpeed);
+		.property("ChasingSpeed", &CameraMove::ChasingSpeed)
+		.property("XClamp", &CameraMove::XClamp)
+		.property("ZClamp", &CameraMove::ZClamp);
 
 	registration::class_<ObjPtr<CameraMove>>("ObjPtr<CameraMove>")
 		.constructor([]() { return Object::NewObject<CameraMove>(); })
