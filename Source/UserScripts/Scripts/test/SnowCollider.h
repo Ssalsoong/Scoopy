@@ -62,8 +62,6 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         ObjPtr<GameObject> TriggerCollider;
 
-        USCRIPT_PROPERTY()
-        ObjPtr<GameObject> SnowManager;
 
         DirectX::SimpleMath::Vector3 m_prevPlayerPos;
         DirectX::SimpleMath::Quaternion m_prevPlayerRot;

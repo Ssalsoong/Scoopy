@@ -39,7 +39,7 @@ DirectX::SimpleMath::Quaternion MMMEngine::SnowCollider::ComputeRollingRotation(
 void MMMEngine::SnowCollider::SnowDestory()
 {
 	auto my_ptr = GetGameObject();
-	SnowManager->GetComponent<SnowballManager2>()->RemoveFromList(my_ptr);
+	SnowballManager2::instance->RemoveFromList(my_ptr);
 	TriggerCollider->GetComponent<SnowTrigger>()->DestoryTrigger();
 }
 

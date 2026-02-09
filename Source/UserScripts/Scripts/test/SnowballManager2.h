@@ -20,10 +20,13 @@ namespace MMMEngine {
 	public:
 		SnowballManager2()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
+		void Awake();
 		USCRIPT_MESSAGE()
 		void Start();
 		USCRIPT_MESSAGE()
@@ -44,5 +47,7 @@ namespace MMMEngine {
 
 		USCRIPT_PROPERTY()
 		ObjPtr<GameObject> m_Castle;
+
+		static ObjPtr<SnowballManager2> instance;
 	};
 }
