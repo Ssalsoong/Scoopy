@@ -24,6 +24,7 @@ namespace MMMEngine
 
         ObjPtr<Image> mCastleIcon;
         ObjPtr<Image> mScoopIcon;
+        ObjPtr<Image> mCountIcon;
 
         int mCurrLevel = 0;
         int mReqExp = 0;
@@ -45,7 +46,6 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerExit);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
-
         }
 
         USCRIPT_PROPERTY()
@@ -54,6 +54,8 @@ namespace MMMEngine
             Vector2 mReadyPosOffset;
         USCRIPT_PROPERTY()
             Vector2 mSelectPosOffset;
+        USCRIPT_PROPERTY()
+            Vector2 mCountPosOffset;
         USCRIPT_PROPERTY()
             float mUIScale = 1.0f;
         USCRIPT_PROPERTY()

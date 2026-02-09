@@ -155,6 +155,7 @@ void MMMEngine::CastleLevelController::Start()
 	mReadyIcon = LevelUpManager::Get()->mReadyIcon;
 	mCastleIcon = LevelUpManager::Get()->mCastleIcon;
 	mScoopIcon = LevelUpManager::Get()->mScoopIcon;
+	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
 
 	if (!mCastle.IsValid()) {
 		std::cout << "CastleLVController::No Castle!!!" << std::endl;

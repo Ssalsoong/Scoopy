@@ -42,6 +42,10 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
+#include "Dongho/Building/Building.h"
+#include "Dongho/Enemy/ArrowEnemy.h"
+#include "Dongho/Enemy/NormalEnemy.h"
+#include "Dongho/Enemy/ThiefEnemy.h"
 
 using namespace rttr;
 using namespace MMMEngine;

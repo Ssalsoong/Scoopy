@@ -63,6 +63,8 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
 			ResPtr<Prefab> mReadyPrefab;
 		USCRIPT_PROPERTY()
+			ResPtr<Prefab> mCountPrefab;
+		USCRIPT_PROPERTY()
             ResPtr<Prefab> mGagePrefab;
 
     public:

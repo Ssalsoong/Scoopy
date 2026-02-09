@@ -29,7 +29,7 @@ void MMMEngine::LevelUpManager::Awake()
 		Destroy(SelfPtr(this));
 	}
 
-	if (!mReadyPrefab || !mGagePrefab)
+	if (!mReadyPrefab || !mCountPrefab || !mGagePrefab)
 	{
 		std::cerr << "LevelManager::Prefab Not Found!!" << std::endl;
 		Destroy(SelfPtr(this));
