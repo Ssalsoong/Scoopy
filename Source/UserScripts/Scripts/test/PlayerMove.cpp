@@ -84,7 +84,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 	{
 		float slowed = DefaultSpeed - (scoop * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
-		return slowed; // 스쿱 상태면 타일 영향 무시
+		return (slowed + buff); // 스쿱 상태면 타일 영향 무시
 	}
 
 	// 스쿱 아닐 때만 타일 속도 적용
@@ -97,7 +97,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 
 	CurSpeed = speed;
 
-	return speed;
+	return (speed + buff);
 }
 
 float MMMEngine::PlayerMove::GetCurSpeed()

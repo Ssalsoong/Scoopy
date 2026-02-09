@@ -123,7 +123,7 @@ void MMMEngine::Player::AutoHeal()
 {
 	if (!GetComponent<Battlestats>())
 		return;
-	auto HP = GetComponent<Battlestats>()->HP;
+	auto HP = GetComponent<Battlestats>()->GetHP();
 	
 	if (prevHP > HP)
 	{
@@ -149,7 +149,7 @@ void MMMEngine::Player::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
-	GetComponent<Battlestats>()->HP = HP;
+	GetComponent<Battlestats>()->SetHP(HP);
 }
 
 void MMMEngine::Player::BuildOn()
@@ -159,7 +159,7 @@ void MMMEngine::Player::BuildOn()
 		auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
 		for (auto& bp : buildingpoints)
 		{
-			if (bp->GetComponent<BuildingPoint>()->canBuild) {
+			if (bp->GetComponent<BuildingPoint>()->GetcanBuild()) {
 				BuildingManager::instance->Build(bp);
 				buildchance = false;
 			}

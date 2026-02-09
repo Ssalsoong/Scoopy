@@ -9,9 +9,13 @@
 
 MMMEngine::ObjPtr<MMMEngine::BattleManager> MMMEngine::BattleManager::instance = nullptr;
 
-void MMMEngine::BattleManager::Start()
+void MMMEngine::BattleManager::Awake()
 {
 	instance = GetGameObject()->GetComponent<BattleManager>();
+}
+
+void MMMEngine::BattleManager::Start()
+{
 }
 
 void MMMEngine::BattleManager::Update()

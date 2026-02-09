@@ -107,6 +107,7 @@ namespace MMMEngine
         float CurSpeed = 0;
 
         float GetCurSpeed();
-        void SetCurSpeed(float value) { CurSpeed = value; }
+        float buff = 0.0f;
+        void Setbuff(float value) { buff = value; }
     };
 }

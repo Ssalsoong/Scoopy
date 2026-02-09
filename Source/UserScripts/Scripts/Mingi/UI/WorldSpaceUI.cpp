@@ -12,6 +12,11 @@ bool MMMEngine::WorldSpaceUI::IsTargetInScreen()
 	return m_isTargetInScreen;
 }
 
+bool MMMEngine::WorldSpaceUI::IsBehindCamera()
+{
+	return m_isBehindCamera;
+}
+
 void MMMEngine::WorldSpaceUI::Awake()
 {
 	//WorldSpaceUI 매니저에 자신을 등록시키기
@@ -46,8 +51,10 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 	if(!mainCam.IsValid() || mainCam->IsDestroyed())
 		return;
 
-	Vector3 targetWorldPos = TargetTransform->GetWorldPosition();
-	Vector2 targetScreenPos = mainCam->WorldToScreenPoint(targetWorldPos);
+		Vector3 targetWorldPos = TargetTransform->GetWorldPosition();
+	Vector3 targetScreenPos3 = mainCam->WorldToScreenPoint(targetWorldPos);
+	Vector2 targetScreenPos(targetScreenPos3.x, targetScreenPos3.y);
+	m_isBehindCamera = targetScreenPos3.z < 0.0f;
 	Vector3 camPos = mainCam->GetGameObject()->GetTransform()->GetWorldPosition();
 
 	auto canvas = m_rectGraphic->GetCanvas();
@@ -76,12 +83,15 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 		targetScreenPos.x = (targetScreenPos.x - offset.x) / (scale.x != 0 ? scale.x : 1.0f);
 		targetScreenPos.y = (targetScreenPos.y - offset.y) / (scale.y != 0 ? scale.y : 1.0f);
 
-
-
 		Vector2 canSize = canvas->GetCanvasSize();
-		m_isTargetInScreen = targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset;
+		if (m_isBehindCamera)
+		{
+			Vector2 center = Vector2(canSize.x * 0.5f, canSize.y * 0.5f);
+			targetScreenPos = center + (center - targetScreenPos);
+		}
+		m_isTargetInScreen = !m_isBehindCamera && targetScreenPos.x > EdgeXOffset && targetScreenPos.x < canSize.x - EdgeXOffset && targetScreenPos.y > EdgeYOffset && targetScreenPos.y < canSize.y - EdgeYOffset;
 
-		if (HideWhenOutsideScreen)
+		if (HideWhenInsideScreen)
 		{
 			if (m_isTargetInScreen)
 			{
@@ -96,6 +106,23 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 				m_rectGraphic->SetEnabled(true);
 				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
 					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(true);
+			}
+		}
+		else if (HideWhenOutsideScreen)
+		{
+			if (m_isTargetInScreen)
+			{
+				// 화면 내에 존재함
+				m_rectGraphic->SetEnabled(true);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(true);
+			}
+			else
+			{
+				// 화면 밖에 존재함
+				m_rectGraphic->SetEnabled(false);
+				if (m_rectGraphic->GetTransform()->GetChildCount() > 0)
+					m_rectGraphic->GetTransform()->GetChild(0)->GetGameObject()->SetActive(false);
 			}
 		}
 

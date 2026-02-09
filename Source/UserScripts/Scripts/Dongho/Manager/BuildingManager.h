@@ -18,10 +18,13 @@ namespace MMMEngine
     public:
         BuildingManager()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+
+        void Awake();
 
         void Start();
 

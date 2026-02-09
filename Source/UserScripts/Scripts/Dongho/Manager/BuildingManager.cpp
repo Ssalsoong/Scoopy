@@ -34,6 +34,11 @@ RTTR_PLUGIN_REGISTRATION
 
 MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instance = nullptr;
 
+void MMMEngine::BuildingManager::Awake()
+{
+	instance = GetGameObject()->GetComponent<BuildingManager>();
+}
+
 void MMMEngine::BuildingManager::Start()
 {
 	pre_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
@@ -52,13 +57,11 @@ void MMMEngine::BuildingManager::Start()
 		obj->AddComponent<BuildingPoint>();
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(cube);
-		obj->GetTransform()->SetWorldScale(0.1f, 0.1f, 0.1f);
+		obj->GetTransform()->SetWorldScale(0.1f, 0.5f, 0.1f);
 		obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
 		obj->GetTransform()->SetParent(GetTransform());
 		buildingpoints.push_back(obj);
 	}
-
-	instance = GetGameObject()->GetComponent<BuildingManager>();
 }
 
 void MMMEngine::BuildingManager::Update()

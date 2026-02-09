@@ -106,7 +106,7 @@ void MMMEngine::Castle::ReturnBall(ObjPtr<GameObject> obj)
 
 void MMMEngine::Castle::AutoHeal()
 {
-	auto HP = GetComponent<Battlestats>()->HP;
+	auto HP = GetComponent<Battlestats>()->GetHP();
 	if (prevHP > HP)
 	{
 		fighting = true;
@@ -131,7 +131,7 @@ void MMMEngine::Castle::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
-	GetComponent<Battlestats>()->HP = HP;
+	GetComponent<Battlestats>()->SetHP(HP);
 }
 
 void MMMEngine::Castle::PointUp(int t)
