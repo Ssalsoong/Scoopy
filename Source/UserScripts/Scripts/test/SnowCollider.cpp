@@ -9,6 +9,7 @@
 #include "../Dongho/Snow/Snowball.h"
 #include "../Dongho/Castle/Castle.h"
 #include "../Dongho/Building/Building.h"
+#include "PlayerController.h"
 
 const float EPS2 = 1e-6f;
 
@@ -39,6 +40,15 @@ DirectX::SimpleMath::Quaternion MMMEngine::SnowCollider::ComputeRollingRotation(
 void MMMEngine::SnowCollider::SnowDestory()
 {
 	auto my_ptr = GetGameObject();
+	if (On_Player && m_player.IsValid())
+	{
+		auto playercon = m_player->GetComponent<PlayerController>();
+		if (playercon.IsValid())
+		{
+			playercon->HasSnow(false);
+			playercon->RemoveSnowList(my_ptr);
+		}
+	}
 	SnowballManager2::instance->RemoveFromList(my_ptr);
 	TriggerCollider->GetComponent<SnowTrigger>()->DestoryTrigger();
 }

@@ -73,7 +73,10 @@ RTTR_PLUGIN_REGISTRATION
 		.property("level", &Castle::level)
 		.property("maxHP", &Castle::maxHP)
 		.property("exp", &Castle::exp)
-		.property("point", &Castle::point);
+		.property("atk", &Castle::atk)
+		.property("point", &Castle::point)
+		.property("pre_bullet", &Castle::pre_bullet)
+		.property("bulletSpeed", &Castle::bulletSpeed);
 
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
@@ -377,7 +380,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<SnowBullet>("SnowBullet")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowBullet>"))
-		.property("speed", &SnowBullet::speed)
+		.property("m_speed", &SnowBullet::m_speed)
 		.property("target", &SnowBullet::target);
 
 	registration::class_<ObjPtr<SnowBullet>>("ObjPtr<SnowBullet>")

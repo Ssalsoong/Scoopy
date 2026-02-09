@@ -4,6 +4,7 @@
 #include "UserScriptsCommon.h"
 #include "StaticMesh.h"
 #include "SimpleMath.h"
+#include "Prefab.h"
 
 namespace MMMEngine {
 	class USERSCRIPTS Castle : public ScriptBehaviour
@@ -34,9 +35,15 @@ namespace MMMEngine {
 		float attackDelay = 1.0f;
 		USCRIPT_PROPERTY()
 		int exp = 0;
+		USCRIPT_PROPERTY()
 		int atk = 10;
 		USCRIPT_PROPERTY()
 		int point = 0;
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> pre_bullet;
+		USCRIPT_PROPERTY()
+		float bulletSpeed = 6.0f;
+		float bulletsize = 0.2f;
 		int prevHP = 300;
 		bool fighting = false;
 		float healTimer = 0.0f;
@@ -44,7 +51,6 @@ namespace MMMEngine {
 		float attackTimer = 0.0f;
 		float attackdist = 5.0f;
 		std::queue<ObjPtr<GameObject>> Castleballs;
-		ResPtr<StaticMesh> castleballmesh;
 		ObjPtr<GameObject> enemyTarget;
 		void PointUp(int t);
 		void CheckEnemy();
@@ -53,5 +59,7 @@ namespace MMMEngine {
 		void ReturnBall(ObjPtr<GameObject> obj);
 		void Dead();
 		void LevelUp();
+		void Level5Apply(int value);
+		void Level10Apply(int value);
 	};
 }

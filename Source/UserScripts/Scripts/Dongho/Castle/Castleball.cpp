@@ -36,34 +36,14 @@ void MMMEngine::Castleball::Update()
 	if (!target)
 	{
 		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
-		GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+		auto ownerpos = owner->GetTransform()->GetWorldPosition();
+		GetTransform()->SetWorldPosition(ownerpos);
 		GetGameObject()->SetActive(false);
 		return;
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();
-	atk = owner->GetComponent<Castle>()->atk;
 	auto pos = GetTransform()->GetWorldPosition();
 
-	// 방향/거리
-	auto to = targetpos - pos;
-	to.y = 0.0f;
-
-	float dist2 = to.LengthSquared();
-	if (dist2 < 1e-8f) dist2 = 0.0f;
-
-	float dist = sqrtf(dist2);
-
-	// 이동 (관통 방지: 남은 거리 이상 못 가게 clamp)
-	float dt = Time::GetDeltaTime();
-	float step = speed * dt;
-	if (step > dist) step = dist;
-
-	if (dist > 1e-6f)
-	{
-		auto dir = to / dist;
-		pos += dir * step;
-		GetTransform()->SetWorldPosition(pos);
-	}
 
 	// 이동 후 히트 판정
 	auto left = targetpos - pos;
@@ -76,7 +56,8 @@ void MMMEngine::Castleball::Update()
 
 		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
 		target = nullptr;
-		GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+		auto ownerpos = owner->GetTransform()->GetWorldPosition();
+		GetTransform()->SetWorldPosition(ownerpos);
 		GetGameObject()->SetActive(false);
 		return;
 	}

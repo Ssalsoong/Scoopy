@@ -23,7 +23,7 @@ namespace MMMEngine
         void Update();
 		int HP = 15;
 		int atk = 2;
-		float velocity = 8.0f;
+		float velocity = 1.0f;
 		float attackDelay = 0.4f;
 		float battledist = 2.0f;
 		float checkdist = 4.0f;
