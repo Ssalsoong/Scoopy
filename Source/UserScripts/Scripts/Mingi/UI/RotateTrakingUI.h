@@ -16,8 +16,9 @@ namespace MMMEngine
     public:
         RotateTrakingUI()
         {
+        SetExecutionOrder(100);
+        REGISTER_BEHAVIOUR_MESSAGE(LateUpdate);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
-        REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
@@ -25,7 +26,7 @@ namespace MMMEngine
         void Start();
 
         USCRIPT_MESSAGE()
-        void Update();
+        void LateUpdate();
 
         USCRIPT_PROPERTY()
         ObjPtr<WorldSpaceUI> WorldSpaceUI;

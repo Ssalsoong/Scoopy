@@ -24,6 +24,7 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(FadeIn);
         REGISTER_BEHAVIOUR_MESSAGE(FadeOut);
+        REGISTER_BEHAVIOUR_MESSAGE(OnDestroy);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
@@ -43,6 +44,9 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void Awake();
+
+        USCRIPT_MESSAGE()
+        void OnDestroy();
 
         USCRIPT_MESSAGE()
         void Update();

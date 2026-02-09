@@ -1,0 +1,11 @@
+type,key,path,volume
+"# SFX			",,,
+SFX,Pause,Assets/Sound/SFX/pause.audioclip,1
+SFX,GiveSnowball,Assets/Sound/SFX/give snowball.audioclip,1
+SFX,Select,Assets/Sound/SFX/sellect.audioclip,1
+SFX,Bubble,Assets/Sound/SFX/Bubble.audioclip,1
+SFX,GetSnowball,Assets/Sound/SFX/get snowball.audioclip,1
+"			",,,
+"# BGM			",,,
+BGM,MainTheme,Assets/Sound/BGM/main.audioclip,0.8
+,,,
