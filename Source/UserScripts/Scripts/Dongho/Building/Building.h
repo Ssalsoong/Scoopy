@@ -41,5 +41,7 @@ namespace MMMEngine {
 		void CheckEnemy();
 		void AutoAttack();
 		void ReturnBall(ObjPtr<GameObject> obj);
+
+		void SetAttackDist(float value) { attackdist = value; }
 	};
 }

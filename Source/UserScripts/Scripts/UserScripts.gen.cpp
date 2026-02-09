@@ -265,6 +265,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mGagePosOffset", &CastleLevelController::mGagePosOffset)
 		.property("mReadyPosOffset", &CastleLevelController::mReadyPosOffset)
 		.property("mSelectPosOffset", &CastleLevelController::mSelectPosOffset)
+		.property("mCountPosOffset", &CastleLevelController::mCountPosOffset)
 		.property("mUIScale", &CastleLevelController::mUIScale)
 		.property("mPadding", &CastleLevelController::mPadding)
 		.property("mSelectPadding", &CastleLevelController::mSelectPadding)
@@ -300,6 +301,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mDeBuffIcon", &LevelUpManager::mDeBuffIcon)
 		.property("mSnowIcon", &LevelUpManager::mSnowIcon)
 		.property("mReadyPrefab", &LevelUpManager::mReadyPrefab)
+		.property("mCountPrefab", &LevelUpManager::mCountPrefab)
 		.property("mGagePrefab", &LevelUpManager::mGagePrefab);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")

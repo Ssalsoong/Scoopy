@@ -6,6 +6,7 @@
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
 #include "../Battlestats.h"
+#include "../Snow/Snowball.h"
 
 MMMEngine::ObjPtr<MMMEngine::BattleManager> MMMEngine::BattleManager::instance = nullptr;
 
@@ -22,32 +23,35 @@ void MMMEngine::BattleManager::Update()
 {
 }
 
-void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> target, int damage)
+void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameObject> target, int damage)
 {
-	if (!target) return;
-
-	auto bs = target->GetComponent<Battlestats>();
-	if (!bs) return;
-	if (bs->HP <= 0) return;
-	if (auto playercomp = target->GetComponent<Player>())
+	if (!attacker || !target) return;
+	if (attacker->GetComponent<Snowball>())
 	{
-		playercomp->GetDamage(damage);
-	}
-	else {
-		bs->HP -= damage;
-		if (bs->HP < 0) bs->HP = 0;
-	}
-}
+		auto ec = target->GetComponent<Enemy>();
+		if (!ec) return;
+		auto bs = target->GetComponent<Battlestats>();
+		if (!bs) return;
+		if (bs->HP <= 0) return;
+		if (!ec->ApplySnowDamage()) return;
 
-void MMMEngine::BattleManager::SnowAttack(ObjPtr<GameObject> target, int point)
-{
-	if (!target) return;
-	auto ec = target->GetComponent<Enemy>();
-	if (!ec) return;
-	auto bs = target->GetComponent<Battlestats>();
-	if (!bs) return;
-	if (bs->HP <= 0) return;
-	if (!ec->ApplySnowDamage()) return;
-
-	bs->HP = std::max(bs->HP - point, 0);
+		bs->ApplyDamage(damage);
+	}
+	else
+	{
+		auto bs = target->GetComponent<Battlestats>();
+		if (!bs) return;
+		if (bs->HP <= 0) return;
+		if (auto player = target->GetComponent<Player>())
+		{
+			player->GetDamage(attacker, damage);
+			return;
+		}
+		if (auto castle = target->GetComponent<Castle>())
+		{
+			castle->GetDamage(attacker, damage);
+			return;
+		}
+		bs->ApplyDamage(damage);
+	}
 }

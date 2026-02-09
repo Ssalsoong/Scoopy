@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B694363B-9400-5F73-BCCD-8583E0880F59}</ProjectGuid>
+    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>

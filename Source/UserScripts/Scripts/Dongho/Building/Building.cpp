@@ -55,7 +55,6 @@ void MMMEngine::Building::Dead()
 {
 	isDead = true;
 	GetGameObject()->SetActive(false);
-	GetComponent<Battlestats>()->HP = 1;
 }
 
 void MMMEngine::Building::CheckEnemy()

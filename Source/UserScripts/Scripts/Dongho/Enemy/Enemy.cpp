@@ -149,7 +149,7 @@ void MMMEngine::Enemy::AttackCastle()
 			if (GetComponent<ArrowEnemy>())
 				GetComponent<ArrowEnemy>()->ArrowAttack(castle);
 			else
-				BattleManager::instance->Attack(castle, atk);
+				BattleManager::instance->Attack(GetGameObject(), castle, atk);
 		}
 		FinishAttackCycle();
 	}
@@ -188,7 +188,7 @@ void MMMEngine::Enemy::AttackPlayer()
 			if (GetComponent<ArrowEnemy>())
 				GetComponent<ArrowEnemy>()->ArrowAttack(player);
 			else
-				BattleManager::instance->Attack(player, atk);
+				BattleManager::instance->Attack(GetGameObject(), player, atk);
 		}
 		FinishAttackCycle();
 	}
@@ -235,7 +235,7 @@ void MMMEngine::Enemy::AttackBuilding()
 			if (GetComponent<ArrowEnemy>())
 				GetComponent<ArrowEnemy>()->ArrowAttack(buildingTarget);
 			else
-				BattleManager::instance->Attack(buildingTarget, atk);
+				BattleManager::instance->Attack(GetGameObject(), buildingTarget, atk);
 		}
 		if (invalid) buildingTarget = nullptr;
 		FinishAttackCycle();
@@ -252,7 +252,6 @@ void MMMEngine::Enemy::Dead()
 	buildingTarget = nullptr;
 	EnemySpawner::instance->EnemyDeath(GetGameObject());
 	GetGameObject()->SetActive(false);
-	GetComponent<Battlestats>()->HP = 1;
 }
 
 bool MMMEngine::Enemy::FindNearBuilding()
