@@ -308,7 +308,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mCanvas", &LevelUpManager::mCanvas)
 		.property("mPlayer", &LevelUpManager::mPlayer)
 		.property("mCastle", &LevelUpManager::mCastle)
-		.property("mSpeechBubble", &LevelUpManager::mSpeechBubble)
+		.property("mLevelUpBubble", &LevelUpManager::mLevelUpBubble)
 		.property("mExpGage", &LevelUpManager::mExpGage)
 		.property("mHpGage", &LevelUpManager::mHpGage)
 		.property("mReadyIcon", &LevelUpManager::mReadyIcon)

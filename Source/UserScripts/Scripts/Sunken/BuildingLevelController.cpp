@@ -13,8 +13,9 @@
 
 void MMMEngine::BuildingLevelController::SetLevelSelection(int _idx)
 {
-	SetLVManager(mSelectIndex);
+	SetLVManager(_idx);
 	mUpPending--;
+	isReady = false;
 }
 
 void MMMEngine::BuildingLevelController::Start()
@@ -348,7 +349,7 @@ void MMMEngine::BuildingLevelController::Update()
 			if (isActive) {
 				std::vector<ObjPtr<Image>> icons{ mHPIcon , mBuffIcon, mDeBuffIcon, mSnowIcon };
 				auto object = GetGameObject();
-				LevelUpManager::Get()->SetPBubble(EXP_BUILD, object, icons);
+				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
 			else {
 				LevelUpManager::Get()->RemovePBubble();

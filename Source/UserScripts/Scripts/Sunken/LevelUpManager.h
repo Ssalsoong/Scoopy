@@ -32,7 +32,7 @@ namespace MMMEngine
             ObjPtr<Castle> mCastle;
 
 		USCRIPT_PROPERTY()
-			ObjPtr<LevelUpBubble> mSpeechBubble;
+			ObjPtr<LevelUpBubble> mLevelUpBubble;
 
         EXPTYPE mPendingType = EXPTYPE::EXP_END;
         ObjPtr<GameObject> mLevelPendingObj;
@@ -116,7 +116,7 @@ namespace MMMEngine
 
         int GetMaxLevel(EXPTYPE _type);
 
-        void SetPBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons);
+        void SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons);
         void RemovePBubble();
         void SetSelection(int _selectionIdx);
         const std::wstring& GetHeadline(int _idx);

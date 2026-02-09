@@ -18,6 +18,7 @@ void MMMEngine::LevelUpBubble::Start()
 		}
 	}
 
+	mCanvas = LevelUpManager::Get()->GetCanvas();
 	mSpeechBubbleIcon = LevelUpManager::Get()->mSpeechBubbleIcon;
 	mHeadline = LevelUpManager::Get()->mHeadlineText;
 	mScript = LevelUpManager::Get()->mScriptText;
@@ -25,37 +26,26 @@ void MMMEngine::LevelUpBubble::Start()
 
 void MMMEngine::LevelUpBubble::Update()
 {
-	static bool prevState = false;
-
-	// IsDirty
-	if (prevState != isActive) {
-		prevState = isActive;
-		mSelectIdx = 0;
-
-		if (prevState) {
-			SetUIActive(true);
-
-			Vector2 zero = Vector2::Zero;
-			SetUITrans(mSpeechBubbleIcon->GetRectTransform(), mSpeechOffset, zero);
-			SetUITrans(mHeadline->GetRectTransform(), mSpeechOffset + mHeadlineOffset, zero);
-			SetUITrans(mScript->GetRectTransform(), mSpeechOffset + mScriptOffset, zero);
-
-			SetIconTrans();
-		}
-		else
-		{
-			SetUIActive(false);
-		}
-	}
-
-	if (isDirty) {
-		SetHeadlineText(LevelUpManager::Get()->GetHeadline(mSelectIdx));
-		SetScriptText(LevelUpManager::Get()->GetScripts(mSelectIdx));
-		UpdateIcon();
-	}
-
 	if (isActive) {
+		SetUIActive(true);
+
+		Vector2 zero = Vector2::Zero;
+		SetUITrans(mSpeechBubbleIcon->GetRectTransform(), mSpeechOffset, zero);
+		SetUITrans(mHeadline->GetRectTransform(), mSpeechOffset + mHeadlineOffset, zero);
+		SetUITrans(mScript->GetRectTransform(), mSpeechOffset + mScriptOffset, zero);
+
+		SetIconTrans();
+		UpdateIcon();
 		UpdateControl();
+
+		if (isDirty) {
+			SetHeadlineText(LevelUpManager::Get()->GetHeadline(mSelectIdx));
+			SetScriptText(LevelUpManager::Get()->GetScripts(mSelectIdx));
+		}
+	}
+	else
+	{
+		SetUIActive(false);
 	}
 }
 
@@ -72,6 +62,11 @@ void MMMEngine::LevelUpBubble::SetScriptText(const std::wstring& _text)
 void MMMEngine::LevelUpBubble::SetActive(bool _val)
 {
 	isActive = _val;
+
+	if (!_val) {
+		mSelectIdx = 0;
+		isDirty = true;
+	}
 }
 
 void MMMEngine::LevelUpBubble::SetIcons(std::vector<ObjPtr<Image>>& _vec)
@@ -122,7 +117,7 @@ void MMMEngine::LevelUpBubble::SetIconTrans()
 	}		
 
 	auto& rt = mIcons[0]->GetRectTransform();
-	float w = rt->GetWidth() * rt->GetWorldScale().x;
+	float w = rt->GetWidth();
 	Vector2 p = mIconPadding;
 	int N = (int)mIcons.size();
 
@@ -151,7 +146,7 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 		}
 	}
 	else if (input.GetKeyDown(KeyCode::Space)) {
-		std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
+		//std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
 		LevelUpManager::Get()->SetSelection(mSelectIdx);
 		isActive = false;
 	}
@@ -164,6 +159,8 @@ void MMMEngine::LevelUpBubble::UpdateIcon()
 			mDeselectIconSize, mDeselectIconSize, mDeselectIconSize);
 	}
 
-	mIcons[mSelectIdx]->GetRectTransform()->SetWorldScale(
-		mSelectIconSize, mSelectIconSize, mSelectIconSize);
+	if (mIcons.size() > mSelectIdx) {
+		mIcons[mSelectIdx]->GetRectTransform()->SetWorldScale(
+			mSelectIconSize, mSelectIconSize, mSelectIconSize);
+	}
 }

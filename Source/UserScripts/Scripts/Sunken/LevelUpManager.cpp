@@ -27,7 +27,7 @@ void MMMEngine::LevelUpManager::Awake()
 		!CheckValid(mBuffIcon, "BuffIcon") ||
 		!CheckValid(mDeBuffIcon, "DeBuffIcon") ||
 		!CheckValid(mSnowIcon, "SnowIcon") ||
-		!CheckValid(mSpeechBubble, "SpeechBubble") ||
+		!CheckValid(mLevelUpBubble, "LevelUpBubble") ||
 		!CheckValid(mSpeechBubbleIcon, "SpeechBubbleIcon") ||
 		!CheckValid(mHeadlineText, "HeadlineText") || 
 		!CheckValid(mScriptText, "ScriptText"))
@@ -162,13 +162,13 @@ int MMMEngine::LevelUpManager::GetMaxLevel(EXPTYPE _type)
 	return 0;
 }
 
-void MMMEngine::LevelUpManager::SetPBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons)
+void MMMEngine::LevelUpManager::SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons)
 {
 	mPendingType = _type;
 	mLevelPendingObj = _target;
 
-	mSpeechBubble->SetActive(true);
-	mSpeechBubble->SetIcons(_icons);
+	mLevelUpBubble->SetActive(true);
+	mLevelUpBubble->SetIcons(_icons);
 
 	// SetHeadline과 SetScript는 버블 안에서 해결
 }
@@ -177,7 +177,7 @@ void MMMEngine::LevelUpManager::RemovePBubble()
 {
 	mPendingType = EXPTYPE::EXP_END;
 	mLevelPendingObj.Reset();
-	mSpeechBubble->SetActive(false);
+	mLevelUpBubble->SetActive(false);
 }
 
 void MMMEngine::LevelUpManager::SetSelection(int _selectionIdx)
