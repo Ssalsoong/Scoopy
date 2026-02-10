@@ -1,4 +1,4 @@
-﻿#include "Export.h"
+#include "Export.h"
 #include "ScriptBehaviour.h"
 #include "CastleLevelController.h"
 
@@ -150,7 +150,8 @@ void MMMEngine::CastleLevelController::Start()
 {
 	if (!LevelUpManager::Get().IsValid()) {
 		std::cout << "CastleLVController::No LVManager!!!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
+		return;
 	}
 
 	mCanvas = LevelUpManager::Get()->GetCanvas();
@@ -235,14 +236,14 @@ void MMMEngine::CastleLevelController::Update()
 		UpLevel();
 }
 
-void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		isActive = true;
 	}
 }
 
-void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(false);

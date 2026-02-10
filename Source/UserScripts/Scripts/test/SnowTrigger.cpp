@@ -1,4 +1,4 @@
-﻿#include "Export.h"
+#include "Export.h"
 #include "ScriptBehaviour.h"
 #include "SnowTrigger.h"
 #include "EnemyMove.h"
@@ -37,7 +37,7 @@ void MMMEngine::SnowTrigger::SetTriggerSize(float size)
 	}
 }
 
-void MMMEngine::SnowTrigger::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::SnowTrigger::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() != "Player") return;
 
@@ -52,7 +52,7 @@ void MMMEngine::SnowTrigger::OnTriggerEnter(MMMEngine::CollisionInfo info)
 		P_Control->AttachNearestSnow();
 }
 
-void MMMEngine::SnowTrigger::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::SnowTrigger::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player")
 	{

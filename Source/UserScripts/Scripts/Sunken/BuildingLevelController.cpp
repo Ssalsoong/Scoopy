@@ -1,4 +1,4 @@
-﻿#include "Export.h"
+#include "Export.h"
 #include "ScriptBehaviour.h"
 #include "BuildingLevelController.h"
 #include "LevelUpManager.h"
@@ -381,7 +381,7 @@ void MMMEngine::BuildingLevelController::Update()
 		LevelUp();
 }
 
-void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(true);
@@ -391,7 +391,7 @@ void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::CollisionInfo
 	}
 }
 
-void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(false);

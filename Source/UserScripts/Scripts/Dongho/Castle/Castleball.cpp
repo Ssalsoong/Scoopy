@@ -35,10 +35,13 @@ void MMMEngine::Castleball::Update()
 	// 타겟이 없거나 죽었거나 비활성화면 회수
 	if (!target)
 	{
-		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
-		auto ownerpos = owner->GetTransform()->GetWorldPosition();
-		GetTransform()->SetWorldPosition(ownerpos);
-		GetGameObject()->SetActive(false);
+		if (owner.IsValid())
+		{
+			owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
+			auto ownerpos = owner->GetTransform()->GetWorldPosition();
+			GetTransform()->SetWorldPosition(ownerpos);
+			GetGameObject()->SetActive(false);
+		}
 		return;
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();

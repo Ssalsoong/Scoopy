@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -94,9 +94,9 @@ namespace MMMEngine
         void Update();
 
         USCRIPT_MESSAGE()
-            void OnTriggerEnter(MMMEngine::CollisionInfo info);
+            void OnTriggerEnter(MMMEngine::TriggerInfo info);
 
         USCRIPT_MESSAGE()
-            void OnTriggerExit(MMMEngine::CollisionInfo info);
+            void OnTriggerExit(MMMEngine::TriggerInfo info);
     };
 }

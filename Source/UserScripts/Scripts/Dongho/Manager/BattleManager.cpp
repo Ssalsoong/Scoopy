@@ -12,7 +12,7 @@ MMMEngine::ObjPtr<MMMEngine::BattleManager> MMMEngine::BattleManager::instance =
 
 void MMMEngine::BattleManager::Awake()
 {
-	instance = GetGameObject()->GetComponent<BattleManager>();
+	instance = SelfPtr(this);
 }
 
 void MMMEngine::BattleManager::Start()
@@ -21,6 +21,12 @@ void MMMEngine::BattleManager::Start()
 
 void MMMEngine::BattleManager::Update()
 {
+}
+
+void MMMEngine::BattleManager::OnDestry()
+{
+	if (instance == SelfPtr(this))
+		instance = nullptr;
 }
 
 void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameObject> target, int damage)

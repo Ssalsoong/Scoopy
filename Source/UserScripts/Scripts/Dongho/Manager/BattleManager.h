@@ -28,6 +28,9 @@ namespace MMMEngine
         void Update();
         static ObjPtr<BattleManager> instance;
 
+        USCRIPT_MESSAGE()
+        void OnDestry();
+
         void Attack(ObjPtr<GameObject>attacker, ObjPtr<GameObject> target, int damage);
     };
 }
