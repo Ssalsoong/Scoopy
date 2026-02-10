@@ -1,5 +1,5 @@
 {
-    "MUID": "358f3763-2c96-484f-a655-0f2cc1a00040",
+    "MUID": "458aade5-082a-45ed-b847-1bd258da4089",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\IceTowerlvl01_BaseColor.png",
@@ -21,8 +21,8 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_metallic": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+        "_lutMap": {
+            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -47,7 +47,7 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.5
+            "value": 0.3
         },
         "mBaseColor": {
             "type": "Vector4",
@@ -57,6 +57,18 @@
                 1.0,
                 1.0
             ]
+        },
+        "mDiffGradientDepth": {
+            "type": "float",
+            "value": 68.32630157470703
+        },
+        "mDiffGradientDistHalf": {
+            "type": "float",
+            "value": 0.15625
+        },
+        "mDiffuseStr": {
+            "type": "float",
+            "value": 0.5
         },
         "mEmissive": {
             "type": "float",
@@ -95,21 +107,33 @@
                 0.0
             ]
         },
-        "mMetallic": {
+        "mLowLut": {
             "type": "float",
-            "value": 0.0
+            "value": 0.30000001192092896
+        },
+        "mPadding": {
+            "type": "Vector3",
+            "value": [
+                0.0,
+                0.0,
+                0.0
+            ]
+        },
+        "mRimLightStr": {
+            "type": "float",
+            "value": 0.10000000149011612
         },
         "mRoughness": {
             "type": "float",
             "value": 0.0
         },
-        "mRoundDotClip": {
-            "type": "int",
-            "value": 0
+        "mSpecularStr": {
+            "type": "float",
+            "value": 0.10000000149011612
         }
     },
     "pshader": {
-        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+        "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
