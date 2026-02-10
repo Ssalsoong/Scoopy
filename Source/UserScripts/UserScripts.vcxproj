@@ -131,6 +131,7 @@
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
     <ClCompile Include="Scripts\Mingi\ExplosionParticles.cpp" />
+    <ClCompile Include="Scripts\Mingi\ExplosionPool.cpp" />
     <ClCompile Include="Scripts\Mingi\FXSnowFall.cpp" />
     <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
     <ClCompile Include="Scripts\Mingi\RedLine.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
     <ClInclude Include="Scripts\Mingi\ExplosionParticles.h" />
+    <ClInclude Include="Scripts\Mingi\ExplosionPool.h" />
     <ClInclude Include="Scripts\Mingi\FXSnowFall.h" />
     <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
     <ClInclude Include="Scripts\Mingi\RedLine.h" />

@@ -18,6 +18,7 @@
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
 #include "Mingi/ExplosionParticles.h"
+#include "Mingi/ExplosionPool.h"
 #include "Mingi/FXSnowFall.h"
 #include "Mingi/Manager/SoundManager.h"
 #include "Mingi/RedLine.h"
@@ -145,6 +146,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<ExplosionParticles>>("ObjPtr<ExplosionParticles>")
 		.constructor([]() { return Object::NewObject<ExplosionParticles>(); })
 		.method("Inject", &ObjPtr<ExplosionParticles>::Inject);
+
+	registration::class_<ExplosionPool>("ExplosionPool")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ExplosionPool>"))
+		.property("ExplosionPrefab", &ExplosionPool::ExplosionPrefab);
+
+	registration::class_<ObjPtr<ExplosionPool>>("ObjPtr<ExplosionPool>")
+		.constructor([]() { return Object::NewObject<ExplosionPool>(); })
+		.method("Inject", &ObjPtr<ExplosionPool>::Inject);
 
 	registration::class_<FXSnowFall>("FXSnowFall")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));

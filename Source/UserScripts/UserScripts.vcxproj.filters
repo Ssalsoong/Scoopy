@@ -30,6 +30,7 @@
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\ExplosionParticles.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\ExplosionPool.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\FXSnowFall.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\RedLine.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -86,6 +87,7 @@
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\ExplosionParticles.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\ExplosionPool.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\FXSnowFall.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\RedLine.h"><Filter>Scripts</Filter></ClInclude>
