@@ -3,6 +3,7 @@
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include "StaticMesh.h"
+#include "Prefab.h"
 
 namespace MMMEngine
 {
@@ -28,7 +29,7 @@ namespace MMMEngine
 		float battledist = 2.0f;
 		float checkdist = 4.0f;
         std::queue<ObjPtr<GameObject>> Arrows;
-        ResPtr<StaticMesh> arrowmesh;
+        ResPtr<Prefab> pre_arrow;
         ObjPtr<GameObject> target;
         void ApplyStats();
         void ArrowAttack(ObjPtr<GameObject> target);

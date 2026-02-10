@@ -15,7 +15,7 @@ namespace MMMEngine
     private:
         RTTR_ENABLE(ScriptBehaviour)
             RTTR_REGISTRATION_FRIEND
-            int m_waveCount = 1;
+            int m_waveCount = 0;
         int m_maxWaveNum = 7;
         float m_animationTime = 0.0f;
         float m_initPosY = 0.0f;

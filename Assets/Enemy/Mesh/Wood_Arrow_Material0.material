@@ -1,5 +1,5 @@
 {
-    "MUID": "2ec180ea-a76b-4416-8b9b-88057138463c",
+    "MUID": "9a2d2acc-32f6-468b-bbe8-192ce29dc83d",
     "properties": {
         "_albedo": {
             "file": "Assets\\Enemy\\FBX\\T_Wood_Crossbow.png",
@@ -104,8 +104,8 @@
             "value": 0.0
         },
         "mRoundDotClip": {
-            "type": "float",
-            "value": 0.0
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

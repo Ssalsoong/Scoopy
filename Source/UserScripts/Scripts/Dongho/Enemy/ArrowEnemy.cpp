@@ -28,19 +28,13 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::ArrowEnemy::Start()
 {
-	arrowmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Enemy/Mesh/Wood_Arrow_StaticMesh.staticmesh");
+	pre_arrow = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Arrow.Prefab");
 	for (int i = 0; i < 5; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("Arrow");
-		obj->SetTag("Arrow");
+		auto obj = Instantiate(pre_arrow);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Arrow>();
-		obj->GetComponent<Arrow>()->SetOwner(GetGameObject());
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(arrowmesh);
 		obj->GetTransform()->SetLocalPosition(0.f, 0.2f, 0.f);
-		obj->GetTransform()->SetWorldScale(2.0f,2.0f,2.0f);
+		obj->GetComponent<Arrow>()->SetOwner(GetGameObject());
 		obj->SetActive(false);
 		Arrows.push(obj);
 	}
