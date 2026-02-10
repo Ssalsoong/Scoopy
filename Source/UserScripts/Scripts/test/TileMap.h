@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -7,87 +7,114 @@
 
 namespace MMMEngine
 {
-    class Transform;
+	class Transform;
 
-    class USERSCRIPTS TileMap : public ScriptBehaviour
-    {
-    private:
-        RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
-    private:
-        static constexpr int GRID_W = 30;
-        static constexpr int GRID_H = 30;
-    public:
-        TileMap()
-        {
+	class USERSCRIPTS TileMap : public ScriptBehaviour
+	{
+	private:
+		RTTR_ENABLE(ScriptBehaviour)
+			RTTR_REGISTRATION_FRIEND
+	private:
+		static constexpr int GRID_W = 30;
+		static constexpr int GRID_H = 30;
+
+
+		struct TileState
+		{
+			bool cleared = false;     // true = ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+			float accum = 0.0f;       // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
+			float respawn = 0.0f;     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½
+
+			bool inRespawn = false;
+		};
+
+		struct RespawnEntry {
+			int ix, iz;
+		};
+
+	public:
+		TileMap()
+		{
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
-        USCRIPT_PROPERTY()
-        ObjPtr<Transform> P_trans = nullptr;
+		USCRIPT_PROPERTY()
+			ObjPtr<Transform> P_trans = nullptr;
 
-        struct Vec2 { float x, z; };
-
-
-        float tileSize = 1.0f;
-        float originX = 0.0f;
-        float originZ = 0.0f;
-
-        USCRIPT_PROPERTY()
-        float threshold = 2.0f; // Å¸ÀÏ ¾È¿¡¼­ ÀÌ ¼öÄ¡¸¸Å­ ¿òÁ÷ÀÌ¸é ÀÚ¿øÈ¹µæ
-
-        bool  gained[GRID_W][GRID_H]{};
-        float accum[GRID_W][GRID_H]{};
-
-        Vec2 prevPos{};
-        bool hasPrev = false;
+		struct Vec2 { float x, z; };
 
 
-        bool isHarvesting = false; // Ä³´Â»óÅÂ
-        bool wasHarvesting = false; // ÀÌÀü ÇÁ·¹ÀÓ
+		float tileSize = 1.0f;
+		float originX = 0.0f;
+		float originZ = 0.0f;
 
-        void NoticePlayer(bool value);
-
-        USCRIPT_MESSAGE()
-        void Start();
-
-        USCRIPT_MESSAGE()
-        void Update();
-
-        USCRIPT_PROPERTY()
-        ResPtr<Prefab> box;
+		USCRIPT_PROPERTY()
+			float threshold = 1.5f; // Å¸ï¿½ï¿½ ï¿½È¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ú¿ï¿½È¹ï¿½ï¿½
 
 
-        int width = 30;
-        int offset = 15;
-
-        int index = 0;
-        std::vector<ObjPtr<GameObject>> boxlist;
-
-        void SetOneTimeValue(int value);
-    private:
-        int OneTimeGetValue = 1;
-
-    public:
-        float DistXZ(const Vec2& a, const Vec2& b);
-
-        bool InBounds(int ix, int iz);
-
-        void WorldToTile(float x, float z, float originX, float originZ, float tileSize, int& outIx, int& outIz);
-
-        void EnterState(const Vec2& startPos);
-
-        bool TileCheck(const Vec2& pos);
-
-        //ÇöÀç playerÀ§Ä¡ ¾ò´Â ÇÔ¼ö
-        Vec2 GetCurPosXZ() const;
-
-        void ResetTile();
-
-        bool IsTileClearedAt(float x, float z);
+		Vec2 prevPos{};
+		bool hasPrev = false;
 
 
-    };
+		bool isHarvesting = false; // Ä³ï¿½Â»ï¿½ï¿½ï¿½
+		bool wasHarvesting = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+
+
+
+		USCRIPT_MESSAGE()
+			void Start();
+
+		USCRIPT_MESSAGE()
+			void Update();
+
+
+		USCRIPT_PROPERTY()
+			ResPtr<Prefab> box;
+
+
+		int width = 30;
+		int offset = 15;
+
+		int index = 0;
+		std::vector<ObjPtr<GameObject>> boxlist;
+		std::vector<TileState> tiles;
+
+		std::vector<RespawnEntry> CheckTiles;
+
+		USCRIPT_PROPERTY()
+			float RESPAWN_TIME = 15.0f;
+
+		//bool  gained[GRID_W][GRID_H]{};
+		//float accum[GRID_W][GRID_H]{};
+
+	private:
+		int OneTimeGetValue = 1;
+
+	public:
+		void SetOneTimeValue(int value);
+		void NoticePlayer(bool value);
+
+		bool IsTileClearedAt(float x, float z);
+	private:
+		float DistXZ(const Vec2& a, const Vec2& b);
+
+		bool InBounds(int ix, int iz);
+
+		void WorldToTile(float x, float z, float originX, float originZ, float tileSize, int& outIx, int& outIz);
+
+		void EnterState(const Vec2& startPos);
+
+		void TileCheck(const Vec2& pos);
+
+		//ï¿½ï¿½ï¿½ï¿½ playerï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
+		Vec2 GetCurPosXZ() const;
+
+		int GetIndex(int x, int y);
+
+
+		void UpdateRespawn();
+
+	};
 }

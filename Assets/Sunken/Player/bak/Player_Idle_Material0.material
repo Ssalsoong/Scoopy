@@ -1,8 +1,8 @@
 {
-    "MUID": "78f8c052-e372-4ede-b64f-e28dc448705a",
+    "MUID": "5bb98b21-b808-4666-91bb-ce73f9b4934d",
     "properties": {
         "_albedo": {
-            "file": "Assets\\Sunken\\Player\\FBX\\Pink_Expressions.png",
+            "file": "Assets/Sunken/Player/FBX/C_Holy Cleric_F_txt.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -109,7 +109,7 @@
         },
         "mLowLut": {
             "type": "float",
-            "value": 0.30000001192092896
+            "value": 0.5
         },
         "mPadding": {
             "type": "Vector3",
@@ -121,7 +121,7 @@
         },
         "mRimLightStr": {
             "type": "float",
-            "value": 0.10000000149011612
+            "value": 0.1
         },
         "mRoughness": {
             "type": "float",
@@ -136,6 +136,6 @@
         "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
     }
 }

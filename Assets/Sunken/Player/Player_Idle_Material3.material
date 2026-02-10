@@ -1,5 +1,5 @@
 {
-    "MUID": "eec450fe-6a7e-4b6d-84f5-7cf0680aad89",
+    "MUID": "a0b9e65c-954e-4925-b9fb-8f289ae648ad",
     "properties": {
         "_albedo": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
@@ -109,7 +109,7 @@
         },
         "mLowLut": {
             "type": "float",
-            "value": 0.5
+            "value": 0.30000001192092896
         },
         "mPadding": {
             "type": "Vector3",
@@ -121,7 +121,7 @@
         },
         "mRimLightStr": {
             "type": "float",
-            "value": 0.5
+            "value": 0.10000000149011612
         },
         "mRoughness": {
             "type": "float",
@@ -136,6 +136,6 @@
         "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
     }
 }

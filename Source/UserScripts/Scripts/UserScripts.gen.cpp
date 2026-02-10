@@ -441,7 +441,8 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
 		.property("P_trans", &TileMap::P_trans)
 		.property("threshold", &TileMap::threshold)
-		.property("box", &TileMap::box);
+		.property("box", &TileMap::box)
+		.property("RESPAWN_TIME", &TileMap::RESPAWN_TIME);
 
 	registration::class_<ObjPtr<TileMap>>("ObjPtr<TileMap>")
 		.constructor([]() { return Object::NewObject<TileMap>(); })
