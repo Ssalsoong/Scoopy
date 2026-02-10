@@ -10,6 +10,7 @@
 #include "../Dongho/Castle/Castle.h"
 #include "../Dongho/Building/Building.h"
 #include "PlayerController.h"
+#include "../Dongho/Manager/BattleManager.h"
 
 const float EPS2 = 1e-6f;
 
@@ -285,5 +286,12 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 		GetComponent<Snowball>()->EatSnow(info.other);
 		info.other->GetComponent<SnowCollider>()->SnowDestory();
 		Destroy(info.other);
+	}
+	else if (info.other->GetTag() == "Enemy")
+	{
+		if (!On_Player)
+			return;
+		int damage = GetComponent<Snowball>()->GetPoint();
+		BattleManager::instance->Attack(GetGameObject(), info.other, damage);
 	}
 }

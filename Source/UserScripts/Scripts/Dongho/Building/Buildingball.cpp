@@ -52,7 +52,7 @@ void MMMEngine::Buildingball::Update()
 	if (left.LengthSquared() <= hitRadius * hitRadius)
 	{
 		// 데미지(컴포넌트로 판별)
-		BattleManager::instance->Attack(target, atk);
+		BattleManager::instance->Attack(owner, target, atk);
 
 		owner->GetComponent<Building>()->ReturnBall(GetGameObject());
 		target = nullptr;

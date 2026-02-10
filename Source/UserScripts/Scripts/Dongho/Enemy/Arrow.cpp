@@ -74,7 +74,7 @@ void MMMEngine::Arrow::Update()
 
 	if (left.LengthSquared() <= hitRadius * hitRadius)
 	{
-		BattleManager::instance->Attack(target, atk);
+		BattleManager::instance->Attack(owner,target, atk);
 
 		owner->GetComponent<ArrowEnemy>()->ReturnArrow(GetGameObject());
 		target = nullptr;

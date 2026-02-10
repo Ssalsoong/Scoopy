@@ -55,11 +55,22 @@ namespace MMMEngine {
 		void PointUp(int t);
 		void CheckEnemy();
 		void AutoAttack();
+		void FireAt(ObjPtr<GameObject>target);
 		void AutoHeal();
 		void ReturnBall(ObjPtr<GameObject> obj);
 		void Dead();
 		void LevelUp();
 		void Level5Apply(int value);
+		bool waveexp = false;
+		void Getexp(int value) { exp += value; }
 		void Level10Apply(int value);
+		bool canshield = false;
+		float shieldDelay = 5.0f;
+		float shieldTimer = 0.0f;
+		void CalShieldDelay();
+		void GetDamage(ObjPtr<GameObject>attacker, int t);
+		bool doubleattack = false;
+		void CheckSecondEnemy();
+		ObjPtr<GameObject> enemyTarget2;
 	};
 }

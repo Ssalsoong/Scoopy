@@ -6,6 +6,7 @@
 #include "Image.h"
 #include "Transform.h"
 #include "../../Mingi/UI/TitleMenu.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::TitleOpeningSequencer::Start()
 {
@@ -44,6 +45,7 @@ void MMMEngine::TitleOpeningSequencer::Update()
 		{
 			m_state++;
 			m_internalTime = 0.0f;
+
 		}
 		break;
 	case 17:
@@ -51,6 +53,14 @@ void MMMEngine::TitleOpeningSequencer::Update()
 		TitleImage->SetAlpha(m_internalTime / titleLoadFadeTime);
 
 		float t = TitleRotate.Evaluate(m_internalTime);
+
+		if (m_internalTime > 0.743f && !m_titleSFX1_played)
+		{
+			m_titleSFX1_played = true;
+
+			if (SoundManager::Instance.IsValid())
+				SoundManager::Instance->PlaySFX2D("GiveSnowball",SelfPtr(this));
+		}
 
 		TitleImage->GetTransform()->SetWorldEulerRotation({ 0,0,TitleRotate.Evaluate(m_internalTime) });
 		TitleImage->GetTransform()->SetWorldScale({ TitleScaleX.Evaluate(m_internalTime),TitleScaleY.Evaluate(m_internalTime),0 });
@@ -68,6 +78,7 @@ void MMMEngine::TitleOpeningSequencer::Update()
 
 		break;
 	case 18:
+		
 		if (m_internalTime > 0.18f)
 		{
 			m_state++;
@@ -105,6 +116,32 @@ void MMMEngine::TitleOpeningSequencer::Update()
 		auto backMaxX = ButtonScaleX.GetKeyframes().back().time;
 		auto backMaxY = ButtonScaleY.GetKeyframes().back().time;
 
+
+
+		if (m_internalTime > 0.0f && !m_menuSFX1_played)
+		{
+			m_menuSFX1_played = true;
+
+			if (SoundManager::Instance.IsValid())
+				SoundManager::Instance->PlaySFX2D("Bubble", SelfPtr(this));
+		}
+		if (m_internalTime > (buttonAnimOffsetTime) && !m_menuSFX2_played)
+		{
+			m_menuSFX2_played = true;
+
+			if (SoundManager::Instance.IsValid())
+				SoundManager::Instance->PlaySFX2D("Bubble", SelfPtr(this));
+		}
+
+		if (m_internalTime > ((buttonAnimOffsetTime * 2.0f)) && !m_menuSFX3_played)
+		{
+			m_menuSFX3_played = true;
+
+			if (SoundManager::Instance.IsValid())
+				SoundManager::Instance->PlaySFX2D("Bubble", SelfPtr(this));
+		}
+
+
 		auto backMax = backMaxX > backMaxY ? backMaxX : backMaxY;
 		backMax += buttonLoadFadeTime + (buttonAnimOffsetTime * 2);
 		if (m_internalTime > backMax)
@@ -114,6 +151,10 @@ void MMMEngine::TitleOpeningSequencer::Update()
 			TitleMenu->TurnOffAllButton();
 			TitleMenu->TurnOnPlayButton();
 			TitleMenu->IsControllAble = true;
+
+
+			if (SoundManager::Instance.IsValid())
+				SoundManager::Instance->PlayBGM("MainTheme");
 		}
 		break;
 	}

@@ -19,6 +19,12 @@ namespace MMMEngine
         float m_playBY = 0.0f;
         float m_creditBY = 0.0f;
         float m_exitBY = 0.0f;
+        bool m_titleSFX1_played = false;
+
+        bool m_menuSFX1_played = false;
+        bool m_menuSFX2_played = false;
+        bool m_menuSFX3_played = false;
+
     public:
         TitleOpeningSequencer()
         {
