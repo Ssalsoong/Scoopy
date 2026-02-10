@@ -47,14 +47,14 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.5
+            "value": 0.2
         },
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.9,
-                1.0,
-                1.0,
+                0.8,
+                0.8,
+                0.8,
                 1.0
             ]
         },

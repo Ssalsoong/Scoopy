@@ -255,8 +255,8 @@ void MMMEngine::SoundManager::LoadAudioTable()
         }
     }
 
-    std::cout << "[SoundManager] Loaded BGM: " << m_bgmTable.size()
-              << ", SFX: " << m_sfxTable.size() << std::endl;
+    //std::cout << "[SoundManager] Loaded BGM: " << m_bgmTable.size()
+    //          << ", SFX: " << m_sfxTable.size() << std::endl;
 }
 
 void MMMEngine::SoundManager::EnsureBGMSource()

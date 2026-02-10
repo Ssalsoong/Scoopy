@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR ±âº»°ª (¾øÀ¸¸é ÇÁ·ÎÁ§Æ® ±âÁØ »ó´ë°æ·Î) -->
+  <!-- MMMENGINE_DIR ï¿½âº»ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>
@@ -134,6 +134,7 @@
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\TimerUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp" />
@@ -145,7 +146,10 @@
     <ClCompile Include="Scripts\Sunken\LevelUpBubble.cpp" />
     <ClCompile Include="Scripts\Sunken\LevelUpManager.cpp" />
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp" />
+    <ClCompile Include="Scripts\Sunken\PlayerHpGage.cpp" />
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp" />
+    <ClCompile Include="Scripts\Sunken\TimerGageScript.cpp" />
+    <ClCompile Include="Scripts\Sunken\WaveUIScript.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
     <ClCompile Include="Scripts\test\CastleManager.cpp" />
     <ClCompile Include="Scripts\test\EnemyMove.cpp" />
@@ -184,6 +188,7 @@
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />
+    <ClInclude Include="Scripts\Mingi\UI\TimerUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h" />
     <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h" />
@@ -195,7 +200,10 @@
     <ClInclude Include="Scripts\Sunken\LevelUpBubble.h" />
     <ClInclude Include="Scripts\Sunken\LevelUpManager.h" />
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
+    <ClInclude Include="Scripts\Sunken\PlayerHpGage.h" />
     <ClInclude Include="Scripts\Sunken\PrefabTest.h" />
+    <ClInclude Include="Scripts\Sunken\TimerGageScript.h" />
+    <ClInclude Include="Scripts\Sunken\WaveUIScript.h" />
     <ClInclude Include="Scripts\test\CastleManager.h" />
     <ClInclude Include="Scripts\test\EnemyMove.h" />
     <ClInclude Include="Scripts\test\MeshSize.h" />

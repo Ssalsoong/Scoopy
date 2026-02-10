@@ -99,7 +99,7 @@ namespace MMMEngine
         DirectX::SimpleMath::Vector3 m_rollAxis = DirectX::SimpleMath::Vector3::Right;
         bool m_hasRollAxis = false;
 
-        int MaxSnowCount = 9;
+        int MaxSnowCount = 30;
 
         void MaxSnow(int count);
 

@@ -9,6 +9,7 @@
 namespace MMMEngine
 {
     class SnowballManager;
+    class PlayerAnimController;
     class USERSCRIPTS PlayerController : public ScriptBehaviour
     {
     private:
@@ -64,6 +65,8 @@ namespace MMMEngine
 
         bool m_holdSpace = false;
 
+        ObjPtr<PlayerAnimController> m_Anime;
+
     public:
         USCRIPT_PROPERTY()
         ObjPtr<GameObject> m_TileMap;
@@ -75,6 +78,8 @@ namespace MMMEngine
 
         bool m_pendingAttach = false;
         int m_attachDelayFrames = 0;
+
+        bool IsScoopFull() const { return SnowScoopCount >= MaxPlayerScoop; }
 
         int GetScoopCount() const { return SnowScoopCount; }
 

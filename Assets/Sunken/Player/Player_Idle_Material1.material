@@ -1,5 +1,5 @@
 {
-    "MUID": "f65e2078-7edd-4295-8db2-f1c0574fd52c",
+    "MUID": "78f8c052-e372-4ede-b64f-e28dc448705a",
     "properties": {
         "_albedo": {
             "file": "Assets\\Sunken\\Player\\FBX\\Pink_Expressions.png",
@@ -109,7 +109,7 @@
         },
         "mLowLut": {
             "type": "float",
-            "value": 0.5
+            "value": 0.30000001192092896
         },
         "mPadding": {
             "type": "Vector3",
@@ -121,7 +121,7 @@
         },
         "mRimLightStr": {
             "type": "float",
-            "value": 0.5
+            "value": 0.10000000149011612
         },
         "mRoughness": {
             "type": "float",
@@ -136,6 +136,6 @@
         "file": "Shader/TOON/ToonPS.hlsl"
     },
     "vshader": {
-        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+        "file": "Shader/PBR/VS/SkeletalVertexShader.hlsl"
     }
 }

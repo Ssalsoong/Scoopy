@@ -36,8 +36,12 @@ void MMMEngine::Player::Update()
 void MMMEngine::Player::HandleAttack()
 {
 	//여기서 스쿱상태일 때 공격을 못하게 막아야 함
-	if (GetComponent<PlayerController>()->IsHoldingSpace())
+	if (GetComponent<PlayerController>()->IsHoldingSpace()) {
+		mPAController->SetAttack(false);
+		attackTimer == 0.0f;
 		return;
+	}
+		
 
 	auto enemies = GameObject::FindGameObjectsWithTag("Enemy");
 
@@ -99,8 +103,6 @@ void MMMEngine::Player::HandleAttack()
 	for (auto& e : enemies)
 	{
 		if (!e) continue;
-		auto tec = e->GetComponent<Enemy>();
-		if (!tec) continue;
 
 		auto tr = e->GetTransform();
 		if (!tr) continue;
@@ -130,7 +132,6 @@ void MMMEngine::Player::HandleAttack()
 		}
 
 		BattleManager::instance->Attack(GetGameObject(), e, damage);
-		tec->PlayerHitMe();
 	}
 }
 

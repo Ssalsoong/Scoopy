@@ -32,13 +32,13 @@ void MMMEngine::LevelUpManager::Awake()
 		!CheckValid(mHeadlineText, "HeadlineText") || 
 		!CheckValid(mScriptText, "ScriptText"))
 	{
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!mReadyPrefab || !mCountPrefab || !mGagePrefab)
 	{
 		std::cerr << "LevelManager::Prefab Not Found!!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 }
 
@@ -49,10 +49,16 @@ void MMMEngine::LevelUpManager::Start()
 	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"디버프건물");
 	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"수급건물");
 
-	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"건물의 체력이 상승합니다.");
-	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처에 있으면 이속이 빨라집니다.");
-	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처의 적의 이속이 느려집니다.");
-	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"일정 시간마다 눈을 저장합니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"건물의 체력이\n상승합니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처에 있으면\n이속이 빨라집니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처의 적의\n이속이 느려집니다.");
+	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"일정 시간마다\n눈을 저장합니다.");
+
+	mHeadlineMap[EXPTYPE::EXP_CASTLE].push_back(L"성 강화");
+	mHeadlineMap[EXPTYPE::EXP_CASTLE].push_back(L"스쿱 강화");
+
+	mScriptMap[EXPTYPE::EXP_CASTLE].push_back(L"공격력 +2");
+	mScriptMap[EXPTYPE::EXP_CASTLE].push_back(L"눈덩이 최대 획득 수 +2\n스쿱 공격력 증가 + 1");
 }
 
 void MMMEngine::LevelUpManager::Update()
@@ -173,7 +179,7 @@ void MMMEngine::LevelUpManager::SetBubble(EXPTYPE _type, ObjPtr<GameObject> _tar
 	// SetHeadline과 SetScript는 버블 안에서 해결
 }
 
-void MMMEngine::LevelUpManager::RemovePBubble()
+void MMMEngine::LevelUpManager::RemoveBubble()
 {
 	mPendingType = EXPTYPE::EXP_END;
 	mLevelPendingObj.Reset();

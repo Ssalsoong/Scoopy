@@ -42,6 +42,7 @@ namespace MMMEngine
 			ObjPtr<Image> mBuffIcon;
 			ObjPtr<Image> mDeBuffIcon;
 			ObjPtr<Image> mSnowIcon;
+            ObjPtr<Image> mCountIcon;
 
         int mCurrLevel = 0;
         int mReqExp = 0;
@@ -49,13 +50,12 @@ namespace MMMEngine
         int mUpPending = 0;
         bool isActive = false;
         bool isReady = false;
+        bool mPrevActive = false;
 
         void UpdateGuage();
         void LevelUp();
         void UpdateReadyIcon();
-        void UpdateSelectIcon();
         void SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding);
-        void ControlSelection();
         void SetLVManager(int _idx);
 
         void SetActiveIcon();
@@ -65,7 +65,7 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
             Vector2 mReadyPosOffset;
 		USCRIPT_PROPERTY()
-			Vector2 mSelectPosOffset;
+			Vector2 mCountPosOffset;
         USCRIPT_PROPERTY()
             float mUIScale = 1.0f;
         USCRIPT_PROPERTY()

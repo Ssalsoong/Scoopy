@@ -117,7 +117,7 @@ namespace MMMEngine
         int GetMaxLevel(EXPTYPE _type);
 
         void SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons);
-        void RemovePBubble();
+        void RemoveBubble();
         void SetSelection(int _selectionIdx);
         const std::wstring& GetHeadline(int _idx);
         const std::wstring& GetScripts(int _idx);
