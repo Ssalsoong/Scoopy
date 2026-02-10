@@ -24,6 +24,7 @@
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/RotateTrakingUI.h"
+#include "Mingi/UI/TimerUI.h"
 #include "Mingi/UI/TitleMenu.h"
 #include "Mingi/UI/TitleOpeningSequencer.h"
 #include "Mingi/UI/WorldSpaceUI.h"
@@ -149,7 +150,7 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<RedLine>("RedLine")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<RedLine>"))
 		.property("CheckDistance", &RedLine::CheckDistance)
-		.property("CheckYPos", &RedLine::CheckYPos)
+		.property("CheckZPos", &RedLine::CheckZPos)
 		.property("CheckXPos", &RedLine::CheckXPos)
 		.property("PlayerTr", &RedLine::PlayerTr)
 		.property("ReddoLine", &RedLine::ReddoLine);
@@ -184,7 +185,10 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<MiniMap>"))
 		.property("MinimapUnitScale", &MiniMap::MinimapUnitScale)
 		.property("Player", &MiniMap::Player)
-		.property("PlayerRectUI", &MiniMap::PlayerRectUI);
+		.property("PlayerRectUI", &MiniMap::PlayerRectUI)
+		.property("EnemyTrackerUI", &MiniMap::EnemyTrackerUI)
+		.property("BuildingTrackerUI", &MiniMap::BuildingTrackerUI)
+		.property("InitialPoolSize", &MiniMap::InitialPoolSize);
 
 	registration::class_<ObjPtr<MiniMap>>("ObjPtr<MiniMap>")
 		.constructor([]() { return Object::NewObject<MiniMap>(); })
@@ -197,6 +201,23 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<RotateTrakingUI>>("ObjPtr<RotateTrakingUI>")
 		.constructor([]() { return Object::NewObject<RotateTrakingUI>(); })
 		.method("Inject", &ObjPtr<RotateTrakingUI>::Inject);
+
+	registration::class_<TimerUI>("TimerUI")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerUI>"))
+		.property("m_playingAnimation", &TimerUI::m_playingAnimation)
+		.property("WaveText", &TimerUI::WaveText)
+		.property("TimerGage", &TimerUI::TimerGage)
+		.property("WaveBack", &TimerUI::WaveBack)
+		.property("changeTextTime", &TimerUI::changeTextTime)
+		.property("scaleCurve", &TimerUI::scaleCurve)
+		.property("rotCurve", &TimerUI::rotCurve)
+		.property("posCurve", &TimerUI::posCurve)
+		.property("TimerAlpha", &TimerUI::TimerAlpha)
+		.property("WaveBackAlpha", &TimerUI::WaveBackAlpha);
+
+	registration::class_<ObjPtr<TimerUI>>("ObjPtr<TimerUI>")
+		.constructor([]() { return Object::NewObject<TimerUI>(); })
+		.method("Inject", &ObjPtr<TimerUI>::Inject);
 
 	registration::class_<TitleMenu>("TitleMenu")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TitleMenu>"))
