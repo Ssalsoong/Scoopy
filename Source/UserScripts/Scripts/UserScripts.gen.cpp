@@ -21,6 +21,7 @@
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
+#include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
 #include "Mingi/UI/TitleMenu.h"
 #include "Mingi/UI/TitleOpeningSequencer.h"
@@ -158,6 +159,26 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<MiniMap>>("ObjPtr<MiniMap>")
 		.constructor([]() { return Object::NewObject<MiniMap>(); })
 		.method("Inject", &ObjPtr<MiniMap>::Inject);
+
+	registration::class_<PauseUI>("PauseUI")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PauseUI>"))
+		.property("PanelGO", &PauseUI::PanelGO)
+		.property("P_rect", &PauseUI::P_rect)
+		.property("a_rect", &PauseUI::a_rect)
+		.property("u_rect", &PauseUI::u_rect)
+		.property("s_rect", &PauseUI::s_rect)
+		.property("e_rect", &PauseUI::e_rect)
+		.property("Resume_rect", &PauseUI::Resume_rect)
+		.property("ToTitle_rect", &PauseUI::ToTitle_rect)
+		.property("PosYCurve", &PauseUI::PosYCurve)
+		.property("ButtonYCurve", &PauseUI::ButtonYCurve)
+		.property("FadeDuration", &PauseUI::FadeDuration)
+		.property("AnimOffestTime", &PauseUI::AnimOffestTime)
+		.property("buttonAnimOffset", &PauseUI::buttonAnimOffset);
+
+	registration::class_<ObjPtr<PauseUI>>("ObjPtr<PauseUI>")
+		.constructor([]() { return Object::NewObject<PauseUI>(); })
+		.method("Inject", &ObjPtr<PauseUI>::Inject);
 
 	registration::class_<RotateTrakingUI>("RotateTrakingUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<RotateTrakingUI>"))
