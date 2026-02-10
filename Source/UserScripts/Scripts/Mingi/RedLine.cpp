@@ -8,6 +8,8 @@
 
 void MMMEngine::RedLine::Start()
 {
+	if (ReddoLine.IsValid())
+		m_baseColor = ReddoLine->GetColor();
 }
 
 void MMMEngine::RedLine::Update()
@@ -17,7 +19,7 @@ void MMMEngine::RedLine::Update()
 		auto pos = PlayerTr->GetWorldPosition();
 		auto dist = pos - GetTransform()->GetWorldPosition();
 		auto distX = dist.x;
-		auto distY = dist.y;
+		auto distZ = dist.z;
 		bool isDanger = false;
 		if (CheckDistance > 0)
 		{
@@ -25,7 +27,7 @@ void MMMEngine::RedLine::Update()
 			{
 				isDanger = true;
 			}
-			if (CheckYPos && distY < CheckDistance)
+			if (CheckZPos && distZ < CheckDistance)
 			{
 				isDanger = true;
 			}
@@ -36,26 +38,25 @@ void MMMEngine::RedLine::Update()
 			{
 				isDanger = true;
 			}
-			if (CheckYPos && distY >= CheckDistance)
+			if (CheckZPos && distZ >= CheckDistance)
 			{
 				isDanger = true;
 			}
 		}
 
-		auto sourceCol = ReddoLine->GetColor();
+		m_internalTimer = std::min(1.0f, m_internalTimer);
 		if (isDanger)
 		{
 			m_internalTimer += Time::GetDeltaTime();
-			float speed = 3.0f;
-			float a = (1.0f - cos(m_internalTimer * speed)) * 0.5f;  // 0~1
-			ReddoLine->SetColor({ sourceCol.R(),sourceCol.G(),sourceCol.B(),  a});
 		}
 		else
 		{
-			m_internalTimer = std::min(1.0f, m_internalTimer);
 			m_internalTimer -= Time::GetDeltaTime();
-			m_internalTimer = std::max(0.0f, m_internalTimer);
-			ReddoLine->SetColor({ sourceCol.R(),sourceCol.G(),sourceCol.B(), m_internalTimer });
 		}
+
+		m_internalTimer = std::max(0.0f, m_internalTimer);
+
+
+		ReddoLine->SetColor({ m_baseColor.R(),m_baseColor.G(),m_baseColor.B(), m_internalTimer });
 	}
 }
