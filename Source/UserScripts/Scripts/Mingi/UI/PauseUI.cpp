@@ -62,11 +62,37 @@ void MMMEngine::PauseUI::Update()
 		m_internalTimer = 0.0f;
 		PanelGO->SetActive(m_isPause);
 		m_isControlAble = false;
+		m_resumeFocusAlpha = 0.5f;
+		m_toTitleFocusAlpha = 0.5f;
+		m_currentSelected = 0;
+		Resume_rect->SetLocalScale({ 1.0f , 1.0f ,1.0f });
+		ToTitle_rect->SetLocalScale({ 1.0f , 1.0f ,1.0f });
+		m_buttonSelectTimer = 0.0f;
+
+		Time::SetTimeScale(m_isPause ? 0.0f : 1.0f);
+	}
+
+	bool currentFrameHasControl = false;
+	if (m_isControlAble)
+	{
+		m_buttonSelectTimer += Time::GetUnscaledDeltaTime();
+		bool upKey = Input::GetKeyDown(KeyCode::UpArrow);
+		bool downKey = Input::GetKeyDown(KeyCode::DownArrow);
+
+		currentFrameHasControl = upKey || downKey;
+
+		if (upKey || downKey)
+			m_currentSelected = 1 - m_currentSelected;
+	}
+
+	if (currentFrameHasControl)
+	{
+		m_buttonSelectTimer = Time::GetUnscaledDeltaTime();
 	}
 
 	if (m_isPause)
 	{
-		m_internalTimer += Time::GetDeltaTime();
+		m_internalTimer += Time::GetUnscaledDeltaTime();
 
 		m_P_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min(m_internalTimer / FadeDuration, 1.0f)) });
 		m_a_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime)) / FadeDuration, 1.0f)) });
@@ -75,9 +101,31 @@ void MMMEngine::PauseUI::Update()
 		m_e_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime * 4)) / FadeDuration, 1.0f)) });
 
 
-		m_Resume_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime * buttonAnimOffset)) / FadeDuration, 1.0f)) });
-		m_ToTitle_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime * (buttonAnimOffset + 1))) / FadeDuration, 1.0f)) * 0.5f });
+		if (!m_isControlAble)
+		{
+			m_Resume_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime * buttonAnimOffset)) / FadeDuration, 1.0f)) * 0.5f });
+			m_ToTitle_text->SetColor({ 1.0f,1.0f,1.0f, std::max(0.0f, std::min((m_internalTimer - (AnimOffestTime * (buttonAnimOffset + 1))) / FadeDuration, 1.0f)) * 0.5f });
 
+		}
+		else
+		{
+			float targetResume = (m_currentSelected == 0) ? 1.0f : 0.5f;
+			float targetToTitle = (m_currentSelected == 1) ? 1.0f : 0.5f;
+
+			float dt = Time::GetUnscaledDeltaTime();
+			float t = std::min(1.0f, FocusFadeSpeed * dt);
+
+			m_resumeFocusAlpha = m_resumeFocusAlpha + (targetResume - m_resumeFocusAlpha) * t;
+			m_toTitleFocusAlpha = m_toTitleFocusAlpha + (targetToTitle - m_toTitleFocusAlpha) * t;
+
+			m_Resume_text->SetColor({ 1.0f,1.0f,1.0f, m_resumeFocusAlpha });
+			m_ToTitle_text->SetColor({ 1.0f,1.0f,1.0f, m_toTitleFocusAlpha });
+
+
+			Resume_rect->SetLocalScale({ (m_currentSelected == 0) ? ButtonScaleCurve.Evaluate(m_buttonSelectTimer) : 1.0f ,(m_currentSelected == 0) ? ButtonScaleCurve.Evaluate(m_buttonSelectTimer) : 1.0f ,1.0f});
+			ToTitle_rect->SetLocalScale({ (m_currentSelected == 1) ? ButtonScaleCurve.Evaluate(m_buttonSelectTimer) : 1.0f ,(m_currentSelected == 1) ? ButtonScaleCurve.Evaluate(m_buttonSelectTimer) : 1.0f ,1.0f});
+		}
+		
 		P_rect->SetAnchoredPosition(m_P_pos + Vector2{0.0f, PosYCurve.Evaluate(m_internalTimer)});
 		a_rect->SetAnchoredPosition(m_a_pos + Vector2{0.0f, PosYCurve.Evaluate(m_internalTimer - (AnimOffestTime))});
 		u_rect->SetAnchoredPosition(m_u_pos + Vector2{0.0f, PosYCurve.Evaluate(m_internalTimer - (AnimOffestTime * 2))});
@@ -86,5 +134,19 @@ void MMMEngine::PauseUI::Update()
 
 		Resume_rect->SetAnchoredPosition(m_Resume_pos + Vector2{ 0.0f, ButtonYCurve.Evaluate(m_internalTimer - (AnimOffestTime * buttonAnimOffset)) });
 		ToTitle_rect->SetAnchoredPosition(m_ToTitle_pos + Vector2{ 0.0f, ButtonYCurve.Evaluate(m_internalTimer - (AnimOffestTime * (buttonAnimOffset+1))) });
+
+		if (!m_isControlAble && m_internalTimer - (AnimOffestTime * (buttonAnimOffset + 1)) > (ButtonYCurve.GetKeyframes().back().time - ButtonSelectTimeOffset))
+		{
+			m_isControlAble = true;
+		}
+
+	}
+}
+
+void MMMEngine::PauseUI::OnDestroy()
+{
+	if (m_isPause)
+	{
+		Time::SetTimeScale(1.0f);
 	}
 }

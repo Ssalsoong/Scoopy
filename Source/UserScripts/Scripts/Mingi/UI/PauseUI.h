@@ -27,9 +27,14 @@ namespace MMMEngine
 
             float m_internalTimer = 0.0f;
 
+            float m_buttonSelectTimer = 0.0f;
+
             bool m_isPause = false;
 
             bool m_isControlAble = false;
+            int m_currentSelected = 0;
+            float m_resumeFocusAlpha = 1.0f;
+            float m_toTitleFocusAlpha = 0.5f;
 
             DirectX::SimpleMath::Vector2 m_P_pos = { 0.0f,0.0f };
             DirectX::SimpleMath::Vector2 m_a_pos = { 0.0f,0.0f };
@@ -41,6 +46,7 @@ namespace MMMEngine
     public:
         PauseUI()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(OnDestroy);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -85,10 +91,22 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         int buttonAnimOffset = 10;
 
+        USCRIPT_PROPERTY()
+        float FocusFadeSpeed = 8.0f;
+
+        USCRIPT_PROPERTY()
+        AnimationCurve ButtonScaleCurve;
+
+        USCRIPT_PROPERTY()
+            float ButtonSelectTimeOffset = 0.0f;
+
         USCRIPT_MESSAGE()
         void Start();
 
         USCRIPT_MESSAGE()
         void Update();
+
+        USCRIPT_MESSAGE()
+        void OnDestroy();
     };
 }

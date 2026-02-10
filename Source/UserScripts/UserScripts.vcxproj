@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
+    <ProjectGuid>{1646F854-69B8-5F2D-9BF7-D6AF971EF747}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR ï¿½âº»ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) -->
+  <!-- MMMENGINE_DIR ±âº»°ª (¾øÀ¸¸é ÇÁ·ÎÁ§Æ® ±âÁØ »ó´ë°æ·Î) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>

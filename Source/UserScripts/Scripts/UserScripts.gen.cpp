@@ -209,7 +209,10 @@ RTTR_PLUGIN_REGISTRATION
 		.property("ButtonYCurve", &PauseUI::ButtonYCurve)
 		.property("FadeDuration", &PauseUI::FadeDuration)
 		.property("AnimOffestTime", &PauseUI::AnimOffestTime)
-		.property("buttonAnimOffset", &PauseUI::buttonAnimOffset);
+		.property("buttonAnimOffset", &PauseUI::buttonAnimOffset)
+		.property("FocusFadeSpeed", &PauseUI::FocusFadeSpeed)
+		.property("ButtonScaleCurve", &PauseUI::ButtonScaleCurve)
+		.property("ButtonSelectTimeOffset", &PauseUI::ButtonSelectTimeOffset);
 
 	registration::class_<ObjPtr<PauseUI>>("ObjPtr<PauseUI>")
 		.constructor([]() { return Object::NewObject<PauseUI>(); })
