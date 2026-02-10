@@ -1,0 +1,28 @@
+{
+    "MUID": "1361d9c0-541b-4f94-9c98-7a09a81886c5",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\Taeil\\Resources\\PixelTeture.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Assets\\Taeil\\Resources\\PixelTeture.png",
+            "type": "Texture2D"
+        },
+        "mBaseColor": {
+            "type": "Vector4",
+            "value": [
+                0.800000011920929,
+                0.800000011920929,
+                0.800000011920929,
+                1.0
+            ]
+        }
+    },
+    "pshader": {
+        "file": "Shader/PBR/PS/BRDFShader.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

@@ -1,4 +1,5 @@
 ﻿// Auto-generated. Do not edit.
+#pragma optimize("", off)
 #include "Export.h"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -13,6 +14,7 @@
 #include "Dongho/Castle/Castle.h"
 #include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
+#include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
 #include "Mingi/FXSnowFall.h"
@@ -27,6 +29,7 @@
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
 #include "Sunken/AnimResourceManager.h"
+#include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
 #include "Sunken/EnemyAnimController.h"
 #include "Sunken/LevelUpBubble.h"
@@ -43,6 +46,7 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
+#include "Dongho/Building/Building.h"
 #include "Dongho/Enemy/ArrowEnemy.h"
 #include "Dongho/Enemy/NormalEnemy.h"
 #include "Dongho/Enemy/ThiefEnemy.h"
@@ -73,7 +77,10 @@ RTTR_PLUGIN_REGISTRATION
 		.property("level", &Castle::level)
 		.property("maxHP", &Castle::maxHP)
 		.property("exp", &Castle::exp)
-		.property("point", &Castle::point);
+		.property("atk", &Castle::atk)
+		.property("point", &Castle::point)
+		.property("pre_bullet", &Castle::pre_bullet)
+		.property("bulletSpeed", &Castle::bulletSpeed);
 
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
@@ -97,6 +104,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<BattleManager>>("ObjPtr<BattleManager>")
 		.constructor([]() { return Object::NewObject<BattleManager>(); })
 		.method("Inject", &ObjPtr<BattleManager>::Inject);
+
+	registration::class_<BuildingManager>("BuildingManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
+		.property("pre_building", &BuildingManager::pre_building);
+
+	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
+		.constructor([]() { return Object::NewObject<BuildingManager>(); })
+		.method("Inject", &ObjPtr<BuildingManager>::Inject);
 
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
@@ -284,6 +299,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mCountPosOffset", &CastleLevelController::mCountPosOffset)
 		.property("mUIScale", &CastleLevelController::mUIScale)
 		.property("mPadding", &CastleLevelController::mPadding)
+		.property("mSelectPadding", &CastleLevelController::mSelectPadding)
 		.property("mDistanceFactor", &CastleLevelController::mDistanceFactor);
 
 	registration::class_<ObjPtr<CastleLevelController>>("ObjPtr<CastleLevelController>")
@@ -417,7 +433,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<SnowBullet>("SnowBullet")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowBullet>"))
-		.property("speed", &SnowBullet::speed)
+		.property("m_speed", &SnowBullet::m_speed)
 		.property("target", &SnowBullet::target);
 
 	registration::class_<ObjPtr<SnowBullet>>("ObjPtr<SnowBullet>")
