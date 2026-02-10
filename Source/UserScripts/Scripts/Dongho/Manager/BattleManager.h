@@ -13,10 +13,13 @@ namespace MMMEngine
     public:
         BattleManager()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+        USCRIPT_MESSAGE()
+        void Awake();
 
         USCRIPT_MESSAGE()
         void Start();
@@ -25,7 +28,6 @@ namespace MMMEngine
         void Update();
         static ObjPtr<BattleManager> instance;
 
-        void Attack(ObjPtr<GameObject> target, int damage);
-        void SnowAttack(ObjPtr<GameObject> target, int point);
+        void Attack(ObjPtr<GameObject>attacker, ObjPtr<GameObject> target, int damage);
     };
 }

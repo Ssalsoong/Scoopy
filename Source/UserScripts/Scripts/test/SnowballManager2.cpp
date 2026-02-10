@@ -4,10 +4,18 @@
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "SnowCollider.h"
+#include "../Dongho/Snow/Snowball.h"
+
+MMMEngine::ObjPtr<MMMEngine::SnowballManager2> MMMEngine::SnowballManager2::instance = nullptr;
+
+void MMMEngine::SnowballManager2::Awake()
+{
+	instance = GetGameObject()->GetComponent<SnowballManager2>();
+}
 
 void MMMEngine::SnowballManager2::Start()
 {
-	
+
 }
 
 void MMMEngine::SnowballManager2::Update()
@@ -39,6 +47,7 @@ void MMMEngine::SnowballManager2::Make_snow(ObjPtr<GameObject> player)
 	obj_snow->GetComponent<SnowCollider>()->SetSize(0.1);
 	//obj_snow->GetComponent<SnowCollider>()->SetOnPlayer(true, player);
 }
+
 
 
 

@@ -1,5 +1,5 @@
 {
-    "MUID": "2b8982ce-95d4-4a6f-bd68-eeb72fb7c99f",
+    "MUID": "358f3763-2c96-484f-a655-0f2cc1a00040",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\IceTowerlvl01_BaseColor.png",
@@ -102,6 +102,10 @@
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mRoundDotClip": {
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

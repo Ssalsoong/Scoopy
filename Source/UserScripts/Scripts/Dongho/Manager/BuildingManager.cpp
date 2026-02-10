@@ -15,24 +15,12 @@
 #include "../Battlestats.h"
 #include "Prefab.h"
 
-RTTR_PLUGIN_REGISTRATION
-{
-	using namespace rttr;
-	using namespace MMMEngine;
-
-	registration::class_<BuildingManager>("BuildingManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("pre_building", &BuildingManager::pre_building);
-
-	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
-		.constructor(
-			[]() {
-				return Object::NewObject<BuildingManager>();
-			})
-        .method("Inject", &ObjPtr<BuildingManager>::Inject);
-}
-
 MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instance = nullptr;
+
+void MMMEngine::BuildingManager::Awake()
+{
+	instance = GetGameObject()->GetComponent<BuildingManager>();
+}
 
 void MMMEngine::BuildingManager::Start()
 {
@@ -52,13 +40,11 @@ void MMMEngine::BuildingManager::Start()
 		obj->AddComponent<BuildingPoint>();
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(cube);
-		obj->GetTransform()->SetWorldScale(0.1f, 0.1f, 0.1f);
+		obj->GetTransform()->SetWorldScale(0.1f, 0.5f, 0.1f);
 		obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
 		obj->GetTransform()->SetParent(GetTransform());
 		buildingpoints.push_back(obj);
 	}
-
-	instance = GetGameObject()->GetComponent<BuildingManager>();
 }
 
 void MMMEngine::BuildingManager::Update()
@@ -73,6 +59,8 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	building->GetTransform()->SetParent(obj->GetTransform());
 	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
 	Buildings.push_back(building);
+	if (distup)
+		building->GetComponent<Building>()->SetAttackDist(5.5f);
 }
 
 void MMMEngine::BuildingManager::BuildingReturn()
@@ -84,7 +72,8 @@ void MMMEngine::BuildingManager::BuildingReturn()
 			obj->GetComponent<Building>()->isDead = false;
 			obj->SetActive(true);
 		}
-		obj->GetComponent<Battlestats>()->HP = obj->GetComponent<Building>()->maxHP;
+		auto maxHP = obj->GetComponent<Building>()->maxHP;
+		obj->GetComponent<Battlestats>()->SetHP(maxHP);
 	}
 }
 
@@ -146,4 +135,13 @@ void MMMEngine::BuildingManager::LevelUpSnow(ObjPtr<GameObject> obj)
 		return;
 	obj->GetComponent<Building>()->level++;
 	obj->GetComponent<SnowBuilding>()->LevelApply(obj->GetComponent<Building>()->level);
+}
+
+void MMMEngine::BuildingManager::BuildingsDistUP()
+{
+	for (auto& e : Buildings)
+	{
+		e->GetComponent<Building>()->SetAttackDist(5.5f);
+		distup = true;
+	}
 }

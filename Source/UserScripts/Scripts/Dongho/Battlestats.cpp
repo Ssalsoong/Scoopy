@@ -8,30 +8,55 @@
 
 void MMMEngine::Battlestats::Start()
 {
+	if (GetComponent<Player>())
+		type = Type::Player;
+	else if (GetComponent<Enemy>())
+		type = Type::Enemy;
+	else if (GetComponent<Castle>())
+		type = Type::Castle;
+	else if (GetComponent<Building>())
+		type = Type::Building;
 }
 
 void MMMEngine::Battlestats::Update()
 {
-	if (HP <= 0)
+	if (!bDead && HP <= 0)
+	{
+		bDead = true;
 		Dead();
+	}
+}
+
+void MMMEngine::Battlestats::ApplyDamage(int amount)
+{
+	if (bDead || amount <= 0) return;
+
+	HP = std::max(HP - amount, 0);
 }
 
 void MMMEngine::Battlestats::Dead()
 {
-	if (GetComponent<Player>())
+	switch (type)
 	{
-		GetComponent<Player>()->Dead();
+	case Type::Player:
+		if (auto p = GetComponent<Player>()) p->Dead();
+		return;
+	case Type::Enemy:
+		if (auto e = GetComponent<Enemy>()) e->ChangeState(Enemy::EnemyState::Dead);
+		return;
+	case Type::Castle:
+		if (auto c = GetComponent<Castle>()) c->Dead();
+		return;
+	case Type::Building:
+		if (auto b = GetComponent<Building>()) b->Dead();
+		return;
+	default:
+		return;
 	}
-	if (GetComponent<Enemy>())
-	{
-		GetComponent<Enemy>()->ChangeState(Enemy::EnemyState::Dead);
-	}
-	if (GetComponent<Castle>())
-	{
-		GetComponent<Castle>()->Dead();
-	}
-	if (GetComponent<Building>())
-	{
-		GetComponent<Building>()->Dead();
-	}
+}
+
+void MMMEngine::Battlestats::SetHP(int value)
+{
+	HP = value;
+	if (HP > 0) bDead = false;
 }

@@ -1,5 +1,5 @@
 {
-    "MUID": "44899dcb-94c6-425f-a644-3ac80a0c6169",
+    "MUID": "b2c60c94-a858-49cf-8798-0ff0e4800f77",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\PortalTowerlvl01_BaseColor.png",
@@ -102,6 +102,10 @@
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mRoundDotClip": {
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

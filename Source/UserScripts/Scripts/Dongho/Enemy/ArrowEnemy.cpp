@@ -28,19 +28,13 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::ArrowEnemy::Start()
 {
-	arrowmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Sphere_StaticMesh.staticmesh");
+	pre_arrow = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Arrow.Prefab");
 	for (int i = 0; i < 5; ++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("Arrow");
-		obj->SetTag("Arrow");
+		auto obj = Instantiate(pre_arrow);
 		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Arrow>();
+		obj->GetTransform()->SetLocalPosition(0.f, 0.2f, 0.f);
 		obj->GetComponent<Arrow>()->SetOwner(GetGameObject());
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(arrowmesh);
-		obj->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
-		obj->GetTransform()->SetWorldScale(0.1f,0.1f,0.1f);
 		obj->SetActive(false);
 		Arrows.push(obj);
 	}
@@ -54,7 +48,7 @@ void MMMEngine::ArrowEnemy::ApplyStats()
 	if (!GetGameObject()->GetComponent<Enemy>())
 		return;
 	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	GetComponent<Battlestats>()->HP = HP;
+	GetComponent<Battlestats>()->SetHP(HP);
 	Enemycomp->atk = atk;
 	Enemycomp->velocity = velocity;
 	Enemycomp->attackDelay = attackDelay;

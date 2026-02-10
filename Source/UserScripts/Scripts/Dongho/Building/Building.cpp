@@ -8,6 +8,7 @@
 #include "StaticMesh.h"
 #include "MMMTime.h"
 #include "../Battlestats.h"
+#include "../../test/SnowBullet.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -15,7 +16,14 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<Building>("Building")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"))
+		.property("level", &Building::level)
+		.property("maxHP", &Building::maxHP)
+		.property("exp", &Building::exp)
+		.property("atk", &Building::atk)
+		.property("point", &Building::point)
+		.property("pre_bullet", &Building::pre_bullet)
+		.property("bulletSpeed", &Building::bulletSpeed);
 
 	registration::class_<ObjPtr<Building>>("ObjPtr<Building>")
 		.constructor(
@@ -26,23 +34,15 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::Building::Start()
 {
-	buildingballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
+	pos = GetTransform()->GetWorldPosition();
 	for (int i = 0; i < 10;++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("Buildingball");
-		obj->SetTag("Buildingball");
-		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Buildingball>();
+		auto obj = Instantiate(pre_bullet);
+		obj->GetTransform()->SetWorldPosition(pos);
 		obj->GetComponent<Buildingball>()->SetOwner(GetGameObject());
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(buildingballmesh);
-		obj->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
-		obj->GetTransform()->SetWorldScale(0.2f, 0.2f, 0.2f);
 		obj->SetActive(false);
 		Buildingballs.push(obj);
 	}
-	pos = GetTransform()->GetWorldPosition();
 }
 
 void MMMEngine::Building::Update()
@@ -55,7 +55,6 @@ void MMMEngine::Building::Dead()
 {
 	isDead = true;
 	GetGameObject()->SetActive(false);
-	GetComponent<Battlestats>()->HP = 1;
 }
 
 void MMMEngine::Building::CheckEnemy()
@@ -102,7 +101,7 @@ void MMMEngine::Building::AutoAttack()
 		return;
 	}
 	attackTimer += Time::GetDeltaTime();
-	if (attackTimer == 0.0f)
+	if (attackTimer >= attackDelay)
 	{
 		if (Buildingballs.empty()){
 			attackTimer = 0.0f;
@@ -114,6 +113,10 @@ void MMMEngine::Building::AutoAttack()
 			return;
 		obj->SetActive(true);
 		obj->GetComponent<Buildingball>()->SetTarget(enemyTarget);
+		obj->GetComponent<Buildingball>()->Setatk(atk);
+		auto bulletpos = pos;
+		bulletpos.y = 1.f;
+		obj->GetComponent<SnowBullet>()->StartBullet(pos, bulletsize, bulletSpeed, enemyTarget);
 		attackTimer = 0.0f;
 		point--;
 	}

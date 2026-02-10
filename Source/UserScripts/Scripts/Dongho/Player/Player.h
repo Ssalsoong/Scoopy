@@ -6,11 +6,14 @@
 
 namespace MMMEngine
 {
+	class PlayerAnimController;
     class USERSCRIPTS Player : public ScriptBehaviour
     {
     private:
-        RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
+		RTTR_ENABLE(ScriptBehaviour)
+			RTTR_REGISTRATION_FRIEND
+
+			ObjPtr<PlayerAnimController> mPAController;
     public:
 		Player()
 		{
@@ -32,6 +35,7 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
 		int atk = 15;
 		float attackDelay = 0.65f;
+		float cosHalfFov = 0.5f;
 		USCRIPT_PROPERTY()
 		int maxpoint = 10;
 		int Getmaxpoint() const { return maxpoint; };
@@ -57,7 +61,13 @@ namespace MMMEngine
 		void LevelUp();
 
 		void CalDamageDelay();
-		void GetDamage(int t);
+		void GetDamage(ObjPtr<GameObject>attacker, int t);
 		void Dead();
+
+		void Level5Apply(int value);
+		bool criticalOn = false;
+
+		void Level10Apply(int value);
+		bool reflectOn = false;
     };
 }

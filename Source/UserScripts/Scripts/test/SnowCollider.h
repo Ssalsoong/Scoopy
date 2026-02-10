@@ -3,6 +3,7 @@
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include <SimpleMath.h>
+#include "PhysxManager.h"
 
 namespace MMMEngine
 {
@@ -23,6 +24,7 @@ namespace MMMEngine
         {
         SetExecutionOrder(5);
         REGISTER_BEHAVIOUR_MESSAGE(FixedUpdate);
+        REGISTER_BEHAVIOUR_MESSAGE(OnCollisionStay);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -60,8 +62,6 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         ObjPtr<GameObject> TriggerCollider;
 
-        USCRIPT_PROPERTY()
-        ObjPtr<GameObject> SnowManager;
 
         DirectX::SimpleMath::Vector3 m_prevPlayerPos;
         DirectX::SimpleMath::Quaternion m_prevPlayerRot;
@@ -99,9 +99,13 @@ namespace MMMEngine
         DirectX::SimpleMath::Vector3 m_rollAxis = DirectX::SimpleMath::Vector3::Right;
         bool m_hasRollAxis = false;
 
-        int MaxSnowCount = 10;
+        int MaxSnowCount = 9;
 
         void MaxSnow(int count);
 
+		float GetSize() const { return m_Size; }
+
+		USCRIPT_MESSAGE()
+		void OnCollisionStay(MMMEngine::CollisionInfo info);
     };
 }

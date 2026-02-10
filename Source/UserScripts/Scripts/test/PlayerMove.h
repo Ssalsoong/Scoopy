@@ -12,12 +12,15 @@ using namespace DirectX::SimpleMath;
 namespace MMMEngine
 {
     class TileMap;
-
+    class PlayerAnimController;
     class USERSCRIPTS PlayerMove : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
             RTTR_REGISTRATION_FRIEND
+
+            USCRIPT_PROPERTY()
+            ObjPtr<PlayerAnimController> mPAController;
     public:
         PlayerMove()
         {
@@ -101,5 +104,10 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
             float MinSpeed = 35.f;
 
+        float CurSpeed = 0;
+
+        float GetCurSpeed();
+        float buff = 0.0f;
+        void Setbuff(float value) { buff = value; }
     };
 }

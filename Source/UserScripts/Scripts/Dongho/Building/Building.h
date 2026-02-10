@@ -4,6 +4,7 @@
 #include "UserScriptsCommon.h"
 #include "StaticMesh.h"
 #include "SimpleMath.h"
+#include "Prefab.h"
 
 namespace MMMEngine {
 	class USERSCRIPTS Building : public ScriptBehaviour
@@ -30,13 +31,17 @@ namespace MMMEngine {
 		float attackTimer = 0.0f;
 		float attackdist = 3.0f;
 		bool isDead = false;
+		ResPtr<Prefab> pre_bullet;
+		float bulletSpeed = 6.0f;
+		float bulletsize = 0.2f;
 		std::queue<ObjPtr<GameObject>> Buildingballs;
-		ResPtr<StaticMesh> buildingballmesh;
 		ObjPtr<GameObject> enemyTarget;
 		void PointUp(int t);
 		void Dead();
 		void CheckEnemy();
 		void AutoAttack();
 		void ReturnBall(ObjPtr<GameObject> obj);
+
+		void SetAttackDist(float value) { attackdist = value; }
 	};
 }

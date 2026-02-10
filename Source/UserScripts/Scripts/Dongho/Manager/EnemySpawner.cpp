@@ -33,12 +33,16 @@ RTTR_PLUGIN_REGISTRATION
 
 MMMEngine::ObjPtr<MMMEngine::EnemySpawner> MMMEngine::EnemySpawner::instance = nullptr;
 
+void MMMEngine::EnemySpawner::Awake()
+{
+	instance = GetGameObject()->GetComponent<EnemySpawner>();
+}
+
 void MMMEngine::EnemySpawner::Start()
 {
 	pre_normalenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/NormalEnemy.Prefab");
 	pre_arrowenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ArrowEnemy.Prefab");
 	pre_thiefenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ThiefEnemy.Prefab");
-	instance = GetGameObject()->GetComponent<EnemySpawner>();
 	for (int i = 0; i < 40; ++i)
 	{
 		auto obj = Instantiate(pre_normalenemy);

@@ -4,7 +4,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "../Building/Building.h"
-#include "../Player/Player.h"
+#include "../../test/PlayerMove.h"
 #include "Transform.h"
 #include "../Battlestats.h"
 
@@ -14,7 +14,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<BuffBuilding>("BuffBuilding")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<BuffBuilding>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<BuffBuilding>"))
+		.property("buff", &BuffBuilding::buff);
 
 	registration::class_<ObjPtr<BuffBuilding>>("ObjPtr<BuffBuilding>")
 		.constructor(
@@ -44,13 +45,14 @@ void MMMEngine::BuffBuilding::GiveBuff()
 	float dz = pos.z - playerpos.z;
 	float d2 = dx * dx + dz * dz;
 	bool nowInRange = (d2 < bestD2);
+	auto playermove = player->GetComponent<PlayerMove>();
 	if (nowInRange && !prevInRange)
 	{
-		//player->GetComponent<Player>()->velocity*= buff;
+		playermove->Setbuff(buff);
 	}
 	else if(!nowInRange && prevInRange)
 	{
-		//player->GetComponent<Player>()->velocity /= buff;
+		playermove->Setbuff(0.0f);
 	}
 	prevInRange = nowInRange;
 }
@@ -60,36 +62,36 @@ void MMMEngine::BuffBuilding::LevelApply(int level)
 	if (level == 1)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
-		buff = 1.1f;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
+		buff = 10.f;
+		buffdist = 2.0f;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
-		buff = 1.2f;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
+		buff = 20.f;
+		buffdist = 2.0f;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
-		buff = 1.3f;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
+		buff = 30.f;
+		buffdist = 3.0f;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
-		buff = 1.4f;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
+		buff = 40.f;
+		buffdist = 3.0f;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 100;
-		GetGameObject()->GetComponent<Battlestats>()->HP =
-			GetGameObject()->GetComponent<Building>()->maxHP;
-		buff = 1.5f;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(100);
+		buff = 50.f;
+		buffdist = 4.0f;
 	}
 }

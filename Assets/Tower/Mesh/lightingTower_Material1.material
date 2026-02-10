@@ -1,5 +1,5 @@
 {
-    "MUID": "3733484c-c3e8-401f-8105-b316f35b8c05",
+    "MUID": "6303357d-115b-415b-9f49-1a20afca067a",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\LightningTowerlvl01_BaseColor.png",
@@ -102,6 +102,10 @@
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mRoundDotClip": {
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

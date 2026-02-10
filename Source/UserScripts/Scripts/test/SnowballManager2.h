@@ -15,25 +15,29 @@ namespace MMMEngine {
 	{
 	private:
 		RTTR_ENABLE(ScriptBehaviour)
-		RTTR_REGISTRATION_FRIEND
+			RTTR_REGISTRATION_FRIEND
+
 	public:
 		SnowballManager2()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 		USCRIPT_MESSAGE()
-			void Start();
+		void Awake();
 		USCRIPT_MESSAGE()
-			void Update();
+		void Start();
+		USCRIPT_MESSAGE()
+		void Update();
 
 
 		USCRIPT_PROPERTY()
-			ObjPtr<GameObject> m_Player;
+		ObjPtr<GameObject> m_Player;
 
 		USCRIPT_PROPERTY()
-			ResPtr<Prefab> Pre_Snow;
+		ResPtr<Prefab> Pre_Snow;
 
 		std::vector<ObjPtr<GameObject>> Snows;
 
@@ -41,5 +45,9 @@ namespace MMMEngine {
 
 		void RemoveFromList(ObjPtr<GameObject> obj);
 
+		USCRIPT_PROPERTY()
+		ObjPtr<GameObject> m_Castle;
+
+		static ObjPtr<SnowballManager2> instance;
 	};
 }

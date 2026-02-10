@@ -17,10 +17,13 @@ namespace MMMEngine {
 	public:
 		EnemySpawner()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+		USCRIPT_MESSAGE()
+		void Awake();
 		USCRIPT_MESSAGE()
 		void Start();
 		USCRIPT_MESSAGE()
@@ -33,7 +36,7 @@ namespace MMMEngine {
 		bool WaveSpawn(int wave);
 		void EnemyUpgrade();
 		float spawnTimer = 0.0f;
-		float spawnDelay = 0.5f;
+		float spawnDelay = 1.5f;
 		static constexpr int SpawnPointCount = 12;
 		std::array<Vector3, SpawnPointCount> spawnPos =
 		{

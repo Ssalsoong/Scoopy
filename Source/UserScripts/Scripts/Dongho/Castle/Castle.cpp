@@ -9,22 +9,16 @@
 #include "Castleball.h"
 #include "../Manager/GameManager.h"
 #include "../Battlestats.h"
+#include "../../test/SnowBullet.h"
+#include "../Manager/BuildingManager.h"
 
 void MMMEngine::Castle::Start()
 {
-	castleballmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Snowball/snowball_StaticMesh.staticmesh");
 	for (int i = 0; i < 10;++i)
 	{
-		auto obj = NewObject<GameObject>();
-		obj->SetName("Castleball");
-		obj->SetTag("Castleball");
-		obj->GetTransform()->SetParent(GetTransform());
-		obj->AddComponent<Castleball>();
+		auto obj = Instantiate(pre_bullet);
+		obj->GetTransform()->SetWorldPosition(0.f, 0.f, 0.f);
 		obj->GetComponent<Castleball>()->SetOwner(GetGameObject());
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(castleballmesh);
-		obj->GetTransform()->SetLocalPosition(0.f,0.f,0.f);
-		obj->GetTransform()->SetWorldScale(0.2f, 0.2f, 0.2f);
 		obj->SetActive(false);
 		Castleballs.push(obj);
 	}
@@ -34,8 +28,12 @@ void MMMEngine::Castle::Start()
 void MMMEngine::Castle::Update()
 {
 	CheckEnemy();
+	if (doubleattack)
+		CheckSecondEnemy();
 	AutoAttack();
 	AutoHeal();
+	if (canshield)
+		CalShieldDelay();
 }
 
 void MMMEngine::Castle::CheckEnemy()
@@ -66,6 +64,56 @@ void MMMEngine::Castle::CheckEnemy()
 		enemyTarget = best;
 }
 
+void MMMEngine::Castle::CheckSecondEnemy()
+{
+	if (!doubleattack || !enemyTarget)
+	{
+		enemyTarget2 = nullptr;
+		return;
+	}
+	float maxD2 = attackdist * attackdist;
+	if (enemyTarget2)
+	{
+		if (enemyTarget2 == enemyTarget)
+		{
+			enemyTarget2 = nullptr;
+			return;
+		}
+		auto epos = enemyTarget2->GetTransform()->GetWorldPosition();
+		float dx = epos.x - pos.x;
+		float dz = epos.z - pos.z;
+		float d2 = dx * dx + dz * dz;
+		if (d2 <= maxD2)
+			return;
+		enemyTarget2 = nullptr;
+	}
+	auto enemys = GameObject::FindGameObjectsWithTag("Enemy");
+	if (enemys.empty())
+	{
+		enemyTarget2 = nullptr;
+		return;
+	}
+	ObjPtr<GameObject> best = nullptr;
+	float bestD2 = maxD2;
+
+	for (auto& e : enemys)
+	{
+		if (!e) continue;
+		if (e == enemyTarget) continue;
+		auto epos = e->GetTransform()->GetWorldPosition();
+		float dx = epos.x - pos.x;
+		float dz = epos.z - pos.z;
+		float d2 = dx * dx + dz * dz;
+
+		if (d2 < bestD2)
+		{
+			bestD2 = d2;
+			best = e;
+		}
+	}
+	enemyTarget2 = best;
+}
+
 void MMMEngine::Castle::AutoAttack()
 {
 	if (point <= 0 || enemyTarget == nullptr)
@@ -78,25 +126,36 @@ void MMMEngine::Castle::AutoAttack()
 	if (d2 > bestD2)
 	{
 		enemyTarget = nullptr;
+		enemyTarget2 = nullptr;
 		attackTimer = 0.0f;
 		return;
 	}
 	attackTimer += Time::GetDeltaTime();
 	if (attackTimer >= attackDelay)
 	{
-		if (Castleballs.empty()) {
-			attackTimer = 0.0f;
-			return;
-		}
-		auto obj = Castleballs.front();
-		Castleballs.pop();
-		if (!obj)
-			return;
-		obj->SetActive(true);
-		obj->GetComponent<Castleball>()->SetTarget(enemyTarget);
+		FireAt(enemyTarget);
+		if (doubleattack && enemyTarget2)
+			FireAt(enemyTarget2);
 		attackTimer = 0.0f;
-		point --;
 	}
+}
+
+void MMMEngine::Castle::FireAt(ObjPtr<GameObject>target)
+{
+	if (Castleballs.empty()) {
+		return;
+	}
+	auto obj = Castleballs.front();
+	Castleballs.pop();
+	if (!obj)
+		return;
+	obj->SetActive(true);
+	obj->GetComponent<Castleball>()->SetTarget(target);
+	obj->GetComponent<Castleball>()->Setatk(atk);
+	auto bulletpos = pos;
+	bulletpos.y = 1.5f;
+	obj->GetComponent<SnowBullet>()->StartBullet(bulletpos, bulletsize, bulletSpeed, target);
+	point--;
 }
 
 void MMMEngine::Castle::ReturnBall(ObjPtr<GameObject> obj)
@@ -106,7 +165,7 @@ void MMMEngine::Castle::ReturnBall(ObjPtr<GameObject> obj)
 
 void MMMEngine::Castle::AutoHeal()
 {
-	auto HP = GetComponent<Battlestats>()->HP;
+	auto HP = GetComponent<Battlestats>()->GetHP();
 	if (prevHP > HP)
 	{
 		fighting = true;
@@ -131,7 +190,15 @@ void MMMEngine::Castle::AutoHeal()
 			healTimer = 0.0f;
 		}
 	}
-	GetComponent<Battlestats>()->HP = HP;
+	GetComponent<Battlestats>()->SetHP(HP);
+}
+
+void MMMEngine::Castle::CalShieldDelay()
+{
+	if (shieldTimer > 0.0f)
+	{
+		shieldTimer = std::max(shieldTimer - Time::GetDeltaTime(), 0.0f);
+	}
 }
 
 void MMMEngine::Castle::PointUp(int t)
@@ -149,7 +216,50 @@ void MMMEngine::Castle::LevelUp()
 	GameManager::instance->levelsum++;
 }
 
+void MMMEngine::Castle::GetDamage(ObjPtr<GameObject>attacker, int t)
+{
+	auto stats = GetComponent<Battlestats>();
+	if (!stats) return;
+	if (!canshield)
+		stats->ApplyDamage(t);
+	else
+	{
+		if (shieldTimer > 0.0f)
+			return;
+		stats->ApplyDamage(t);
+	}
+}
+
 void MMMEngine::Castle::Dead()
 {
 	GameManager::instance->GameOver = true;
+}
+
+void MMMEngine::Castle::Level5Apply(int value)
+{
+	if (value != 1 && value != 2)
+		return;
+	if (value == 1)
+	{
+		waveexp = true;
+	}
+	else if (value == 2)
+	{
+		attackdist = 7.5f;
+		BuildingManager::instance->BuildingsDistUP();
+	}
+}
+
+void MMMEngine::Castle::Level10Apply(int value)
+{
+	if (value != 1 && value != 2)
+		return;
+	if (value == 1)
+	{
+		canshield = true;
+	}
+	else if (value == 2)
+	{
+		doubleattack = true;
+	}
 }

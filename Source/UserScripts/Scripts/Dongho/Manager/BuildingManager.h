@@ -18,10 +18,13 @@ namespace MMMEngine
     public:
         BuildingManager()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
+
+        void Awake();
 
         void Start();
 
@@ -53,6 +56,13 @@ namespace MMMEngine
         std::vector<ObjPtr<GameObject>> buildingpoints;
         std::vector<ObjPtr<GameObject>> Buildings;
 
+		int GetBuildingCount() const {
+			return static_cast<int>(Buildings.size());
+		}
+        void BuildingsDistUP();
+        bool distup = false;
+
+        USCRIPT_PROPERTY()
         ResPtr<Prefab> pre_building;
 
         static ObjPtr<BuildingManager> instance;

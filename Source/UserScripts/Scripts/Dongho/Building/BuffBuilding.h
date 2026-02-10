@@ -18,8 +18,9 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-        float buff = 1.1f;
-        float buffdist = 3.0f;
+        float buff = 10.0f;
+        float buffdist = 2.0f;
+        
         ObjPtr<GameObject> player;
         DirectX::SimpleMath::Vector3 playerpos;
         bool prevInRange = false;

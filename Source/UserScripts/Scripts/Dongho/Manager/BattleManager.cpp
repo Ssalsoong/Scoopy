@@ -6,44 +6,78 @@
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
 #include "../Battlestats.h"
+#include "../Snow/Snowball.h"
 
 MMMEngine::ObjPtr<MMMEngine::BattleManager> MMMEngine::BattleManager::instance = nullptr;
 
-void MMMEngine::BattleManager::Start()
+void MMMEngine::BattleManager::Awake()
 {
 	instance = GetGameObject()->GetComponent<BattleManager>();
+}
+
+void MMMEngine::BattleManager::Start()
+{
 }
 
 void MMMEngine::BattleManager::Update()
 {
 }
 
-void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> target, int damage)
+void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameObject> target, int damage)
 {
-	if (!target) return;
+	if (!attacker || !target) return;
 
-	auto bs = target->GetComponent<Battlestats>();
-	if (!bs) return;
-	if (bs->HP <= 0) return;
-	if (auto playercomp = target->GetComponent<Player>())
+	auto targetbs = target->GetComponent<Battlestats>();
+	if (!targetbs || targetbs->HP <= 0) return;
+
+	switch (targetbs->type)
 	{
-		playercomp->GetDamage(damage);
+	case Battlestats::Type::Player:
+	{
+		if (auto player = target->GetComponent<Player>())
+			player->GetDamage(attacker, damage);
+		return;
 	}
-	else {
-		bs->HP -= damage;
-		if (bs->HP < 0) bs->HP = 0;
+
+	case Battlestats::Type::Enemy:
+	{
+		auto enemy = target->GetComponent<Enemy>();
+		if (!enemy) return;
+
+		// Snowball -> Enemy (특수)
+		if (attacker->GetComponent<Snowball>())
+		{
+			if (!enemy->ApplySnowDamage()) return;
+			targetbs->ApplyDamage(damage);
+			return;
+		}
+
+		// Player -> Enemy
+		if (attacker->GetComponent<Player>())
+		{
+			targetbs->ApplyDamage(damage);
+			enemy->PlayerHitMe();
+			return;
+		}
+		targetbs->ApplyDamage(damage);
+
+		return;
 	}
-}
 
-void MMMEngine::BattleManager::SnowAttack(ObjPtr<GameObject> target, int point)
-{
-	if (!target) return;
-	auto ec = target->GetComponent<Enemy>();
-	if (!ec) return;
-	auto bs = target->GetComponent<Battlestats>();
-	if (!bs) return;
-	if (bs->HP <= 0) return;
-	if (!ec->ApplySnowDamage()) return;
+	case Battlestats::Type::Castle:
+	{
+		if (auto castle = target->GetComponent<Castle>())
+			castle->GetDamage(attacker, damage);
+		return;
+	}
 
-	bs->HP = std::max(bs->HP - point, 0);
+	case Battlestats::Type::Building:
+	{
+		targetbs->ApplyDamage(damage);
+		return;
+	}
+
+	default:
+		return;
+	}
 }

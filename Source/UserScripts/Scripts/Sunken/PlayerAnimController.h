@@ -27,6 +27,7 @@ namespace MMMEngine
         ObjPtr<AnimResourceManager> mAnimManager;
 
         PSTAT mCurrStat = PSTAT::IDLE;
+        float mDefaultSpeed = 0.0f;
 
         void CreateAnimNode();
         void CreateParams();
@@ -79,5 +80,7 @@ namespace MMMEngine
         // 현재 공격상태 입력
         USCRIPT_PROPERTY()
             void SetAttack(bool _isAttacking);
+
+        void SetDefaultSpeed(float _speed) { mDefaultSpeed = _speed; }
     };
 }
