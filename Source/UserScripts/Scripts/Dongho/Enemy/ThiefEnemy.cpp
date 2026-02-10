@@ -36,7 +36,7 @@ void MMMEngine::ThiefEnemy::ApplyStats()
 	if (!GetGameObject()->GetComponent<Enemy>())
 		return;
 	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	GetComponent<Battlestats>()->HP = HP;
+	GetComponent<Battlestats>()->SetHP(HP);
 	Enemycomp->atk = atk;
 	Enemycomp->velocity = velocity;
 	Enemycomp->attackDelay = attackDelay;

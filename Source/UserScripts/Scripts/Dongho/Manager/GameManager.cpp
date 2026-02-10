@@ -79,6 +79,11 @@ void MMMEngine::GameManager::Update()
 			playercomp->Setbuildchance(true);
 			player->GetComponent<Battlestats>()->SetHP(playercomp->GetmaxHP());
 			castle->GetComponent<Battlestats>()->SetHP(castlecomp->GetmaxHP());
+			if (castlecomp->waveexp)
+			{
+				int BuildingCount = BuildingManager::instance->GetBuildingCount();
+				castlecomp->Getexp(BuildingCount * 10);
+			}
 		}
 	}
 }

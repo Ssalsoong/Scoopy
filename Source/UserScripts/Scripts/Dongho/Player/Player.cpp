@@ -129,7 +129,7 @@ void MMMEngine::Player::HandleAttack()
 			}
 		}
 
-		BattleManager::instance->Attack(e, damage);
+		BattleManager::instance->Attack(GetGameObject(), e, damage);
 		tec->PlayerHitMe();
 	}
 }
@@ -204,16 +204,15 @@ void MMMEngine::Player::CalDamageDelay()
 
 }
 
-void MMMEngine::Player::GetDamage(int t)
+void MMMEngine::Player::GetDamage(ObjPtr<GameObject>attacker, int t)
 {
 	if (damageTimer > 0.0f)
 		return;
 	auto stats = GetComponent<Battlestats>();
 	if (!stats) return;
-	if (stats->HP <= 0)
-		return;
-	stats->HP = std::max(stats->HP - t, 0);
-
+	stats->ApplyDamage(t);
+	if (reflectOn)
+		BattleManager::instance->Attack(GetGameObject(), attacker, t / 2);
 	damageTimer = damageDelay;
 }
 

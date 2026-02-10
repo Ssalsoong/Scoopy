@@ -61,7 +61,7 @@ namespace MMMEngine
 		void LevelUp();
 
 		void CalDamageDelay();
-		void GetDamage(int t);
+		void GetDamage(ObjPtr<GameObject>attacker, int t);
 		void Dead();
 
 		void Level5Apply(int value);

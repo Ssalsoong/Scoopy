@@ -24,12 +24,16 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
         void Update();
 
+        void ApplyDamage(int amount);
+
         void Dead();
 
         USCRIPT_PROPERTY()
         int HP = 1;
 
+        bool bDead = false;
+
         int GetHP() const { return HP; }
-        void SetHP(int value) { HP = value; }
+        void SetHP(int value);
     };
 }

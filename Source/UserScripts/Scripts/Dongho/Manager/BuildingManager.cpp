@@ -59,6 +59,8 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	building->GetTransform()->SetParent(obj->GetTransform());
 	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
 	Buildings.push_back(building);
+	if (distup)
+		building->GetComponent<Building>()->SetAttackDist(5.5f);
 }
 
 void MMMEngine::BuildingManager::BuildingReturn()
@@ -70,7 +72,8 @@ void MMMEngine::BuildingManager::BuildingReturn()
 			obj->GetComponent<Building>()->isDead = false;
 			obj->SetActive(true);
 		}
-		obj->GetComponent<Battlestats>()->HP = obj->GetComponent<Building>()->maxHP;
+		auto maxHP = obj->GetComponent<Building>()->maxHP;
+		obj->GetComponent<Battlestats>()->SetHP(maxHP);
 	}
 }
 
@@ -132,4 +135,13 @@ void MMMEngine::BuildingManager::LevelUpSnow(ObjPtr<GameObject> obj)
 		return;
 	obj->GetComponent<Building>()->level++;
 	obj->GetComponent<SnowBuilding>()->LevelApply(obj->GetComponent<Building>()->level);
+}
+
+void MMMEngine::BuildingManager::BuildingsDistUP()
+{
+	for (auto& e : Buildings)
+	{
+		e->GetComponent<Building>()->SetAttackDist(5.5f);
+		distup = true;
+	}
 }

@@ -4,7 +4,6 @@
 #include "Transform.h"
 #include "../../Mingi/UI/WorldSpaceUI.h"
 #include "Camera.h"
-#include "MMMMathF.h"
 
 void MMMEngine::RotateTrakingUI::Start()
 {
@@ -15,7 +14,7 @@ void MMMEngine::RotateTrakingUI::Start()
 	}
 }
 
-void MMMEngine::RotateTrakingUI::Update()
+void MMMEngine::RotateTrakingUI::LateUpdate()
 {
 	if (!WorldSpaceUI.IsValid())
 		return;
@@ -62,6 +61,8 @@ void MMMEngine::RotateTrakingUI::Update()
 		targetCanvasPos.y = (targetCanvasPos.y - offset.y) / (scale.y != 0 ? scale.y : 1.0f);
 
 		Vector2 dir = targetCanvasPos - uiCanvasPos;
+		if (WorldSpaceUI->IsBehindCamera())
+			dir = -dir;
 		if (dir.LengthSquared() > 1e-6f)
 		{
 			dir.Normalize();

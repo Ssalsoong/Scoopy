@@ -1,5 +1,4 @@
 ﻿// Auto-generated. Do not edit.
-#pragma optimize("", off)
 #include "Export.h"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -14,9 +13,11 @@
 #include "Dongho/Castle/Castle.h"
 #include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
-#include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/FXSnowFall.h"
+#include "Mingi/Manager/SoundManager.h"
+#include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
@@ -26,7 +27,6 @@
 #include "Mingi/UI/WorldSpaceUI.h"
 #include "Mingi/UI/WorldSpaceUISorter.h"
 #include "Sunken/AnimResourceManager.h"
-#include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
 #include "Sunken/EnemyAnimController.h"
 #include "Sunken/LevelUpBubble.h"
@@ -43,7 +43,6 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TileMap.h"
-#include "Dongho/Building/Building.h"
 #include "Dongho/Enemy/ArrowEnemy.h"
 #include "Dongho/Enemy/NormalEnemy.h"
 #include "Dongho/Enemy/ThiefEnemy.h"
@@ -74,10 +73,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("level", &Castle::level)
 		.property("maxHP", &Castle::maxHP)
 		.property("exp", &Castle::exp)
-		.property("atk", &Castle::atk)
-		.property("point", &Castle::point)
-		.property("pre_bullet", &Castle::pre_bullet)
-		.property("bulletSpeed", &Castle::bulletSpeed);
+		.property("point", &Castle::point);
 
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
@@ -102,14 +98,6 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<BattleManager>(); })
 		.method("Inject", &ObjPtr<BattleManager>::Inject);
 
-	registration::class_<BuildingManager>("BuildingManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("pre_building", &BuildingManager::pre_building);
-
-	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
-		.constructor([]() { return Object::NewObject<BuildingManager>(); })
-		.method("Inject", &ObjPtr<BuildingManager>::Inject);
-
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
 		.property("level", &Player::level)
@@ -129,11 +117,39 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
 
+	registration::class_<FXSnowFall>("FXSnowFall")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));
+
+	registration::class_<ObjPtr<FXSnowFall>>("ObjPtr<FXSnowFall>")
+		.constructor([]() { return Object::NewObject<FXSnowFall>(); })
+		.method("Inject", &ObjPtr<FXSnowFall>::Inject);
+
+	registration::class_<SoundManager>("SoundManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SoundManager>"));
+
+	registration::class_<ObjPtr<SoundManager>>("ObjPtr<SoundManager>")
+		.constructor([]() { return Object::NewObject<SoundManager>(); })
+		.method("Inject", &ObjPtr<SoundManager>::Inject);
+
+	registration::class_<RedLine>("RedLine")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<RedLine>"))
+		.property("CheckDistance", &RedLine::CheckDistance)
+		.property("CheckYPos", &RedLine::CheckYPos)
+		.property("CheckXPos", &RedLine::CheckXPos)
+		.property("PlayerTr", &RedLine::PlayerTr)
+		.property("ReddoLine", &RedLine::ReddoLine);
+
+	registration::class_<ObjPtr<RedLine>>("ObjPtr<RedLine>")
+		.constructor([]() { return Object::NewObject<RedLine>(); })
+		.method("Inject", &ObjPtr<RedLine>::Inject);
+
 	registration::class_<CameraMove>("CameraMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CameraMove>"))
 		.property("Offset", &CameraMove::Offset)
 		.property("Target", &CameraMove::Target)
-		.property("ChasingSpeed", &CameraMove::ChasingSpeed);
+		.property("ChasingSpeed", &CameraMove::ChasingSpeed)
+		.property("XClamp", &CameraMove::XClamp)
+		.property("ZClamp", &CameraMove::ZClamp);
 
 	registration::class_<ObjPtr<CameraMove>>("ObjPtr<CameraMove>")
 		.constructor([]() { return Object::NewObject<CameraMove>(); })
@@ -244,32 +260,19 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<AnimResourceManager>(); })
 		.method("Inject", &ObjPtr<AnimResourceManager>::Inject);
 
-	registration::class_<BuildingLevelController>("BuildingLevelController")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingLevelController>"))
-		.property("mBuilding", &BuildingLevelController::mBuilding)
-		.property("mPlayer", &BuildingLevelController::mPlayer)
-		.property("mBattleStat", &BuildingLevelController::mBattleStat)
-		.property("mGagePosOffset", &BuildingLevelController::mGagePosOffset)
-		.property("mReadyPosOffset", &BuildingLevelController::mReadyPosOffset)
-		.property("mSelectPosOffset", &BuildingLevelController::mSelectPosOffset)
-		.property("mUIScale", &BuildingLevelController::mUIScale)
-		.property("mPadding", &BuildingLevelController::mPadding)
-		.property("mSelectPadding", &BuildingLevelController::mSelectPadding)
-		.property("mDistanceFactor", &BuildingLevelController::mDistanceFactor);
-
-	registration::class_<ObjPtr<BuildingLevelController>>("ObjPtr<BuildingLevelController>")
-		.constructor([]() { return Object::NewObject<BuildingLevelController>(); })
-		.method("Inject", &ObjPtr<BuildingLevelController>::Inject);
-
 	registration::class_<CastleLevelController>("CastleLevelController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleLevelController>"))
 		.property("mGagePosOffset", &CastleLevelController::mGagePosOffset)
 		.property("mReadyPosOffset", &CastleLevelController::mReadyPosOffset)
 		.property("mSelectPosOffset", &CastleLevelController::mSelectPosOffset)
 		.property("mCountPosOffset", &CastleLevelController::mCountPosOffset)
+		.property("mCastle", &CastleLevelController::mCastle)
+		.property("mExpGage", &CastleLevelController::mExpGage)
+		.property("mHpGage", &CastleLevelController::mHpGage)
+		.property("mCanvas", &CastleLevelController::mCanvas)
+		.property("mUIPosOffset", &CastleLevelController::mUIPosOffset)
 		.property("mUIScale", &CastleLevelController::mUIScale)
 		.property("mPadding", &CastleLevelController::mPadding)
-		.property("mSelectPadding", &CastleLevelController::mSelectPadding)
 		.property("mDistanceFactor", &CastleLevelController::mDistanceFactor);
 
 	registration::class_<ObjPtr<CastleLevelController>>("ObjPtr<CastleLevelController>")
@@ -403,7 +406,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<SnowBullet>("SnowBullet")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<SnowBullet>"))
-		.property("m_speed", &SnowBullet::m_speed)
+		.property("speed", &SnowBullet::speed)
 		.property("target", &SnowBullet::target);
 
 	registration::class_<ObjPtr<SnowBullet>>("ObjPtr<SnowBullet>")
