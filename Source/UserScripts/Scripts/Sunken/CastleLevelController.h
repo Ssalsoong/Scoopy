@@ -29,6 +29,7 @@ namespace MMMEngine
         int mCurrLevel = 0;
         int mReqExp = 0;
         int mUpPending = 0;
+        bool mPrevActive = false;
 
         int mSelectIndex = 0;
         
@@ -38,7 +39,6 @@ namespace MMMEngine
 
         void UpdateGuage();
         void UpdateReadyIcon();
-        void UpdateSelectIcon();
     public:
         CastleLevelController()
         {
@@ -53,8 +53,6 @@ namespace MMMEngine
             Vector2 mGagePosOffset;
         USCRIPT_PROPERTY()
             Vector2 mReadyPosOffset;
-        USCRIPT_PROPERTY()
-            Vector2 mSelectPosOffset;
         USCRIPT_PROPERTY()
             Vector2 mCountPosOffset;
         USCRIPT_PROPERTY()
@@ -78,5 +76,7 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
             void OnTriggerExit(MMMEngine::CollisionInfo info);
+
+        void SetLevelSelection(int _index);
     };
 }

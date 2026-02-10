@@ -26,32 +26,58 @@ void MMMEngine::BattleManager::Update()
 void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameObject> target, int damage)
 {
 	if (!attacker || !target) return;
-	if (attacker->GetComponent<Snowball>())
-	{
-		auto ec = target->GetComponent<Enemy>();
-		if (!ec) return;
-		auto bs = target->GetComponent<Battlestats>();
-		if (!bs) return;
-		if (bs->HP <= 0) return;
-		if (!ec->ApplySnowDamage()) return;
 
-		bs->ApplyDamage(damage);
-	}
-	else
+	auto targetbs = target->GetComponent<Battlestats>();
+	if (!targetbs || targetbs->HP <= 0) return;
+
+	switch (targetbs->type)
 	{
-		auto bs = target->GetComponent<Battlestats>();
-		if (!bs) return;
-		if (bs->HP <= 0) return;
+	case Battlestats::Type::Player:
+	{
 		if (auto player = target->GetComponent<Player>())
-		{
 			player->GetDamage(attacker, damage);
-			return;
-		}
-		if (auto castle = target->GetComponent<Castle>())
+		return;
+	}
+
+	case Battlestats::Type::Enemy:
+	{
+		auto enemy = target->GetComponent<Enemy>();
+		if (!enemy) return;
+
+		// Snowball -> Enemy (특수)
+		if (attacker->GetComponent<Snowball>())
 		{
-			castle->GetDamage(attacker, damage);
+			if (!enemy->ApplySnowDamage()) return;
+			targetbs->ApplyDamage(damage);
 			return;
 		}
-		bs->ApplyDamage(damage);
+
+		// Player -> Enemy
+		if (attacker->GetComponent<Player>())
+		{
+			targetbs->ApplyDamage(damage);
+			enemy->PlayerHitMe();
+			return;
+		}
+		targetbs->ApplyDamage(damage);
+
+		return;
+	}
+
+	case Battlestats::Type::Castle:
+	{
+		if (auto castle = target->GetComponent<Castle>())
+			castle->GetDamage(attacker, damage);
+		return;
+	}
+
+	case Battlestats::Type::Building:
+	{
+		targetbs->ApplyDamage(damage);
+		return;
+	}
+
+	default:
+		return;
 	}
 }

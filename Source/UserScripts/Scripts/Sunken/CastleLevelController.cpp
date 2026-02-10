@@ -6,6 +6,7 @@
 #include "LevelUpManager.h"
 
 #include "InputManager.h"
+#include <StringHelper.h>
 
 void MMMEngine::CastleLevelController::UpLevel()
 {
@@ -39,7 +40,7 @@ void MMMEngine::CastleLevelController::SetUITrans(ObjPtr<RectTransform> _rectTra
 	_rectTrans->SetAnchoredPosition(((canvasPos - achPos) + (_offset / distFactor)) + paddingFactor / 2.0f );
 
 	auto defaultSize = Vector3{ 1.0f, 1.0f, 1.0f };
-	_rectTrans->SetWorldScale(defaultSize / distFactor);
+	_rectTrans->SetWorldScale((defaultSize / mUIScale) / distFactor);
 }
 
 void MMMEngine::CastleLevelController::SetLVManager(int _upIndex)
@@ -59,17 +60,17 @@ void MMMEngine::CastleLevelController::SetLVManager(int _upIndex)
 
 void MMMEngine::CastleLevelController::UpdateGuage()
 {
-	mCastleIcon->GetGameObject()->SetActive(false);
-	mScoopIcon->GetGameObject()->SetActive(false);
-
 	mHpGage->GetGameObject()->SetActive(true);
 	mExpGage->GetGameObject()->SetActive(true);
+	mCountIcon->GetGameObject()->SetActive(true);
 
 	auto expRect = mExpGage->GetRectTransform();
 	auto hpRect = mHpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
 
 	SetUITrans(expRect, mGagePosOffset ,mPadding);
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mCastle->maxHP;
 	auto currHP = mCastle->prevHP;
@@ -82,6 +83,11 @@ void MMMEngine::CastleLevelController::UpdateGuage()
 		expFactor = 1.0f;
 	else
 		expFactor = (float)mCastle->exp / (float)mReqExp;
+
+	// 현재 눈 갯수 출력
+	auto text = mCountIcon->GetTransform()->GetChild(0)->GetComponent<Text>();
+	int snowCount = mCastle->point;
+	text->SetText(std::to_wstring(snowCount));
 
 	mExpGage->SetValue(expFactor);
 }
@@ -98,47 +104,47 @@ void MMMEngine::CastleLevelController::UpdateReadyIcon()
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{0.0f, 0.0f});
 }
 
-void MMMEngine::CastleLevelController::UpdateSelectIcon()
-{
-	if (mCastleIcon)
-		mCastleIcon->GetGameObject()->SetActive(true);
-
-	if (mScoopIcon)
-		mScoopIcon->GetGameObject()->SetActive(true);
-
-	auto castleRect = mCastleIcon->GetRectTransform();
-	auto scoopRect = mScoopIcon->GetRectTransform();
-
-	SetUITrans(castleRect, mSelectPosOffset, mSelectPadding);
-	SetUITrans(scoopRect, mSelectPosOffset, -mSelectPadding);
-
-	if (mSelectIndex == 0) {
-		castleRect->SetWorldScale(1.0f, 1.0f, 1.0f);
-		scoopRect->SetWorldScale(0.75f, 0.75f, 0.75f);
-	}
-	else {
-		scoopRect->SetWorldScale(1.0f, 1.0f, 1.0f);
-		castleRect->SetWorldScale(0.75f, 0.75f, 0.75f);
-	}
-
-	// 인풋 받기
-	auto& input = InputManager::Get();
-
-	// TODO::효과음 재생 부분
-	if(input.GetKeyDown(KeyCode::LeftArrow)) {
-		if (mSelectIndex > 0)
-			--mSelectIndex;
-	}
-	else if (input.GetKeyDown(KeyCode::RightArrow)) {
-		if (mSelectIndex < 1)
-			++mSelectIndex;
-	}
-	else if (input.GetKeyDown(KeyCode::Space)) {
-		//std::cout << "CastleLVController::Selected" << std::endl;
-		SetLVManager(mSelectIndex);
-		mUpPending--;
-	}
-}
+//void MMMEngine::CastleLevelController::UpdateSelectIcon()
+//{
+//	if (mCastleIcon)
+//		mCastleIcon->GetGameObject()->SetActive(true);
+//
+//	if (mScoopIcon)
+//		mScoopIcon->GetGameObject()->SetActive(true);
+//
+//	auto castleRect = mCastleIcon->GetRectTransform();
+//	auto scoopRect = mScoopIcon->GetRectTransform();
+//
+//	SetUITrans(castleRect, mSelectPosOffset, mSelectPadding);
+//	SetUITrans(scoopRect, mSelectPosOffset, -mSelectPadding);
+//
+//	if (mSelectIndex == 0) {
+//		castleRect->SetWorldScale(1.0f, 1.0f, 1.0f);
+//		scoopRect->SetWorldScale(0.75f, 0.75f, 0.75f);
+//	}
+//	else {
+//		scoopRect->SetWorldScale(1.0f, 1.0f, 1.0f);
+//		castleRect->SetWorldScale(0.75f, 0.75f, 0.75f);
+//	}
+//
+//	// 인풋 받기
+//	auto& input = InputManager::Get();
+//
+//	// TODO::효과음 재생 부분
+//	if(input.GetKeyDown(KeyCode::LeftArrow)) {
+//		if (mSelectIndex > 0)
+//			--mSelectIndex;
+//	}
+//	else if (input.GetKeyDown(KeyCode::RightArrow)) {
+//		if (mSelectIndex < 1)
+//			++mSelectIndex;
+//	}
+//	else if (input.GetKeyDown(KeyCode::Space)) {
+//		//std::cout << "CastleLVController::Selected" << std::endl;
+//		SetLVManager(mSelectIndex);
+//		mUpPending--;
+//	}
+//}
 
 void MMMEngine::CastleLevelController::Start()
 {
@@ -156,6 +162,9 @@ void MMMEngine::CastleLevelController::Start()
 	mCastleIcon = LevelUpManager::Get()->mCastleIcon;
 	mScoopIcon = LevelUpManager::Get()->mScoopIcon;
 	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
+
+	mCountIcon->GetTransform()->SetParent(mCanvas->GetTransform());
+	mCountIcon->GetGameObject()->SetActive(false);
 
 	if (!mCastle.IsValid()) {
 		std::cout << "CastleLVController::No Castle!!!" << std::endl;
@@ -186,21 +195,39 @@ void MMMEngine::CastleLevelController::Start()
 		std::cout << "CastleLVController::No mScoopIcon!!!" << std::endl;
 		GetGameObject()->SetActive(false);
 	}
+
+
 }
 
 
 void MMMEngine::CastleLevelController::Update()
 {
 	if (isActive) {
-		if (mUpPending > 0) {
+		/*if (mUpPending > 0) {
 			UpdateSelectIcon();
 		}
 		else {
 			UpdateGuage();
-		}
+		}*/
+
+		UpdateGuage();
 	}
 	else if (mUpPending > 0) {
 		UpdateReadyIcon();
+	}
+
+	if (mPrevActive != isActive && mUpPending > 0) {
+		mPrevActive = isActive;
+		if (mPrevActive) {
+			mReadyIcon->GetGameObject()->SetActive(false);
+
+			mPrevActive = isActive;
+			std::vector<ObjPtr<Image>> icons{ mCastleIcon, mScoopIcon };
+			LevelUpManager::Get()->SetBubble(EXPTYPE::EXP_CASTLE, GetGameObject(), icons);
+		}
+		else {
+			LevelUpManager::Get()->RemoveBubble();
+		}
 	}
 
 	auto currEXP = mCastle->exp;
@@ -211,7 +238,6 @@ void MMMEngine::CastleLevelController::Update()
 void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::CollisionInfo info)
 {
 	if (info.other->GetTag() == "Player") {
-		mReadyIcon->GetGameObject()->SetActive(false);
 		isActive = true;
 	}
 }
@@ -223,6 +249,14 @@ void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::CollisionInfo in
 		mExpGage->GetGameObject()->SetActive(false);
 		mCastleIcon->GetGameObject()->SetActive(false);
 		mScoopIcon->GetGameObject()->SetActive(false);
+		mCountIcon->GetGameObject()->SetActive(false);
 		isActive = false;
 	}
+}
+
+void MMMEngine::CastleLevelController::SetLevelSelection(int _index)
+{
+	SetLVManager(_index);
+	mPrevActive = false;
+	mUpPending--;
 }

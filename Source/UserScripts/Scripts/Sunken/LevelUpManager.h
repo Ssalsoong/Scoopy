@@ -15,6 +15,7 @@ namespace MMMEngine
     class Player;
     class CastleLevelController;
     class Castle;
+    class LevelUpBubble;
     class USERSCRIPTS LevelUpManager : public ScriptBehaviour
     {
     private:
@@ -30,8 +31,17 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
             ObjPtr<Castle> mCastle;
 
+		USCRIPT_PROPERTY()
+			ObjPtr<LevelUpBubble> mLevelUpBubble;
+
+        EXPTYPE mPendingType = EXPTYPE::EXP_END;
+        ObjPtr<GameObject> mLevelPendingObj;
+
         std::vector<int> mCastleExp = { 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100 };
         std::vector<int> mBuildingExp = { 150, 300, 450, 600, 750 };
+
+        std::unordered_map<EXPTYPE, std::vector<std::wstring>> mHeadlineMap;
+        std::unordered_map<EXPTYPE, std::vector<std::wstring>> mScriptMap;
 
         static ObjPtr<LevelUpManager> instance;
 
@@ -58,6 +68,13 @@ namespace MMMEngine
 			ObjPtr<Image> mDeBuffIcon;
 		USCRIPT_PROPERTY()
 			ObjPtr<Image> mSnowIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mSpeechBubbleIcon;
+
+		USCRIPT_PROPERTY()
+			ObjPtr<Text> mHeadlineText;
+		USCRIPT_PROPERTY()
+			ObjPtr<Text> mScriptText;
 
 
 		USCRIPT_PROPERTY()
@@ -98,6 +115,13 @@ namespace MMMEngine
         int GetExpPoint(EXPTYPE _type, int _level);
 
         int GetMaxLevel(EXPTYPE _type);
+
+        void SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons);
+        void RemoveBubble();
+        void SetSelection(int _selectionIdx);
+        const std::wstring& GetHeadline(int _idx);
+        const std::wstring& GetScripts(int _idx);
+
 
         static const ObjPtr<LevelUpManager>& Get() { return instance; }
 
