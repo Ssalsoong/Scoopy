@@ -1,5 +1,5 @@
 {
-    "MUID": "2ea39f20-86d7-497c-924e-e3e95cb91228",
+    "MUID": "27d36912-2454-49ce-aae0-b5b6620fde0c",
     "properties": {
         "_albedo": {
             "file": "Assets\\DefaultMesh\\Default_White.png",
@@ -102,6 +102,10 @@
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mRoundDotClip": {
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

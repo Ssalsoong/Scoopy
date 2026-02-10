@@ -1,5 +1,5 @@
 {
-    "MUID": "fd2ddbec-a840-4f1a-82a7-211d04976aeb",
+    "MUID": "7f874bc9-505a-4773-8733-cf5ca70f9af9",
     "properties": {
         "_albedo": {
             "file": "Assets\\Tower\\FBX\\lambert1_Base_Color.png",
@@ -102,6 +102,10 @@
         "mRoughness": {
             "type": "float",
             "value": 0.0
+        },
+        "mRoundDotClip": {
+            "type": "int",
+            "value": 0
         }
     },
     "pshader": {

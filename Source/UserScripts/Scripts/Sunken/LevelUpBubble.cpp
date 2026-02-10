@@ -154,13 +154,22 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 
 void MMMEngine::LevelUpBubble::UpdateIcon()
 {
+	auto tp = mPlayer->GetTransform();
+	auto wPos = tp->GetWorldPosition();
+
+	float camDistance = Vector3::Distance(Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), wPos);
+	float distFactor = camDistance * mDistanceFactor;
+
+	float deselectIconSize = mDeselectIconSize / distFactor;
+	float selecIconSize = mSelectIconSize / distFactor;
+
 	for (auto& icon : mIcons) {
 		icon->GetRectTransform()->SetWorldScale(
-			mDeselectIconSize, mDeselectIconSize, mDeselectIconSize);
+			deselectIconSize, deselectIconSize, deselectIconSize);
 	}
 
 	if (mIcons.size() > mSelectIdx) {
 		mIcons[mSelectIdx]->GetRectTransform()->SetWorldScale(
-			mSelectIconSize, mSelectIconSize, mSelectIconSize);
+			selecIconSize, selecIconSize, selecIconSize);
 	}
 }

@@ -25,19 +25,25 @@ void MMMEngine::BuildingLevelController::Start()
 		Destroy(SelfPtr(this));
 	}
 
-	if (!mBuilding) {
-		std::cout << "BuildingLVController::Building Not Exist !!" << std::endl;
-		Destroy(SelfPtr(this));
-	}
-
 	if (!BuildingManager::instance) {
 		std::cout << "BuildingLVController::BuildingManager Not Exist !!" << std::endl;
 		Destroy(SelfPtr(this));
 	}
 
+	if (!mBuilding) {
+		mBuilding = GetTransform()->GetParent()->GetGameObject()->GetComponent<Building>();
+		if (!mBuilding) {
+			std::cout << "BuildingLVController::Building Not Exist !!" << std::endl;
+			Destroy(SelfPtr(this));
+		}
+	}
+
 	if (!mBattleStat) {
-		std::cout << "BuildingLVController::BattleStat Not Exist !!" << std::endl;
-		Destroy(SelfPtr(this));
+		mBattleStat = GetTransform()->GetParent()->GetGameObject()->GetComponent<Battlestats>();
+		if (!mBattleStat) {
+			std::cout << "BuildingLVController::BattleStat Not Exist !!" << std::endl;
+			Destroy(SelfPtr(this));
+		}
 	}
 
 	if (!mPlayer) {
@@ -97,6 +103,7 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 	mUpPending--;
 	mCurrLevel++;
 	mBuilding->exp = 0;
+	mPrevActive = false;
 
 	if (mCurrLevel >= LevelUpManager::Get()->GetMaxLevel(EXPTYPE::EXP_BUILD))
 		mReqExp = 0;
@@ -135,83 +142,79 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 
 void MMMEngine::BuildingLevelController::UpdateReadyIcon()
 {
-	SetActiveIcon();
-	mReadyIcon->GetGameObject()->SetActive(true);
-
-
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{ 0.0f, 0.0f });
 }
 
-void MMMEngine::BuildingLevelController::UpdateSelectIcon()
-{
-	SetActiveIcon();
-
-	std::vector<ObjPtr<RectTransform>> icons = { 
-		mHPIcon->GetRectTransform(), 
-		mBuffIcon->GetRectTransform(),
-		mDeBuffIcon->GetRectTransform(),
-		mSnowIcon->GetRectTransform() };
-	float w = mHPIcon->GetRectTransform()->GetWidth();
-	Vector2 p = mSelectPadding;
-	int N = (int)icons.size();
-
-	float totalWidth = N * w + (N - 1) * p.x;
-	float startX = -totalWidth / 2.0f + w / 2.0f;
-
-	for (int i = 0; i < N; ++i) {
-		Vector2 pos = mSelectPosOffset + Vector2{ startX + i * (w + p.x), i * p.y };
-		SetUITrans(icons[i], mSelectPosOffset, pos);
-	}
-
-	// 인풋 받기
-	auto& input = InputManager::Get();
-	
-	Vector3 selectSize(1.0f, 1.0f, 1.0f);
-	Vector3 deSelectSize(0.8f, 0.8f, 0.8f);
-	// 이미지 크기 조절하기
-	switch (mSelectIndex)
-	{
-	case 0:
-	{
-		icons[0]->SetWorldScale(selectSize);
-		icons[1]->SetWorldScale(deSelectSize);
-		icons[2]->SetWorldScale(deSelectSize);
-		icons[3]->SetWorldScale(deSelectSize);
-		break;
-	}
-	case 1:
-	{
-		icons[0]->SetWorldScale(deSelectSize);
-		icons[1]->SetWorldScale(selectSize);
-		icons[2]->SetWorldScale(deSelectSize);
-		icons[3]->SetWorldScale(deSelectSize);
-		break;
-	}
-	case 2:
-	{
-		icons[0]->SetWorldScale(deSelectSize);
-		icons[1]->SetWorldScale(deSelectSize);
-		icons[2]->SetWorldScale(selectSize);
-		icons[3]->SetWorldScale(deSelectSize);
-		break;
-	}
-	case 3:
-	{
-		icons[0]->SetWorldScale(deSelectSize);
-		icons[1]->SetWorldScale(deSelectSize);
-		icons[2]->SetWorldScale(deSelectSize);
-		icons[3]->SetWorldScale(selectSize);
-		break;
-	}
-	default:
-		break;
-	}
-
-	// 컨트롤 받기
-	ControlSelection();
-}
+//void MMMEngine::BuildingLevelController::UpdateSelectIcon()
+//{
+//	SetActiveIcon();
+//
+//	std::vector<ObjPtr<RectTransform>> icons = { 
+//		mHPIcon->GetRectTransform(), 
+//		mBuffIcon->GetRectTransform(),
+//		mDeBuffIcon->GetRectTransform(),
+//		mSnowIcon->GetRectTransform() };
+//	float w = mHPIcon->GetRectTransform()->GetWidth();
+//	Vector2 p = mSelectPadding;
+//	int N = (int)icons.size();
+//
+//	float totalWidth = N * w + (N - 1) * p.x;
+//	float startX = -totalWidth / 2.0f + w / 2.0f;
+//
+//	for (int i = 0; i < N; ++i) {
+//		Vector2 pos = mSelectPosOffset + Vector2{ startX + i * (w + p.x), i * p.y };
+//		SetUITrans(icons[i], mSelectPosOffset, pos);
+//	}
+//
+//	// 인풋 받기
+//	auto& input = InputManager::Get();
+//	
+//	Vector3 selectSize(1.0f, 1.0f, 1.0f);
+//	Vector3 deSelectSize(0.8f, 0.8f, 0.8f);
+//	// 이미지 크기 조절하기
+//	switch (mSelectIndex)
+//	{
+//	case 0:
+//	{
+//		icons[0]->SetWorldScale(selectSize);
+//		icons[1]->SetWorldScale(deSelectSize);
+//		icons[2]->SetWorldScale(deSelectSize);
+//		icons[3]->SetWorldScale(deSelectSize);
+//		break;
+//	}
+//	case 1:
+//	{
+//		icons[0]->SetWorldScale(deSelectSize);
+//		icons[1]->SetWorldScale(selectSize);
+//		icons[2]->SetWorldScale(deSelectSize);
+//		icons[3]->SetWorldScale(deSelectSize);
+//		break;
+//	}
+//	case 2:
+//	{
+//		icons[0]->SetWorldScale(deSelectSize);
+//		icons[1]->SetWorldScale(deSelectSize);
+//		icons[2]->SetWorldScale(selectSize);
+//		icons[3]->SetWorldScale(deSelectSize);
+//		break;
+//	}
+//	case 3:
+//	{
+//		icons[0]->SetWorldScale(deSelectSize);
+//		icons[1]->SetWorldScale(deSelectSize);
+//		icons[2]->SetWorldScale(deSelectSize);
+//		icons[3]->SetWorldScale(selectSize);
+//		break;
+//	}
+//	default:
+//		break;
+//	}
+//
+//	// 컨트롤 받기
+//	ControlSelection();
+//}
 
 void MMMEngine::BuildingLevelController::SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding)
 {
@@ -233,25 +236,25 @@ void MMMEngine::BuildingLevelController::SetUITrans(ObjPtr<RectTransform> _rectT
 	_rectTrans->SetWorldScale(defaultSize / distFactor);
 }
 
-void MMMEngine::BuildingLevelController::ControlSelection()
-{
-	// TODO::효과음 재생 부분
-	auto& input = InputManager::Get();
-
-	if (input.GetKeyDown(KeyCode::LeftArrow)) {
-		if (mSelectIndex > 0)
-			--mSelectIndex;
-	}
-	else if (input.GetKeyDown(KeyCode::RightArrow)) {
-		if (mSelectIndex < 3)
-			++mSelectIndex;
-	}
-	else if (input.GetKeyDown(KeyCode::Space)) {
-		//std::cout << "BuildingLVController::Selected" << std::endl;
-		SetLVManager(mSelectIndex);
-		isReady = false;
-	}
-}
+//void MMMEngine::BuildingLevelController::ControlSelection()
+//{
+//	// TODO::효과음 재생 부분
+//	auto& input = InputManager::Get();
+//
+//	if (input.GetKeyDown(KeyCode::LeftArrow)) {
+//		if (mSelectIndex > 0)
+//			--mSelectIndex;
+//	}
+//	else if (input.GetKeyDown(KeyCode::RightArrow)) {
+//		if (mSelectIndex < 3)
+//			++mSelectIndex;
+//	}
+//	else if (input.GetKeyDown(KeyCode::Space)) {
+//		//std::cout << "BuildingLVController::Selected" << std::endl;
+//		SetLVManager(mSelectIndex);
+//		isReady = false;
+//	}
+//}
 
 void MMMEngine::BuildingLevelController::SetLVManager(int _idx)
 {
@@ -334,6 +337,8 @@ void MMMEngine::BuildingLevelController::Update()
 {
 	if (isActive)
 		UpdateGuage();
+	else if(isReady)
+		UpdateReadyIcon();
 
 	/*if (isReady && !isActive) {
 		UpdateReadyIcon();
@@ -342,17 +347,18 @@ void MMMEngine::BuildingLevelController::Update()
 		UpdateSelectIcon();
 	}*/
 
-	static bool prevActive = false;
 	if (isReady) {
-		if (prevActive != isActive) {
-			prevActive = isActive;
+		if (mPrevActive != isActive) {
+			mPrevActive = isActive;
 			if (isActive) {
+				mReadyIcon->GetGameObject()->SetActive(false);
 				std::vector<ObjPtr<Image>> icons{ mHPIcon , mBuffIcon, mDeBuffIcon, mSnowIcon };
 				auto object = GetGameObject();
 				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
 			else {
-				LevelUpManager::Get()->RemovePBubble();
+				mReadyIcon->GetGameObject()->SetActive(true);
+				LevelUpManager::Get()->RemoveBubble();
 			}
 		}
 	}
