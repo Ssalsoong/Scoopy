@@ -38,7 +38,9 @@
 #include "Sunken/PlayerAnimController.h"
 #include "Sunken/PrefabTest.h"
 #include "test/CastleManager.h"
+#include "test/EnemyController.h"
 #include "test/EnemyMove.h"
+#include "test/EnemySensor.h"
 #include "test/MeshSize.h"
 #include "test/PlayerController.h"
 #include "test/PlayerMove.h"
@@ -46,6 +48,7 @@
 #include "test/SnowCollider.h"
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
+#include "test/Testpooling.h"
 #include "test/TileMap.h"
 #include "Dongho/Building/Building.h"
 #include "Dongho/Enemy/ArrowEnemy.h"
@@ -409,10 +412,17 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<CastleManager>(); })
 		.method("Inject", &ObjPtr<CastleManager>::Inject);
 
+	registration::class_<EnemyController>("EnemyController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyController>"))
+		.property("m_MainTarget", &EnemyController::m_MainTarget);
+
+	registration::class_<ObjPtr<EnemyController>>("ObjPtr<EnemyController>")
+		.constructor([]() { return Object::NewObject<EnemyController>(); })
+		.method("Inject", &ObjPtr<EnemyController>::Inject);
+
 	registration::class_<EnemyMove>("EnemyMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))
 		.property("movespeed", &EnemyMove::movespeed)
-		.property("Obj_target", &EnemyMove::Obj_target)
 		.property("sweepRadius", &EnemyMove::sweepRadius)
 		.property("sweepAhead", &EnemyMove::sweepAhead)
 		.property("avoidGain", &EnemyMove::avoidGain);
@@ -420,6 +430,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EnemyMove>>("ObjPtr<EnemyMove>")
 		.constructor([]() { return Object::NewObject<EnemyMove>(); })
 		.method("Inject", &ObjPtr<EnemyMove>::Inject);
+
+	registration::class_<EnemySensor>("EnemySensor")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySensor>"));
+
+	registration::class_<ObjPtr<EnemySensor>>("ObjPtr<EnemySensor>")
+		.constructor([]() { return Object::NewObject<EnemySensor>(); })
+		.method("Inject", &ObjPtr<EnemySensor>::Inject);
 
 	registration::class_<MeshSize>("MeshSize")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<MeshSize>"));
@@ -488,6 +505,16 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
 		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
 		.method("Inject", &ObjPtr<SnowballManager2>::Inject);
+
+	registration::class_<Testpooling>("Testpooling")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<Testpooling>"))
+		.property("e1", &Testpooling::e1)
+		.property("e2", &Testpooling::e2)
+		.property("e3", &Testpooling::e3);
+
+	registration::class_<ObjPtr<Testpooling>>("ObjPtr<Testpooling>")
+		.constructor([]() { return Object::NewObject<Testpooling>(); })
+		.method("Inject", &ObjPtr<Testpooling>::Inject);
 
 	registration::class_<TileMap>("TileMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))

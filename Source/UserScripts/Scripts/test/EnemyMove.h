@@ -7,6 +7,8 @@
 
 namespace MMMEngine
 {
+    class TileMap;
+
     class USERSCRIPTS EnemyMove : public ScriptBehaviour
     {
     private:
@@ -26,19 +28,18 @@ namespace MMMEngine
         void FixedUpdate();
 
         USCRIPT_PROPERTY()
-        float movespeed = 1.0f;
+        float movespeed = 10.0f;
 
         USCRIPT_PROPERTY()
         DirectX::SimpleMath::Vector3 Target{};
 
-        USCRIPT_PROPERTY()
         ObjPtr<GameObject> Obj_target;
 
         DirectX::SimpleMath::Vector3 myPos{};
 
         
         ObjPtr<GameObject> m_GO;
-
+        ObjPtr<TileMap> m_T;
 
         DirectX::SimpleMath::Vector3 ComputeChaseVelocity();
 
@@ -85,5 +86,13 @@ namespace MMMEngine
 
         void MoveTriggerSet(bool value);
         bool is_move = true;
+
+        void SetEnemySpeed(float speedvalue);
+
+        void SetDebuffSpeed(float value);
+
+        float debuffSpeed = 1.0f;
+
+        void ResetPos(DirectX::SimpleMath::Vector3 pos);
     };
 }

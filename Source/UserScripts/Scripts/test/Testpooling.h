@@ -5,29 +5,30 @@
 
 namespace MMMEngine
 {
-    class USERSCRIPTS ThiefEnemy : public ScriptBehaviour
+    class USERSCRIPTS Testpooling : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
         RTTR_REGISTRATION_FRIEND
     public:
-        ThiefEnemy()
+        Testpooling()
         {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
+        USCRIPT_MESSAGE()
         void Start();
 
+        USCRIPT_MESSAGE()
         void Update();
-		int HP = 30;
-		int atk = 3;
-		float velocity = 1.0f;
-		float attackDelay = 0.65f;
-		float battledist = 0.5f;
-		float checkdist = 2.5f;
 
-		void ApplyStats();
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> e1;
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> e2;
+        USCRIPT_PROPERTY()
+        ObjPtr<GameObject> e3;
     };
 }

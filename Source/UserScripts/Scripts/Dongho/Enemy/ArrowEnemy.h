@@ -4,6 +4,7 @@
 #include "UserScriptsCommon.h"
 #include "StaticMesh.h"
 #include "Prefab.h"
+#include "SimpleMath.h"
 
 namespace MMMEngine
 {
@@ -28,11 +29,12 @@ namespace MMMEngine
 		float attackDelay = 0.4f;
 		float battledist = 2.0f;
 		float checkdist = 4.0f;
+
         std::queue<ObjPtr<GameObject>> Arrows;
         ResPtr<Prefab> pre_arrow;
         ObjPtr<GameObject> target;
-        void ApplyStats();
         void ArrowAttack(ObjPtr<GameObject> target);
+        void LookAt(const DirectX::SimpleMath::Vector3& target);
         void ReturnArrow(ObjPtr<GameObject> obj);
     };
 }

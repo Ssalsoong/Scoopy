@@ -2,15 +2,15 @@
 #include "ScriptBehaviour.h"
 #include "Battlestats.h"
 #include "Player/Player.h"
-#include "Enemy/Enemy.h"
 #include "Castle/Castle.h"
 #include "Building/Building.h"
+#include "../test/EnemyController.h"
 
 void MMMEngine::Battlestats::Start()
 {
 	if (GetComponent<Player>())
 		type = Type::Player;
-	else if (GetComponent<Enemy>())
+	else if (GetComponent<EnemyController>())
 		type = Type::Enemy;
 	else if (GetComponent<Castle>())
 		type = Type::Castle;
@@ -42,7 +42,7 @@ void MMMEngine::Battlestats::Dead()
 		if (auto p = GetComponent<Player>()) p->Dead();
 		return;
 	case Type::Enemy:
-		if (auto e = GetComponent<Enemy>()) e->ChangeState(Enemy::EnemyState::Dead);
+		if (auto e = GetComponent<EnemyController>()) e->OnStateEnter(EnemyController::EnemyState::Dead);
 		return;
 	case Type::Castle:
 		if (auto c = GetComponent<Castle>()) c->Dead();

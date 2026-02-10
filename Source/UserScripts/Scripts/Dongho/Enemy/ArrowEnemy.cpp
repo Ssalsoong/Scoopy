@@ -43,19 +43,6 @@ void MMMEngine::ArrowEnemy::Update()
 {
 }
 
-void MMMEngine::ArrowEnemy::ApplyStats()
-{
-	if (!GetGameObject()->GetComponent<Enemy>())
-		return;
-	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	GetComponent<Battlestats>()->SetHP(HP);
-	Enemycomp->atk = atk;
-	Enemycomp->velocity = velocity;
-	Enemycomp->attackDelay = attackDelay;
-	Enemycomp->battledist = battledist;
-	Enemycomp->checkdist = checkdist;
-}
-
 void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
 {
 	if (Arrows.empty())
@@ -67,6 +54,23 @@ void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
 	obj->GetComponent<Arrow>()->SetTarget(target);
 	obj->SetActive(true);
 }
+
+void MMMEngine::ArrowEnemy::LookAt(const DirectX::SimpleMath::Vector3& target)
+{
+	auto pos = GetTransform()->GetWorldPosition();
+	auto dir = target - pos;
+	dir.y = 0.0f;
+
+	float len2 = dir.LengthSquared();
+	if (len2 < 1e-8f) return;
+
+	dir.Normalize();
+
+	float yaw = atan2f(dir.x, dir.z);
+	auto rot = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0, 0);
+	GetTransform()->SetWorldRotation(rot);
+}
+
 
 void MMMEngine::ArrowEnemy::ReturnArrow(ObjPtr<GameObject> obj)
 {

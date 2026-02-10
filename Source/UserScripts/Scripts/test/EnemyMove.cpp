@@ -3,6 +3,8 @@
 #include "EnemyMove.h"
 #include "Transform.h"
 #include "MMMTime.h"
+#include "TileMap.h"
+#include "CapsuleColliderComponent.h"
 
 
 static float WrapPi(float a)
@@ -20,7 +22,6 @@ static float LerpAngleRad(float cur, float target, float a)
 
 static float YawFromQuat_YUp(const Quaternion& q)
 {
-	// yaw(Y) = atan2(2*(w*y + x*z), 1 - 2*(y*y + x*x))
 	float siny_cosp = 2.f * (q.w * q.y + q.x * q.z);
 	float cosy_cosp = 1.f - 2.f * (q.y * q.y + q.x * q.x);
 	return atan2f(siny_cosp, cosy_cosp);
@@ -31,107 +32,124 @@ void MMMEngine::EnemyMove::Start()
 {
 	myPos = GetGameObject()->GetTransform()->GetWorldPosition();
 	m_GO = GetGameObject();
-	if (!m_GO.IsValid()) { std::cout << "GameObject not found" << std::endl; }
+
+	if (auto go = GameObject::Find("TileMap"); go.IsValid())
+	{
+		m_T = go->GetComponent<TileMap>();
+	}
 }
 
 void MMMEngine::EnemyMove::FixedUpdate()
 {
-    auto rb = GetComponent<RigidBodyComponent>();
-    auto col = GetComponent<ColliderComponent>();
-    float dt = TimeManager::Get().GetDeltaTime();
+	auto rb = GetComponent<RigidBodyComponent>();
+	if (!is_move)
+	{
+		rb->SetLockPosX(true);
+		rb->SetLockPosZ(true);
+		rb->SetLockRotY(true);
+		rb->SetLinearVelocity(DirectX::SimpleMath::Vector3{});
+		return;
+	}
+	
 
-    if(is_move)
-    {
-        //목표 속도
-        Vector3 desiredVel = ComputeChaseVelocity();
-        Vector3 chaseDir = desiredVel;
-        chaseDir.y = 0.f;
+	auto col = GetComponent<CapsuleColliderComponent>();
+	float dt = TimeManager::Get().GetFixedDeltaTime();
+	rb->SetLockPosX(false);
+	rb->SetLockPosZ(false);
+	rb->SetLockRotY(false);
 
-        if (chaseDir.LengthSquared() > 1e-6f)
-            chaseDir.Normalize();
-        else
-            chaseDir = Vector3(0, 0, 1);
+	//목표 속도
+	Vector3 desiredVel = ComputeChaseVelocity();
+	Vector3 chaseDir = desiredVel;
+	chaseDir.y = 0.f;
 
-        //SweepSphere로 "앞에 벽" 미리 감지
-        SweepHit sh{};
-        Vector3 my = m_GO->GetTransform()->GetWorldPosition();
-        my.y = 0.f;
+	if (chaseDir.LengthSquared() > 1e-6f)
+		chaseDir.Normalize();
+	else
+		chaseDir = Vector3(0, 0, 1);
 
-        // layer는 자기자신의 layer를 넣음
-        uint32_t wallLayer = col->GetLayer();
+	//SweepSphere로 "앞에 벽" 미리 감지
+	SweepHit sh{};
+	Vector3 my = m_GO->GetTransform()->GetWorldPosition();
+	my.y = 0.f;
 
-        bool hit = PhysxManager::Get().SweepSphere(
-            my, sweepRadius,
-            chaseDir, sweepAhead,
-            sh, wallLayer,
-            col,
-            rb,
-            true
-        );
+	// layer는 자기자신의 layer를 넣음
+	uint32_t wallLayer = 15;
 
-        if (hit && sh.gameObject.IsValid())
-        {
-            //hit.normal로 슬라이드 방향 계산 (후진/왕복 방지)
-            Vector3 n = sh.normal;
-            n.y = 0.f;
+	bool hit = PhysxManager::Get().SweepSphere(
+		my, sweepRadius,
+		chaseDir, sweepAhead,
+		sh, wallLayer,
+		col,
+		rb,
+		false
+	);
 
-            if (n.LengthSquared() > 1e-6f)
-            {
-                n.Normalize();
+	if (hit && sh.gameObject.IsValid())
+	{
+		//hit.normal로 슬라이드 방향 계산 (후진/왕복 방지)
+		Vector3 n = sh.normal;
+		n.y = 0.f;
 
-                // (a) chaseDir에서 벽 안으로 파고드는 성분 제거
-                Vector3 slide = chaseDir;
-                float dn = slide.Dot(n);
-                if (dn < 0.f) slide -= n * dn;
+		if (n.LengthSquared() > 1e-6f)
+		{
+			n.Normalize();
 
-                // (b) 정면 막힘이면 tangent 강제 + side 고정
-                if (slide.LengthSquared() < 1e-4f)
-                {
-                    Vector3 t = Vector3(0, 1, 0).Cross(n);
-                    t.y = 0.f;
-                    if (t.LengthSquared() > 1e-6f)
-                    {
-                        t.Normalize();
+			// (a) chaseDir에서 벽 안으로 파고드는 성분 제거
+			Vector3 slide = chaseDir;
+			float dn = slide.Dot(n);
+			if (dn < 0.f) slide -= n * dn;
 
-                        // side 고정 로직(프레임마다 뒤집히면 지터)
-                        if (!hasAvoidSide)
-                        {
-                            // 목표 방향과 더 가까운 쪽 선택
-                            float s = t.Dot(chaseDir);
-                            avoidSide = (s >= 0.f) ? +1 : -1;
-                            hasAvoidSide = true;
-                        }
-                        slide = t * (float)avoidSide;
-                    }
-                }
-                else
-                {
-                    // 슬라이드가 잘 나오면 side 고정 해제
-                    hasAvoidSide = false;
-                }
+			// (b) 정면 막힘이면 tangent 강제 + side 고정
+			if (slide.LengthSquared() < 1e-4f)
+			{
+				Vector3 t = Vector3(0, 1, 0).Cross(n);
+				t.y = 0.f;
+				if (t.LengthSquared() > 1e-6f)
+				{
+					t.Normalize();
 
-                //최종 방향 섞기 (슬라이드만 써도 되고, 섞으면 더 부드러움)
-                Vector3 dir = chaseDir + slide * avoidGain;
-                if (dir.LengthSquared() > 1e-6f) dir.Normalize();
+					// side 고정 로직(프레임마다 뒤집히면 지터)
+					if (!hasAvoidSide)
+					{
+						// 목표 방향과 더 가까운 쪽 선택
+						float s = t.Dot(chaseDir);
+						avoidSide = (s >= 0.f) ? +1 : -1;
+						hasAvoidSide = true;
+					}
+					slide = t * (float)avoidSide;
+				}
+			}
+			else
+			{
+				// 슬라이드가 잘 나오면 side 고정 해제
+				hasAvoidSide = false;
+			}
 
-                desiredVel = dir * movespeed;
-            }
-        }
-        else
-        {
-            hasAvoidSide = false;
-        }
+			//최종 방향 섞기 (슬라이드만 써도 되고, 섞으면 더 부드러움)
+			Vector3 dir = chaseDir + slide * avoidGain;
+			if (dir.LengthSquared() > 1e-6f) dir.Normalize();
 
-        float m_sharpness = 8.0f;
+			desiredVel = dir * movespeed;
+		}
+	}
+	else
+	{
+		hasAvoidSide = false;
+	}
 
-        //관성(가속 제한)
-        curVel = DirectX::SimpleMath::Vector3::Lerp(curVel, desiredVel, m_sharpness * Time::GetDeltaTime());
-        curVel.y = 0.f;
+	float m_sharpness = 8.0f;
 
-        rb->SetLinearVelocity(curVel);
+	//관성(가속 제한)
+	curVel = DirectX::SimpleMath::Vector3::Lerp(curVel, desiredVel, m_sharpness * Time::GetFixedDeltaTime());
+	curVel.y = 0.f;
 
-        FaceVelocityYaw(curVel);
-    }
+	curVel *= Time::GetFixedDeltaTime();
+	curVel *= debuffSpeed;
+
+	rb->SetLinearVelocity(curVel);
+
+	FaceVelocityYaw(curVel);
 }
 
 
@@ -212,4 +230,27 @@ void MMMEngine::EnemyMove::ChangeTarget(ObjPtr<GameObject> target)
 void MMMEngine::EnemyMove::MoveTriggerSet(bool value)
 {
     is_move = value;
+}
+
+void MMMEngine::EnemyMove::SetEnemySpeed(float speedvalue)
+{
+	movespeed = speedvalue;
+}
+
+void MMMEngine::EnemyMove::SetDebuffSpeed(float value)
+{
+	debuffSpeed = value;
+}
+
+void MMMEngine::EnemyMove::ResetPos(DirectX::SimpleMath::Vector3 pos)
+{
+	auto m_Trans = GetTransform();
+	auto m_Rigid = GetComponent<RigidBodyComponent>();
+
+	if (m_Rigid.IsValid())
+	{
+		auto defualtRot = Quaternion::Identity;
+		m_Rigid->SetKinematicTarget(pos, defualtRot);
+		m_Rigid->WakeUp();
+	}
 }

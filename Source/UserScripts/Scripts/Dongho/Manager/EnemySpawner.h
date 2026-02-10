@@ -38,6 +38,11 @@ namespace MMMEngine {
 		float spawnTimer = 0.0f;
 		float spawnDelay = 1.5f;
 		static constexpr int SpawnPointCount = 12;
+
+		int NormalHP = 45;
+		int ArrowHP = 15;
+		int ThiefHP = 30;
+
 		std::array<Vector3, SpawnPointCount> spawnPos =
 		{
 			Vector3{-14.5f,0.f,-20.5f},

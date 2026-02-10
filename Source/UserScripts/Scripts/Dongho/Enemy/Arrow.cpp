@@ -11,6 +11,7 @@
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
 #include "../Manager/BattleManager.h"
+#include "../../test/EnemyController.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -44,7 +45,6 @@ void MMMEngine::Arrow::Update()
 		return;
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();
-	atk = owner->GetComponent<Enemy>()->atk;
 	auto pos = GetTransform()->GetWorldPosition();
 
 	// 방향/거리

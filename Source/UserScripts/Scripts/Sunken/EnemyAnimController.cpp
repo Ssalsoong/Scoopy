@@ -4,32 +4,21 @@
 #include "InputManager.h"
 #include "Animator.h"
 
-#include "../Dongho/Enemy/Enemy.h"
-#include "../Dongho/Enemy/ArrowEnemy.h"
-#include "../Dongho/Enemy/NormalEnemy.h"
-#include "../Dongho/Enemy/ThiefEnemy.h"
+#include "../test/EnemyController.h"
 
 void MMMEngine::EnemyAnimController::UpdateArcher()
 {
-	if (prevStat != mEnemy->state) {
-		prevStat = mEnemy->state;
+	if (prevStat != mEnemy->curState) {
+		prevStat = mEnemy->curState;
 		switch (prevStat)
 		{
-		case Enemy::EnemyState::GoToBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::GoToCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::ChasePlayer:
+		case EnemyController::EnemyState::Move:
 			mAnimator->PlayClip("Anim_Goblin_Archer_Move", true);
 			break;
-		case Enemy::EnemyState::AttackBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackPlayer:
+		case EnemyController::EnemyState::Attack:
 			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
 			break;
-		case Enemy::EnemyState::Dead:
+		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Archer_Dead", false);
 			break;
 		default:
@@ -40,25 +29,17 @@ void MMMEngine::EnemyAnimController::UpdateArcher()
 
 void MMMEngine::EnemyAnimController::UpdateWarrior()
 {
-	if (prevStat != mEnemy->state) {
-		prevStat = mEnemy->state;
+	if (prevStat != mEnemy->curState) {
+		prevStat = mEnemy->curState;
 		switch (prevStat)
 		{
-		case Enemy::EnemyState::GoToBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::GoToCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::ChasePlayer:
+		case EnemyController::EnemyState::Move:
 			mAnimator->PlayClip("Anim_Goblin_Warrior_Move", true);
 			break;
-		case Enemy::EnemyState::AttackBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackPlayer:
+		case EnemyController::EnemyState::Attack:
 			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", true);
 			break;
-		case Enemy::EnemyState::Dead:
+		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Warrior_Dead", false);
 			break;
 		default:
@@ -69,25 +50,17 @@ void MMMEngine::EnemyAnimController::UpdateWarrior()
 
 void MMMEngine::EnemyAnimController::UpdateScout()
 {
-	if (prevStat != mEnemy->state) {
-		prevStat = mEnemy->state;
+	if (prevStat != mEnemy->curState) {
+		prevStat = mEnemy->curState;
 		switch (prevStat)
 		{
-		case Enemy::EnemyState::GoToBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::GoToCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::ChasePlayer:
+		case EnemyController::EnemyState::Move:
 			mAnimator->PlayClip("Anim_Goblin_Scout_Move", true);
 			break;
-		case Enemy::EnemyState::AttackBuilding:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackCastle:
-			[[fallthrough]];
-		case Enemy::EnemyState::AttackPlayer:
+		case EnemyController::EnemyState::Attack:
 			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", true);
 			break;
-		case Enemy::EnemyState::Dead:
+		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Scout_Dead", false);
 			break;
 		default:
@@ -117,7 +90,7 @@ void MMMEngine::EnemyAnimController::Start()
 	}
 
 	if (!mEnemy.IsValid()) {
-		mEnemy = GetComponent<Enemy>();
+		mEnemy = GetComponent<EnemyController>();
 		if (!mEnemy.IsValid()) {
 			std::cerr << GetName() << "::NO Enemy Component!!!" << std::endl;
 			Destroy(SelfPtr(this));
@@ -125,22 +98,20 @@ void MMMEngine::EnemyAnimController::Start()
 	}
 
 	// 에너미 타입 찾기
-	if (!mArcher.IsValid()) {
-		mArcher = GetComponent<ArrowEnemy>();
-		mAnimType = AT_Archer;
-		if (!mArcher.IsValid()) {
-			mWarrior = GetComponent<NormalEnemy>();
+	if (auto enemyController = GetComponent<EnemyController>();enemyController.IsValid())
+	{
+		auto type = enemyController->GetType();
+		switch (type)
+		{
+		case EnemyController::EnemyType::Warrior:
 			mAnimType = AT_Warrior;
-			if (!mWarrior.IsValid()) {
-				mScout = GetComponent<ThiefEnemy>();
-				mAnimType = AT_Scout;
-				if (!mScout.IsValid()) {
-					std::cerr << GetName() << "::NO EnemyType!!!" << std::endl;
-					Destroy(SelfPtr(this));
-				}
-			}
+		case EnemyController::EnemyType::Archer:
+			mAnimType = AT_Archer;
+		case EnemyController::EnemyType::Scout:
+			mAnimType = AT_Scout;
 		}
 	}
+
 
 	auto clips = mAnimManager->GetAnimClips(mAnimType);
 
