@@ -8,11 +8,15 @@
 #include "TileMap.h"
 #include "SnowballManager2.h"
 
+#include "../Sunken/PlayerAnimController.h"
+
 
 void MMMEngine::PlayerController::Start()
 {
 	MoveComponent = GetComponent<PlayerMove>();
 	if (!MoveComponent.IsValid()) { std::cout << "MoveComponent not found" << std::endl; }
+	
+	m_Anime = GetComponent<PlayerAnimController>();
 }
 
 void MMMEngine::PlayerController::Update()
@@ -51,6 +55,9 @@ void MMMEngine::PlayerController::InPutHoldSnow()
 	{
 		m_holdSpace = true;
 
+		// 애니메이션 재생
+		m_Anime->mScooping = true;
+
 		if (!m_Snows.empty())
 		{
 			AttachNearestSnow();
@@ -60,14 +67,21 @@ void MMMEngine::PlayerController::InPutHoldSnow()
 			if (m_TileMap.IsValid())
 				m_TileMap->GetComponent<TileMap>()->NoticePlayer(true);
 
-			if (auto mv = GetComponent<PlayerMove>(); mv.IsValid())
+			if (auto mv = GetComponent<PlayerMove>(); mv.IsValid()) {
 				mv->SetScoopMode(true, nullptr);
+
+			}
+
 		}
 	}
 
 	if (Input::GetKeyUp(KeyCode::Space))
 	{
 		m_holdSpace = false;
+
+		// 애니메이션 재생
+		m_Anime->mScooping = false;
+
 		m_pendingAttach = false;
 		m_attachDelayFrames = 0;
 		SnowScoopCount = 0;

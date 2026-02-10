@@ -32,13 +32,13 @@ void MMMEngine::LevelUpManager::Awake()
 		!CheckValid(mHeadlineText, "HeadlineText") || 
 		!CheckValid(mScriptText, "ScriptText"))
 	{
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!mReadyPrefab || !mCountPrefab || !mGagePrefab)
 	{
 		std::cerr << "LevelManager::Prefab Not Found!!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 }
 

@@ -36,7 +36,10 @@
 #include "Sunken/LevelUpBubble.h"
 #include "Sunken/LevelUpManager.h"
 #include "Sunken/PlayerAnimController.h"
+#include "Sunken/PlayerHpGage.h"
 #include "Sunken/PrefabTest.h"
+#include "Sunken/TimerGageScript.h"
+#include "Sunken/WaveUIScript.h"
 #include "test/CastleManager.h"
 #include "test/EnemyMove.h"
 #include "test/MeshSize.h"
@@ -265,6 +268,7 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<WorldSpaceUI>"))
 		.property("SelfRect", &WorldSpaceUI::SelfRect)
 		.property("TargetTransform", &WorldSpaceUI::TargetTransform)
+		.property("DontMoveUI", &WorldSpaceUI::DontMoveUI)
 		.property("DontSortByDistance", &WorldSpaceUI::DontSortByDistance)
 		.property("ClampToScreenEdge", &WorldSpaceUI::ClampToScreenEdge)
 		.property("EdgeYOffset", &WorldSpaceUI::EdgeYOffset)
@@ -340,6 +344,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<LevelUpBubble>("LevelUpBubble")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
+		.property("mAnimCurve", &LevelUpBubble::mAnimCurve)
 		.property("mUIScale", &LevelUpBubble::mUIScale)
 		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
 		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
@@ -395,12 +400,35 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
 		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
 
+	registration::class_<PlayerHpGage>("PlayerHpGage")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerHpGage>"))
+		.property("mPlayer", &PlayerHpGage::mPlayer);
+
+	registration::class_<ObjPtr<PlayerHpGage>>("ObjPtr<PlayerHpGage>")
+		.constructor([]() { return Object::NewObject<PlayerHpGage>(); })
+		.method("Inject", &ObjPtr<PlayerHpGage>::Inject);
+
 	registration::class_<PrefabTest>("PrefabTest")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
 
 	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
 		.constructor([]() { return Object::NewObject<PrefabTest>(); })
 		.method("Inject", &ObjPtr<PrefabTest>::Inject);
+
+	registration::class_<TimerGageScript>("TimerGageScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerGageScript>"));
+
+	registration::class_<ObjPtr<TimerGageScript>>("ObjPtr<TimerGageScript>")
+		.constructor([]() { return Object::NewObject<TimerGageScript>(); })
+		.method("Inject", &ObjPtr<TimerGageScript>::Inject);
+
+	registration::class_<WaveUIScript>("WaveUIScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<WaveUIScript>"))
+		.property("mWaveText", &WaveUIScript::mWaveText);
+
+	registration::class_<ObjPtr<WaveUIScript>>("ObjPtr<WaveUIScript>")
+		.constructor([]() { return Object::NewObject<WaveUIScript>(); })
+		.method("Inject", &ObjPtr<WaveUIScript>::Inject);
 
 	registration::class_<CastleManager>("CastleManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleManager>"));

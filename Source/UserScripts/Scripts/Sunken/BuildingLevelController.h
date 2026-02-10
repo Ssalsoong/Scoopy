@@ -42,6 +42,7 @@ namespace MMMEngine
 			ObjPtr<Image> mBuffIcon;
 			ObjPtr<Image> mDeBuffIcon;
 			ObjPtr<Image> mSnowIcon;
+            ObjPtr<Image> mCountIcon;
 
         int mCurrLevel = 0;
         int mReqExp = 0;

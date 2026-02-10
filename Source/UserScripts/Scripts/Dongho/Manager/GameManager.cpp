@@ -39,6 +39,10 @@ void MMMEngine::GameManager::Start()
 	castle = GetGameObject()->Find("Castle");
 	playercomp = player->GetComponent<Player>();
 	castlecomp = castle->GetComponent<Castle>();
+
+	if (!mTimerUI) {
+		std::cout << "GameManager::TimerUI Not Found!!!" << std::endl;
+	}
 }
 
 void MMMEngine::GameManager::Update()
@@ -68,7 +72,7 @@ void MMMEngine::GameManager::Update()
 	{
 		if (!EnemySpawner::instance->WaveSpawn(wave))
 		{
-			if (wave == 10) {
+			if (wave == mMaxWave) {
 				GameWin = true;
 				return;
 			}
@@ -84,6 +88,14 @@ void MMMEngine::GameManager::Update()
 				int BuildingCount = BuildingManager::instance->GetBuildingCount();
 				castlecomp->Getexp(BuildingCount * 10);
 			}
+		}
+	}
+
+	static bool prevSetting = nowSetting;
+
+	if (!nowSetting) {
+		if (mTimerUI.IsValid()) {
+			// mTimerUI->
 		}
 	}
 }

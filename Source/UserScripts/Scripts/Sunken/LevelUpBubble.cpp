@@ -7,14 +7,14 @@ void MMMEngine::LevelUpBubble::Start()
 {
 	if (!LevelUpManager::Get()) {
 		std::cout << "LeveUpBubble::No LevelUpManager!!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!mPlayer) {
 		mPlayer = GameObject::FindWithTag("Player");
 		if (!mPlayer) {
 			std::cout << "LeveUpBubble::No Player!!" << std::endl;
-			Destroy(SelfPtr(this));
+			Destroy(GetGameObject());
 		}
 	}
 
@@ -62,9 +62,9 @@ void MMMEngine::LevelUpBubble::SetScriptText(const std::wstring& _text)
 void MMMEngine::LevelUpBubble::SetActive(bool _val)
 {
 	isActive = _val;
+	mSelectIdx = 0;
 
 	if (!_val) {
-		mSelectIdx = 0;
 		isDirty = true;
 	}
 }
@@ -101,12 +101,16 @@ void MMMEngine::LevelUpBubble::SetUITrans(ObjPtr<RectTransform> _rectTrans, Vect
 	achPos *= canvasSize;
 
 	float distFactor = camDistance * mDistanceFactor;
-	auto paddingFactor = _mPadding / distFactor;
 
-	_rectTrans->SetAnchoredPosition(((canvasPos - achPos) + (_offset / distFactor)) + paddingFactor);
+	Vector2 offset = (_offset * mUIScale) / distFactor;
+	Vector2 padding = (_mPadding * mUIScale) / distFactor;
 
-	auto defaultSize = Vector3{ 1.0f, 1.0f, 1.0f };
-	_rectTrans->SetWorldScale(defaultSize / distFactor);
+	_rectTrans->SetAnchoredPosition(
+		(canvasPos - achPos) + offset + padding
+	);
+
+	Vector3 baseScale{ 1.0f, 1.0f, 1.0f };
+	_rectTrans->SetWorldScale((baseScale * mUIScale) / distFactor);
 }
 
 void MMMEngine::LevelUpBubble::SetIconTrans()
@@ -118,15 +122,15 @@ void MMMEngine::LevelUpBubble::SetIconTrans()
 
 	auto& rt = mIcons[0]->GetRectTransform();
 	float w = rt->GetWidth();
-	Vector2 p = mIconPadding;
+	Vector2 p = mIconPadding * mUIScale;
 	int N = (int)mIcons.size();
 
 	float totalWidth = N * w + (N - 1) * p.x;
 	float startX = -totalWidth / 2.0f + w / 2.0f;
 
 	for (int i = 0; i < N; ++i) {
-		Vector2 pos = mIconOffset + Vector2{ startX + i * (w + p.x), i * p.y };
-		SetUITrans(mIcons[i]->GetRectTransform(), mSpeechOffset + mIconOffset, pos);
+		Vector2 pos = (mIconOffset * mUIScale) + Vector2{ startX + i * (w + p.x), i * p.y };
+		SetUITrans(mIcons[i]->GetRectTransform(), mSpeechOffset + (mIconOffset * mUIScale), pos);
 	}
 }
 
@@ -160,8 +164,8 @@ void MMMEngine::LevelUpBubble::UpdateIcon()
 	float camDistance = Vector3::Distance(Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), wPos);
 	float distFactor = camDistance * mDistanceFactor;
 
-	float deselectIconSize = mDeselectIconSize / distFactor;
-	float selecIconSize = mSelectIconSize / distFactor;
+	float deselectIconSize = (mDeselectIconSize * mUIScale) / distFactor;
+	float selectIconSize = (mSelectIconSize * mUIScale) / distFactor;
 
 	for (auto& icon : mIcons) {
 		icon->GetRectTransform()->SetWorldScale(
@@ -170,6 +174,6 @@ void MMMEngine::LevelUpBubble::UpdateIcon()
 
 	if (mIcons.size() > mSelectIdx) {
 		mIcons[mSelectIdx]->GetRectTransform()->SetWorldScale(
-			selecIconSize, selecIconSize, selecIconSize);
+			selectIconSize, selectIconSize, selectIconSize);
 	}
 }

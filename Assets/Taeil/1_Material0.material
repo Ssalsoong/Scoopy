@@ -1,5 +1,5 @@
 {
-    "MUID": "82512b65-79b6-4e48-985e-d543d1bc7d63",
+    "MUID": "6b9c5242-26e1-4f15-ac85-1ade544e016b",
     "properties": {
         "_albedo": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
@@ -104,8 +104,8 @@
             "value": 0.0
         },
         "mRoundDotClip": {
-            "type": "int",
-            "value": 0
+            "type": "float",
+            "value": 0.0
         }
     },
     "pshader": {
