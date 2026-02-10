@@ -99,8 +99,6 @@ void MMMEngine::Player::HandleAttack()
 	for (auto& e : enemies)
 	{
 		if (!e) continue;
-		auto tec = e->GetComponent<Enemy>();
-		if (!tec) continue;
 
 		auto tr = e->GetTransform();
 		if (!tr) continue;
@@ -130,7 +128,6 @@ void MMMEngine::Player::HandleAttack()
 		}
 
 		BattleManager::instance->Attack(GetGameObject(), e, damage);
-		tec->PlayerHitMe();
 	}
 }
 

@@ -31,6 +31,10 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         int HP = 1;
 
+        enum class Type{Player, Enemy, Castle, Building, None};
+        Type type = Type::None;
+
+
         bool bDead = false;
 
         int GetHP() const { return HP; }

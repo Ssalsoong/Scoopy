@@ -28,7 +28,7 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::ArrowEnemy::Start()
 {
-	arrowmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Sphere_StaticMesh.staticmesh");
+	arrowmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Enemy/Mesh/Wood_Arrow_StaticMesh.staticmesh");
 	for (int i = 0; i < 5; ++i)
 	{
 		auto obj = NewObject<GameObject>();
@@ -39,8 +39,8 @@ void MMMEngine::ArrowEnemy::Start()
 		obj->GetComponent<Arrow>()->SetOwner(GetGameObject());
 		obj->AddComponent<MeshRenderer>();
 		obj->GetComponent<MeshRenderer>()->SetMesh(arrowmesh);
-		obj->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
-		obj->GetTransform()->SetWorldScale(0.1f,0.1f,0.1f);
+		obj->GetTransform()->SetLocalPosition(0.f, 0.2f, 0.f);
+		obj->GetTransform()->SetWorldScale(2.0f,2.0f,2.0f);
 		obj->SetActive(false);
 		Arrows.push(obj);
 	}
