@@ -36,7 +36,7 @@ namespace MMMEngine {
 		bool WaveSpawn(int wave);
 		void EnemyUpgrade();
 		float spawnTimer = 0.0f;
-		float spawnDelay = 0.5f;
+		float spawnDelay = 1.5f;
 		static constexpr int SpawnPointCount = 12;
 		std::array<Vector3, SpawnPointCount> spawnPos =
 		{

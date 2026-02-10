@@ -78,7 +78,7 @@ void MMMEngine::Arrow::Update()
 
 		owner->GetComponent<ArrowEnemy>()->ReturnArrow(GetGameObject());
 		target = nullptr;
-		GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+		GetTransform()->SetLocalPosition(0.f, 0.2f, 0.f);
 		GetGameObject()->SetActive(false);
 		return;
 	}
