@@ -8,6 +8,14 @@
 
 void MMMEngine::Battlestats::Start()
 {
+	if (GetComponent<Player>())
+		type = Type::Player;
+	else if (GetComponent<Enemy>())
+		type = Type::Enemy;
+	else if (GetComponent<Castle>())
+		type = Type::Castle;
+	else if (GetComponent<Building>())
+		type = Type::Building;
 }
 
 void MMMEngine::Battlestats::Update()
@@ -28,10 +36,23 @@ void MMMEngine::Battlestats::ApplyDamage(int amount)
 
 void MMMEngine::Battlestats::Dead()
 {
-	if (auto player = GetComponent<Player>()) { player->Dead(); return; }
-	if (auto enemy = GetComponent<Enemy>()) { enemy->ChangeState(Enemy::EnemyState::Dead); return; }
-	if (auto castle = GetComponent<Castle>()) { castle->Dead(); return; }
-	if (auto bld = GetComponent<Building>()) { bld->Dead(); return; }
+	switch (type)
+	{
+	case Type::Player:
+		if (auto p = GetComponent<Player>()) p->Dead();
+		return;
+	case Type::Enemy:
+		if (auto e = GetComponent<Enemy>()) e->ChangeState(Enemy::EnemyState::Dead);
+		return;
+	case Type::Castle:
+		if (auto c = GetComponent<Castle>()) c->Dead();
+		return;
+	case Type::Building:
+		if (auto b = GetComponent<Building>()) b->Dead();
+		return;
+	default:
+		return;
+	}
 }
 
 void MMMEngine::Battlestats::SetHP(int value)

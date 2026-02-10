@@ -23,8 +23,8 @@ namespace MMMEngine
 
         void Update();
         int atk = 4;
-        float speed = 25.0f;
-        float hitRadius = 0.25f; //나중에 제거
+        float speed = 5.0f;
+        float hitRadius = 0.01f;
         ObjPtr<GameObject> owner;
         ObjPtr<GameObject> target;
         DirectX::SimpleMath::Vector3 targetpos;
