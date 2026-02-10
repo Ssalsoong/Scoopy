@@ -82,10 +82,12 @@ void MMMEngine::TimerUI::Update()
 		m_textChanged = true;
 		// 새 텍스트 문자열 
 		// 최대 웨이브 수치를 넘은 경우는 원래대로 돌아가기
-		++m_waveCount;
 		m_waveCount %= m_maxWaveNum;
 		std::string wave = std::to_string(m_waveCount + 1) + "/" + std::to_string(m_maxWaveNum);
 		WaveText->SetTextUtf8(wave);
+
+		// 웨이브 표기 후 증가
+		++m_waveCount;
 	}
 
 	if (m_animationTime > m_maximumAnimTime)

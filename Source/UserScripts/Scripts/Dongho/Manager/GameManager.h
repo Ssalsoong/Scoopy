@@ -19,8 +19,6 @@ namespace MMMEngine {
 		RTTR_ENABLE(ScriptBehaviour)
 			RTTR_REGISTRATION_FRIEND
 
-			USCRIPT_PROPERTY()
-			ObjPtr<TimerUI> mTimerUI;
 	public:
 		GameManager()
 		{
@@ -52,7 +50,7 @@ namespace MMMEngine {
 		ObjPtr<GameObject> castle;
 		ObjPtr<Player> playercomp;
 		ObjPtr<Castle> castlecomp;
-
+		ObjPtr<TimerUI> mTimerUI;
 
 
 		static ObjPtr<GameManager> instance;

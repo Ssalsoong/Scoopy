@@ -11,13 +11,16 @@
 #include "BuildingManager.h"
 #include "../Battlestats.h"
 
+#include "../../Mingi/UI/TimerUI.h"
+
 RTTR_PLUGIN_REGISTRATION
 {
 	using namespace rttr;
 	using namespace MMMEngine;
 
 	registration::class_<GameManager>("GameManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"))
+		.property("mTimerUI", &GameManager::mTimerUI);
 
 	registration::class_<ObjPtr<GameManager>>("ObjPtr<GameManager>")
 		.constructor(
@@ -42,6 +45,10 @@ void MMMEngine::GameManager::Start()
 
 	if (!mTimerUI) {
 		std::cout << "GameManager::TimerUI Not Found!!!" << std::endl;
+	}
+	else {
+		mTimerUI->SetMaxWaveNum(mMaxWave);
+		mTimerUI->SetWaveCount(0);
 	}
 }
 
@@ -93,9 +100,12 @@ void MMMEngine::GameManager::Update()
 
 	static bool prevSetting = nowSetting;
 
-	if (!nowSetting) {
-		if (mTimerUI.IsValid()) {
-			// mTimerUI->
+	if (prevSetting != nowSetting) {
+		prevSetting = nowSetting;
+		if (!prevSetting) {
+			if (mTimerUI.IsValid()) {
+				mTimerUI->ShowNextWave();
+			}
 		}
 	}
 }
