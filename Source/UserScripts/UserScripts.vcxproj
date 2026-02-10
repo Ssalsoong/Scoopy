@@ -137,6 +137,7 @@
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\TimerUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\TitleOpeningSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\WorldSpaceUI.cpp" />
@@ -189,6 +190,7 @@
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />
+    <ClInclude Include="Scripts\Mingi\UI\TimerUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h" />
     <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\WorldSpaceUI.h" />
