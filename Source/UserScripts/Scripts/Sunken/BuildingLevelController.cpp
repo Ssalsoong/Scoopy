@@ -142,6 +142,7 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 
 void MMMEngine::BuildingLevelController::UpdateReadyIcon()
 {
+	mReadyIcon->GetGameObject()->SetActive(true);
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{ 0.0f, 0.0f });
@@ -357,7 +358,6 @@ void MMMEngine::BuildingLevelController::Update()
 				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
 			else {
-				mReadyIcon->GetGameObject()->SetActive(true);
 				LevelUpManager::Get()->RemoveBubble();
 			}
 		}
