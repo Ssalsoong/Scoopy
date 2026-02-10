@@ -94,9 +94,9 @@ namespace MMMEngine
         void Update();
 
         USCRIPT_MESSAGE()
-            void OnTriggerEnter(MMMEngine::CollisionInfo info);
+            void OnTriggerEnter(MMMEngine::TriggerInfo info);
 
         USCRIPT_MESSAGE()
-            void OnTriggerExit(MMMEngine::CollisionInfo info);
+            void OnTriggerExit(MMMEngine::TriggerInfo info);
     };
 }

@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR ï¿½âº»ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) -->
+  <!-- MMMENGINE_DIR ±âº»°ª (¾øÀ¸¸é ÇÁ·ÎÁ§Æ® ±âÁØ »ó´ë°æ·Î) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>
@@ -130,6 +130,9 @@
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp" />
     <ClCompile Include="Scripts\ExampleBehaviour.cpp" />
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp" />
+    <ClCompile Include="Scripts\Mingi\FXSnowFall.cpp" />
+    <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
+    <ClCompile Include="Scripts\Mingi\RedLine.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
@@ -184,6 +187,9 @@
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h" />
     <ClInclude Include="Scripts\ExampleBehaviour.h" />
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h" />
+    <ClInclude Include="Scripts\Mingi\FXSnowFall.h" />
+    <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
+    <ClInclude Include="Scripts\Mingi\RedLine.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />

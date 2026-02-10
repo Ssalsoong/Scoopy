@@ -235,14 +235,14 @@ void MMMEngine::CastleLevelController::Update()
 		UpLevel();
 }
 
-void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		isActive = true;
 	}
 }
 
-void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::CastleLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(false);
