@@ -145,6 +145,7 @@
     <ClCompile Include="Scripts\Sunken\AnimResourceManager.cpp" />
     <ClCompile Include="Scripts\Sunken\BuildingLevelController.cpp" />
     <ClCompile Include="Scripts\Sunken\CastleLevelController.cpp" />
+    <ClCompile Include="Scripts\Sunken\ControlManager.cpp" />
     <ClCompile Include="Scripts\Sunken\EnemyAnimController.cpp" />
     <ClCompile Include="Scripts\Sunken\LevelUpBubble.cpp" />
     <ClCompile Include="Scripts\Sunken\LevelUpManager.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="Scripts\Sunken\AnimResourceManager.h" />
     <ClInclude Include="Scripts\Sunken\BuildingLevelController.h" />
     <ClInclude Include="Scripts\Sunken\CastleLevelController.h" />
+    <ClInclude Include="Scripts\Sunken\ControlManager.h" />
     <ClInclude Include="Scripts\Sunken\EnemyAnimController.h" />
     <ClInclude Include="Scripts\Sunken\LevelUpBubble.h" />
     <ClInclude Include="Scripts\Sunken\LevelUpManager.h" />
