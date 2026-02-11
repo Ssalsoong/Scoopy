@@ -16,8 +16,6 @@ void MMMEngine::SwitchSceneFX::Awake()
 	{
 		Instance = SelfPtr(this);
 		DontDestroyOnLoad(SelfPtr(this));
-
-		
 	}
 	else
 	{
