@@ -30,7 +30,7 @@ namespace MMMEngine {
 		void Start();
 		USCRIPT_MESSAGE()
 		void Update();
-		float settingfullTime = 30.0f;
+		float settingfullTime = 10.0f;
 		float enemySpawnDelay = 0.5f;
 		float enemySpawnTimer = 0.0f;
 		float settingTimer = 0.0f;

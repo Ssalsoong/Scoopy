@@ -5,7 +5,6 @@
 #include "StaticMesh.h"
 #include "MeshRenderer.h"
 #include "Transform.h"
-#include "../Enemy/Enemy.h"
 #include "Castleball.h"
 #include "../Manager/GameManager.h"
 #include "../Battlestats.h"

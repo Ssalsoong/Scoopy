@@ -10,11 +10,18 @@
 #include "MMMTime.h"
 #include "../Dongho/Battlestats.h"
 #include "../Dongho/Manager/EnemySpawner.h"
+#include "SphereColliderComponent.h"
 
 void MMMEngine::EnemyController::Start()
 {
 	m_Sensor = GetComponent<EnemySensor>();
 	m_Move = GetComponent<EnemyMove>();
+
+	//if (auto TriggerCol = GetComponent<SphereColliderComponent>(); TriggerCol.IsValid())
+	//{
+	//	TriggerCol->SetTriggerQueryEnabled(false);
+	//}
+	
 
 	if (auto go = GameObject::Find("Castle"); go.IsValid())
 	{
@@ -28,6 +35,9 @@ void MMMEngine::EnemyController::Update()
 	UpdateDistance();
 	ChangeState();
 	CheckState();
+
+	AttackTarget();
+	CalSnowDamageDelay();
 }
 
 
@@ -36,8 +46,8 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 {
 	GetTransform()->SetWorldPosition(pos);
 	m_Sensor = GetComponent<EnemySensor>();
-	m_Move->ResetPos(pos);
 	m_Move = GetComponent<EnemyMove>();
+	m_Move->ResetPos(pos);
 	m_Move->ChangeTarget(m_MainTarget);
 
 	curState = EnemyState::Move;
@@ -57,7 +67,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Warrior:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 4.f;
+		E_state.AD = 4;
 		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
@@ -66,7 +76,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Archer:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 2.f;
+		E_state.AD = 2;
 		E_state.AS = 0.4f;
 		E_state.Range = 2.0f;
 		break;
@@ -75,7 +85,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Scout:
 	{
 		m_Move->SetEnemySpeed(270.f);
-		E_state.AD = 3.f;
+		E_state.AD = 3;
 		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
@@ -97,17 +107,28 @@ void MMMEngine::EnemyController::UpdateDistance()
 
 void MMMEngine::EnemyController::ChangeState()
 {
+	if (curState == EnemyState::Attack && attackTimer > 0.0f)
+		return;
     prevState = curState;
 
     float extra = 0.0f;
     const auto& tag = m_CurTarget->GetTag();
 
-    if (tag == "Castle") extra = 0.8f;
-    else if (tag == "Tower") extra = 0.4f;
-    else if (tag == "Player") extra = 0.25f;
+    if (tag == "Castle"){ extra = 0.8f;}
+    else if (tag == "Building") extra = 1.0f;
+    else if (tag == "Player") extra = 0.5f;
     else if (tag == "Snow") extra = 0.6f;
 
     curState = (distance <= (E_state.Range + extra)) ? EnemyState::Attack : EnemyState::Move;
+
+	/*if (curState == EnemyState::Attack)
+	{
+		std::cout << "now Attack" << std::endl;
+	}
+	if (curState == EnemyState::Move)
+	{
+		std::cout << "now Move" << std::endl;
+	}*/
 }
 
 void MMMEngine::EnemyController::CheckState()
@@ -133,7 +154,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	case EnemyState::Attack:
 	{
 		m_Move->MoveTriggerSet(false);
-		//Todo :: 공격관련
+		attacktarget = m_CurTarget;
 		break;
 	}
 	case EnemyState::Dead:
@@ -177,19 +198,43 @@ void MMMEngine::EnemyController::OnHurtFlag(bool value)
 void MMMEngine::EnemyController::AttackTarget()
 {
 	if (curState != EnemyState::Attack)
+	{
+		attackTimer = 0.0f;
 		return;
+	}
 	attackTimer += Time::GetDeltaTime();
 	if (attackTimer >= E_state.AS)
 	{
-		if (m_CurTarget->GetName() == "Snow")
+		if (attacktarget == m_CurTarget)
 		{
-			m_CurTarget->GetComponent<Snowball>()->lifecount--;
-			return;
+			if (attacktarget->GetName() == "Snow")
+			{
+				if (auto snowball = attacktarget->GetComponent<Snowball>(); snowball.IsValid())
+				{
+					snowball->lifecount--;
+					if (snowball->lifecount <= 0)
+					{
+						m_CurTarget = m_MainTarget;
+						OnStateEnter(EnemyState::Move);
+					}
+				}
+				attackTimer = 0.0f;
+				return;
+			}
+			if (auto arrowenemy = GetComponent<ArrowEnemy>(); arrowenemy.IsValid())
+				arrowenemy->ArrowAttack(attacktarget);
+			else
+				BattleManager::instance->Attack(GetGameObject(), attacktarget, E_state.AD);
 		}
-		if (auto arrowenemy = GetComponent<ArrowEnemy>())
-			arrowenemy->ArrowAttack(m_CurTarget);
-		BattleManager::instance->Attack(GetGameObject(), m_CurTarget, E_state.AD);
-		attackTimer == 0.0f;
+		if (auto targetstats = m_CurTarget->GetComponent<Battlestats>(); targetstats.IsValid())
+		{
+			if (targetstats->HP <= 0)
+			{
+				m_CurTarget = m_MainTarget;
+				OnStateEnter(EnemyState::Move);
+			}
+		}
+		attackTimer = 0.0f;
 	}
 }
 

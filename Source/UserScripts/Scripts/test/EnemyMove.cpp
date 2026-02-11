@@ -6,6 +6,7 @@
 #include "TileMap.h"
 #include "CapsuleColliderComponent.h"
 
+using namespace DirectX::SimpleMath;
 
 static float WrapPi(float a)
 {
@@ -249,8 +250,9 @@ void MMMEngine::EnemyMove::ResetPos(DirectX::SimpleMath::Vector3 pos)
 
 	if (m_Rigid.IsValid())
 	{
+		m_Trans->SetWorldPosition(pos);
 		auto defualtRot = Quaternion::Identity;
-		m_Rigid->SetKinematicTarget(pos, defualtRot);
+		m_Rigid->SetLinearVelocity(Vector3{ 0.f,0.f,0.f });
 		m_Rigid->WakeUp();
 	}
 }

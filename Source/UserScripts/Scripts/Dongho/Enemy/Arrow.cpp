@@ -4,7 +4,6 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "../Enemy/ArrowEnemy.h"
-#include "../Enemy/Enemy.h"
 #include "Transform.h"
 #include "MMMTime.h"
 #include "../Player/Player.h"

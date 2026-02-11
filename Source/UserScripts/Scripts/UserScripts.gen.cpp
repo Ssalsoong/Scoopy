@@ -12,7 +12,6 @@
 #include "Dongho/Battlestats.h"
 #include "Dongho/Building/BuildingPoint.h"
 #include "Dongho/Castle/Castle.h"
-#include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
@@ -51,9 +50,6 @@
 #include "test/Testpooling.h"
 #include "test/TileMap.h"
 #include "Dongho/Building/Building.h"
-#include "Dongho/Enemy/ArrowEnemy.h"
-#include "Dongho/Enemy/NormalEnemy.h"
-#include "Dongho/Enemy/ThiefEnemy.h"
 
 using namespace rttr;
 using namespace MMMEngine;
@@ -89,18 +85,6 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<Castle>>("ObjPtr<Castle>")
 		.constructor([]() { return Object::NewObject<Castle>(); })
 		.method("Inject", &ObjPtr<Castle>::Inject);
-
-	registration::class_<Enemy>("Enemy")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Enemy>"))
-		.property("atk", &Enemy::atk)
-		.property("velocity", &Enemy::velocity)
-		.property("attackDelay", &Enemy::attackDelay)
-		.property("battledist", &Enemy::battledist)
-		.property("checkdist", &Enemy::checkdist);
-
-	registration::class_<ObjPtr<Enemy>>("ObjPtr<Enemy>")
-		.constructor([]() { return Object::NewObject<Enemy>(); })
-		.method("Inject", &ObjPtr<Enemy>::Inject);
 
 	registration::class_<BattleManager>("BattleManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BattleManager>"));
@@ -333,7 +317,6 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
 		.property("mAnimator", &EnemyAnimController::mAnimator)
-		.property("mEnemy", &EnemyAnimController::mEnemy)
 		.property("mAnimSpeed", &EnemyAnimController::mAnimSpeed)
 		.property("AnimSize", &EnemyAnimController::AnimSize);
 

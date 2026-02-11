@@ -9,14 +9,15 @@ void MMMEngine::EnemySensor::Start()
 	ColObj = GetComponent<SphereColliderComponent>();
 }
 
-void MMMEngine::EnemySensor::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::EnemySensor::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	TargetList.insert(info.other);
 
 	std::cout << "Trigger enter: other=" << info.other->GetTag() << std::endl;
+	std::cout << "Trigger enter: otherid = " << info.other->GetInstanceID() << std::endl;
 }
 
-void MMMEngine::EnemySensor::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::EnemySensor::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	TargetList.erase(info.other);
 }
@@ -60,7 +61,10 @@ int MMMEngine::EnemySensor::GetPriority(const ObjPtr<GameObject> obj)
 		return 4;
 	}
 	if (obj->GetTag() == "Snow") return 2;
-	if (obj->GetTag() == "Castle") return 3;
+	if (obj->GetTag() == "Castle") {
+		int a = 0;
+		return 3;
+	};
 
 	return INT_MAX;
 }

@@ -3,7 +3,6 @@
 #include "MMMTime.h"
 #include "MMMInput.h"
 #include "Transform.h"
-#include "../Enemy/Enemy.h"
 #include "../Manager/GameManager.h"
 #include "../Snow/Snowball.h"
 #include "../Building/BuildingPoint.h"
@@ -57,8 +56,6 @@ void MMMEngine::Player::HandleAttack()
 	{
 		if (!e) continue;
 
-		auto tec = e->GetComponent<Enemy>();
-		if (!tec) continue;
 
 		auto tr = e->GetTransform();
 		if (!tr) continue;

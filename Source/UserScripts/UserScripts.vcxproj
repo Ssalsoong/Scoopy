@@ -119,7 +119,6 @@
     <ClCompile Include="Scripts\Dongho\Castle\Castleball.cpp" />
     <ClCompile Include="Scripts\Dongho\Enemy\Arrow.cpp" />
     <ClCompile Include="Scripts\Dongho\Enemy\ArrowEnemy.cpp" />
-    <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\BattleManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp" />
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp" />
@@ -174,7 +173,6 @@
     <ClInclude Include="Scripts\Dongho\Castle\Castleball.h" />
     <ClInclude Include="Scripts\Dongho\Enemy\Arrow.h" />
     <ClInclude Include="Scripts\Dongho\Enemy\ArrowEnemy.h" />
-    <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h" />
     <ClInclude Include="Scripts\Dongho\Manager\BattleManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h" />
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h" />

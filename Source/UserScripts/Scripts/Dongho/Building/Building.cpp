@@ -2,7 +2,6 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Buildingball.h"
-#include "../Enemy/Enemy.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "StaticMesh.h"

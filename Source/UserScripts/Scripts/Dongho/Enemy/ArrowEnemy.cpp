@@ -3,7 +3,6 @@
 #include "ArrowEnemy.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
-#include "Enemy.h"
 #include "MeshRenderer.h"
 #include "StaticMesh.h"
 #include "Transform.h"

@@ -3,7 +3,6 @@
 #include "Buildingball.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
-#include "../Enemy/Enemy.h"
 #include "Building.h"
 #include "Transform.h"
 #include "MMMTime.h"

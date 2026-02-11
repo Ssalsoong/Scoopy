@@ -97,7 +97,7 @@ void MMMEngine::EnemyAnimController::Start()
 		}
 	}
 
-	// 에너미 타입 찾기
+	 //에너미 타입 찾기
 	if (auto enemyController = GetComponent<EnemyController>();enemyController.IsValid())
 	{
 		auto type = enemyController->GetType();
@@ -105,10 +105,15 @@ void MMMEngine::EnemyAnimController::Start()
 		{
 		case EnemyController::EnemyType::Warrior:
 			mAnimType = AT_Warrior;
+			break;
 		case EnemyController::EnemyType::Archer:
 			mAnimType = AT_Archer;
+			break;
 		case EnemyController::EnemyType::Scout:
 			mAnimType = AT_Scout;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -154,5 +159,23 @@ void MMMEngine::EnemyAnimController::Update()
 	default:
 		Destroy(SelfPtr(this));
 		break;
+	}
+}
+
+void MMMEngine::EnemyAnimController::SetAniType(AnimType type)
+{
+	mAnimType = type;
+	auto clips = mAnimManager->GetAnimClips(mAnimType);
+
+	// 클립 불러오기 실패시 리턴
+	if (clips == nullptr) {
+		std::cerr << GetName() << "::NO AnimClips!!!" << std::endl;
+		return;
+	}
+
+	AnimSize = (int)clips->size();
+
+	for (auto& clip : *clips) {
+		mAnimator->AddAnimClip(clip);
 	}
 }

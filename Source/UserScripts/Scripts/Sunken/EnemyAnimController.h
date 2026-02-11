@@ -49,6 +49,6 @@ namespace MMMEngine
 		USCRIPT_MESSAGE()
 			void Update();
 
-		void SetAniType(AnimType type) { mAnimType = type; }
+		void SetAniType(AnimType type);
 	};
 }

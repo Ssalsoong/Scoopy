@@ -18,7 +18,7 @@ namespace MMMEngine
 
         struct Stat
         {
-            float AD;
+            int AD;
             float AS;
             float Range;
         };
@@ -44,7 +44,6 @@ namespace MMMEngine
         EnemyState curState = EnemyState::Move;
         EnemyState prevState = EnemyState::Dead;
 
-        USCRIPT_PROPERTY()
         EnemyType m_EnemyType = EnemyType::Warrior;
 
         ObjPtr<EnemySensor> m_Sensor;
@@ -94,11 +93,14 @@ namespace MMMEngine
 
 
         void AttackTarget();
+        ObjPtr<GameObject> attacktarget;
 
         float attackTimer = 0.0f;
 		float snowDamageTimer = 0.0f;
 		float snowDamageDelay = 0.5f;
 		void CalSnowDamageDelay();
 		bool ApplySnowDamage();
+
+        void SetType(EnemyType type) { m_EnemyType = type; }
     };
 }
