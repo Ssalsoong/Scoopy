@@ -72,9 +72,18 @@ void MMMEngine::FadeInOutFX::FadeIn()
 	m_fadeState = 1;
 	if (m_internalTime == 0.0f)
 		m_internalTime = FadeDuration;
+
+	m_lastFadeState = 1;
+}
+
+bool MMMEngine::FadeInOutFX::LastFadeState()
+{
+	return m_lastFadeState;
 }
 
 void MMMEngine::FadeInOutFX::FadeOut()
 {
 	m_fadeState = 2;
+
+	m_lastFadeState = 2;
 }

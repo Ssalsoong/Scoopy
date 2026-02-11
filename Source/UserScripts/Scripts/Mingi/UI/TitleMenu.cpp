@@ -189,7 +189,7 @@ void MMMEngine::TitleMenu::Update()
 	{
 		if (m_popupstate == 0 &&
 			(Input::GetKeyDown(KeyCode::Enter) ||
-				Input::GetKeyDown(KeyCode::Escape)))
+				Input::GetKeyDown(KeyCode::Space) || Input::GetKeyDown(KeyCode::Escape)))
 		{
 			m_internalTimer[2] = 0.0f;
 			m_popupstate = 2;

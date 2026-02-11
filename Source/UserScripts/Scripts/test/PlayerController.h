@@ -48,7 +48,11 @@ namespace MMMEngine
         
         void AttachNearestSnow();
 
+        void CheckParticleEnable();
+
         void DetachSnow();
+
+        bool IsParticleEnable();
     private:
 
         DirectX::SimpleMath::Vector3 m_InputDir;
@@ -66,6 +70,8 @@ namespace MMMEngine
         int MaxPlayerScoop = 9;
 
         bool m_holdSpace = false;
+
+        bool m_particleEnable = false;
 
         ObjPtr<ControlManager> mInput;
         ObjPtr<PlayerAnimController> m_Anime;
