@@ -12,6 +12,8 @@
 #include "../Battlestats.h"
 
 #include "../../Mingi/UI/TimerUI.h"
+#include "../../Sunken/ControlManager.h"
+#include "../../Mingi/UI/PauseUI.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -20,7 +22,11 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<GameManager>("GameManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"))
-		.property("mTimerUI", &GameManager::mTimerUI);
+		.property("mTimerUI", &GameManager::mTimerUI)
+		.property("mPauseUI", &GameManager::mPauseUI)
+		.property("enemySpawnDelay", &GameManager::enemySpawnDelay)
+		.property("settingfullTime", &GameManager::settingfullTime);
+		
 
 	registration::class_<ObjPtr<GameManager>>("ObjPtr<GameManager>")
 		.constructor(
@@ -49,6 +55,13 @@ void MMMEngine::GameManager::Start()
 	else {
 		mTimerUI->SetMaxWaveNum(mMaxWave);
 		mTimerUI->SetWaveCount(0);
+	}
+
+	if (!mPauseUI) {
+		std::cout << "GameManager::PauseUI Not Found!!!" << std::endl;
+	}
+	else {
+		mPauseUI->SetEnabled(false);
 	}
 }
 
@@ -109,5 +122,12 @@ void MMMEngine::GameManager::Update()
 				mTimerUI->SwitchWave();
 		}
 		
+	}
+
+	// Pause Key Å½Áö
+	if (mPauseUI.IsValid()) {
+		if (ControlManager::Get()->GetKeyDown(KeyCode::Escape, 1)) {
+			mPauseUI->SetEnabled(true);
+		}
 	}
 }

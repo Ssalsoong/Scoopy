@@ -71,7 +71,7 @@ namespace MMMEngine
         ObjPtr<PlayerAnimController> m_Anime;
 
         USCRIPT_PROPERTY()
-            int mControlLayout = 1;
+            int mInputLayer = 1;
 
     public:
         USCRIPT_PROPERTY()

@@ -22,9 +22,26 @@ namespace MMMEngine
         std::vector<ObjPtr<Image>> mIcons;
 
         USCRIPT_PROPERTY()
-            AnimationCurve mAnimCurve;
+            AnimationCurve mBubbleSizeCurve;
+		USCRIPT_PROPERTY()
+			AnimationCurve mContentAlphaCurve;
+
+		USCRIPT_PROPERTY()
+			AnimationCurve mCloseSizeCurve;
+		USCRIPT_PROPERTY()
+			float mOpenAnimTime = 1.0f;
+		USCRIPT_PROPERTY()
+			float mCloseAnimTime = 1.0f;
+
+
+        float mCurveScale = 0.0f;
+        float mCurveAlpha = 0.0f;
+        float mCloseScale = 0.0f;
+
+        float mFinalScale = 0.0f;
 
         float mElipsedTime = 0.0f;
+        bool isAnimating = false;
 
         int mSelectIdx = 0;
 
@@ -57,7 +74,10 @@ namespace MMMEngine
         void SetActive(bool _val);
 
         void SetIcons(std::vector<ObjPtr<Image>>& _vec);
+        bool IsAnimating() { return isAnimating; }
     public:
+		USCRIPT_PROPERTY()
+			int mInputLayer = 10;
 		USCRIPT_PROPERTY()
 			float mUIScale = 1.0f;
 		USCRIPT_PROPERTY()

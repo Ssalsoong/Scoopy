@@ -2,6 +2,7 @@
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
+#include "CoreComponents.h"
 
 namespace MMMEngine
 {
@@ -15,6 +16,14 @@ namespace MMMEngine
 
             ObjPtr<Player> mPlayer;
             ObjPtr<PlayerController> mPlayerController;
+
+            USCRIPT_PROPERTY()
+                ObjPtr<Gage> mGage;
+
+			USCRIPT_PROPERTY()
+				ObjPtr<Image> mActiveImg;
+			USCRIPT_PROPERTY()
+				ObjPtr<Image> mDeactiveImg;
     public:
         ScoopGageScript()
         {

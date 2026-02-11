@@ -26,6 +26,20 @@ void MMMEngine::ScoopGageScript::Start()
 		Destroy(GetGameObject());
 	}
 
+	if (!mGage.IsValid()) {
+		std::cout << "ScoopGageScript::Gage Not Found !!!" << std::endl;
+		Destroy(GetGameObject());
+	}
+
+	if (!mActiveImg.IsValid()) {
+		std::cout << "ScoopGageScript::ActiveIMG Not Found !!!" << std::endl;
+		Destroy(GetGameObject());
+	}
+
+	if (!mDeactiveImg.IsValid()) {
+		std::cout << "ScoopGageScript::DeactiveIMG Not Found !!!" << std::endl;
+		Destroy(GetGameObject());
+	}
 	
 }
 
@@ -37,8 +51,22 @@ void MMMEngine::ScoopGageScript::Update()
 				int snowSize = snow->point;
 				int maxSize = mPlayer->maxpoint;
 
-				//TODO 게이지 만들기 
+				if (mGage && maxSize > 0) {
+					mGage->SetValue(static_cast<float>(snowSize) / static_cast<float>(maxSize));
+				}
 			}
+		}
+		else if (mGage) {
+			mGage->SetValue(0.0f);
+		}
+
+		if (mPlayerController->IsHoldingSpace()) {
+			if (mActiveImg)   mActiveImg->SetAlpha(1.0f);
+			if (mDeactiveImg) mDeactiveImg->SetAlpha(0.0f);
+		}
+		else {
+			if (mActiveImg)   mActiveImg->SetAlpha(0.0f);
+			if (mDeactiveImg) mDeactiveImg->SetAlpha(1.0f);
 		}
 	}
 }

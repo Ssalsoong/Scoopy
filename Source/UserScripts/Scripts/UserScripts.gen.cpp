@@ -397,7 +397,12 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<LevelUpBubble>("LevelUpBubble")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
-		.property("mAnimCurve", &LevelUpBubble::mAnimCurve)
+		.property("mBubbleSizeCurve", &LevelUpBubble::mBubbleSizeCurve)
+		.property("mContentAlphaCurve", &LevelUpBubble::mContentAlphaCurve)
+		.property("mCloseSizeCurve", &LevelUpBubble::mCloseSizeCurve)
+		.property("mOpenAnimTime", &LevelUpBubble::mOpenAnimTime)
+		.property("mCloseAnimTime", &LevelUpBubble::mCloseAnimTime)
+		.property("mInputLayer", &LevelUpBubble::mInputLayer)
 		.property("mUIScale", &LevelUpBubble::mUIScale)
 		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
 		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
@@ -470,7 +475,10 @@ RTTR_PLUGIN_REGISTRATION
 		.method("Inject", &ObjPtr<PrefabTest>::Inject);
 
 	registration::class_<ScoopGageScript>("ScoopGageScript")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<ScoopGageScript>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ScoopGageScript>"))
+		.property("mGage", &ScoopGageScript::mGage)
+		.property("mActiveImg", &ScoopGageScript::mActiveImg)
+		.property("mDeactiveImg", &ScoopGageScript::mDeactiveImg);
 
 	registration::class_<ObjPtr<ScoopGageScript>>("ObjPtr<ScoopGageScript>")
 		.constructor([]() { return Object::NewObject<ScoopGageScript>(); })
@@ -519,7 +527,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerController>("PlayerController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
-		.property("mControlLayout", &PlayerController::mControlLayout)
+		.property("mInputLayer", &PlayerController::mInputLayer)
 		.property("m_TileMap", &PlayerController::m_TileMap)
 		.property("m_SnowManager", &PlayerController::m_SnowManager);
 
