@@ -27,7 +27,7 @@ void MMMEngine::EnemyAnimController::UpdateArcher()
 		case Enemy::EnemyState::AttackCastle:
 			[[fallthrough]];
 		case Enemy::EnemyState::AttackPlayer:
-			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", false);
 			break;
 		case Enemy::EnemyState::Dead:
 			mAnimator->PlayClip("Archer_Dead", false);
@@ -56,7 +56,7 @@ void MMMEngine::EnemyAnimController::UpdateWarrior()
 		case Enemy::EnemyState::AttackCastle:
 			[[fallthrough]];
 		case Enemy::EnemyState::AttackPlayer:
-			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", false);
 			break;
 		case Enemy::EnemyState::Dead:
 			mAnimator->PlayClip("Warrior_Dead", false);
@@ -85,7 +85,7 @@ void MMMEngine::EnemyAnimController::UpdateScout()
 		case Enemy::EnemyState::AttackCastle:
 			[[fallthrough]];
 		case Enemy::EnemyState::AttackPlayer:
-			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", false);
 			break;
 		case Enemy::EnemyState::Dead:
 			mAnimator->PlayClip("Scout_Dead", false);
@@ -182,6 +182,24 @@ void MMMEngine::EnemyAnimController::Update()
 		break;
 	default:
 		Destroy(SelfPtr(this));
+		break;
+	}
+}
+
+void MMMEngine::EnemyAnimController::PlayAttack()
+{
+	switch (mAnimType)
+	{
+	case MMMEngine::AT_Archer:
+		mAnimator->PlayClip("Anim_Goblin_Archer_Attack", false);
+		break;
+	case MMMEngine::AT_Warrior:
+		mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", false);
+		break;
+	case MMMEngine::AT_Scout:
+		mAnimator->PlayClip("Anim_Goblin_Scout_Attack", false);
+		break;
+	default:
 		break;
 	}
 }
