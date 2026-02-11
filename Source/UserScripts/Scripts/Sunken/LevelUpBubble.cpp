@@ -138,6 +138,9 @@ void MMMEngine::LevelUpBubble::SetIconTrans()
 void MMMEngine::LevelUpBubble::UpdateControl()
 {
 	auto& input = ControlManager::Get();
+
+	input->SetMinLayer(10);
+
 	if (input->GetKeyDown(KeyCode::LeftArrow, 10)) {
 		if (mSelectIdx > 0) {
 			mSelectIdx--;
@@ -150,9 +153,10 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 			isDirty = true;
 		}
 	}
-	else if (input->GetKeyDown(KeyCode::RightArrow, 10)) {
+	else if (input->GetKeyDown(KeyCode::Space, 10)) {
 		//std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
 		LevelUpManager::Get()->SetSelection(mSelectIdx);
+		input->ReleaseMinLayer();
 		isActive = false;
 	}
 }

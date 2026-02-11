@@ -5,6 +5,8 @@
 #include <SimpleMath.h>
 #include <unordered_set>
 
+namespace MMMEngine { class ControlManager; }
+
 
 namespace MMMEngine
 {
@@ -65,7 +67,11 @@ namespace MMMEngine
 
         bool m_holdSpace = false;
 
+        ObjPtr<ControlManager> mInput;
         ObjPtr<PlayerAnimController> m_Anime;
+
+        USCRIPT_PROPERTY()
+            int mControlLayout = 1;
 
     public:
         USCRIPT_PROPERTY()

@@ -510,6 +510,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerController>("PlayerController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
+		.property("mControlLayout", &PlayerController::mControlLayout)
 		.property("m_TileMap", &PlayerController::m_TileMap)
 		.property("m_SnowManager", &PlayerController::m_SnowManager);
 
