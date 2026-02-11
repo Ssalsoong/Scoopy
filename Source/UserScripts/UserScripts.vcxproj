@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{75E614B8-00F5-50DC-8A85-9E4BD561A32D}</ProjectGuid>
+    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -167,6 +167,7 @@
     <ClCompile Include="Scripts\test\SnowCollider.cpp" />
     <ClCompile Include="Scripts\test\SnowTrigger.cpp" />
     <ClCompile Include="Scripts\test\SnowballManager2.cpp" />
+    <ClCompile Include="Scripts\test\TargetSlotProvider.cpp" />
     <ClCompile Include="Scripts\test\Testpooling.cpp" />
     <ClCompile Include="Scripts\test\TileMap.cpp" />
     <ClInclude Include="Scripts\Dongho\Battlestats.h" />
@@ -228,6 +229,7 @@
     <ClInclude Include="Scripts\test\SnowCollider.h" />
     <ClInclude Include="Scripts\test\SnowTrigger.h" />
     <ClInclude Include="Scripts\test\SnowballManager2.h" />
+    <ClInclude Include="Scripts\test\TargetSlotProvider.h" />
     <ClInclude Include="Scripts\test\Testpooling.h" />
     <ClInclude Include="Scripts\test\TileMap.h" />
   </ItemGroup>

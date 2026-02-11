@@ -46,11 +46,16 @@ void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
 {
 	if (Arrows.empty())
 		return;
+	
 	auto obj = Arrows.front();
 	Arrows.pop();
 	if (!obj)
 		return;
-	obj->GetComponent<Arrow>()->SetTarget(target);
+	if (auto arrow = obj->GetComponent<Arrow>(); arrow.IsValid())
+	{
+		arrow->SetTarget(target);
+	}
+
 	obj->SetActive(true);
 }
 

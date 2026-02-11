@@ -12,6 +12,7 @@
 #include "../Dongho/Manager/EnemySpawner.h"
 #include "SphereColliderComponent.h"
 #include "SnowCollider.h"
+#include "TargetSlotProvider.h"
 
 void MMMEngine::EnemyController::Start()
 {
@@ -33,12 +34,21 @@ void MMMEngine::EnemyController::Start()
 void MMMEngine::EnemyController::Update()
 {
 	UpdateTarget();
+	if (!m_hasSlot && m_CurTarget.IsValid())
+	{
+		if (--m_slotRetryFrames <= 0)
+		{
+			TryAcquireSlot();
+			m_slotRetryFrames = m_slotRetryInterval;
+		}
+	}
 	UpdateDistance();
 	ChangeState();
 	CheckState();
 
 	AttackTarget();
 	CalSnowDamageDelay();
+	HurtCal();
 }
 
 
@@ -47,6 +57,10 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 {
 	GetTransform()->SetWorldPosition(pos);
 	m_Sensor = m_SensorObj->GetComponent<EnemySensor>();
+	if (!m_Sensor.IsValid())
+	{
+		std::cout << "Sensor not found" << std::endl;
+	}
 	m_Move = GetComponent<EnemyMove>();
 	m_Move->ResetPos(pos);
 	m_Move->ChangeTarget(m_MainTarget);
@@ -58,6 +72,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 
 
 	m_CurTarget = m_MainTarget;
+	TryAcquireSlot();
 	m_Move->ChangeTarget(m_CurTarget);
 	m_Move->MoveTriggerSet(true);
 
@@ -69,7 +84,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(250.f);
 		E_state.AD = 4;
-		E_state.AS = 0.65f;
+		E_state.AS = 1.3f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -78,7 +93,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(250.f);
 		E_state.AD = 2;
-		E_state.AS = 0.4f;
+		E_state.AS = 0.8f;
 		E_state.Range = 2.0f;
 		break;
 	}
@@ -87,7 +102,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(270.f);
 		E_state.AD = 3;
-		E_state.AS = 0.65f;
+		E_state.AS = 1.3f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -97,35 +112,57 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 
 void MMMEngine::EnemyController::UpdateDistance()
 {
-	if (m_CurTarget == nullptr) {
-		m_CurTarget = m_MainTarget;
-		UpdateDistance();
-		return;
+	if (m_CurTarget == nullptr) m_CurTarget = m_MainTarget;
 
-	}
-	if (!m_CurTarget.IsValid()) {
-		m_CurTarget = m_MainTarget;
-		UpdateDistance();
-		return;
-	}
-	if (auto tr = GetTransform();tr.IsValid())
+	if (!m_CurTarget.IsValid())
 	{
-		if (auto Curtr = m_CurTarget->GetTransform(); Curtr.IsValid())
-		{
+		ReleaseSlot();
+		distance = 1e9f;
+		if (m_Move.IsValid())
+			m_Move->ClearTargetOverride();
+		return;
+	}
 
-			auto EnemyPos = tr->GetWorldPosition();
-			auto TargetPos = Curtr->GetWorldPosition();
-			toTarget = TargetPos - EnemyPos;
-			distance = toTarget.Length();
+	auto EnemyPos = GetTransform()->GetWorldPosition();
+	DirectX::SimpleMath::Vector3 TargetPos{};
+	bool useSlot = false;
+
+	if (m_hasSlot && m_SlotProvider.IsValid() && m_SlotTarget == m_CurTarget)
+	{
+		if (m_SlotProvider->GetSlotWorldPos(m_slotRing, m_slotIndex, TargetPos))
+		{
+			useSlot = true;
+		}
+		else
+		{
+			ReleaseSlot();
 		}
 	}
+
+	if (!useSlot)
+		TargetPos = m_CurTarget->GetTransform()->GetWorldPosition();
+
+	m_effectiveTargetPos = TargetPos;
+	toTarget = TargetPos - EnemyPos;
+	distance = toTarget.Length();
+
+	if (m_Move.IsValid())
+	{
+		if (useSlot)
+			m_Move->SetTargetOverride(m_effectiveTargetPos);
+		else
+			m_Move->ClearTargetOverride();
+	}
+
+	m_usingSlotTarget = useSlot;
 }
+
 
 
 void MMMEngine::EnemyController::ChangeState()
 {
-	if (curState == EnemyState::Attack && attackTimer > 0.0f)
-		return;
+	/*if (curState == EnemyState::Attack && attackTimer > 0.0f)
+		return;*/
     prevState = curState;
 
     float extra = 0.0f;
@@ -134,9 +171,12 @@ void MMMEngine::EnemyController::ChangeState()
     if (tag == "Castle"){ extra = 0.6f;}
     else if (tag == "Building") extra = 0.3f;
     else if (tag == "Player") extra = 0.2f;
-    else if (tag == "Snow") extra = 0.6f;
+    else if (tag == "Snow") extra = 0.4f;
 
-    curState = (distance <= (E_state.Range + extra)) ? EnemyState::Attack : EnemyState::Move;
+	if (m_usingSlotTarget)
+		curState = (distance <= slotArriveRadius) ? EnemyState::Attack : EnemyState::Move;
+	else
+		curState = (distance <= (E_state.Range + extra)) ? EnemyState::Attack : EnemyState::Move;
 
 	/*if (curState == EnemyState::Attack)
 	{
@@ -183,6 +223,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 		GetTransform()->SetWorldPosition(deadpos);
 		attackTimer = 0.0f;
 		EnemySpawner::instance->EnemyDeath(GetGameObject());
+		ReleaseSlot();
 		GetGameObject()->SetActive(false);
 		break;
 	}
@@ -196,12 +237,71 @@ bool MMMEngine::EnemyController::UpdateTarget()
 	{
 		if (m_CurTarget != target)
 		{
+			ReleaseSlot();
 			m_CurTarget = target;
 			m_Move->ChangeTarget(m_CurTarget); // 여기서 바로 갱신
+			TryAcquireSlot();
 		}
 		return true;
 	}
+
+	if (!target.IsValid())
+	{
+		if (m_CurTarget != m_MainTarget)
+		{
+			ReleaseSlot();
+			m_CurTarget = m_MainTarget;
+			m_Move->ChangeTarget(m_CurTarget);
+			TryAcquireSlot();
+		}
+		return false;
+	}
+
 	return false;
+}
+
+void MMMEngine::EnemyController::TryAcquireSlot()
+{
+	m_hasSlot = false;
+	m_SlotProvider = nullptr;
+	m_SlotTarget = nullptr;
+	m_slotRing = -1;
+	m_slotIndex = -1;
+
+	if (!m_CurTarget.IsValid()) return;
+
+	auto provider = m_CurTarget->GetComponent<TargetSlotProvider>();
+	if (!provider.IsValid()) return;
+
+	int ring = -1;
+	int index = -1;
+	if (provider->RequestSlot(GetGameObject(), ring, index))
+	{
+		m_hasSlot = true;
+		m_SlotProvider = provider;
+		m_SlotTarget = m_CurTarget;
+		m_slotRing = ring;
+		m_slotIndex = index;
+	}
+
+	std::cout << "m_hasSlot : " << m_hasSlot << "m_slotRing : " << m_slotRing << "m_slotIndex : " << m_slotIndex << std::endl;
+}
+
+void MMMEngine::EnemyController::ReleaseSlot()
+{
+	if (m_hasSlot && m_SlotProvider.IsValid())
+	{
+		m_SlotProvider->ReleaseSlot(m_slotRing, m_slotIndex, GetGameObject());
+	}
+
+	m_hasSlot = false;
+	m_SlotProvider = nullptr;
+	m_SlotTarget = nullptr;
+	m_slotRing = -1;
+	m_slotIndex = -1;
+
+	if (m_Move.IsValid())
+		m_Move->ClearTargetOverride();
 }
 
 bool MMMEngine::EnemyController::CheckHurt()
@@ -254,6 +354,12 @@ void MMMEngine::EnemyController::AttackTarget()
 			else
 				BattleManager::instance->Attack(GetGameObject(), battletarget, E_state.AD);
 		}
+		else
+		{
+			m_CurTarget = m_MainTarget;
+			OnStateEnter(EnemyState::Move);
+			attackTimer = 0.0f;
+		}
 		if (auto targetstats = m_CurTarget->GetComponent<Battlestats>(); targetstats.IsValid())
 		{
 			if (targetstats->HP <= 0)
@@ -284,4 +390,17 @@ bool MMMEngine::EnemyController::ApplySnowDamage()
 	if (snowDamageTimer > 0.0f) return false;
 	snowDamageTimer = snowDamageDelay;
 	return true;
+}
+
+void MMMEngine::EnemyController::HurtCal()
+{
+	if (HurtTimer > 0.0f)
+	{
+		HurtTimer -= Time::GetDeltaTime();
+		if (HurtTimer <= 0.0f)
+		{
+			OnHurtFlag(false);
+			HurtTimer = 0.0f;
+		}
+	}
 }

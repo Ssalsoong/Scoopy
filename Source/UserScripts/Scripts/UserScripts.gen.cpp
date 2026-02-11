@@ -55,6 +55,7 @@
 #include "test/SnowCollider.h"
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
+#include "test/TargetSlotProvider.h"
 #include "test/Testpooling.h"
 #include "test/TileMap.h"
 #include "Dongho/Building/Building.h"
@@ -584,6 +585,18 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
 		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
 		.method("Inject", &ObjPtr<SnowballManager2>::Inject);
+
+	registration::class_<TargetSlotProvider>("TargetSlotProvider")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TargetSlotProvider>"))
+		.property("baseRadius", &TargetSlotProvider::baseRadius)
+		.property("ringSpacing", &TargetSlotProvider::ringSpacing)
+		.property("slotSpacing", &TargetSlotProvider::slotSpacing)
+		.property("yOffset", &TargetSlotProvider::yOffset)
+		.property("maxRings", &TargetSlotProvider::maxRings);
+
+	registration::class_<ObjPtr<TargetSlotProvider>>("ObjPtr<TargetSlotProvider>")
+		.constructor([]() { return Object::NewObject<TargetSlotProvider>(); })
+		.method("Inject", &ObjPtr<TargetSlotProvider>::Inject);
 
 	registration::class_<Testpooling>("Testpooling")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Testpooling>"))

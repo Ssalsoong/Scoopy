@@ -84,8 +84,15 @@ namespace MMMEngine
 
         void ChangeTarget(ObjPtr<GameObject> target);
 
+		void SetTargetOverride(const DirectX::SimpleMath::Vector3& pos);
+		void ClearTargetOverride();
+		bool HasTargetOverride() const { return m_hasTargetOverride; }
+
         void MoveTriggerSet(bool value);
         bool is_move = true;
+
+		bool m_hasTargetOverride = false;
+		DirectX::SimpleMath::Vector3 m_targetOverride{};
 
         void SetEnemySpeed(float speedvalue);
 

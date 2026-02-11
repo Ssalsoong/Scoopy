@@ -148,7 +148,7 @@ bool MMMEngine::EnemySpawner::WaveSpawn(int wave)
 		switch (wave)
 		{
 		case 1:
-			if (leftCount[1] > 0) { SpawnNormalEnemy(spawnPos[1]); leftCount[1]--; }
+			if (leftCount[1] > 0) { SpawnArrowEnemy(spawnPos[1]); leftCount[1]--; }
 			break;
 
 		case 2:

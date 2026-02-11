@@ -66,6 +66,7 @@
     <ClCompile Include="Scripts\test\SnowCollider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowTrigger.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowballManager2.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\TargetSlotProvider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\Testpooling.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\TileMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClInclude Include="Scripts\Dongho\Battlestats.h"><Filter>Scripts</Filter></ClInclude>
@@ -127,6 +128,7 @@
     <ClInclude Include="Scripts\test\SnowCollider.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowTrigger.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowballManager2.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\TargetSlotProvider.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\Testpooling.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\TileMap.h"><Filter>Scripts</Filter></ClInclude>
   </ItemGroup>

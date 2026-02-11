@@ -31,10 +31,10 @@ namespace MMMEngine
 		int maxHP = 100;
 		int GetmaxHP() const { return maxHP; }
 		USCRIPT_PROPERTY()
-		float battledist = 0.7f;
+		float battledist = 1.0f;
 		USCRIPT_PROPERTY()
 		int atk = 15;
-		float attackDelay = 0.65f;
+		float attackDelay = 0.5f;
 		float cosHalfFov = 0.5f;
 		USCRIPT_PROPERTY()
 		int maxpoint = 10;

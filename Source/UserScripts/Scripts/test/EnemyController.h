@@ -8,6 +8,7 @@ namespace MMMEngine
 {
     class EnemyMove;
     class EnemySensor;
+    class TargetSlotProvider;
 
     class USERSCRIPTS EnemyController : public ScriptBehaviour
     {
@@ -55,6 +56,18 @@ namespace MMMEngine
         ObjPtr<GameObject> m_CurTarget;
 
         DirectX::SimpleMath::Vector3 toTarget{};
+
+		// 슬롯 상태
+		ObjPtr<TargetSlotProvider> m_SlotProvider;
+		ObjPtr<GameObject> m_SlotTarget;
+		bool m_hasSlot = false;
+		int m_slotRing = -1;
+		int m_slotIndex = -1;
+		DirectX::SimpleMath::Vector3 m_effectiveTargetPos{};
+
+		// 슬롯 재요청
+		int m_slotRetryFrames = 0;
+		int m_slotRetryInterval = 10; // 10프레임마다 재요청
 
     public:
         EnemyController()
@@ -105,5 +118,16 @@ namespace MMMEngine
 		bool ApplySnowDamage();
 
         void SetType(EnemyType type) { m_EnemyType = type; }
+
+        void HurtTimerOn() { HurtTimer = HurtDelay; }
+        void HurtCal();
+        float HurtTimer = 0.0f;
+        float HurtDelay = 2.0f;
+    private:
+		void TryAcquireSlot();
+	    void ReleaseSlot();
+
+		float slotArriveRadius = 0.2f;
+		bool m_usingSlotTarget = false;
     };
 }

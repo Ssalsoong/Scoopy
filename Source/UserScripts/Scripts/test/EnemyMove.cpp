@@ -157,13 +157,20 @@ void MMMEngine::EnemyMove::FixedUpdate()
 DirectX::SimpleMath::Vector3 MMMEngine::EnemyMove::ComputeChaseVelocity()
 {
 	myPos = m_GO->GetTransform()->GetWorldPosition();
-	
-	if (!Obj_target) 
+
+	if (!Obj_target && !m_hasTargetOverride)
 	{
 		std::cout << "Target Nullptr" << std::endl;
 		return Vector3{ 0,0,0 };
 	}
-	Target = Obj_target->GetTransform()->GetWorldPosition();
+
+	if (m_hasTargetOverride)
+		Target = m_targetOverride;
+	else
+		Target = Obj_target->GetTransform()->GetWorldPosition();
+
+
+	//Target = Obj_target->GetTransform()->GetWorldPosition();
 
 	DirectX::SimpleMath::Vector3 dir = (Target - myPos);
 	dir.y = 0.f;
@@ -227,6 +234,18 @@ void MMMEngine::EnemyMove::ChangeTarget(ObjPtr<GameObject> target)
 {
     Obj_target = target;
 }
+
+void MMMEngine::EnemyMove::SetTargetOverride(const DirectX::SimpleMath::Vector3& pos)
+{
+	m_targetOverride = pos;
+	m_hasTargetOverride = true;
+}
+
+void MMMEngine::EnemyMove::ClearTargetOverride()
+{
+	m_hasTargetOverride = false;
+}
+
 
 void MMMEngine::EnemyMove::MoveTriggerSet(bool value)
 {

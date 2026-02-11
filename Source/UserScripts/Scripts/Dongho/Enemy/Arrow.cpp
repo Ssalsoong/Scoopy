@@ -82,3 +82,29 @@ void MMMEngine::Arrow::Update()
 		return;
 	}
 }
+
+void MMMEngine::Arrow::SetTarget(ObjPtr<GameObject> obj) 
+{ 
+	target = obj;
+	if (auto targettr = target->GetTransform(); targettr.IsValid())
+	{
+		auto targetpos = targettr->GetWorldPosition();
+		LookAt(targetpos);
+	}
+}
+
+void MMMEngine::Arrow::LookAt(const DirectX::SimpleMath::Vector3& target)
+{
+	auto pos = GetTransform()->GetWorldPosition();
+	auto dir = target - pos;
+	dir.y = 0.0f;
+
+	float len2 = dir.LengthSquared();
+	if (len2 < 1e-8f) return;
+
+	dir.Normalize();
+
+	float yaw = atan2f(dir.x, dir.z);
+	auto rot = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0, 0);
+	GetTransform()->SetWorldRotation(rot);
+}
