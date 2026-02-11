@@ -138,19 +138,19 @@ void MMMEngine::LevelUpBubble::SetIconTrans()
 void MMMEngine::LevelUpBubble::UpdateControl()
 {
 	auto& input = ControlManager::Get();
-	if (input->GetKeyDown(KeyCode::LeftArrow, GetGameObject(), true)) {
+	if (input->GetKeyDown(KeyCode::LeftArrow, 10)) {
 		if (mSelectIdx > 0) {
 			mSelectIdx--;
 			isDirty = true;
 		}
 	}
-	else if (input->GetKeyDown(KeyCode::RightArrow, GetGameObject(), true)) {
+	else if (input->GetKeyDown(KeyCode::RightArrow, 10)) {
 		if (mSelectIdx < mIcons.size() - 1) {
 			mSelectIdx++;
 			isDirty = true;
 		}
 	}
-	else if (input->GetKeyDown(KeyCode::RightArrow, GetGameObject(), true)) {
+	else if (input->GetKeyDown(KeyCode::RightArrow, 10)) {
 		//std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
 		LevelUpManager::Get()->SetSelection(mSelectIdx);
 		isActive = false;
