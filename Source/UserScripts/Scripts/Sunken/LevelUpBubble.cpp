@@ -107,6 +107,9 @@ void MMMEngine::LevelUpBubble::SetActive(bool _val)
 
 	if (!_val) {
 		isDirty = true;
+
+		if (ControlManager::Get()->GetMinLayer() == mInputLayer)
+			ControlManager::Get()->ReleaseMinLayer();
 	}
 }
 

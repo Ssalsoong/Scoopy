@@ -285,15 +285,20 @@ void MMMEngine::CastleLevelController::OnDisable()
 {
 	isActive = false;
 
+	// 본인 소유객체는 알아서 끄기
+	if(mHpGage->GetGameObject().IsValid())
+		mHpGage->GetGameObject()->SetActive(false);
+	if(mCountIcon->GetGameObject().IsValid())
+		mCountIcon->GetGameObject()->SetActive(false);
+
 	auto puller = LevelUpManager::Get()->GetUIPuller();
 	auto go = GetGameObject();
 
 	if (puller.IsValid() && go.IsValid()) {
 		if (puller == go) {
-			mHpGage->GetGameObject()->SetActive(false);
-			mExpGage->GetGameObject()->SetActive(false);
-			mCountIcon->GetGameObject()->SetActive(false);
-
+			if(mExpGage->GetGameObject().IsValid())
+				mExpGage->GetGameObject()->SetActive(false);
+			
 			if (auto target = LevelUpManager::Get()->GetBubbleTarget(); target.IsValid()) {
 				if (target == go) {
 					LevelUpManager::Get()->RemoveBubble();
