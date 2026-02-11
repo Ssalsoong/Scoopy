@@ -17,12 +17,15 @@
 #include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/ExplosionParticles.h"
+#include "Mingi/ExplosionPool.h"
 #include "Mingi/FXSnowFall.h"
 #include "Mingi/Manager/SoundManager.h"
 #include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
+#include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
 #include "Mingi/UI/TimerUI.h"
 #include "Mingi/UI/TitleMenu.h"
@@ -136,6 +139,25 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
 
+	registration::class_<ExplosionParticles>("ExplosionParticles")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ExplosionParticles>"))
+		.property("Particle1", &ExplosionParticles::Particle1)
+		.property("Particle2", &ExplosionParticles::Particle2)
+		.property("Particle3", &ExplosionParticles::Particle3)
+		.property("Particle4", &ExplosionParticles::Particle4);
+
+	registration::class_<ObjPtr<ExplosionParticles>>("ObjPtr<ExplosionParticles>")
+		.constructor([]() { return Object::NewObject<ExplosionParticles>(); })
+		.method("Inject", &ObjPtr<ExplosionParticles>::Inject);
+
+	registration::class_<ExplosionPool>("ExplosionPool")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ExplosionPool>"))
+		.property("ExplosionPrefab", &ExplosionPool::ExplosionPrefab);
+
+	registration::class_<ObjPtr<ExplosionPool>>("ObjPtr<ExplosionPool>")
+		.constructor([]() { return Object::NewObject<ExplosionPool>(); })
+		.method("Inject", &ObjPtr<ExplosionPool>::Inject);
+
 	registration::class_<FXSnowFall>("FXSnowFall")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));
 
@@ -196,6 +218,29 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<MiniMap>>("ObjPtr<MiniMap>")
 		.constructor([]() { return Object::NewObject<MiniMap>(); })
 		.method("Inject", &ObjPtr<MiniMap>::Inject);
+
+	registration::class_<PauseUI>("PauseUI")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PauseUI>"))
+		.property("PanelGO", &PauseUI::PanelGO)
+		.property("P_rect", &PauseUI::P_rect)
+		.property("a_rect", &PauseUI::a_rect)
+		.property("u_rect", &PauseUI::u_rect)
+		.property("s_rect", &PauseUI::s_rect)
+		.property("e_rect", &PauseUI::e_rect)
+		.property("Resume_rect", &PauseUI::Resume_rect)
+		.property("ToTitle_rect", &PauseUI::ToTitle_rect)
+		.property("PosYCurve", &PauseUI::PosYCurve)
+		.property("ButtonYCurve", &PauseUI::ButtonYCurve)
+		.property("FadeDuration", &PauseUI::FadeDuration)
+		.property("AnimOffestTime", &PauseUI::AnimOffestTime)
+		.property("buttonAnimOffset", &PauseUI::buttonAnimOffset)
+		.property("FocusFadeSpeed", &PauseUI::FocusFadeSpeed)
+		.property("ButtonScaleCurve", &PauseUI::ButtonScaleCurve)
+		.property("ButtonSelectTimeOffset", &PauseUI::ButtonSelectTimeOffset);
+
+	registration::class_<ObjPtr<PauseUI>>("ObjPtr<PauseUI>")
+		.constructor([]() { return Object::NewObject<PauseUI>(); })
+		.method("Inject", &ObjPtr<PauseUI>::Inject);
 
 	registration::class_<RotateTrakingUI>("RotateTrakingUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<RotateTrakingUI>"))

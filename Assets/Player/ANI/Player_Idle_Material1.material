@@ -1,5 +1,5 @@
 {
-    "MUID": "df62b0b1-1555-4cab-af17-141662e7e2dc",
+    "MUID": "d8b2a5b1-b94e-4635-937f-4546207ca7a8",
     "properties": {
         "_albedo": {
             "file": "Assets\\Player\\ANI\\Pink_Expressions.png",
@@ -100,6 +100,10 @@
             "value": 0.0
         },
         "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoundDotClip": {
             "type": "float",
             "value": 0.0
         }

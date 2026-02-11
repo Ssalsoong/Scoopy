@@ -16,20 +16,25 @@ namespace MMMEngine
         RTTR_ENABLE(ScriptBehaviour)
             RTTR_REGISTRATION_FRIEND
             int m_waveCount = 0;
-        int m_maxWaveNum = 7;
+        int m_maxWaveNum = 10;
         float m_animationTime = 0.0f;
+        int m_animState = 0;
+        bool m_isWaveMode = false;
         float m_initPosY = 0.0f;
         float m_initPosX = 0.0f;
 
         bool m_textChanged = false;
         float m_maximumAnimTime = 0.0f;
-        USCRIPT_PROPERTY()
         bool m_playingAnimation = false;
         ObjPtr<RectTransform> m_rect = nullptr;
     public:
         TimerUI()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(ForceSwitchTimer);
+        REGISTER_BEHAVIOUR_MESSAGE(ForceSwitchWave);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
+        REGISTER_BEHAVIOUR_MESSAGE(SwitchTimer);
+        REGISTER_BEHAVIOUR_MESSAGE(SwitchWave);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
@@ -56,7 +61,18 @@ namespace MMMEngine
         void SetWaveCount(int count);
         void SetMaxWaveNum(int num);
 
-        void ShowNextWave();
+        USCRIPT_MESSAGE()
+        void SwitchWave();
+
+        USCRIPT_MESSAGE()
+        void SwitchTimer();
+
+
+        USCRIPT_MESSAGE()
+            void ForceSwitchWave();
+
+        USCRIPT_MESSAGE()
+            void ForceSwitchTimer();
 
         USCRIPT_PROPERTY()
             AnimationCurve scaleCurve;
@@ -67,11 +83,12 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
             AnimationCurve posCurve;
 
+        USCRIPT_PROPERTY()
+            AnimationCurve alphaCurve;
+
+        bool IsPlayingAnimation();
 
         USCRIPT_PROPERTY()
-            AnimationCurve TimerAlpha;
-
-        USCRIPT_PROPERTY()
-            AnimationCurve WaveBackAlpha;
+            AnimationCurve gageCurve;
     };
 }
