@@ -54,6 +54,7 @@
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PlayerHpGage.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\ScoopGageScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\TimerGageScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\WaveUIScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -115,6 +116,7 @@
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PlayerHpGage.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PrefabTest.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\ScoopGageScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\TimerGageScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\WaveUIScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\CastleManager.h"><Filter>Scripts</Filter></ClInclude>

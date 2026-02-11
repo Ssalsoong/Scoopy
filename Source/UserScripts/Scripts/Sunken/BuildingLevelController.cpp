@@ -146,7 +146,6 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 
 void MMMEngine::BuildingLevelController::UpdateReadyIcon()
 {
-	mReadyIcon->GetGameObject()->SetActive(true);
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{ 0.0f, 0.0f });
@@ -358,16 +357,30 @@ void MMMEngine::BuildingLevelController::Update()
 		UpdateSelectIcon();
 	}*/
 
-	if (isReady) {
-		if (mPrevActive != isActive) {
-			mPrevActive = isActive;
-			if (isActive) {
-				mReadyIcon->GetGameObject()->SetActive(false);
+	if (mPrevActive != isActive) {
+		mPrevActive = isActive;
+		if (isActive) {
+			auto object = GetGameObject();
+			LevelUpManager::Get()->SetUIPuller(object);
+
+			mHpGage->GetGameObject()->SetActive(true);
+			mExpGage->GetGameObject()->SetActive(true);
+			mCountIcon->GetGameObject()->SetActive(true);
+
+			if (isReady) {
 				std::vector<ObjPtr<Image>> icons{ mHPIcon , mBuffIcon, mDeBuffIcon, mSnowIcon };
-				auto object = GetGameObject();
 				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
-			else {
+		}
+		else {
+			LevelUpManager::Get()->RemoveUIPuller();
+
+			mHpGage->GetGameObject()->SetActive(false);
+			mExpGage->GetGameObject()->SetActive(false);
+			mCountIcon->GetGameObject()->SetActive(false);
+
+			if (isReady) {
+				mReadyIcon->GetGameObject()->SetActive(true);
 				LevelUpManager::Get()->RemoveBubble();
 			}
 		}
@@ -381,12 +394,31 @@ void MMMEngine::BuildingLevelController::Update()
 		LevelUp();
 }
 
+void MMMEngine::BuildingLevelController::OnDisable()
+{
+	isActive = false;
+
+	auto puller = LevelUpManager::Get()->GetUIPuller();
+	auto go = GetGameObject();
+
+	if (puller.IsValid() && go.IsValid()) {
+		if (puller == go) {
+			mHpGage->GetGameObject()->SetActive(false);
+			mExpGage->GetGameObject()->SetActive(false);
+			mCountIcon->GetGameObject()->SetActive(false);
+
+			if (auto target = LevelUpManager::Get()->GetBubbleTarget(); target.IsValid()) {
+				if (target == go) {
+					LevelUpManager::Get()->RemoveBubble();
+				}
+			}
+		}
+	}
+}
+
 void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
-		mHpGage->GetGameObject()->SetActive(true);
-		mExpGage->GetGameObject()->SetActive(true);
-		mCountIcon->GetGameObject()->SetActive(true);
 		isActive = true;
 	}
 }
@@ -394,9 +426,6 @@ void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo i
 void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
-		mHpGage->GetGameObject()->SetActive(false);
-		mExpGage->GetGameObject()->SetActive(false);
-		mCountIcon->GetGameObject()->SetActive(false);
 		isActive = false;
 	}
 }

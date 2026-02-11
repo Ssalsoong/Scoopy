@@ -12,7 +12,8 @@ void MMMEngine::PrefabTest::Update()
 {
 	if (Input::GetKeyDown(KeyCode::G))
 	{
-		if (ExplosionPool::Instance.IsValid())
-			ExplosionPool::Instance->Spawn({ 1.0f,2.0f,3.0f });
+		/*if (ExplosionPool::Instance.IsValid())
+			ExplosionPool::Instance->Spawn({ 1.0f,2.0f,3.0f });*/
+		Instantiate(Teees);
 	}
 }

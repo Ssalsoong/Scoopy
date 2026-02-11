@@ -98,14 +98,16 @@ void MMMEngine::GameManager::Update()
 		}
 	}
 
-	static bool prevSetting = nowSetting;
+	static bool prevSetting = false;
 
 	if (prevSetting != nowSetting) {
 		prevSetting = nowSetting;
-		if (!prevSetting) {
-			if (mTimerUI.IsValid()) {
-				//mTimerUI->ShowNextWave();
-			}
+		if (mTimerUI.IsValid()) {
+			if (prevSetting)
+				mTimerUI->SwitchTimer();
+			else
+				mTimerUI->SwitchWave();
 		}
+		
 	}
 }

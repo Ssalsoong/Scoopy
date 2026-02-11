@@ -216,23 +216,55 @@ void MMMEngine::CastleLevelController::Update()
 		UpdateReadyIcon();
 	}
 
-	if (mPrevActive != isActive && mUpPending > 0) {
+	static bool prevReady = false;
+
+	if (mPrevActive != isActive) {
 		mPrevActive = isActive;
 		if (mPrevActive) {
-			mReadyIcon->GetGameObject()->SetActive(false);
+			auto object = GetGameObject();
+			LevelUpManager::Get()->SetUIPuller(object);
 
-			mPrevActive = isActive;
-			std::vector<ObjPtr<Image>> icons{ mCastleIcon, mScoopIcon };
-			LevelUpManager::Get()->SetBubble(EXPTYPE::EXP_CASTLE, GetGameObject(), icons);
+			if (mUpPending > 0) {
+				mReadyIcon->GetGameObject()->SetActive(false);
+
+				std::vector<ObjPtr<Image>> icons{ mCastleIcon, mScoopIcon };
+				LevelUpManager::Get()->SetBubble(EXPTYPE::EXP_CASTLE, GetGameObject(), icons);
+			}
 		}
 		else {
-			LevelUpManager::Get()->RemoveBubble();
+			LevelUpManager::Get()->RemoveUIPuller();
+
+			if (mUpPending > 0) {
+				LevelUpManager::Get()->RemoveBubble();
+			}
 		}
 	}
 
 	auto currEXP = mCastle->exp;
 	if (currEXP >= mReqExp && mCurrLevel < LevelUpManager::Get()->GetMaxLevel(EXPTYPE::EXP_CASTLE))
 		UpLevel();
+}
+
+void MMMEngine::CastleLevelController::OnDisable()
+{
+	isActive = false;
+
+	auto puller = LevelUpManager::Get()->GetUIPuller();
+	auto go = GetGameObject();
+
+	if (puller.IsValid() && go.IsValid()) {
+		if (puller == go) {
+			mHpGage->GetGameObject()->SetActive(false);
+			mExpGage->GetGameObject()->SetActive(false);
+			mCountIcon->GetGameObject()->SetActive(false);
+
+			if (auto target = LevelUpManager::Get()->GetBubbleTarget(); target.IsValid()) {
+				if (target == go) {
+					LevelUpManager::Get()->RemoveBubble();
+				}
+			}
+		}
+	}
 }
 
 void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)

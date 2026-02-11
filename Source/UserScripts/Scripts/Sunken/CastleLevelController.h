@@ -42,6 +42,7 @@ namespace MMMEngine
     public:
         CastleLevelController()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerEnter);
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerExit);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
@@ -70,6 +71,9 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void Update();
+
+		USCRIPT_MESSAGE()
+			void OnDisable();
 
         USCRIPT_MESSAGE()
             void OnTriggerEnter(MMMEngine::TriggerInfo info);

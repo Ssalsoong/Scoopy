@@ -42,6 +42,7 @@
 #include "Sunken/PlayerAnimController.h"
 #include "Sunken/PlayerHpGage.h"
 #include "Sunken/PrefabTest.h"
+#include "Sunken/ScoopGageScript.h"
 #include "Sunken/TimerGageScript.h"
 #include "Sunken/WaveUIScript.h"
 #include "test/CastleManager.h"
@@ -461,11 +462,19 @@ RTTR_PLUGIN_REGISTRATION
 		.method("Inject", &ObjPtr<PlayerHpGage>::Inject);
 
 	registration::class_<PrefabTest>("PrefabTest")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"))
+		.property("Teees", &PrefabTest::Teees);
 
 	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
 		.constructor([]() { return Object::NewObject<PrefabTest>(); })
 		.method("Inject", &ObjPtr<PrefabTest>::Inject);
+
+	registration::class_<ScoopGageScript>("ScoopGageScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ScoopGageScript>"));
+
+	registration::class_<ObjPtr<ScoopGageScript>>("ObjPtr<ScoopGageScript>")
+		.constructor([]() { return Object::NewObject<ScoopGageScript>(); })
+		.method("Inject", &ObjPtr<ScoopGageScript>::Inject);
 
 	registration::class_<TimerGageScript>("TimerGageScript")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerGageScript>"));
