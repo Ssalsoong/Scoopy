@@ -60,9 +60,6 @@ void MMMEngine::GameManager::Start()
 	if (!mPauseUI) {
 		std::cout << "GameManager::PauseUI Not Found!!!" << std::endl;
 	}
-	else {
-		mPauseUI->SetEnabled(false);
-	}
 }
 
 void MMMEngine::GameManager::Update()
@@ -126,8 +123,13 @@ void MMMEngine::GameManager::Update()
 
 	// Pause Key Å½Áö
 	if (mPauseUI.IsValid()) {
-		if (ControlManager::Get()->GetKeyDown(KeyCode::Escape, 1)) {
-			mPauseUI->SetEnabled(true);
+		bool pauseStat = mPauseUI->IsPause();
+		if (isPausing != pauseStat) {
+			isPausing = pauseStat;
+			if (pauseStat)
+				ControlManager::Get()->SetMinLayer(100);
+			else
+				ControlManager::Get()->ReleaseMinLayer();
 		}
 	}
 }

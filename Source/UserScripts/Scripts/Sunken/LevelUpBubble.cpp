@@ -100,7 +100,7 @@ void MMMEngine::LevelUpBubble::SetActive(bool _val)
 	mSelectIdx = 0;
 
 	mElipsedTime = 0.0f;
-	isAnimating = _val;
+	isAnimating = true;
 
 	if (!_val) {
 		isDirty = true;

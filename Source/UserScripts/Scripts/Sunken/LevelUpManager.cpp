@@ -205,7 +205,6 @@ void MMMEngine::LevelUpManager::SetSelection(int _selectionIdx)
 	case MMMEngine::EXP_CASTLE:
 	{
 		auto controller = mLevelPendingObj->GetComponent<CastleLevelController>();
-		
 		if (controller) {
 			controller->SetLevelSelection(_selectionIdx);
 			return;

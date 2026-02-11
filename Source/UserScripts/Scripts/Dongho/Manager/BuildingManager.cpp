@@ -20,6 +20,10 @@ MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instan
 void MMMEngine::BuildingManager::Awake()
 {
 	instance = GetGameObject()->GetComponent<BuildingManager>();
+
+	if (!pre_building || !mBuildingPoint) {
+		std::cout << "BuildingManager::Prefab not Found!!" << std::endl;
+	}
 }
 
 void MMMEngine::BuildingManager::Start()
@@ -35,10 +39,11 @@ void MMMEngine::BuildingManager::Start()
 	buffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/lightingTower_StaticMesh.staticmesh");
 	debuffbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/fireTower_StaticMesh.staticmesh");
 	snowbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/iceTower_StaticMesh.staticmesh");
-	ResPtr<StaticMesh> cube = ResourceManager::Get().Load<StaticMesh>(L"Assets/DefaultMesh/Cube_StaticMesh.staticmesh");
 	for (int i = 0; i < BuildingPointCount; ++i)
 	{
-		auto obj = NewObject<GameObject>();
+		auto obj = Instantiate(mBuildingPoint);
+			
+			NewObject<GameObject>();
 		obj->SetName("BuildingPoint");
 		obj->SetTag("BuildingPoint");
 		obj->AddComponent<BuildingPoint>();

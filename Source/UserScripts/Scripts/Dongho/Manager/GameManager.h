@@ -42,6 +42,7 @@ namespace MMMEngine {
 		bool GameWin = false;
 		bool GameOver = false;
 		bool nowSetting = true;
+		bool isPausing = false;
 		int wave = 1;
 		int levelsum = 0;
 
