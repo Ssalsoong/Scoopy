@@ -83,7 +83,7 @@ void MMMEngine::TitleMenu::MenuControl()
 	}
 
 	// 메뉴 선택
-	if (!m_dontUseButtonClick && Input::GetKeyDown(KeyCode::Enter))
+	if (!m_dontUseButtonClick && (Input::GetKeyDown(KeyCode::Enter) || Input::GetKeyDown(KeyCode::Space)))
 	{
 		switch (m_selected)
 		{

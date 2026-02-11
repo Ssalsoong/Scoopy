@@ -26,11 +26,11 @@ namespace MMMEngine
             ObjPtr<Text> m_ToTitle_text;
 
             float m_internalTimer = 0.0f;
-
+           
             float m_buttonSelectTimer = 0.0f;
 
             bool m_isPause = false;
-
+            bool m_skipPauseUIUpdate = false;
             bool m_isControlAble = false;
             int m_currentSelected = 0;
             float m_resumeFocusAlpha = 1.0f;
@@ -85,6 +85,10 @@ namespace MMMEngine
         USCRIPT_PROPERTY()
         float FadeDuration = 0.625f;
 
+
+        USCRIPT_PROPERTY()
+            float SceneChangeTime = 1.25f;
+
         USCRIPT_PROPERTY()
         float AnimOffestTime = 0.25f;
 
@@ -99,6 +103,9 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
             float ButtonSelectTimeOffset = 0.0f;
+
+        USCRIPT_PROPERTY()
+            std::string TitleSceneName = "";
 
         USCRIPT_MESSAGE()
         void Start();
