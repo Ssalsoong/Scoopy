@@ -11,10 +11,11 @@
 #include "../Dongho/Battlestats.h"
 #include "../Dongho/Manager/EnemySpawner.h"
 #include "SphereColliderComponent.h"
+#include "SnowCollider.h"
 
 void MMMEngine::EnemyController::Start()
 {
-	m_Sensor = GetComponent<EnemySensor>();
+	m_Sensor = m_SensorObj->GetComponent<EnemySensor>();
 	m_Move = GetComponent<EnemyMove>();
 
 	//if (auto TriggerCol = GetComponent<SphereColliderComponent>(); TriggerCol.IsValid())
@@ -45,7 +46,7 @@ void MMMEngine::EnemyController::Update()
 void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::Vector3 pos, int hp)
 {
 	GetTransform()->SetWorldPosition(pos);
-	m_Sensor = GetComponent<EnemySensor>();
+	m_Sensor = m_SensorObj->GetComponent<EnemySensor>();
 	m_Move = GetComponent<EnemyMove>();
 	m_Move->ResetPos(pos);
 	m_Move->ChangeTarget(m_MainTarget);
@@ -159,9 +160,11 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	}
 	case EnemyState::Dead:
 	{
+		DirectX::SimpleMath::Vector3 deadpos = { 200.f,200.f,200.f };
 		m_Move->SetEnemySpeed(0.f);
+		m_Move->ResetPos(deadpos);
 		m_Move->MoveTriggerSet(false);
-		GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
+		GetTransform()->SetWorldPosition(deadpos);
 		attackTimer = 0.0f;
 		EnemySpawner::instance->EnemyDeath(GetGameObject());
 		GetGameObject()->SetActive(false);
@@ -211,12 +214,23 @@ void MMMEngine::EnemyController::AttackTarget()
 			{
 				if (auto snowball = attacktarget->GetComponent<Snowball>(); snowball.IsValid())
 				{
-					snowball->lifecount--;
-					if (snowball->lifecount <= 0)
+					if (auto snowCollider = attacktarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
 					{
-						m_CurTarget = m_MainTarget;
-						OnStateEnter(EnemyState::Move);
+						if (!snowCollider->CheckOnPlayer())
+						{
+							snowball->lifecount--;
+							if (snowball->lifecount <= 0)
+							{
+								m_CurTarget = m_MainTarget;
+								OnStateEnter(EnemyState::Move);
+							}
+						}
 					}
+				}
+				else
+				{
+					m_CurTarget = m_MainTarget;
+					OnStateEnter(EnemyState::Move);
 				}
 				attackTimer = 0.0f;
 				return;
@@ -233,6 +247,11 @@ void MMMEngine::EnemyController::AttackTarget()
 				m_CurTarget = m_MainTarget;
 				OnStateEnter(EnemyState::Move);
 			}
+		}
+		else
+		{
+			m_CurTarget = m_MainTarget;
+			OnStateEnter(EnemyState::Move);
 		}
 		attackTimer = 0.0f;
 	}

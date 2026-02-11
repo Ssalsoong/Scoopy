@@ -42,6 +42,9 @@ namespace MMMEngine
 
         ObjPtr<GameObject> GetTarget();
 
+		USCRIPT_PROPERTY()
+		ObjPtr<GameObject> EnemyObj;
+
         int GetPriority(const ObjPtr<GameObject> obj);
     };
 }

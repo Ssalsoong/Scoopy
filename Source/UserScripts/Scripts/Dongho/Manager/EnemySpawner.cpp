@@ -42,9 +42,8 @@ void MMMEngine::EnemySpawner::Start()
 	for (int i = 0; i < 40; ++i)
 	{
 		auto obj = Instantiate(pre_normalenemy);
-		//obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
+		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Warrior);
-		//obj->GetComponent<EnemyAnimController>()->SetAniType(AnimType::AT_Warrior);
 		obj->SetActive(false);
 		NormalEnemys.push(obj);
 	}
@@ -53,7 +52,6 @@ void MMMEngine::EnemySpawner::Start()
 		auto obj = Instantiate(pre_arrowenemy);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Archer);
-		//obj->GetComponent<EnemyAnimController>()->SetAniType(AnimType::AT_Archer);
 		obj->SetActive(false);
 		ArrowEnemys.push(obj);
 	}
@@ -62,7 +60,6 @@ void MMMEngine::EnemySpawner::Start()
 		auto obj = Instantiate(pre_thiefenemy);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Scout);
-		//obj->GetComponent<EnemyAnimController>()->SetAniType(AnimType::AT_Scout);
 		obj->SetActive(false);
 		ThiefEnemys.push(obj);
 	}

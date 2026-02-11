@@ -53,12 +53,15 @@ int MMMEngine::EnemySensor::GetPriority(const ObjPtr<GameObject> obj)
 	//Todo :: 플레이어가 나를 때렸다는 정보가 필요함 -> 동호씨 로직 연결 필요
 	if (obj->GetTag() == "Player")
 	{
-		if (auto it = GetComponent<EnemyController>(); it->CheckHurt())
+		if (auto it = EnemyObj->GetComponent<EnemyController>(); (it.IsValid() && it->CheckHurt()))
 		{
+			if (!it.IsValid())
+			{
+				std::cout << "Enemy not found" << std::endl;
+			}
 			it->OnHurtFlag(false);
 			return 1;
 		}
-		return 4;
 	}
 	if (obj->GetTag() == "Snow") return 2;
 	if (obj->GetTag() == "Castle") {

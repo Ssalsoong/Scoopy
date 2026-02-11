@@ -87,6 +87,9 @@ namespace MMMEngine
         void OnStateEnter(EnemyState state);
 
         bool UpdateTarget();
+
+		USCRIPT_PROPERTY()
+		ObjPtr<GameObject> m_SensorObj;
         
 
         EnemyType GetType() { return m_EnemyType; }

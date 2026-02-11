@@ -397,7 +397,8 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<EnemyController>("EnemyController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyController>"))
-		.property("m_MainTarget", &EnemyController::m_MainTarget);
+		.property("m_MainTarget", &EnemyController::m_MainTarget)
+		.property("m_SensorObj", &EnemyController::m_SensorObj);
 
 	registration::class_<ObjPtr<EnemyController>>("ObjPtr<EnemyController>")
 		.constructor([]() { return Object::NewObject<EnemyController>(); })
@@ -415,7 +416,8 @@ RTTR_PLUGIN_REGISTRATION
 		.method("Inject", &ObjPtr<EnemyMove>::Inject);
 
 	registration::class_<EnemySensor>("EnemySensor")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySensor>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySensor>"))
+		.property("EnemyObj", &EnemySensor::EnemyObj);
 
 	registration::class_<ObjPtr<EnemySensor>>("ObjPtr<EnemySensor>")
 		.constructor([]() { return Object::NewObject<EnemySensor>(); })

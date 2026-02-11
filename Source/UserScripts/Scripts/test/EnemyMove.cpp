@@ -247,12 +247,12 @@ void MMMEngine::EnemyMove::ResetPos(DirectX::SimpleMath::Vector3 pos)
 {
 	auto m_Trans = GetTransform();
 	auto m_Rigid = GetComponent<RigidBodyComponent>();
-
 	if (m_Rigid.IsValid())
 	{
-		m_Trans->SetWorldPosition(pos);
-		auto defualtRot = Quaternion::Identity;
-		m_Rigid->SetLinearVelocity(Vector3{ 0.f,0.f,0.f });
-		m_Rigid->WakeUp();
+		m_Rigid->Teleport(pos, Quaternion::Identity);
+		m_Rigid->SetLinearVelocity(Vector3::Zero);
+		m_Rigid->SetAngularVelocity(Vector3::Zero);
+		curVel = Vector3::Zero;
+		is_move = false;
 	}
 }
