@@ -101,6 +101,7 @@
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\PauseUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\SwitchSceneFX.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\TimerUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\TitleOpeningSequencer.h"><Filter>Scripts</Filter></ClInclude>

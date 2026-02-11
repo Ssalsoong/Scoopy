@@ -108,5 +108,7 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void OnDestroy();
+
+        bool IsPause();
     };
 }

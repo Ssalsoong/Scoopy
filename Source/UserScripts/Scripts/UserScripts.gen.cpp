@@ -27,6 +27,7 @@
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
+#include "Mingi/UI/SwitchSceneFX.h"
 #include "Mingi/UI/TimerUI.h"
 #include "Mingi/UI/TitleMenu.h"
 #include "Mingi/UI/TitleOpeningSequencer.h"
@@ -251,6 +252,15 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<RotateTrakingUI>(); })
 		.method("Inject", &ObjPtr<RotateTrakingUI>::Inject);
 
+	registration::class_<SwitchSceneFX>("SwitchSceneFX")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SwitchSceneFX>"))
+		.property("FXImage", &SwitchSceneFX::FXImage)
+		.property("FXCurve", &SwitchSceneFX::FXCurve);
+
+	registration::class_<ObjPtr<SwitchSceneFX>>("ObjPtr<SwitchSceneFX>")
+		.constructor([]() { return Object::NewObject<SwitchSceneFX>(); })
+		.method("Inject", &ObjPtr<SwitchSceneFX>::Inject);
+
 	registration::class_<TimerUI>("TimerUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerUI>"))
 		.property("WaveText", &TimerUI::WaveText)
@@ -274,6 +284,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("exitButton", &TitleMenu::exitButton)
 		.property("creditPopup", &TitleMenu::creditPopup)
 		.property("IsControllAble", &TitleMenu::IsControllAble)
+		.property("PlaySceneName", &TitleMenu::PlaySceneName)
 		.property("ButtonOnScaleX", &TitleMenu::ButtonOnScaleX)
 		.property("ButtonOnScaleY", &TitleMenu::ButtonOnScaleY)
 		.property("ButtonExecuteScaleX", &TitleMenu::ButtonExecuteScaleX)

@@ -3,6 +3,7 @@
 #include "SwitchSceneFX.h"
 #include "MMMTime.h"
 #include "Image.h"
+#include "RectTransform.h"
 #include "Canvas.h"
 
 using namespace MMMEngine;
@@ -16,6 +17,9 @@ void MMMEngine::SwitchSceneFX::Awake()
 	{
 		Instance = SelfPtr(this);
 		DontDestroyOnLoad(SelfPtr(this));
+
+		if (FXImage.IsValid())
+			m_rect = FXImage->GetRectTransform();
 	}
 	else
 	{
@@ -31,8 +35,10 @@ void MMMEngine::SwitchSceneFX::OnDestroy()
 
 void MMMEngine::SwitchSceneFX::Update()
 {
-	// idle 시 리턴
-	if (m_animState == 0)
+	// 조건 미충족 시 리턴
+	if (m_animState == 0 || 
+		!m_rect.IsValid() ||
+		FXCurve.IsEmpty())
 		return;
 
 	m_timer += Time::GetUnscaledDeltaTime();
@@ -41,11 +47,31 @@ void MMMEngine::SwitchSceneFX::Update()
 	{
 		// 가리기 시작
 	case 1:
-		
+		//anchor min = 0.0f 고정
+		//anchor max = 0 -> 1 로
+		m_rect->SetAnchorMin({ 0.0f , 0.0f});
+		m_rect->SetAnchorMax({ FXCurve.Evaluate(m_timer) , 1.0f});
+
+		if (m_timer > FXCurve.GetKeyframes().back().time)
+		{
+			m_timer = 0.0f;
+			m_animState = 0;
+		}
+
 		break;
 
 		// 화면 보이게
 	case 2:
+
+		m_rect->SetAnchorMin({ FXCurve.Evaluate(m_timer) , 0.0f });
+		m_rect->SetAnchorMax({ 1.0f , 1.0f });
+
+		if (m_timer > FXCurve.GetKeyframes().back().time)
+		{
+			m_timer = 0.0f;
+			m_animState = 0;
+		}
+
 		break;
 	}
 }
@@ -57,8 +83,10 @@ int MMMEngine::SwitchSceneFX::GetState()
 
 void MMMEngine::SwitchSceneFX::FXStart()
 {
+	m_animState = 1;
 }
 
 void MMMEngine::SwitchSceneFX::FXEnd()
 {
+	m_animState = 2;
 }

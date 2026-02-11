@@ -14,6 +14,8 @@ namespace MMMEngine
         int m_selected = 0;
         float m_internalTimer[3] = {0,}; // 0 = ButtonSelect, 1 = ButtonExecute, 2 = PopUp
         bool m_popupOn = false;
+        bool m_dontUseButtonClick = false;
+        bool m_appQuit = false;
         int m_popupstate = 0; // 0 = idle, 1 = on, 2 = off
 
         RTTR_ENABLE(ScriptBehaviour)
@@ -45,6 +47,10 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         bool IsControllAble = false;
+
+
+        USCRIPT_PROPERTY()
+        std::string PlaySceneName = "";
 
         USCRIPT_MESSAGE()
         void Start();
