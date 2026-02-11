@@ -4,6 +4,7 @@
 #include "UserScriptsCommon.h"
 #include "CoreComponents.h"
 #include "LevelUpManager.h"
+#include "AnimationCurve.h"
 
 namespace MMMEngine
 {
@@ -19,6 +20,11 @@ namespace MMMEngine
         ObjPtr<Text> mHeadline;
         ObjPtr<Text> mScript;
         std::vector<ObjPtr<Image>> mIcons;
+
+        USCRIPT_PROPERTY()
+            AnimationCurve mAnimCurve;
+
+        float mElipsedTime = 0.0f;
 
         int mSelectIdx = 0;
 

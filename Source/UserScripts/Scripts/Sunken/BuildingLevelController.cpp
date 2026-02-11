@@ -22,19 +22,19 @@ void MMMEngine::BuildingLevelController::Start()
 {
 	if (!LevelUpManager::Get()) {
 		std::cout << "BuildingLVController::LevelUpManager Not Exist !!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!BuildingManager::instance) {
 		std::cout << "BuildingLVController::BuildingManager Not Exist !!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!mBuilding) {
 		mBuilding = GetTransform()->GetParent()->GetGameObject()->GetComponent<Building>();
 		if (!mBuilding) {
 			std::cout << "BuildingLVController::Building Not Exist !!" << std::endl;
-			Destroy(SelfPtr(this));
+			Destroy(GetGameObject());
 		}
 	}
 
@@ -42,7 +42,7 @@ void MMMEngine::BuildingLevelController::Start()
 		mBattleStat = GetTransform()->GetParent()->GetGameObject()->GetComponent<Battlestats>();
 		if (!mBattleStat) {
 			std::cout << "BuildingLVController::BattleStat Not Exist !!" << std::endl;
-			Destroy(SelfPtr(this));
+			Destroy(GetGameObject());
 		}
 	}
 
@@ -50,7 +50,7 @@ void MMMEngine::BuildingLevelController::Start()
 		mPlayer = GameObject::FindWithTag("Player");
 		if (!mPlayer) {
 			std::cout << "BuildingLVController::Player Not Exist !!" << std::endl;
-			Destroy(SelfPtr(this));
+			Destroy(GetGameObject());
 		}
 	}
 
@@ -63,10 +63,14 @@ void MMMEngine::BuildingLevelController::Start()
 	mDeBuffIcon = LevelUpManager::Get()->mDeBuffIcon;
 	mSnowIcon = LevelUpManager::Get()->mSnowIcon;
 	mReadyIcon = Instantiate(LevelUpManager::Get()->mReadyPrefab)->GetComponent<Image>();
+	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
+
+	mCountIcon->GetTransform()->SetParent(mCanvas->GetTransform());
+	mCountIcon->GetGameObject()->SetActive(false);
 
 	if (!mCanvas.IsValid()) {
 		std::cout << "BuildingLVController::No Canvas!!!" << std::endl;
-		Destroy(SelfPtr(this));
+		Destroy(GetGameObject());
 	}
 
 	if (!mExpGage.IsValid()) {
@@ -142,6 +146,7 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 
 void MMMEngine::BuildingLevelController::UpdateReadyIcon()
 {
+	mReadyIcon->GetGameObject()->SetActive(true);
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{ 0.0f, 0.0f });
@@ -313,9 +318,11 @@ void MMMEngine::BuildingLevelController::UpdateGuage()
 {
 	auto expRect = mExpGage->GetRectTransform();
 	auto hpRect = mHpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
 
 	SetUITrans(expRect, mGagePosOffset, mPadding);
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mBuilding->maxHP;
 	auto currHP = mBattleStat->HP;
@@ -329,8 +336,12 @@ void MMMEngine::BuildingLevelController::UpdateGuage()
 	else
 		expFactor = (float)mBuilding->exp / (float)mReqExp;
 
+	// 현재 눈 갯수 출력
+	auto text = mCountIcon->GetTransform()->GetChild(0)->GetComponent<Text>();
+	int snowCount = mBuilding->point;
+	text->SetText(std::to_wstring(snowCount));
+
 	mExpGage->SetValue(expFactor);
-	
 }
 
 void MMMEngine::BuildingLevelController::Update()
@@ -357,7 +368,6 @@ void MMMEngine::BuildingLevelController::Update()
 				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
 			else {
-				mReadyIcon->GetGameObject()->SetActive(true);
 				LevelUpManager::Get()->RemoveBubble();
 			}
 		}
@@ -371,20 +381,22 @@ void MMMEngine::BuildingLevelController::Update()
 		LevelUp();
 }
 
-void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(true);
 		mExpGage->GetGameObject()->SetActive(true);
+		mCountIcon->GetGameObject()->SetActive(true);
 		isActive = true;
 	}
 }
 
-void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::CollisionInfo info)
+void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
 		mHpGage->GetGameObject()->SetActive(false);
 		mExpGage->GetGameObject()->SetActive(false);
+		mCountIcon->GetGameObject()->SetActive(false);
 		isActive = false;
 	}
 }

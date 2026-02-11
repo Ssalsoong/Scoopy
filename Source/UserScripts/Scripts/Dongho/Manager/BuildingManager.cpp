@@ -24,7 +24,11 @@ void MMMEngine::BuildingManager::Awake()
 
 void MMMEngine::BuildingManager::Start()
 {
-	pre_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
+	//pre_building = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/Building.Prefab");
+
+	if (!pre_building) {
+		std::cout << "BuildingManager::No Building Prefab!!!" << std::endl;
+	}
 
 	buildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomalTower_StaticMesh.staticmesh");
 	HPbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/nomal2Tower_StaticMesh.staticmesh");

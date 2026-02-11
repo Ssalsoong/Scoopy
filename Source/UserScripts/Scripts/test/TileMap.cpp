@@ -5,8 +5,6 @@
 #include "MMMTime.h"
 
 
-
-
 void MMMEngine::TileMap::SetOneTimeValue(int value)
 {
 	OneTimeGetValue = value;
@@ -45,6 +43,15 @@ void MMMEngine::TileMap::TileCheck(const Vec2& pos)
 	}
 
 	float d = DistXZ(prevPos, pos);
+
+	if (auto p = P_trans->GetComponent<PlayerController>(); p.IsValid())
+	{
+		if (p->HasCurrentSnow() && p->IsScoopFull())
+		{
+			prevPos = pos;
+			return;
+		}
+	}
 
 	int ix, iz;
 	WorldToTile(pos.x, pos.z, originX, originZ, tileSize, ix, iz);

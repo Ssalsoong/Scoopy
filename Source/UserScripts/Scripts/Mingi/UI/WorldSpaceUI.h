@@ -50,6 +50,9 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
             void OnDestroy();
 
+		USCRIPT_PROPERTY()
+			bool DontMoveUI = false;
+
         USCRIPT_PROPERTY()
             bool DontSortByDistance = false;
 

@@ -16,13 +16,17 @@
 #include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
 #include "Mingi/EngineLogoStartAnim.h"
+#include "Mingi/ExplosionParticles.h"
+#include "Mingi/ExplosionPool.h"
 #include "Mingi/FXSnowFall.h"
 #include "Mingi/Manager/SoundManager.h"
 #include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/MiniMap.h"
+#include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
+#include "Mingi/UI/SwitchSceneFX.h"
 #include "Mingi/UI/TimerUI.h"
 #include "Mingi/UI/TitleMenu.h"
 #include "Mingi/UI/TitleOpeningSequencer.h"
@@ -31,11 +35,15 @@
 #include "Sunken/AnimResourceManager.h"
 #include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
+#include "Sunken/ControlManager.h"
 #include "Sunken/EnemyAnimController.h"
 #include "Sunken/LevelUpBubble.h"
 #include "Sunken/LevelUpManager.h"
 #include "Sunken/PlayerAnimController.h"
+#include "Sunken/PlayerHpGage.h"
 #include "Sunken/PrefabTest.h"
+#include "Sunken/TimerGageScript.h"
+#include "Sunken/WaveUIScript.h"
 #include "test/CastleManager.h"
 #include "test/EnemyController.h"
 #include "test/EnemyMove.h"
@@ -120,6 +128,25 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<EngineLogoStartAnim>(); })
 		.method("Inject", &ObjPtr<EngineLogoStartAnim>::Inject);
 
+	registration::class_<ExplosionParticles>("ExplosionParticles")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ExplosionParticles>"))
+		.property("Particle1", &ExplosionParticles::Particle1)
+		.property("Particle2", &ExplosionParticles::Particle2)
+		.property("Particle3", &ExplosionParticles::Particle3)
+		.property("Particle4", &ExplosionParticles::Particle4);
+
+	registration::class_<ObjPtr<ExplosionParticles>>("ObjPtr<ExplosionParticles>")
+		.constructor([]() { return Object::NewObject<ExplosionParticles>(); })
+		.method("Inject", &ObjPtr<ExplosionParticles>::Inject);
+
+	registration::class_<ExplosionPool>("ExplosionPool")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ExplosionPool>"))
+		.property("ExplosionPrefab", &ExplosionPool::ExplosionPrefab);
+
+	registration::class_<ObjPtr<ExplosionPool>>("ObjPtr<ExplosionPool>")
+		.constructor([]() { return Object::NewObject<ExplosionPool>(); })
+		.method("Inject", &ObjPtr<ExplosionPool>::Inject);
+
 	registration::class_<FXSnowFall>("FXSnowFall")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FXSnowFall>"));
 
@@ -181,6 +208,31 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<MiniMap>(); })
 		.method("Inject", &ObjPtr<MiniMap>::Inject);
 
+	registration::class_<PauseUI>("PauseUI")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PauseUI>"))
+		.property("PanelGO", &PauseUI::PanelGO)
+		.property("P_rect", &PauseUI::P_rect)
+		.property("a_rect", &PauseUI::a_rect)
+		.property("u_rect", &PauseUI::u_rect)
+		.property("s_rect", &PauseUI::s_rect)
+		.property("e_rect", &PauseUI::e_rect)
+		.property("Resume_rect", &PauseUI::Resume_rect)
+		.property("ToTitle_rect", &PauseUI::ToTitle_rect)
+		.property("PosYCurve", &PauseUI::PosYCurve)
+		.property("ButtonYCurve", &PauseUI::ButtonYCurve)
+		.property("FadeDuration", &PauseUI::FadeDuration)
+		.property("SceneChangeTime", &PauseUI::SceneChangeTime)
+		.property("AnimOffestTime", &PauseUI::AnimOffestTime)
+		.property("buttonAnimOffset", &PauseUI::buttonAnimOffset)
+		.property("FocusFadeSpeed", &PauseUI::FocusFadeSpeed)
+		.property("ButtonScaleCurve", &PauseUI::ButtonScaleCurve)
+		.property("ButtonSelectTimeOffset", &PauseUI::ButtonSelectTimeOffset)
+		.property("TitleSceneName", &PauseUI::TitleSceneName);
+
+	registration::class_<ObjPtr<PauseUI>>("ObjPtr<PauseUI>")
+		.constructor([]() { return Object::NewObject<PauseUI>(); })
+		.method("Inject", &ObjPtr<PauseUI>::Inject);
+
 	registration::class_<RotateTrakingUI>("RotateTrakingUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<RotateTrakingUI>"))
 		.property("WorldSpaceUI", &RotateTrakingUI::WorldSpaceUI);
@@ -189,9 +241,17 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<RotateTrakingUI>(); })
 		.method("Inject", &ObjPtr<RotateTrakingUI>::Inject);
 
+	registration::class_<SwitchSceneFX>("SwitchSceneFX")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<SwitchSceneFX>"))
+		.property("FXImage", &SwitchSceneFX::FXImage)
+		.property("FXCurve", &SwitchSceneFX::FXCurve);
+
+	registration::class_<ObjPtr<SwitchSceneFX>>("ObjPtr<SwitchSceneFX>")
+		.constructor([]() { return Object::NewObject<SwitchSceneFX>(); })
+		.method("Inject", &ObjPtr<SwitchSceneFX>::Inject);
+
 	registration::class_<TimerUI>("TimerUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerUI>"))
-		.property("m_playingAnimation", &TimerUI::m_playingAnimation)
 		.property("WaveText", &TimerUI::WaveText)
 		.property("TimerGage", &TimerUI::TimerGage)
 		.property("WaveBack", &TimerUI::WaveBack)
@@ -199,8 +259,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("scaleCurve", &TimerUI::scaleCurve)
 		.property("rotCurve", &TimerUI::rotCurve)
 		.property("posCurve", &TimerUI::posCurve)
-		.property("TimerAlpha", &TimerUI::TimerAlpha)
-		.property("WaveBackAlpha", &TimerUI::WaveBackAlpha);
+		.property("alphaCurve", &TimerUI::alphaCurve)
+		.property("gageCurve", &TimerUI::gageCurve);
 
 	registration::class_<ObjPtr<TimerUI>>("ObjPtr<TimerUI>")
 		.constructor([]() { return Object::NewObject<TimerUI>(); })
@@ -213,6 +273,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("exitButton", &TitleMenu::exitButton)
 		.property("creditPopup", &TitleMenu::creditPopup)
 		.property("IsControllAble", &TitleMenu::IsControllAble)
+		.property("PlaySceneName", &TitleMenu::PlaySceneName)
 		.property("ButtonOnScaleX", &TitleMenu::ButtonOnScaleX)
 		.property("ButtonOnScaleY", &TitleMenu::ButtonOnScaleY)
 		.property("ButtonExecuteScaleX", &TitleMenu::ButtonExecuteScaleX)
@@ -252,6 +313,7 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<WorldSpaceUI>"))
 		.property("SelfRect", &WorldSpaceUI::SelfRect)
 		.property("TargetTransform", &WorldSpaceUI::TargetTransform)
+		.property("DontMoveUI", &WorldSpaceUI::DontMoveUI)
 		.property("DontSortByDistance", &WorldSpaceUI::DontSortByDistance)
 		.property("ClampToScreenEdge", &WorldSpaceUI::ClampToScreenEdge)
 		.property("EdgeYOffset", &WorldSpaceUI::EdgeYOffset)
@@ -314,6 +376,13 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<CastleLevelController>(); })
 		.method("Inject", &ObjPtr<CastleLevelController>::Inject);
 
+	registration::class_<ControlManager>("ControlManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ControlManager>"));
+
+	registration::class_<ObjPtr<ControlManager>>("ObjPtr<ControlManager>")
+		.constructor([]() { return Object::NewObject<ControlManager>(); })
+		.method("Inject", &ObjPtr<ControlManager>::Inject);
+
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
 		.property("mAnimator", &EnemyAnimController::mAnimator)
@@ -326,6 +395,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<LevelUpBubble>("LevelUpBubble")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
+		.property("mAnimCurve", &LevelUpBubble::mAnimCurve)
 		.property("mUIScale", &LevelUpBubble::mUIScale)
 		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
 		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
@@ -381,12 +451,35 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<PlayerAnimController>(); })
 		.method("Inject", &ObjPtr<PlayerAnimController>::Inject);
 
+	registration::class_<PlayerHpGage>("PlayerHpGage")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerHpGage>"))
+		.property("mPlayer", &PlayerHpGage::mPlayer);
+
+	registration::class_<ObjPtr<PlayerHpGage>>("ObjPtr<PlayerHpGage>")
+		.constructor([]() { return Object::NewObject<PlayerHpGage>(); })
+		.method("Inject", &ObjPtr<PlayerHpGage>::Inject);
+
 	registration::class_<PrefabTest>("PrefabTest")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
 
 	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
 		.constructor([]() { return Object::NewObject<PrefabTest>(); })
 		.method("Inject", &ObjPtr<PrefabTest>::Inject);
+
+	registration::class_<TimerGageScript>("TimerGageScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerGageScript>"));
+
+	registration::class_<ObjPtr<TimerGageScript>>("ObjPtr<TimerGageScript>")
+		.constructor([]() { return Object::NewObject<TimerGageScript>(); })
+		.method("Inject", &ObjPtr<TimerGageScript>::Inject);
+
+	registration::class_<WaveUIScript>("WaveUIScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<WaveUIScript>"))
+		.property("mWaveText", &WaveUIScript::mWaveText);
+
+	registration::class_<ObjPtr<WaveUIScript>>("ObjPtr<WaveUIScript>")
+		.constructor([]() { return Object::NewObject<WaveUIScript>(); })
+		.method("Inject", &ObjPtr<WaveUIScript>::Inject);
 
 	registration::class_<CastleManager>("CastleManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<CastleManager>"));
@@ -432,6 +525,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerController>("PlayerController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
+		.property("mControlLayout", &PlayerController::mControlLayout)
 		.property("m_TileMap", &PlayerController::m_TileMap)
 		.property("m_SnowManager", &PlayerController::m_SnowManager);
 

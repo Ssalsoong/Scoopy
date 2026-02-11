@@ -8,11 +8,24 @@
 #include "TileMap.h"
 #include "SnowballManager2.h"
 
+#include "../Sunken/PlayerAnimController.h"
+#include "../Sunken/ControlManager.h"
+
 
 void MMMEngine::PlayerController::Start()
 {
 	MoveComponent = GetComponent<PlayerMove>();
 	if (!MoveComponent.IsValid()) { std::cout << "MoveComponent not found" << std::endl; }
+	
+	m_Anime = GetComponent<PlayerAnimController>();
+	if (!m_Anime.IsValid()) {
+		std::cout << "PlayerController::PAcontroller not Found !!" << std::endl;
+	}
+
+	mInput = ControlManager::Get();
+	if (!mInput.IsValid()) {
+		std::cout << "PlayerController::ControlManager not Found !!" << std::endl;
+	}
 }
 
 void MMMEngine::PlayerController::Update()
@@ -34,10 +47,11 @@ void MMMEngine::PlayerController::RemoveSnowList(ObjPtr<GameObject> obj)
 void MMMEngine::PlayerController::InPutMove()
 {
 	float x = 0.f, z = 0.f;
-	if (Input::GetKey(KeyCode::W)) z += 1.f;
-	if (Input::GetKey(KeyCode::S)) z -= 1.f;
-	if (Input::GetKey(KeyCode::D)) x += 1.f;
-	if (Input::GetKey(KeyCode::A)) x -= 1.f;
+
+	if (mInput->GetKey(KeyCode::UpArrow, mControlLayout)) z += 1.f;
+	if (mInput->GetKey(KeyCode::DownArrow, mControlLayout)) z -= 1.f;
+	if (mInput->GetKey(KeyCode::RightArrow, mControlLayout)) x += 1.f;
+	if (mInput->GetKey(KeyCode::LeftArrow, mControlLayout)) x -= 1.f;
 
 	m_InputDir = DirectX::SimpleMath::Vector3(x, 0.f, z);
 
@@ -47,34 +61,48 @@ void MMMEngine::PlayerController::InPutMove()
 
 void MMMEngine::PlayerController::InPutHoldSnow()
 {
-	if (Input::GetKeyDown(KeyCode::Space))
-	{
-		m_holdSpace = true;
+	static bool prevSpaceFlag = false;
+	bool spaceFlag = mInput->GetKey(KeyCode::Space, mControlLayout);
 
-		if (!m_Snows.empty())
-		{
-			AttachNearestSnow();
+	if (prevSpaceFlag != spaceFlag) {
+		prevSpaceFlag = spaceFlag;
+
+		if (prevSpaceFlag) {
+			m_holdSpace = true;
+
+			// 애니메이션 재생
+			m_Anime->mScooping = true;
+
+			if (!m_Snows.empty())
+			{
+				AttachNearestSnow();
+			}
+			else
+			{
+				if (m_TileMap.IsValid())
+					m_TileMap->GetComponent<TileMap>()->NoticePlayer(true);
+
+				if (auto mv = GetComponent<PlayerMove>(); mv.IsValid()) {
+					mv->SetScoopMode(true, nullptr);
+
+				}
+
+			}
 		}
-		else
-		{
-			if (m_TileMap.IsValid())
-				m_TileMap->GetComponent<TileMap>()->NoticePlayer(true);
+		else {
+			m_holdSpace = false;
 
-			if (auto mv = GetComponent<PlayerMove>(); mv.IsValid())
-				mv->SetScoopMode(true, nullptr);
+			// 애니메이션 재생
+			m_Anime->mScooping = false;
+
+			m_pendingAttach = false;
+			m_attachDelayFrames = 0;
+			SnowScoopCount = 0;
+			DetachSnow();
+			return;
 		}
 	}
-
-	if (Input::GetKeyUp(KeyCode::Space))
-	{
-		m_holdSpace = false;
-		m_pendingAttach = false;
-		m_attachDelayFrames = 0;
-		SnowScoopCount = 0;
-		DetachSnow();
-		return;
-	}
-
+	
 	if (m_holdSpace && !curSnow.IsValid() && !m_Snows.empty())
 	{
 		AttachNearestSnow();

@@ -164,11 +164,6 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value, ObjPtr<GameObject> target)
 	is_Scoop = value;
 	isSlow = value;
 	m_LookTarget = value;
-
-	// 애니메이션 세팅
-	if (mPAController) {
-		mPAController->mScooping = value;
-	}
 }
 
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)

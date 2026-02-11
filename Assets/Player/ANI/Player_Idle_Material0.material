@@ -1,5 +1,5 @@
 {
-    "MUID": "44006ebf-0dfa-4636-a799-d8dd0f064066",
+    "MUID": "b48d66a2-04ae-48dc-8c16-84998a7625ae",
     "properties": {
         "_albedo": {
             "file": "Assets\\Player\\ANI\\C_Holy Cleric_F_txt.png",
@@ -100,6 +100,10 @@
             "value": 0.0
         },
         "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoundDotClip": {
             "type": "float",
             "value": 0.0
         }

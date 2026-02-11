@@ -1,5 +1,5 @@
 {
-    "MUID": "dd105607-89f5-4478-8d35-aaaf5bdc06ba",
+    "MUID": "b0691cb2-36aa-4bf5-8067-9907d1eaf90e",
     "properties": {
         "_albedo": {
             "file": "Assets\\Taeil\\Resources\\PixelTeture.png",
@@ -100,6 +100,10 @@
             "value": 0.0
         },
         "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoundDotClip": {
             "type": "float",
             "value": 0.0
         }
