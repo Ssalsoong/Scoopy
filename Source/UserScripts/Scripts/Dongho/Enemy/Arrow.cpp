@@ -45,7 +45,7 @@ void MMMEngine::Arrow::Update()
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();
 	auto pos = GetTransform()->GetWorldPosition();
-
+	LookAt(targetpos);
 	// 방향/거리
 	auto to = targetpos - pos;
 	to.y = 0.0f;
@@ -86,11 +86,6 @@ void MMMEngine::Arrow::Update()
 void MMMEngine::Arrow::SetTarget(ObjPtr<GameObject> obj) 
 { 
 	target = obj;
-	if (auto targettr = target->GetTransform(); targettr.IsValid())
-	{
-		auto targetpos = targettr->GetWorldPosition();
-		LookAt(targetpos);
-	}
 }
 
 void MMMEngine::Arrow::LookAt(const DirectX::SimpleMath::Vector3& target)
