@@ -82,9 +82,13 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 
 	if (is_Scoop)
 	{
-		float slowed = DefaultSpeed - (scoop * MinusSpeed);
+		float T_OnSnowSpeed = OnSnowSpeed;
+
+		float MinusSpeed = (25.f / float(Snow_MaxScoop));
+
+		float slowed = T_OnSnowSpeed - (float(scoop) * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
-		return (slowed + buff); // 스쿱 상태면 타일 영향 무시
+		return slowed; // 스쿱 상태면 타일 영향 무시
 	}
 
 	// 스쿱 아닐 때만 타일 속도 적용
@@ -97,7 +101,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 
 	CurSpeed = speed;
 
-	return (speed + buff);
+	return speed;
 }
 
 float MMMEngine::PlayerMove::GetCurSpeed()
@@ -165,4 +169,9 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value, ObjPtr<GameObject> target)
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
 	m_InputDir = vec;
+}
+
+void MMMEngine::PlayerMove::SetSnowMaxScoop(int maxValue)
+{
+	Snow_MaxScoop = maxValue;
 }
