@@ -5,6 +5,7 @@
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Building.h"
 #include "../../test/EnemyMove.h"
+#include "../../test/EnemyController.h"
 #include "Transform.h"
 #include "../Battlestats.h"
 

@@ -96,7 +96,7 @@ namespace MMMEngine
 
 
         void AttackTarget();
-        ObjPtr<GameObject> attacktarget;
+        ObjPtr<GameObject> battletarget;
 
         float attackTimer = 0.0f;
 		float snowDamageTimer = 0.0f;

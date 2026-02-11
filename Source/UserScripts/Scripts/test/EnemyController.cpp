@@ -97,12 +97,28 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 
 void MMMEngine::EnemyController::UpdateDistance()
 {
-	if (m_CurTarget == nullptr) m_CurTarget = m_MainTarget;
+	if (m_CurTarget == nullptr) {
+		m_CurTarget = m_MainTarget;
+		UpdateDistance();
+		return;
 
-	auto EnemyPos = GetTransform()->GetWorldPosition();
-	auto TargetPos = m_CurTarget->GetTransform()->GetWorldPosition();
-	toTarget = TargetPos - EnemyPos;
-	distance = toTarget.Length();
+	}
+	if (!m_CurTarget.IsValid()) {
+		m_CurTarget = m_MainTarget;
+		UpdateDistance();
+		return;
+	}
+	if (auto tr = GetTransform();tr.IsValid())
+	{
+		if (auto Curtr = m_CurTarget->GetTransform(); Curtr.IsValid())
+		{
+
+			auto EnemyPos = tr->GetWorldPosition();
+			auto TargetPos = Curtr->GetWorldPosition();
+			toTarget = TargetPos - EnemyPos;
+			distance = toTarget.Length();
+		}
+	}
 }
 
 
@@ -115,7 +131,7 @@ void MMMEngine::EnemyController::ChangeState()
     float extra = 0.0f;
     const auto& tag = m_CurTarget->GetTag();
 
-    if (tag == "Castle"){ extra = 0.4f;}
+    if (tag == "Castle"){ extra = 0.6f;}
     else if (tag == "Building") extra = 0.3f;
     else if (tag == "Player") extra = 0.2f;
     else if (tag == "Snow") extra = 0.6f;
@@ -155,7 +171,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	case EnemyState::Attack:
 	{
 		m_Move->MoveTriggerSet(false);
-		attacktarget = m_CurTarget;
+		battletarget = m_CurTarget;
 		break;
 	}
 	case EnemyState::Dead:
@@ -205,24 +221,24 @@ void MMMEngine::EnemyController::AttackTarget()
 		attackTimer = 0.0f;
 		return;
 	}
+	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
+	{
+		attackTimer = 0.0f;
+		m_CurTarget = m_MainTarget;
+		OnStateEnter(EnemyState::Move);
+	}
 	attackTimer += Time::GetDeltaTime();
 	if (attackTimer >= E_state.AS)
 	{
-		if (attacktarget == m_CurTarget)
+		if (battletarget == m_CurTarget)
 		{
-			if (attacktarget->GetName() == "Snow")
+			if (battletarget->GetName() == "Snow")
 			{
-				if (auto snowCollider = attacktarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
+				if (auto snowCollider = battletarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
 				{
 					if (!snowCollider->CheckOnPlayer())
 					{
-						snowCollider->lifeCount--;
-						if (snowCollider->lifeCount <= 0)
-						{
-							snowCollider->DestroyByEnemy();
-							m_CurTarget = m_MainTarget;
-							OnStateEnter(EnemyState::Move);
-						}
+						snowCollider->LifeDown();
 					}
 				}
 				else
@@ -234,9 +250,9 @@ void MMMEngine::EnemyController::AttackTarget()
 				return;
 			}
 			if (auto arrowenemy = GetComponent<ArrowEnemy>(); arrowenemy.IsValid())
-				arrowenemy->ArrowAttack(attacktarget);
+				arrowenemy->ArrowAttack(battletarget);
 			else
-				BattleManager::instance->Attack(GetGameObject(), attacktarget, E_state.AD);
+				BattleManager::instance->Attack(GetGameObject(), battletarget, E_state.AD);
 		}
 		if (auto targetstats = m_CurTarget->GetComponent<Battlestats>(); targetstats.IsValid())
 		{

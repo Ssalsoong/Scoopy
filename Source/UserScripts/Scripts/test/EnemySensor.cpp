@@ -59,8 +59,9 @@ int MMMEngine::EnemySensor::GetPriority(const ObjPtr<GameObject> obj)
 			{
 				std::cout << "Enemy not found" << std::endl;
 			}
-			return 1;
 			it->OnHurtFlag(false);
+			std::cout << "Check Player" << std::endl;
+			return 1;
 		}*/
 		return 1;
 	}

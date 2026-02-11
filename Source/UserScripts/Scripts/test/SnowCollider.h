@@ -108,7 +108,7 @@ namespace MMMEngine
 		USCRIPT_MESSAGE()
 		void OnCollisionStay(MMMEngine::CollisionInfo info);
 
-        int lifeCount = 3;
-        void DestroyByEnemy();
+        int life = 3;
+        void LifeDown();
     };
 }

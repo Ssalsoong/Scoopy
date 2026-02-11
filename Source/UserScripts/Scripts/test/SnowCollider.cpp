@@ -103,8 +103,11 @@ void MMMEngine::SnowCollider::Start()
 
 void MMMEngine::SnowCollider::Update()
 {
-	GetTransform()->SetWorldPosition(Vector3::Lerp(m_lastPos, m_currPos, TimeManager::Get().GetInterpolationAlpha()));
-	GetTransform()->SetWorldRotation(Quaternion::Slerp(m_lastRot, m_currRot, TimeManager::Get().GetInterpolationAlpha()));
+	if (GetGameObject().IsValid())
+	{
+		GetTransform()->SetWorldPosition(Vector3::Lerp(m_lastPos, m_currPos, TimeManager::Get().GetInterpolationAlpha()));
+		GetTransform()->SetWorldRotation(Quaternion::Slerp(m_lastRot, m_currRot, TimeManager::Get().GetInterpolationAlpha()));
+	}
 }
 
 void MMMEngine::SnowCollider::FixedUpdate()
@@ -296,10 +299,11 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 	}
 }
 
-void MMMEngine::SnowCollider::DestroyByEnemy()
+void MMMEngine::SnowCollider::LifeDown()
 {
-	if (lifeCount > 0)
-		return;
-	SnowDestory();
-	Destroy(GetGameObject());
+	life--;
+	if (life <= 0) {
+		SnowDestory();
+		Destroy(GetGameObject());
+	}
 }
