@@ -87,11 +87,12 @@ void MMMEngine::SoundManager::Awake()
     if (!Instance.IsValid())
     {
         Instance = SelfPtr(this);
-        DontDestroyOnLoad(SelfPtr(this));
 
         EnsureBGMSource();
         EnsureSFXPool();
         LoadAudioTable();
+
+        DontDestroyOnLoad(SelfPtr(this));
     }
     else
     {

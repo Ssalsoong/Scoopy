@@ -32,6 +32,7 @@ void MMMEngine::PlayerController::Update()
 {
 	InPutMove();
 	InPutHoldSnow();
+	CheckParticleEnable();
 }
 
 void MMMEngine::PlayerController::AddSnowList(ObjPtr<GameObject> obj)
@@ -228,6 +229,17 @@ void MMMEngine::PlayerController::AttachNearestSnow()
 	t->SetScoopMode(true, curSnow);
 }
 
+void MMMEngine::PlayerController::CheckParticleEnable()
+{
+	auto tr = GetTransform();
+
+	m_particleEnable = m_InputDir.LengthSquared() > 0 &&
+		SnowScoopCount < MaxPlayerScoop &&
+		m_holdSpace &&
+		m_TileMap.IsValid() &&
+		!m_TileMap->GetComponent<TileMap>()->IsTileClearedAt(tr->GetWorldPosition().x, tr->GetWorldPosition().z);
+}
+
 void MMMEngine::PlayerController::DetachSnow()
 {
 	if (curSnow.IsValid())
@@ -244,4 +256,9 @@ void MMMEngine::PlayerController::DetachSnow()
 
 	if (auto mv = GetComponent<PlayerMove>(); mv.IsValid())
 		mv->SetScoopMode(false, nullptr);
+}
+
+bool MMMEngine::PlayerController::IsParticleEnable()
+{
+	return m_particleEnable;
 }
