@@ -52,7 +52,9 @@ namespace MMMEngine
         bool isReady = false;
         bool mPrevActive = false;
 
-        void UpdateGuage();
+        void LowHPUpdate();
+        void UpdateHpGuage();
+        void UpdateExtraGuage();
         void LevelUp();
         void UpdateReadyIcon();
         void SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding);

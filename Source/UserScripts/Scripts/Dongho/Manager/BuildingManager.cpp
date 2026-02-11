@@ -41,18 +41,19 @@ void MMMEngine::BuildingManager::Start()
 	snowbuildingmesh = ResourceManager::Get().Load<StaticMesh>(L"Assets/Tower/Mesh/iceTower_StaticMesh.staticmesh");
 	for (int i = 0; i < BuildingPointCount; ++i)
 	{
-		auto obj = Instantiate(mBuildingPoint);
-			
-			NewObject<GameObject>();
-		obj->SetName("BuildingPoint");
-		obj->SetTag("BuildingPoint");
-		obj->AddComponent<BuildingPoint>();
-		obj->AddComponent<MeshRenderer>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(cube);
-		obj->GetTransform()->SetWorldScale(0.1f, 0.5f, 0.1f);
-		obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
-		obj->GetTransform()->SetParent(GetTransform());
-		buildingpoints.push_back(obj);
+		if (mBuildingPoint) {
+			auto obj = Instantiate(mBuildingPoint);
+			/*obj->SetName("BuildingPoint");
+			obj->SetTag("BuildingPoint");
+			obj->AddComponent<BuildingPoint>();
+			obj->AddComponent<MeshRenderer>();
+			obj->GetComponent<MeshRenderer>()->SetMesh(cube);
+			obj->GetTransform()->SetWorldScale(0.1f, 0.5f, 0.1f);
+			*/
+			obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
+			obj->GetTransform()->SetParent(GetTransform());
+			buildingpoints.push_back(obj);
+		}
 	}
 }
 

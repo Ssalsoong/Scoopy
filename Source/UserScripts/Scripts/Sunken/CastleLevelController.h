@@ -37,8 +37,11 @@ namespace MMMEngine
         void SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding);
         void SetLVManager(int _upIndex);
 
-        void UpdateGuage();
+        void UpdateHPGuage();
+        void UpdateExtraGuage();
         void UpdateReadyIcon();
+
+        void LowHPUpdate();
     public:
         CastleLevelController()
         {

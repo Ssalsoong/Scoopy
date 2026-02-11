@@ -86,6 +86,7 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
             ResPtr<Prefab> mGagePrefab;
 
+
     public:
         LevelUpManager()
         {

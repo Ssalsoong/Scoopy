@@ -56,7 +56,13 @@ void MMMEngine::BuildingLevelController::Start()
 
 	mCanvas = LevelUpManager::Get()->GetCanvas();
 	mReqExp = LevelUpManager::Get()->GetExpPoint(EXPTYPE::EXP_BUILD, mCurrLevel);
-	mHpGage = LevelUpManager::Get()->mHpGage;
+	auto gage = Instantiate(LevelUpManager::Get()->mGagePrefab);
+
+	if (gage) {
+		gage->GetTransform()->SetParent(mCanvas->GetTransform());
+		mHpGage = gage->GetComponent<Gage>();
+		gage->SetActive(false);
+	}
 	mExpGage = LevelUpManager::Get()->mExpGage;
 	mHPIcon = LevelUpManager::Get()->mHPIcon;
 	mBuffIcon = LevelUpManager::Get()->mBuffIcon;
@@ -313,21 +319,40 @@ void MMMEngine::BuildingLevelController::SetActiveIcon()
 
 }
 
-void MMMEngine::BuildingLevelController::UpdateGuage()
+void MMMEngine::BuildingLevelController::LowHPUpdate()
 {
-	auto expRect = mExpGage->GetRectTransform();
-	auto hpRect = mHpGage->GetRectTransform();
-	auto countRect = mCountIcon->GetRectTransform();
+	if (!mHpGage)
+		return;
 
-	SetUITrans(expRect, mGagePosOffset, mPadding);
+	int currHP = mBattleStat->HP;
+	int maxHP = mBuilding->maxHP;
+
+	if (currHP < maxHP) {
+		UpdateHpGuage();
+	}
+	else
+		mHpGage->GetGameObject()->SetActive(false);
+}
+
+void MMMEngine::BuildingLevelController::UpdateHpGuage()
+{
+	auto hpRect = mHpGage->GetRectTransform();
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
-	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mBuilding->maxHP;
 	auto currHP = mBattleStat->HP;
 
 	float hpFactor = (float)currHP / (float)maxHP;
 	mHpGage->SetValue(hpFactor);
+}
+
+void MMMEngine::BuildingLevelController::UpdateExtraGuage()
+{
+	auto expRect = mExpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
+
+	SetUITrans(expRect, mGagePosOffset, mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	float expFactor = 0.0f;
 	if (mReqExp == 0)
@@ -345,10 +370,15 @@ void MMMEngine::BuildingLevelController::UpdateGuage()
 
 void MMMEngine::BuildingLevelController::Update()
 {
-	if (isActive)
-		UpdateGuage();
-	else if(isReady)
-		UpdateReadyIcon();
+	if (isActive) {
+		UpdateHpGuage();
+		UpdateExtraGuage();
+	}
+	else {
+		LowHPUpdate();
+		if (isReady)
+			UpdateReadyIcon();
+	}
 
 	/*if (isReady && !isActive) {
 		UpdateReadyIcon();

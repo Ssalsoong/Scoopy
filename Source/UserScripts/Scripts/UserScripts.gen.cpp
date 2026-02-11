@@ -117,7 +117,8 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingManager>("BuildingManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("pre_building", &BuildingManager::pre_building);
+		.property("pre_building", &BuildingManager::pre_building)
+		.property("mBuildingPoint", &BuildingManager::mBuildingPoint);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor([]() { return Object::NewObject<BuildingManager>(); })
@@ -411,16 +412,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<LevelUpBubble>("LevelUpBubble")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
 		.property("mBubbleSizeCurve", &LevelUpBubble::mBubbleSizeCurve)
-		.property("mContentAlphaCurve", &LevelUpBubble::mContentAlphaCurve)
 		.property("mCloseSizeCurve", &LevelUpBubble::mCloseSizeCurve)
-		.property("mOpenAnimTime", &LevelUpBubble::mOpenAnimTime)
-		.property("mCloseAnimTime", &LevelUpBubble::mCloseAnimTime)
+		.property("mSelectRotCurve", &LevelUpBubble::mSelectRotCurve)
 		.property("mInputLayer", &LevelUpBubble::mInputLayer)
 		.property("mUIScale", &LevelUpBubble::mUIScale)
 		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
+		.property("mIconWidth", &LevelUpBubble::mIconWidth)
 		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
 		.property("mIconOffset", &LevelUpBubble::mIconOffset)
-		.property("mIconPadding", &LevelUpBubble::mIconPadding)
 		.property("mHeadlineOffset", &LevelUpBubble::mHeadlineOffset)
 		.property("mScriptOffset", &LevelUpBubble::mScriptOffset)
 		.property("mSelectIconSize", &LevelUpBubble::mSelectIconSize)
