@@ -59,5 +59,7 @@ namespace MMMEngine
 
 		USCRIPT_MESSAGE()
 			void Update();
+
+		void PlayAttack();
 	};
 }
