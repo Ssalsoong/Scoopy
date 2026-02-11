@@ -150,3 +150,8 @@ void MMMEngine::PauseUI::OnDestroy()
 		Time::SetTimeScale(1.0f);
 	}
 }
+
+bool MMMEngine::PauseUI::IsPause()
+{
+	return m_isPause;
+}

@@ -5,8 +5,12 @@
 #include "MMMTime.h"
 #include "Image.h"
 #include "Transform.h"
+#include "MMMApplication.h"
+#include "MMMSceneManagement.h"
 
 #include "../../Mingi/Manager/SoundManager.h"
+#include "../../Mingi/UI/SwitchSceneFX.h"
+#include "../../Mingi/UI/FadeInOutFX.h"
 
 using namespace MMMEngine;
 
@@ -79,17 +83,25 @@ void MMMEngine::TitleMenu::MenuControl()
 	}
 
 	// 메뉴 선택
-	if (Input::GetKeyDown(KeyCode::Enter))
+	if (!m_dontUseButtonClick && Input::GetKeyDown(KeyCode::Enter))
 	{
 		switch (m_selected)
 		{
+		case 0:
+			m_dontUseButtonClick = true;
+			SwitchSceneFX::Instance->FXStart();
+			break;
 		case 1:
 			m_internalTimer[2] = 0.0f;
 			m_popupstate = 1;
 			m_popupOn = true;
 			break;
+		case 2:
+			m_dontUseButtonClick = true;
+			m_appQuit = true;
+			FadeInOutFX::Instance->FadeOut();
+			break;
 		}
-
 
 		if (SoundManager::Instance.IsValid())
 			SoundManager::Instance->PlaySFX2D("GetSnowball", SelfPtr(this));
@@ -159,6 +171,17 @@ void MMMEngine::TitleMenu::Start()
 
 void MMMEngine::TitleMenu::Update()
 {
+	if (m_appQuit && FadeInOutFX::Instance->GetState() == 0)
+	{
+		Application::Quit(); // <- WTF?
+	}
+
+	if (m_dontUseButtonClick && m_selected == 0 && SwitchSceneFX::Instance->GetState() == 0)
+	{
+		SceneManagement::ChangeScene(PlaySceneName);
+		SwitchSceneFX::Instance->FXEnd();
+	}
+
 	if (!IsControllAble)
 		return;
 
