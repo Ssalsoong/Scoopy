@@ -6,6 +6,9 @@
 #include "Text.h"
 #include "MMMTime.h"
 #include "MMMInput.h"
+#include "MMMSceneManagement.h"
+#include "../../Mingi/UI/SwitchSceneFX.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -50,10 +53,66 @@ void MMMEngine::PauseUI::Start()
 
 void MMMEngine::PauseUI::Update()
 {
+	if (m_skipPauseUIUpdate)
+	{
+		m_internalTimer += Time::GetUnscaledDeltaTime();
+
+		if (SwitchSceneFX::Instance.IsValid() && 
+			(SwitchSceneFX::Instance->GetState() != 0 || 
+			m_internalTimer < SceneChangeTime))
+		{
+			return;
+		}
+
+		Time::SetTimeScale(1.0f);
+		SceneManagement::ChangeScene(TitleSceneName);
+
+		if (SwitchSceneFX::Instance.IsValid())
+			SwitchSceneFX::Instance->FXEnd();
+
+		if (SoundManager::Instance.IsValid())
+			SoundManager::Instance->StopBGM();
+		return;
+	}
+
 	bool lastPause = m_isPause;
 	if (Input::GetKeyDown(KeyCode::Escape))
 	{
 		m_isPause = !m_isPause;
+	}
+
+	bool currentFrameHasControl = false;
+	if (m_isControlAble)
+	{
+		m_buttonSelectTimer += Time::GetUnscaledDeltaTime();
+		bool upKey = Input::GetKeyDown(KeyCode::UpArrow);
+		bool downKey = Input::GetKeyDown(KeyCode::DownArrow);
+
+		currentFrameHasControl = upKey || downKey;
+
+		if (upKey || downKey)
+			m_currentSelected = 1 - m_currentSelected;
+
+
+		bool selectKey = Input::GetKeyDown(KeyCode::Enter) || Input::GetKeyDown(KeyCode::Space);
+
+		if (selectKey)
+		{
+			if (m_currentSelected == 0)
+			{
+				m_isPause = false;
+			}
+			if (m_currentSelected == 1)
+			{
+				//타이틀로 
+				//FX 요청
+				if (SwitchSceneFX::Instance.IsValid())
+					SwitchSceneFX::Instance->FXStart();
+				m_skipPauseUIUpdate = true;
+				m_internalTimer = 0.0f;
+				return;
+			}
+		}
 	}
 
 	if (lastPause != m_isPause)
@@ -72,18 +131,7 @@ void MMMEngine::PauseUI::Update()
 		Time::SetTimeScale(m_isPause ? 0.0f : 1.0f);
 	}
 
-	bool currentFrameHasControl = false;
-	if (m_isControlAble)
-	{
-		m_buttonSelectTimer += Time::GetUnscaledDeltaTime();
-		bool upKey = Input::GetKeyDown(KeyCode::UpArrow);
-		bool downKey = Input::GetKeyDown(KeyCode::DownArrow);
-
-		currentFrameHasControl = upKey || downKey;
-
-		if (upKey || downKey)
-			m_currentSelected = 1 - m_currentSelected;
-	}
+	
 
 	if (currentFrameHasControl)
 	{
