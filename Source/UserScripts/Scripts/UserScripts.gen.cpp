@@ -35,6 +35,7 @@
 #include "Sunken/AnimResourceManager.h"
 #include "Sunken/BuildingLevelController.h"
 #include "Sunken/CastleLevelController.h"
+#include "Sunken/ControlManager.h"
 #include "Sunken/EnemyAnimController.h"
 #include "Sunken/LevelUpBubble.h"
 #include "Sunken/LevelUpManager.h"
@@ -252,7 +253,6 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<TimerUI>("TimerUI")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerUI>"))
-		.property("m_playingAnimation", &TimerUI::m_playingAnimation)
 		.property("WaveText", &TimerUI::WaveText)
 		.property("TimerGage", &TimerUI::TimerGage)
 		.property("WaveBack", &TimerUI::WaveBack)
@@ -260,8 +260,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("scaleCurve", &TimerUI::scaleCurve)
 		.property("rotCurve", &TimerUI::rotCurve)
 		.property("posCurve", &TimerUI::posCurve)
-		.property("TimerAlpha", &TimerUI::TimerAlpha)
-		.property("WaveBackAlpha", &TimerUI::WaveBackAlpha);
+		.property("alphaCurve", &TimerUI::alphaCurve)
+		.property("gageCurve", &TimerUI::gageCurve);
 
 	registration::class_<ObjPtr<TimerUI>>("ObjPtr<TimerUI>")
 		.constructor([]() { return Object::NewObject<TimerUI>(); })
@@ -375,6 +375,13 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<CastleLevelController>>("ObjPtr<CastleLevelController>")
 		.constructor([]() { return Object::NewObject<CastleLevelController>(); })
 		.method("Inject", &ObjPtr<CastleLevelController>::Inject);
+
+	registration::class_<ControlManager>("ControlManager")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ControlManager>"));
+
+	registration::class_<ObjPtr<ControlManager>>("ObjPtr<ControlManager>")
+		.constructor([]() { return Object::NewObject<ControlManager>(); })
+		.method("Inject", &ObjPtr<ControlManager>::Inject);
 
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))

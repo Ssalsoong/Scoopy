@@ -4,7 +4,7 @@
 #include "UserScriptsCommon.h"
 
 #include "CoreComponents.h"
-#include "InputManager.h"
+#include "InputKeyCode.h"
 
 namespace MMMEngine
 {
@@ -17,15 +17,16 @@ namespace MMMEngine
         // idx = KeyCode, int = Layer 
         std::array<int, 256> mControlArray;
 
-        // int = Layer, vec = KeyCodes
-        std::unordered_map<int, std::vector<KeyCode>> mControlMap;
+        // int = Layer, set = KeyCodes
+        std::unordered_map<int, std::unordered_set<KeyCode>> mControlMap;
 
         static ObjPtr<ControlManager> instance;
-
-        void RemoveKey(std::vector<KeyCode>& _keycodes, int _idx);
     public:
         ControlManager()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(Awake);
+        REGISTER_BEHAVIOUR_MESSAGE(LateUpdate);
+
         }
 
         USCRIPT_MESSAGE()

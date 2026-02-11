@@ -104,7 +104,7 @@ void MMMEngine::GameManager::Update()
 		prevSetting = nowSetting;
 		if (!prevSetting) {
 			if (mTimerUI.IsValid()) {
-				mTimerUI->ShowNextWave();
+				//mTimerUI->ShowNextWave();
 			}
 		}
 	}
