@@ -28,7 +28,5 @@ namespace MMMEngine {
 
 		ObjPtr<GameObject>m_player;
 		int point = 1;
-
-		int lifecount = 3;
 	};
 }

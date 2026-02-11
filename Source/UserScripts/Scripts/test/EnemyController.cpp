@@ -115,9 +115,9 @@ void MMMEngine::EnemyController::ChangeState()
     float extra = 0.0f;
     const auto& tag = m_CurTarget->GetTag();
 
-    if (tag == "Castle"){ extra = 0.8f;}
-    else if (tag == "Building") extra = 1.0f;
-    else if (tag == "Player") extra = 0.5f;
+    if (tag == "Castle"){ extra = 0.4f;}
+    else if (tag == "Building") extra = 0.3f;
+    else if (tag == "Player") extra = 0.2f;
     else if (tag == "Snow") extra = 0.6f;
 
     curState = (distance <= (E_state.Range + extra)) ? EnemyState::Attack : EnemyState::Move;
@@ -212,18 +212,16 @@ void MMMEngine::EnemyController::AttackTarget()
 		{
 			if (attacktarget->GetName() == "Snow")
 			{
-				if (auto snowball = attacktarget->GetComponent<Snowball>(); snowball.IsValid())
+				if (auto snowCollider = attacktarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
 				{
-					if (auto snowCollider = attacktarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
+					if (!snowCollider->CheckOnPlayer())
 					{
-						if (!snowCollider->CheckOnPlayer())
+						snowCollider->lifeCount--;
+						if (snowCollider->lifeCount <= 0)
 						{
-							snowball->lifecount--;
-							if (snowball->lifecount <= 0)
-							{
-								m_CurTarget = m_MainTarget;
-								OnStateEnter(EnemyState::Move);
-							}
+							snowCollider->DestroyByEnemy();
+							m_CurTarget = m_MainTarget;
+							OnStateEnter(EnemyState::Move);
 						}
 					}
 				}

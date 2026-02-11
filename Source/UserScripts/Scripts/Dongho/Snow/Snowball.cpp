@@ -30,14 +30,7 @@ void MMMEngine::Snowball::Start()
 
 void MMMEngine::Snowball::Update()
 {
-	if (lifecount <= 0)
-	{
-		if (auto snowColider = GetComponent<SnowCollider>(); snowColider.IsValid())
-		{
-			snowColider->SnowDestory();
-			Destroy(GetGameObject());
-		}
-	}
+	
 }
 
 void MMMEngine::Snowball::EatSnow(ObjPtr<GameObject> other)

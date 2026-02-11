@@ -5,7 +5,6 @@
 
 namespace MMMEngine
 {
-    class EnemyController;
     class USERSCRIPTS DebuffBuilding : public ScriptBehaviour
     {
     private:
@@ -20,7 +19,7 @@ namespace MMMEngine
         }
         float debuff = 0.8f;
         float debuffdist = 2.0f;
-        std::unordered_set<ObjPtr<EnemyController>> m_inside;
+        std::unordered_set<ObjPtr<GameObject>> m_inside;
         void Start();
         void Update();
         void GiveDebuff();

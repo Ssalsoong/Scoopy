@@ -4,7 +4,7 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Building.h"
-#include "../../test/EnemyController.h"
+#include "../../test/EnemyMove.h"
 #include "Transform.h"
 #include "../Battlestats.h"
 
@@ -35,20 +35,18 @@ void MMMEngine::DebuffBuilding::Update()
 
 void MMMEngine::DebuffBuilding::GiveDebuff()
 {
-	std::unordered_set<ObjPtr<EnemyController>> nowInside;
+	std::unordered_set<ObjPtr<GameObject>> nowInside;
 
 	auto pos = GetTransform()->GetWorldPosition();
 	float bestD2 = debuffdist * debuffdist;
 	auto enemys = GetGameObject()->FindGameObjectsWithTag("Enemy");
 	
-	for (auto& e : enemys)
+	for (auto& enemy : enemys)
 	{
-		if (!e) continue;
 
-		auto enemy = e->GetComponent<EnemyController>();
 		if (!enemy) continue;
 
-		auto epos = e->GetTransform()->GetWorldPosition();
+		auto epos = enemy->GetTransform()->GetWorldPosition();
 
 		float dx = pos.x - epos.x;
 		float dz = pos.z - epos.z;
@@ -61,7 +59,8 @@ void MMMEngine::DebuffBuilding::GiveDebuff()
 	{
 		if (m_inside.find(enemy) == m_inside.end())
 		{
-			//enemy->velocity *= debuff;
+			if (auto enemyMove = enemy->GetComponent<EnemyMove>(); enemyMove.IsValid())
+				enemyMove->SetDebuffSpeed(debuff);
 			//enemy->attackDelay /= debuff;
 		}
 	}
@@ -69,7 +68,8 @@ void MMMEngine::DebuffBuilding::GiveDebuff()
 	{
 		if (nowInside.find(enemy) == nowInside.end())
 		{
-			//enemy->velocity /= debuff;
+			if (auto enemyMove = enemy->GetComponent<EnemyMove>(); enemyMove.IsValid())
+				enemyMove->SetDebuffSpeed(1.0f);
 			//enemy->attackDelay *= debuff;
 		}
 	}

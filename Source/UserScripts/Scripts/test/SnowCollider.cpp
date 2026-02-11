@@ -295,3 +295,11 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 		BattleManager::instance->Attack(GetGameObject(), info.other, damage);
 	}
 }
+
+void MMMEngine::SnowCollider::DestroyByEnemy()
+{
+	if (lifeCount > 0)
+		return;
+	SnowDestory();
+	Destroy(GetGameObject());
+}
