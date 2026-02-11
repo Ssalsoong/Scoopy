@@ -7,6 +7,8 @@
 #include "SimpleMath.h"
 #include <array>
 
+namespace MMMEngine { class TimerUI; }
+
 using DirectX::SimpleMath::Vector3;
 namespace MMMEngine {
 	class Player;
@@ -15,7 +17,8 @@ namespace MMMEngine {
 	{
 	private:
 		RTTR_ENABLE(ScriptBehaviour)
-		RTTR_REGISTRATION_FRIEND
+			RTTR_REGISTRATION_FRIEND
+
 	public:
 		GameManager()
 		{
@@ -39,12 +42,17 @@ namespace MMMEngine {
 		bool GameOver = false;
 		bool nowSetting = true;
 		int wave = 1;
+		USCRIPT_PROPERTY()
+		int mMaxWave = 10;
 		int levelsum = 0;
 
 		ObjPtr<GameObject> player;
 		ObjPtr<GameObject> castle;
 		ObjPtr<Player> playercomp;
 		ObjPtr<Castle> castlecomp;
+		ObjPtr<TimerUI> mTimerUI;
+
+
 		static ObjPtr<GameManager> instance;
 	};
 }

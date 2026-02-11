@@ -11,13 +11,16 @@
 #include "BuildingManager.h"
 #include "../Battlestats.h"
 
+#include "../../Mingi/UI/TimerUI.h"
+
 RTTR_PLUGIN_REGISTRATION
 {
 	using namespace rttr;
 	using namespace MMMEngine;
 
 	registration::class_<GameManager>("GameManager")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"))
+		.property("mTimerUI", &GameManager::mTimerUI);
 
 	registration::class_<ObjPtr<GameManager>>("ObjPtr<GameManager>")
 		.constructor(
@@ -39,6 +42,14 @@ void MMMEngine::GameManager::Start()
 	castle = GetGameObject()->Find("Castle");
 	playercomp = player->GetComponent<Player>();
 	castlecomp = castle->GetComponent<Castle>();
+
+	if (!mTimerUI) {
+		std::cout << "GameManager::TimerUI Not Found!!!" << std::endl;
+	}
+	else {
+		mTimerUI->SetMaxWaveNum(mMaxWave);
+		mTimerUI->SetWaveCount(0);
+	}
 }
 
 void MMMEngine::GameManager::Update()
@@ -68,7 +79,7 @@ void MMMEngine::GameManager::Update()
 	{
 		if (!EnemySpawner::instance->WaveSpawn(wave))
 		{
-			if (wave == 10) {
+			if (wave == mMaxWave) {
 				GameWin = true;
 				return;
 			}
@@ -83,6 +94,17 @@ void MMMEngine::GameManager::Update()
 			{
 				int BuildingCount = BuildingManager::instance->GetBuildingCount();
 				castlecomp->Getexp(BuildingCount * 10);
+			}
+		}
+	}
+
+	static bool prevSetting = nowSetting;
+
+	if (prevSetting != nowSetting) {
+		prevSetting = nowSetting;
+		if (!prevSetting) {
+			if (mTimerUI.IsValid()) {
+				mTimerUI->ShowNextWave();
 			}
 		}
 	}

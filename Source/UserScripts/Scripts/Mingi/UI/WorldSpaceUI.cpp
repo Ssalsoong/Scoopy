@@ -134,7 +134,9 @@ void MMMEngine::WorldSpaceUI::LateUpdate()
 
 		Vector2 anchorCenter, anchorSpan;
 		SelfRect->GetAnchorData(canvas->GetCanvasSize(), anchorCenter, anchorSpan);
-		SelfRect->SetAnchoredPosition(targetScreenPos - anchorCenter);
+
+		if(!DontMoveUI)
+			SelfRect->SetAnchoredPosition(targetScreenPos - anchorCenter);
 	}
 }
 

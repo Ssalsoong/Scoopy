@@ -1,5 +1,5 @@
 {
-    "MUID": "20c1912d-61f7-4da5-986f-eba2ef2469e5",
+    "MUID": "afdd667f-d4bf-44a1-b46c-5ce6e4ee2c32",
     "properties": {
         "_albedo": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
@@ -52,9 +52,9 @@
         "mBaseColor": {
             "type": "Vector4",
             "value": [
-                0.17708333333333334,
-                0.17916666666666667,
-                0.18333333333333332,
+                0.1770833283662796,
+                0.17916665971279144,
+                0.18333333730697632,
                 1.0
             ]
         },
@@ -100,6 +100,10 @@
             "value": 0.0
         },
         "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoundDotClip": {
             "type": "float",
             "value": 0.0
         }
