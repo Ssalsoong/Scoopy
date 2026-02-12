@@ -56,32 +56,32 @@ void MMMEngine::SnowBuilding::LevelApply(int level)
 {
 	if (level == 1)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
+		GetGameObject()->GetComponent<Building>()->maxHP = 70;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(70);
 		chargeDelay = 2.0f;
 	}
 	if (level == 2)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 50;
+		GetGameObject()->GetComponent<Building>()->maxHP = 90;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
 		chargeDelay = 1.5f;
 	}
 	if (level == 3)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 65;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
+		GetGameObject()->GetComponent<Building>()->maxHP = 110;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(110);
 		chargeDelay = 1.0f;
 	}
 	if (level == 4)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 65;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
+		GetGameObject()->GetComponent<Building>()->maxHP = 130;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(130);
 		chargeDelay = 0.5f;
 	}
 	if (level == 5)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 80;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(80);
+		GetGameObject()->GetComponent<Building>()->maxHP = 150;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(150);
 		chargeDelay = 0.25f;
 		provideDelay = 0.25f;
 	}

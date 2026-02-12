@@ -108,8 +108,8 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Warrior:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 4;
-		E_state.AS = 0.65f;
+		E_state.AD = 3;
+		E_state.AS = 1.0f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -117,17 +117,17 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Archer:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 2;
-		E_state.AS = 0.4f;
-		E_state.Range = 2.0f;
+		E_state.AD = 1;
+		E_state.AS = 0.6f;
+		E_state.Range = 2.5f;
 		break;
 	}
 
 	case EnemyType::Scout:
 	{
 		m_Move->SetEnemySpeed(270.f);
-		E_state.AD = 3;
-		E_state.AS = 0.65f;
+		E_state.AD = 2;
+		E_state.AS = 0.8f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -526,7 +526,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		attackTimer += dt;
 
-		if (attackTimer >= E_state.AS)
+		if (attackTimer >= attackFullTime)
 		{
 			DoHit();
 
@@ -541,7 +541,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		RecoverTimer += dt;
 
-		if (RecoverTimer >= RecoverDelay * m_FinalAttackMult)
+		if (RecoverTimer >= E_state.AS * m_FinalAttackMult)
 		{
 			/*m_attackPhase = AttackPhase::Motion;
 			attackTimer = 0.0f;

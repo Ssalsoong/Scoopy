@@ -86,42 +86,42 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 {
 	if (level == 1)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
+		GetGameObject()->GetComponent<Building>()->maxHP = 70;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(70);
 		speedDebuff = 0.8f;
-		attackDebuff = 1.2f;
+		attackDebuff = 1.5f;
 		debuffdist = 2.0f;
 	}
 	if (level == 2)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 50;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
+		GetGameObject()->GetComponent<Building>()->maxHP = 90;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(90);
 		speedDebuff = 0.65f;
-		attackDebuff = 1.35f;
-		debuffdist = 2.0f;
+		attackDebuff = 1.75f;
+		debuffdist = 2.5f;
 	}
 	if (level == 3)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
+		GetGameObject()->GetComponent<Building>()->maxHP = 110;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(110);
 		speedDebuff = 0.65f;
-		attackDebuff = 1.35f;
+		attackDebuff = 2.f;
 		debuffdist = 3.0f;
 	}
 	if (level == 4)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 75;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
+		GetGameObject()->GetComponent<Building>()->maxHP = 130;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(130);
 		speedDebuff = 0.5f;
-		attackDebuff = 1.5f;
-		debuffdist = 3.0f;
+		attackDebuff = 2.25f;
+		debuffdist = 3.5f;
 	}
 	if (level == 5)
 	{
-		GetGameObject()->GetComponent<Building>()->maxHP = 100;
-		GetGameObject()->GetComponent<Battlestats>()->SetHP(100);
+		GetGameObject()->GetComponent<Building>()->maxHP = 150;
+		GetGameObject()->GetComponent<Battlestats>()->SetHP(150);
 		speedDebuff = 0.5f;
-		attackDebuff = 1.5f;
+		attackDebuff = 2.5f;
 		debuffdist = 4.0f;
 	}
 }
