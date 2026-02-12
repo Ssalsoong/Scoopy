@@ -32,11 +32,13 @@ namespace MMMEngine {
 		int healHP = 10;
 		float healDelay = 1.0f;
 		float NonfightDelay = 5.0f;
-		float attackDelay = 1.0f;
+
+		USCRIPT_PROPERTY()
+		float attackDelay = 0.5f;
 		USCRIPT_PROPERTY()
 		int exp = 0;
 		USCRIPT_PROPERTY()
-		int atk = 10;
+		int atk = 15;
 		USCRIPT_PROPERTY()
 		int point = 0;
 		USCRIPT_PROPERTY()

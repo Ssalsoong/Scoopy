@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8F2EF390-FE89-5CB8-B126-D459A859FE75}</ProjectGuid>
+    <ProjectGuid>{75E614B8-00F5-50DC-8A85-9E4BD561A32D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -54,12 +54,12 @@
 
   <PropertyGroup Label="UserMacros" />
 
-  <!-- MMMENGINE_DIR ±âº»°ª (¾øÀ¸¸é ÇÁ·ÎÁ§Æ® ±âÁØ »ó´ë°æ·Î) -->
+  <!-- MMMENGINE_DIR ï¿½âº»ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) -->
   <PropertyGroup>
     <MMMENGINE_DIR Condition="'$(MMMENGINE_DIR)'==''">$(ProjectDir)..\..\..</MMMENGINE_DIR>
   </PropertyGroup>
 
-  <!--Ãâ·Â °íÁ¤: ProjectRoot/Binaries/Win64/UserScripts.dll-->
+  <!--ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ProjectRoot/Binaries/Win64/UserScripts.dll-->
   <PropertyGroup>
     <OutDir>$(ProjectDir)..\..\Binaries\Win64\</OutDir>
     <TargetName>UserScripts</TargetName>
@@ -135,6 +135,7 @@
     <ClCompile Include="Scripts\Mingi\RedLine.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\GameOverSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\PauseUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Scripts\Mingi\RedLine.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
+    <ClInclude Include="Scripts\Mingi\UI\GameOverSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\PauseUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />

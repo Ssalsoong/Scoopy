@@ -17,6 +17,8 @@ namespace MMMEngine
             ObjPtr<Player> mPlayer;
             ObjPtr<PlayerController> mPlayerController;
 
+            float m_showingGage = 0.0f;
+
             USCRIPT_PROPERTY()
                 ObjPtr<Gage> mGage;
 

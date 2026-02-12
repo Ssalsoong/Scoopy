@@ -5,13 +5,24 @@
 #include "StaticMesh.h"
 #include "SimpleMath.h"
 #include "Prefab.h"
+#include "AnimationCurve.h"
 
 namespace MMMEngine {
 	class USERSCRIPTS Building : public ScriptBehaviour
 	{
+		enum ANIMTYPE : int {
+			SPAWN = 0,
+			LEVEL = 1,
+			END
+		};
+
 	private:
 		RTTR_ENABLE(ScriptBehaviour)
-		RTTR_REGISTRATION_FRIEND
+			RTTR_REGISTRATION_FRIEND
+
+
+		void UpdateSpawnAnim();
+		void UpdateLevelAnim();
 	public:
 		Building()
 		{
@@ -22,10 +33,21 @@ namespace MMMEngine {
 		DirectX::SimpleMath::Vector3 pos;
 		void Start();
 		void Update();
-		int maxHP = 50;
+
+		USCRIPT_PROPERTY()
+			AnimationCurve mSpawnScaleCurve;
+		USCRIPT_PROPERTY()
+			AnimationCurve mLevelScaleCurve;
+
+		bool isAnimating = false;
+		float mElipsedTime = 0.0f;
+		float mCurveScale;
+		ANIMTYPE mAnimType = ANIMTYPE::END;
+
+		int maxHP = 70;
 		int point = 0;
 		int exp = 0;
-		int atk = 10;
+		int atk = 13;
 		int level = 0;
 		float attackDelay = 1.0f;
 		float attackTimer = 0.0f;

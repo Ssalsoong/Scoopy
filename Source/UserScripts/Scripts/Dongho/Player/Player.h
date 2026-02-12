@@ -14,6 +14,11 @@ namespace MMMEngine
 			RTTR_REGISTRATION_FRIEND
 
 			ObjPtr<PlayerAnimController> mPAController;
+
+		float mBuildElipsed = 0.0f;
+
+		USCRIPT_PROPERTY()
+			float mBuildTime = 1.0f;
     public:
 		Player()
 		{
@@ -51,7 +56,12 @@ namespace MMMEngine
 		float damageTimer = 0.0f;
 		bool isMoving = false;
 		bool buildchance = true;
+
+		bool isBuildable = false;
 		void Setbuildchance(bool value) { buildchance = value; }
+		void SetBuildable(bool _val) { isBuildable = _val; }
+		float GetBuildElipsed() { return mBuildElipsed; }
+		float GetBuildTime() { return mBuildTime; }
 
 		DirectX::SimpleMath::Vector3 pos;
 		void AutoHeal();

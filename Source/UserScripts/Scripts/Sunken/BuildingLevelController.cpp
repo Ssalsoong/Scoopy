@@ -55,7 +55,7 @@ void MMMEngine::BuildingLevelController::Start()
 
 	mCanvas = LevelUpManager::Get()->GetCanvas();
 	mReqExp = LevelUpManager::Get()->GetExpPoint(EXPTYPE::EXP_BUILD, mCurrLevel);
-	auto gage = Instantiate(LevelUpManager::Get()->mGagePrefab);
+	auto gage = Instantiate(LevelUpManager::Get()->mHPGagePrefab);
 
 	if (gage) {
 		gage->GetTransform()->SetParent(mCanvas->GetTransform());

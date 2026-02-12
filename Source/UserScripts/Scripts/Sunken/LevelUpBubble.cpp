@@ -100,13 +100,18 @@ void MMMEngine::LevelUpBubble::SetScriptText(const std::wstring& _text)
 void MMMEngine::LevelUpBubble::SetActive(bool _val)
 {
 	isActive = _val;
+	
 	mSelectIdx = 0;
-
 	mElipsedTime = 0.0f;
 	isAnimating = true;
+	isDirty = true;
 
 	if (!_val) {
-		isDirty = true;
+		//// 아이콘들 끄기 확인
+		//for (auto& icon : mIcons) {
+		//	if (icon->GetGameObject().IsValid())
+		//		icon->GetGameObject()->SetActive(false);
+		//}
 
 		if (ControlManager::Get()->GetMinLayer() == mInputLayer)
 			ControlManager::Get()->ReleaseMinLayer();

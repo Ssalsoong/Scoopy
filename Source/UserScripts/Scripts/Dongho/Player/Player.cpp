@@ -12,6 +12,7 @@
 #include "../../test/PlayerController.h"
 #include "../../Sunken/PlayerAnimController.h"
 #include "../../test/PlayerMove.h"
+#include "../../Sunken/ControlManager.h"
 
 void MMMEngine::Player::Start()
 {
@@ -169,17 +170,31 @@ void MMMEngine::Player::AutoHeal()
 
 void MMMEngine::Player::BuildOn()
 {
-	if (Input::GetKeyDown(KeyCode::LeftControl))
-	{
-		auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
-		for (auto& bp : buildingpoints)
-		{
-			if (bp->GetComponent<BuildingPoint>()->GetcanBuild()) {
-				BuildingManager::instance->Build(bp);
-				buildchance = false;
+	if (isBuildable) {
+		auto input = ControlManager::Get();
+
+		static bool isInited = false;
+		if (input->GetKeyDown(KeyCode::Space, 5))
+			isInited = true;
+
+		if (isInited && input->GetKey(KeyCode::Space, 5)) {
+			mBuildElipsed += Time::GetDeltaTime();
+
+			if (mBuildElipsed > mBuildTime) {
+				isInited = false;
+
+				auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
+				for (auto& bp : buildingpoints)
+				{
+					if (bp->GetComponent<BuildingPoint>()->GetcanBuild()) {
+						BuildingManager::instance->Build(bp);
+						buildchance = false;
+					}
+				}
 			}
 		}
-		
+		else
+			mBuildElipsed = 0.0f;
 	}
 }
 
