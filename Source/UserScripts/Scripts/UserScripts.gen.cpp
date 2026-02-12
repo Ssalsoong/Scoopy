@@ -24,6 +24,7 @@
 #include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
+#include "Mingi/UI/GameOverSequencer.h"
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
@@ -205,6 +206,30 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<FadeInOutFX>>("ObjPtr<FadeInOutFX>")
 		.constructor([]() { return Object::NewObject<FadeInOutFX>(); })
 		.method("Inject", &ObjPtr<FadeInOutFX>::Inject);
+
+	registration::class_<GameOverSequencer>("GameOverSequencer")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<GameOverSequencer>"))
+		.property("GameOverBGPanel", &GameOverSequencer::GameOverBGPanel)
+		.property("GameOverText", &GameOverSequencer::GameOverText)
+		.property("ReplayText", &GameOverSequencer::ReplayText)
+		.property("ToTitleText", &GameOverSequencer::ToTitleText)
+		.property("PanelCV", &GameOverSequencer::PanelCV)
+		.property("GameOverPosXCV", &GameOverSequencer::GameOverPosXCV)
+		.property("TitleSceneName", &GameOverSequencer::TitleSceneName)
+		.property("GameSceneName", &GameOverSequencer::GameSceneName)
+		.property("GameOverPosYCV", &GameOverSequencer::GameOverPosYCV)
+		.property("GameOverRotZCV", &GameOverSequencer::GameOverRotZCV)
+		.property("ButtonYPosCV", &GameOverSequencer::ButtonYPosCV)
+		.property("ButtonScaleCV", &GameOverSequencer::ButtonScaleCV)
+		.property("CameraPosZCV", &GameOverSequencer::CameraPosZCV)
+		.property("CameraPosYCV", &GameOverSequencer::CameraPosYCV)
+		.property("CameraRotXCV", &GameOverSequencer::CameraRotXCV)
+		.property("CameraRotYCV", &GameOverSequencer::CameraRotYCV)
+		.property("CameraRotZCV", &GameOverSequencer::CameraRotZCV);
+
+	registration::class_<ObjPtr<GameOverSequencer>>("ObjPtr<GameOverSequencer>")
+		.constructor([]() { return Object::NewObject<GameOverSequencer>(); })
+		.method("Inject", &ObjPtr<GameOverSequencer>::Inject);
 
 	registration::class_<MiniMap>("MiniMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<MiniMap>"))
@@ -566,6 +591,9 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
 		.property("P_trans", &TileMap::P_trans)
 		.property("threshold", &TileMap::threshold)
+		.property("recoverSpeed", &TileMap::recoverSpeed)
+		.property("regenFadeSpeed", &TileMap::regenFadeSpeed)
+		.property("accumRegenSpeed", &TileMap::accumRegenSpeed)
 		.property("box", &TileMap::box)
 		.property("RESPAWN_TIME", &TileMap::RESPAWN_TIME);
 
