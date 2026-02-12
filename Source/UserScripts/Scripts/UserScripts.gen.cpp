@@ -23,6 +23,7 @@
 #include "Mingi/Manager/SoundManager.h"
 #include "Mingi/RedLine.h"
 #include "Mingi/UI/CameraMove.h"
+#include "Mingi/UI/EnemyGageController.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/GameOverSequencer.h"
 #include "Mingi/UI/MarkUIInfo.h"
@@ -201,6 +202,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<CameraMove>>("ObjPtr<CameraMove>")
 		.constructor([]() { return Object::NewObject<CameraMove>(); })
 		.method("Inject", &ObjPtr<CameraMove>::Inject);
+
+	registration::class_<EnemyGageController>("EnemyGageController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyGageController>"))
+		.property("battlestats", &EnemyGageController::battlestats);
+
+	registration::class_<ObjPtr<EnemyGageController>>("ObjPtr<EnemyGageController>")
+		.constructor([]() { return Object::NewObject<EnemyGageController>(); })
+		.method("Inject", &ObjPtr<EnemyGageController>::Inject);
 
 	registration::class_<FadeInOutFX>("FadeInOutFX")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<FadeInOutFX>"))

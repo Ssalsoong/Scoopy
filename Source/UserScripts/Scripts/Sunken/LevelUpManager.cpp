@@ -135,7 +135,7 @@ void MMMEngine::LevelUpManager::Start()
 void MMMEngine::LevelUpManager::Update()
 {
 	// 캐슬레벨 확인
-	if (mCastleLevel > mCastleFirst - 1) {
+	if (mCastleLevel >= mCastleFirst - 1) {
 		// 첫번째 스페셜
 		if (mCastleSpecial == 0) {
 			if (!IsBubbling()) {
@@ -146,7 +146,7 @@ void MMMEngine::LevelUpManager::Update()
 		}
 
 		// 두번째 스페셜 확인
-		if (mCastleLevel > mCastleSecond - 1) {
+		if (mCastleLevel >= mCastleSecond - 1) {
 			// 두번째 스페셜
 			if (mCastleSpecial == 1) {
 				if (!IsBubbling()) {
@@ -159,7 +159,7 @@ void MMMEngine::LevelUpManager::Update()
 	}
 
 	// 스쿱레벨 확인
-	if (mScoopLevel > mScoopFirst - 1) {
+	if (mScoopLevel >= mScoopFirst - 1) {
 		// 첫번째 스페셜
 		if (mScoopSpecial == 0) {
 			if (!IsBubbling()) {
@@ -170,7 +170,7 @@ void MMMEngine::LevelUpManager::Update()
 		}
 
 		// 두번째 스페셜 확인
-		if (mScoopLevel > mScoopSecond - 1) {
+		if (mScoopLevel >= mScoopSecond - 1) {
 			// 두번째 스페셜
 			if (mScoopSpecial == 1) {
 				if (!IsBubbling()) {

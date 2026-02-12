@@ -134,8 +134,11 @@
     <ClCompile Include="Scripts\Mingi\Manager\SoundManager.cpp" />
     <ClCompile Include="Scripts\Mingi\RedLine.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\EnemyGageController.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\GameOverSequencer.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\MarkUIInfo.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\MarkWaveController.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\PauseUI.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp" />
@@ -200,8 +203,11 @@
     <ClInclude Include="Scripts\Mingi\Manager\SoundManager.h" />
     <ClInclude Include="Scripts\Mingi\RedLine.h" />
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
+    <ClInclude Include="Scripts\Mingi\UI\EnemyGageController.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
     <ClInclude Include="Scripts\Mingi\UI\GameOverSequencer.h" />
+    <ClInclude Include="Scripts\Mingi\UI\MarkUIInfo.h" />
+    <ClInclude Include="Scripts\Mingi\UI\MarkWaveController.h" />
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h" />
     <ClInclude Include="Scripts\Mingi\UI\PauseUI.h" />
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h" />

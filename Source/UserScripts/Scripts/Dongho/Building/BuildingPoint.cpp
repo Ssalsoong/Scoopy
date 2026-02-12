@@ -84,6 +84,8 @@ void MMMEngine::BuildingPoint::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (player.IsValid()) {
 		if (auto pScript = player->GetComponent<Player>(); pScript.IsValid()) {
+			pScript->misInited = false;
+			pScript->ElipsedClear();
 			pScript->SetBuildable(true);
 		}
 
@@ -98,8 +100,11 @@ void MMMEngine::BuildingPoint::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (player.IsValid()) {
 		if (auto pScript = player->GetComponent<Player>(); pScript.IsValid()) {
+			pScript->misInited = false;
+			pScript->ElipsedClear();
 			pScript->SetBuildable(false);
 		}
+
 		canBuild = false;
 	}
 }
@@ -108,6 +113,9 @@ void MMMEngine::BuildingPoint::OnDisable()
 {
 	if (player.IsValid()) {
 		if (auto pScript = player->GetComponent<Player>(); pScript.IsValid()) {
+			pScript->misInited = false;
+			pScript->ElipsedClear();
+
 			if (pScript->isBuildable)
 				pScript->SetBuildable(false);
 		}

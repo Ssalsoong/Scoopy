@@ -63,6 +63,7 @@ namespace MMMEngine
 		void SetBuildable(bool _val) { isBuildable = _val; }
 		float GetBuildElipsed() { return mBuildElipsed; }
 		float GetBuildTime() { return mBuildTime; }
+		void ElipsedClear() { mBuildElipsed = 0.0f; }
 
 		DirectX::SimpleMath::Vector3 pos;
 		void AutoHeal();

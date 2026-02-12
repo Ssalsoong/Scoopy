@@ -15,6 +15,8 @@ namespace MMMEngine {
 	public:
 		Castle()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
+        REGISTER_BEHAVIOUR_MESSAGE(OnEnable);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -74,5 +76,8 @@ namespace MMMEngine {
 		bool doubleattack = false;
 		void CheckSecondEnemy();
 		ObjPtr<GameObject> enemyTarget2;
+
+		void OnEnable();
+		void OnDisable();
 	};
 }

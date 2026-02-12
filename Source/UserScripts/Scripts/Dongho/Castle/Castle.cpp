@@ -12,6 +12,23 @@
 #include "../Manager/BuildingManager.h"
 #include "../../Mingi/Manager/SoundManager.h"
 
+#include "../../Mingi/UI/MiniMap.h"
+
+void MMMEngine::Castle::OnEnable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->RegisterTracker(GetMUID(), GetTransform(), TrackerType::Building);
+	}
+}
+void MMMEngine::Castle::OnDisable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->UnregisterTracker(GetMUID());
+	}
+}
+
 void MMMEngine::Castle::Start()
 {
 	for (int i = 0; i < 10;++i)
