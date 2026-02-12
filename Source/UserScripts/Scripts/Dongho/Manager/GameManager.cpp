@@ -16,6 +16,7 @@
 #include "../../Mingi/UI/PauseUI.h"
 #include "../../Mingi/UI/GameOverSequencer.h"
 #include "../../Sunken/PlayerAnimController.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -98,6 +99,13 @@ void MMMEngine::GameManager::Update()
 
 	if (nowSetting)
 	{
+		if (!mPlayingNormalBGM) {
+			mPlayingNormalBGM = true;
+			mPlayingWaveBGM = false;
+			SoundManager::Instance->StopBGM();
+			SoundManager::Instance->PlayBGM("TitleTheme");
+		}
+
 		settingTimer += Time::GetDeltaTime();
 		if (settingTimer >= settingfullTime)
 		{
@@ -109,6 +117,13 @@ void MMMEngine::GameManager::Update()
 	}
 	else
 	{
+		if (!mPlayingWaveBGM) {
+			mPlayingNormalBGM = false;
+			mPlayingWaveBGM = true;
+			SoundManager::Instance->StopBGM();
+			SoundManager::Instance->PlayBGM("BattleTheme");
+		}
+
 		if (!EnemySpawner::instance->WaveSpawn(wave))
 		{
 			if (wave == mMaxWave) {
@@ -148,10 +163,14 @@ void MMMEngine::GameManager::Update()
 		bool pauseStat = mPauseUI->IsPause();
 		if (isPausing != pauseStat) {
 			isPausing = pauseStat;
-			if (pauseStat)
+			if (pauseStat) {
+				SoundManager::Instance->PlaySFX2D("Pause", SelfPtr(this));
 				ControlManager::Get()->SetMinLayer(100);
-			else
+			}
+			else {
+				SoundManager::Instance->PlaySFX2D("Pause", SelfPtr(this));
 				ControlManager::Get()->ReleaseMinLayer();
+			}	
 		}
 	}
 }
