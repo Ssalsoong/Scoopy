@@ -78,7 +78,7 @@ void MMMEngine::SnowBullet::FixedUpdate()
 	}
 }
 
-void MMMEngine::SnowBullet::OnTriggerEnter(MMMEngine::CollisionInfo info)
+void MMMEngine::SnowBullet::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other == target) ReSet();
 }

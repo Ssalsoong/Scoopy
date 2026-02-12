@@ -34,6 +34,8 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
 			ObjPtr<LevelUpBubble> mLevelUpBubble;
 
+        ObjPtr<GameObject> mPuller;
+
         EXPTYPE mPendingType = EXPTYPE::EXP_END;
         ObjPtr<GameObject> mLevelPendingObj;
 
@@ -84,6 +86,7 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
             ResPtr<Prefab> mGagePrefab;
 
+
     public:
         LevelUpManager()
         {
@@ -116,9 +119,15 @@ namespace MMMEngine
 
         int GetMaxLevel(EXPTYPE _type);
 
+        void SetUIPuller(ObjPtr<GameObject> _puller) { mPuller = _puller; }
+        void RemoveUIPuller();
+        ObjPtr<GameObject> GetUIPuller();
+
         void SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons);
         void RemoveBubble();
         void SetSelection(int _selectionIdx);
+        ObjPtr<GameObject> GetBubbleTarget();
+
         const std::wstring& GetHeadline(int _idx);
         const std::wstring& GetScripts(int _idx);
 

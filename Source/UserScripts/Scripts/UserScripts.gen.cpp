@@ -45,6 +45,7 @@
 #include "Sunken/PlayerAnimController.h"
 #include "Sunken/PlayerHpGage.h"
 #include "Sunken/PrefabTest.h"
+#include "Sunken/ScoopGageScript.h"
 #include "Sunken/TimerGageScript.h"
 #include "Sunken/WaveUIScript.h"
 #include "test/CastleManager.h"
@@ -118,7 +119,8 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingManager>("BuildingManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
-		.property("pre_building", &BuildingManager::pre_building);
+		.property("pre_building", &BuildingManager::pre_building)
+		.property("mBuildingPoint", &BuildingManager::mBuildingPoint);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor([]() { return Object::NewObject<BuildingManager>(); })
@@ -427,12 +429,15 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<LevelUpBubble>("LevelUpBubble")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<LevelUpBubble>"))
-		.property("mAnimCurve", &LevelUpBubble::mAnimCurve)
+		.property("mBubbleSizeCurve", &LevelUpBubble::mBubbleSizeCurve)
+		.property("mCloseSizeCurve", &LevelUpBubble::mCloseSizeCurve)
+		.property("mSelectRotCurve", &LevelUpBubble::mSelectRotCurve)
+		.property("mInputLayer", &LevelUpBubble::mInputLayer)
 		.property("mUIScale", &LevelUpBubble::mUIScale)
 		.property("mDistanceFactor", &LevelUpBubble::mDistanceFactor)
+		.property("mIconWidth", &LevelUpBubble::mIconWidth)
 		.property("mSpeechOffset", &LevelUpBubble::mSpeechOffset)
 		.property("mIconOffset", &LevelUpBubble::mIconOffset)
-		.property("mIconPadding", &LevelUpBubble::mIconPadding)
 		.property("mHeadlineOffset", &LevelUpBubble::mHeadlineOffset)
 		.property("mScriptOffset", &LevelUpBubble::mScriptOffset)
 		.property("mSelectIconSize", &LevelUpBubble::mSelectIconSize)
@@ -492,11 +497,22 @@ RTTR_PLUGIN_REGISTRATION
 		.method("Inject", &ObjPtr<PlayerHpGage>::Inject);
 
 	registration::class_<PrefabTest>("PrefabTest")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<PrefabTest>"))
+		.property("Teees", &PrefabTest::Teees);
 
 	registration::class_<ObjPtr<PrefabTest>>("ObjPtr<PrefabTest>")
 		.constructor([]() { return Object::NewObject<PrefabTest>(); })
 		.method("Inject", &ObjPtr<PrefabTest>::Inject);
+
+	registration::class_<ScoopGageScript>("ScoopGageScript")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<ScoopGageScript>"))
+		.property("mGage", &ScoopGageScript::mGage)
+		.property("mActiveImg", &ScoopGageScript::mActiveImg)
+		.property("mDeactiveImg", &ScoopGageScript::mDeactiveImg);
+
+	registration::class_<ObjPtr<ScoopGageScript>>("ObjPtr<ScoopGageScript>")
+		.constructor([]() { return Object::NewObject<ScoopGageScript>(); })
+		.method("Inject", &ObjPtr<ScoopGageScript>::Inject);
 
 	registration::class_<TimerGageScript>("TimerGageScript")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TimerGageScript>"));
@@ -541,7 +557,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<PlayerController>("PlayerController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<PlayerController>"))
-		.property("mControlLayout", &PlayerController::mControlLayout)
+		.property("mInputLayer", &PlayerController::mInputLayer)
 		.property("m_TileMap", &PlayerController::m_TileMap)
 		.property("m_SnowManager", &PlayerController::m_SnowManager);
 

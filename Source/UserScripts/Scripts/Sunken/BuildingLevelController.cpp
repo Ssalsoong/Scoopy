@@ -9,7 +9,6 @@
 #include "../Dongho/Building/BuffBuilding.h"
 #include "../Dongho/Building/DebuffBuilding.h"
 #include "../Dongho/Building/SnowBuilding.h"
-#include "InputManager.h"
 
 void MMMEngine::BuildingLevelController::SetLevelSelection(int _idx)
 {
@@ -56,7 +55,13 @@ void MMMEngine::BuildingLevelController::Start()
 
 	mCanvas = LevelUpManager::Get()->GetCanvas();
 	mReqExp = LevelUpManager::Get()->GetExpPoint(EXPTYPE::EXP_BUILD, mCurrLevel);
-	mHpGage = LevelUpManager::Get()->mHpGage;
+	auto gage = Instantiate(LevelUpManager::Get()->mGagePrefab);
+
+	if (gage) {
+		gage->GetTransform()->SetParent(mCanvas->GetTransform());
+		mHpGage = gage->GetComponent<Gage>();
+		gage->SetActive(false);
+	}
 	mExpGage = LevelUpManager::Get()->mExpGage;
 	mHPIcon = LevelUpManager::Get()->mHPIcon;
 	mBuffIcon = LevelUpManager::Get()->mBuffIcon;
@@ -146,7 +151,6 @@ void MMMEngine::BuildingLevelController::LevelUp() {
 
 void MMMEngine::BuildingLevelController::UpdateReadyIcon()
 {
-	mReadyIcon->GetGameObject()->SetActive(true);
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{ 0.0f, 0.0f });
@@ -314,21 +318,42 @@ void MMMEngine::BuildingLevelController::SetActiveIcon()
 
 }
 
-void MMMEngine::BuildingLevelController::UpdateGuage()
+void MMMEngine::BuildingLevelController::LowHPUpdate()
 {
-	auto expRect = mExpGage->GetRectTransform();
-	auto hpRect = mHpGage->GetRectTransform();
-	auto countRect = mCountIcon->GetRectTransform();
+	if (!mHpGage)
+		return;
 
-	SetUITrans(expRect, mGagePosOffset, mPadding);
+	int currHP = mBattleStat->HP;
+	int maxHP = mBuilding->maxHP;
+
+	if (currHP < maxHP) {
+		UpdateHpGuage();
+	}
+	else
+		mHpGage->GetGameObject()->SetActive(false);
+}
+
+void MMMEngine::BuildingLevelController::UpdateHpGuage()
+{
+	mHpGage->GetGameObject()->SetActive(true);
+
+	auto hpRect = mHpGage->GetRectTransform();
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
-	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mBuilding->maxHP;
 	auto currHP = mBattleStat->HP;
 
 	float hpFactor = (float)currHP / (float)maxHP;
 	mHpGage->SetValue(hpFactor);
+}
+
+void MMMEngine::BuildingLevelController::UpdateExtraGuage()
+{
+	auto expRect = mExpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
+
+	SetUITrans(expRect, mGagePosOffset, mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	float expFactor = 0.0f;
 	if (mReqExp == 0)
@@ -346,10 +371,15 @@ void MMMEngine::BuildingLevelController::UpdateGuage()
 
 void MMMEngine::BuildingLevelController::Update()
 {
-	if (isActive)
-		UpdateGuage();
-	else if(isReady)
-		UpdateReadyIcon();
+	if (isActive) {
+		UpdateHpGuage();
+		UpdateExtraGuage();
+	}
+	else {
+		LowHPUpdate();
+		if (isReady)
+			UpdateReadyIcon();
+	}
 
 	/*if (isReady && !isActive) {
 		UpdateReadyIcon();
@@ -358,16 +388,29 @@ void MMMEngine::BuildingLevelController::Update()
 		UpdateSelectIcon();
 	}*/
 
-	if (isReady) {
-		if (mPrevActive != isActive) {
-			mPrevActive = isActive;
-			if (isActive) {
-				mReadyIcon->GetGameObject()->SetActive(false);
+	if (mPrevActive != isActive) {
+		mPrevActive = isActive;
+		if (isActive) {
+			auto object = GetGameObject();
+			LevelUpManager::Get()->SetUIPuller(object);
+
+			mExpGage->GetGameObject()->SetActive(true);
+			mCountIcon->GetGameObject()->SetActive(true);
+
+			if (isReady) {
 				std::vector<ObjPtr<Image>> icons{ mHPIcon , mBuffIcon, mDeBuffIcon, mSnowIcon };
-				auto object = GetGameObject();
 				LevelUpManager::Get()->SetBubble(EXP_BUILD, object, icons);
 			}
-			else {
+		}
+		else {
+			LevelUpManager::Get()->RemoveUIPuller();
+
+			mHpGage->GetGameObject()->SetActive(false);
+			mExpGage->GetGameObject()->SetActive(false);
+			mCountIcon->GetGameObject()->SetActive(false);
+
+			if (isReady) {
+				mReadyIcon->GetGameObject()->SetActive(true);
 				LevelUpManager::Get()->RemoveBubble();
 			}
 		}
@@ -381,12 +424,36 @@ void MMMEngine::BuildingLevelController::Update()
 		LevelUp();
 }
 
+void MMMEngine::BuildingLevelController::OnDisable()
+{
+	isActive = false;
+
+	// 본인소유 객체는 알아서 끄기
+	if (mHpGage->GetGameObject().IsValid())
+		mHpGage->GetGameObject()->SetActive(false);
+	if (mCountIcon->GetGameObject().IsValid())
+		mCountIcon->GetGameObject()->SetActive(false);
+
+	auto puller = LevelUpManager::Get()->GetUIPuller();
+	auto go = GetGameObject();
+
+	if (puller.IsValid() && go.IsValid()) {
+		if (puller == go) {
+			if(mExpGage->GetGameObject().IsValid())
+				mExpGage->GetGameObject()->SetActive(false);
+			
+			if (auto target = LevelUpManager::Get()->GetBubbleTarget(); target.IsValid()) {
+				if (target == go) {
+					LevelUpManager::Get()->RemoveBubble();
+				}
+			}
+		}
+	}
+}
+
 void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
-		mHpGage->GetGameObject()->SetActive(true);
-		mExpGage->GetGameObject()->SetActive(true);
-		mCountIcon->GetGameObject()->SetActive(true);
 		isActive = true;
 	}
 }
@@ -394,9 +461,6 @@ void MMMEngine::BuildingLevelController::OnTriggerEnter(MMMEngine::TriggerInfo i
 void MMMEngine::BuildingLevelController::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	if (info.other->GetTag() == "Player") {
-		mHpGage->GetGameObject()->SetActive(false);
-		mExpGage->GetGameObject()->SetActive(false);
-		mCountIcon->GetGameObject()->SetActive(false);
 		isActive = false;
 	}
 }

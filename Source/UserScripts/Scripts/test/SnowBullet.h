@@ -43,7 +43,7 @@ namespace MMMEngine
 		float maxSpeed = 30.f;     // 속도 상한(필수에 가까움)
 
 		USCRIPT_MESSAGE()
-			void OnTriggerEnter(MMMEngine::CollisionInfo info);
+			void OnTriggerEnter(MMMEngine::TriggerInfo info);
 
 
 		USCRIPT_PROPERTY()

@@ -99,3 +99,27 @@ bool MMMEngine::ControlManager::GetKey(KeyCode _keycode, int _layer)
 	}
 	return false;
 }
+
+void MMMEngine::ControlManager::SetMinLayer(int _layer)
+{
+	mInputLayers.insert(_layer);
+	minLayer = *std::prev(mInputLayers.end());
+}
+
+void MMMEngine::ControlManager::ReleaseMinLayer()
+{
+	if (!mInputLayers.empty()) {
+		auto it = std::prev(mInputLayers.end());
+
+		// 가장 높은 레이어 제거
+		mInputLayers.erase(it);
+
+		// 남아있는 레이어 중 가장 높은 값으로 minLayer 갱신
+		if (!mInputLayers.empty()) {
+			minLayer = *std::prev(mInputLayers.end());
+		}
+		else {
+			minLayer = -1; // 아무 레이어도 없을 때 기본값
+		}
+	}
+}

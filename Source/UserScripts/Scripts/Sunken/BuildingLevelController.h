@@ -52,7 +52,9 @@ namespace MMMEngine
         bool isReady = false;
         bool mPrevActive = false;
 
-        void UpdateGuage();
+        void LowHPUpdate();
+        void UpdateHpGuage();
+        void UpdateExtraGuage();
         void LevelUp();
         void UpdateReadyIcon();
         void SetUITrans(ObjPtr<RectTransform> _rectTrans, Vector2& _offset, Vector2& _mPadding);
@@ -80,6 +82,7 @@ namespace MMMEngine
 
         BuildingLevelController()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerEnter);
         REGISTER_BEHAVIOUR_MESSAGE(OnTriggerExit);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
@@ -92,6 +95,9 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void Update();
+        
+		USCRIPT_MESSAGE()
+			void OnDisable();
 
         USCRIPT_MESSAGE()
             void OnTriggerEnter(MMMEngine::TriggerInfo info);

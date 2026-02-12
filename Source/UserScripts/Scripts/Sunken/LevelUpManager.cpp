@@ -168,6 +168,18 @@ int MMMEngine::LevelUpManager::GetMaxLevel(EXPTYPE _type)
 	return 0;
 }
 
+void MMMEngine::LevelUpManager::RemoveUIPuller()
+{
+	mPuller = nullptr;
+}
+
+MMMEngine::ObjPtr<MMMEngine::GameObject> MMMEngine::LevelUpManager::GetUIPuller()
+{
+	if (mPuller.IsValid())
+		return mPuller;
+	return nullptr;
+}
+
 void MMMEngine::LevelUpManager::SetBubble(EXPTYPE _type, ObjPtr<GameObject> _target, std::vector<ObjPtr<Image>>& _icons)
 {
 	mPendingType = _type;
@@ -193,7 +205,6 @@ void MMMEngine::LevelUpManager::SetSelection(int _selectionIdx)
 	case MMMEngine::EXP_CASTLE:
 	{
 		auto controller = mLevelPendingObj->GetComponent<CastleLevelController>();
-		
 		if (controller) {
 			controller->SetLevelSelection(_selectionIdx);
 			return;
@@ -217,6 +228,11 @@ void MMMEngine::LevelUpManager::SetSelection(int _selectionIdx)
 
 	std::cout << "LevelUpManager::SetSelection::Wrong Type!!" << std::endl;
 	return;
+}
+
+MMMEngine::ObjPtr<MMMEngine::GameObject> MMMEngine::LevelUpManager::GetBubbleTarget()
+{
+	return mLevelPendingObj;
 }
 
 const std::wstring& MMMEngine::LevelUpManager::GetHeadline(int _idx)

@@ -2,25 +2,30 @@
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
-#include <CoreComponents.h>
-
-namespace MMMEngine { class TimerUI; }
+#include "CoreComponents.h"
 
 namespace MMMEngine
 {
-    class USERSCRIPTS TimerGageScript : public ScriptBehaviour
+    class PlayerController;
+    class Player;
+    class USERSCRIPTS ScoopGageScript : public ScriptBehaviour
     {
     private:
         RTTR_ENABLE(ScriptBehaviour)
             RTTR_REGISTRATION_FRIEND
 
-            ObjPtr<Gage> mTimerGage;
-        ObjPtr<TimerUI> mTimerUI;
-                
-        //bool mPrevStat = false;
+            ObjPtr<Player> mPlayer;
+            ObjPtr<PlayerController> mPlayerController;
 
+            USCRIPT_PROPERTY()
+                ObjPtr<Gage> mGage;
+
+			USCRIPT_PROPERTY()
+				ObjPtr<Image> mActiveImg;
+			USCRIPT_PROPERTY()
+				ObjPtr<Image> mDeactiveImg;
     public:
-        TimerGageScript()
+        ScoopGageScript()
         {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);

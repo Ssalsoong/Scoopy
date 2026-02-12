@@ -49,10 +49,10 @@ void MMMEngine::PlayerController::InPutMove()
 {
 	float x = 0.f, z = 0.f;
 
-	if (mInput->GetKey(KeyCode::UpArrow, mControlLayout)) z += 1.f;
-	if (mInput->GetKey(KeyCode::DownArrow, mControlLayout)) z -= 1.f;
-	if (mInput->GetKey(KeyCode::RightArrow, mControlLayout)) x += 1.f;
-	if (mInput->GetKey(KeyCode::LeftArrow, mControlLayout)) x -= 1.f;
+	if (mInput->GetKey(KeyCode::UpArrow, mInputLayer)) z += 1.f;
+	if (mInput->GetKey(KeyCode::DownArrow, mInputLayer)) z -= 1.f;
+	if (mInput->GetKey(KeyCode::RightArrow, mInputLayer)) x += 1.f;
+	if (mInput->GetKey(KeyCode::LeftArrow, mInputLayer)) x -= 1.f;
 
 	m_InputDir = DirectX::SimpleMath::Vector3(x, 0.f, z);
 
@@ -63,7 +63,7 @@ void MMMEngine::PlayerController::InPutMove()
 void MMMEngine::PlayerController::InPutHoldSnow()
 {
 	static bool prevSpaceFlag = false;
-	bool spaceFlag = mInput->GetKey(KeyCode::Space, mControlLayout);
+	bool spaceFlag = mInput->GetKey(KeyCode::Space, mInputLayer);
 
 	if (prevSpaceFlag != spaceFlag) {
 		prevSpaceFlag = spaceFlag;

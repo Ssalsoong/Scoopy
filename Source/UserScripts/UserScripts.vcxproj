@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{75E614B8-00F5-50DC-8A85-9E4BD561A32D}</ProjectGuid>
+    <ProjectGuid>{1D8EC615-C3A4-5AE1-B8E2-5C197897C2F0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UserScripts</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -158,6 +158,7 @@
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp" />
     <ClCompile Include="Scripts\Sunken\PlayerHpGage.cpp" />
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp" />
+    <ClCompile Include="Scripts\Sunken\ScoopGageScript.cpp" />
     <ClCompile Include="Scripts\Sunken\TimerGageScript.cpp" />
     <ClCompile Include="Scripts\Sunken\WaveUIScript.cpp" />
     <ClCompile Include="Scripts\UserScripts.gen.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h" />
     <ClInclude Include="Scripts\Sunken\PlayerHpGage.h" />
     <ClInclude Include="Scripts\Sunken\PrefabTest.h" />
+    <ClInclude Include="Scripts\Sunken\ScoopGageScript.h" />
     <ClInclude Include="Scripts\Sunken\TimerGageScript.h" />
     <ClInclude Include="Scripts\Sunken\WaveUIScript.h" />
     <ClInclude Include="Scripts\test\CastleManager.h" />

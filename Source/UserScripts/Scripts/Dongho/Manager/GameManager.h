@@ -7,6 +7,8 @@
 #include "SimpleMath.h"
 #include <array>
 
+namespace MMMEngine { class PauseUI; }
+
 namespace MMMEngine { class TimerUI; }
 
 using DirectX::SimpleMath::Vector3;
@@ -33,18 +35,25 @@ namespace MMMEngine {
 		void Start();
 		USCRIPT_MESSAGE()
 		void Update();
-		float settingfullTime = 30.0f;
-		float enemySpawnDelay = 0.5f;
+		
 		float enemySpawnTimer = 0.0f;
 		float settingTimer = 0.0f;
 
 		bool GameWin = false;
 		bool GameOver = false;
 		bool nowSetting = true;
+		bool isPausing = false;
 		int wave = 1;
-		USCRIPT_PROPERTY()
-		int mMaxWave = 10;
 		int levelsum = 0;
+
+		USCRIPT_PROPERTY()
+			int mMaxWave = 10;
+
+		USCRIPT_PROPERTY()
+			float enemySpawnDelay = 0.5f;
+
+		USCRIPT_PROPERTY()
+			float settingfullTime = 30.0f;
 
 		ObjPtr<GameObject> player;
 		ObjPtr<GameObject> castle;
@@ -52,6 +61,8 @@ namespace MMMEngine {
 		ObjPtr<Castle> castlecomp;
 		ObjPtr<TimerUI> mTimerUI;
 
+		USCRIPT_PROPERTY()
+		ObjPtr<PauseUI> mPauseUI;
 
 		static ObjPtr<GameManager> instance;
 	};

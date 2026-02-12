@@ -3,6 +3,7 @@
 #include "LevelUpBubble.h"
 #include "InputManager.h"
 #include "ControlManager.h"
+#include "MMMTime.h"
 
 void MMMEngine::LevelUpBubble::Start()
 {
@@ -42,11 +43,47 @@ void MMMEngine::LevelUpBubble::Update()
 		if (isDirty) {
 			SetHeadlineText(LevelUpManager::Get()->GetHeadline(mSelectIdx));
 			SetScriptText(LevelUpManager::Get()->GetScripts(mSelectIdx));
+			isDirty = false;
 		}
+
+		// 애니메이션 효과
+		if (isAnimating) {
+			mElipsedTime += Time::GetDeltaTime();
+			if (mElipsedTime > mBubbleSizeCurve.GetKeyframes().back().time)
+				isAnimating = false;
+			else {
+				mCurveScale = mBubbleSizeCurve.Evaluate(mElipsedTime);
+			}
+		}
+
+		// 최종스케일
+		mFinalScale = mUIScale * mCurveScale;
 	}
 	else
 	{
-		SetUIActive(false);
+		mHeadline->GetGameObject()->SetActive(false);
+		mScript->GetGameObject()->SetActive(false);
+
+		if (isAnimating) {
+			if (mElipsedTime > mCloseSizeCurve.GetKeyframes().back().time)
+				isAnimating = false;
+
+			mElipsedTime += Time::GetDeltaTime();
+			mCurveScale = mCloseSizeCurve.Evaluate(mElipsedTime);
+
+			// 최종스케일
+			mFinalScale = mUIScale * mCurveScale;
+
+			Vector2 zero = Vector2::Zero;
+			SetUITrans(mSpeechBubbleIcon->GetRectTransform(), mSpeechOffset, zero);
+			SetUITrans(mHeadline->GetRectTransform(), mSpeechOffset + mHeadlineOffset, zero);
+			SetUITrans(mScript->GetRectTransform(), mSpeechOffset + mScriptOffset, zero);
+
+			SetIconTrans();
+			UpdateIcon();
+		}
+		else
+			SetUIActive(false);
 	}
 }
 
@@ -65,8 +102,14 @@ void MMMEngine::LevelUpBubble::SetActive(bool _val)
 	isActive = _val;
 	mSelectIdx = 0;
 
+	mElipsedTime = 0.0f;
+	isAnimating = true;
+
 	if (!_val) {
 		isDirty = true;
+
+		if (ControlManager::Get()->GetMinLayer() == mInputLayer)
+			ControlManager::Get()->ReleaseMinLayer();
 	}
 }
 
@@ -103,15 +146,15 @@ void MMMEngine::LevelUpBubble::SetUITrans(ObjPtr<RectTransform> _rectTrans, Vect
 
 	float distFactor = camDistance * mDistanceFactor;
 
-	Vector2 offset = (_offset * mUIScale) / distFactor;
-	Vector2 padding = (_mPadding * mUIScale) / distFactor;
+	Vector2 offset = (_offset * mFinalScale) / distFactor;
+	Vector2 padding = (_mPadding * mFinalScale) / distFactor;
 
 	_rectTrans->SetAnchoredPosition(
 		(canvasPos - achPos) + offset + padding
 	);
 
 	Vector3 baseScale{ 1.0f, 1.0f, 1.0f };
-	_rectTrans->SetWorldScale((baseScale * mUIScale) / distFactor);
+	_rectTrans->SetWorldScale((baseScale * mFinalScale) / distFactor);
 }
 
 void MMMEngine::LevelUpBubble::SetIconTrans()
@@ -119,19 +162,34 @@ void MMMEngine::LevelUpBubble::SetIconTrans()
 	if (mIcons.empty()) {
 		std::cout << "LevelUpBubble::Icons Empty !!!" << std::endl;
 		return;
-	}		
+	}
 
-	auto& rt = mIcons[0]->GetRectTransform();
-	float w = rt->GetWidth();
-	Vector2 p = mIconPadding * mUIScale;
-	int N = (int)mIcons.size();
+	const int N = (int)mIcons.size();
+	if (N <= 0) return;
 
-	float totalWidth = N * w + (N - 1) * p.x;
-	float startX = -totalWidth / 2.0f + w / 2.0f;
+	// 평균 폭(요청대로 고려는 하되, 배치 간격 계산에는 padding 대신 mIconWidth 사용)
+	float sumW = 0.0f;
+	for (int i = 0; i < N; ++i) {
+		sumW += mIcons[i]->GetRectTransform()->GetWidth();
+	}
+	const float avgW = sumW / (float)N;
+
+	// 중앙 기준 고정 폭 안에서 균등 배치
+	const float layoutWidth = mIconWidth * mFinalScale;
+	const float step = layoutWidth / (float)N;                  // N칸
+	const float left = -layoutWidth * 0.5f;
 
 	for (int i = 0; i < N; ++i) {
-		Vector2 pos = (mIconOffset * mUIScale) + Vector2{ startX + i * (w + p.x), i * p.y };
-		SetUITrans(mIcons[i]->GetRectTransform(), mSpeechOffset + (mIconOffset * mUIScale), pos);
+		const float x = left + step * ((float)i + 0.5f);        // 각 칸 중앙
+		const float y = 0.0f;
+
+		Vector2 pos = (mIconOffset * mFinalScale) + Vector2{ x, y };
+
+		SetUITrans(
+			mIcons[i]->GetRectTransform(),
+			mSpeechOffset + (mIconOffset * mFinalScale),
+			pos
+		);
 	}
 }
 
@@ -139,25 +197,44 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 {
 	auto& input = ControlManager::Get();
 
-	input->SetMinLayer(10);
+	input->SetMinLayer(mInputLayer);
 
-	if (input->GetKeyDown(KeyCode::LeftArrow, 10)) {
+	static bool isIconAnimDirty = true;
+
+	if (mSelectTime <= mSelectRotCurve.GetKeyframes().back().time) {
+		mSelectTime += Time::GetDeltaTime();
+		float selectRotZ = mSelectRotCurve.Evaluate(mSelectTime);
+		mIcons[mSelectIdx]->GetRectTransform()->SetWorldEulerRotation(0.0f, 0.0f, selectRotZ);
+	}
+		
+	if (isIconAnimDirty) {
+		mSelectTime = 0.0f;
+		isIconAnimDirty = false;
+	}
+
+	if (input->GetKeyDown(KeyCode::LeftArrow, mInputLayer)) {
 		if (mSelectIdx > 0) {
 			mSelectIdx--;
 			isDirty = true;
+			isIconAnimDirty = true;
 		}
 	}
-	else if (input->GetKeyDown(KeyCode::RightArrow, 10)) {
+	else if (input->GetKeyDown(KeyCode::RightArrow, mInputLayer)) {
 		if (mSelectIdx < mIcons.size() - 1) {
 			mSelectIdx++;
 			isDirty = true;
+			isIconAnimDirty = true;
 		}
 	}
-	else if (input->GetKeyDown(KeyCode::Space, 10)) {
+	else if (input->GetKeyDown(KeyCode::Space, mInputLayer)) {
 		//std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
 		LevelUpManager::Get()->SetSelection(mSelectIdx);
 		input->ReleaseMinLayer();
 		isActive = false;
+		
+		// 닫기 애니메이션 재생용
+		isAnimating = true;
+		mElipsedTime = 0.0f;
 	}
 }
 
@@ -169,8 +246,8 @@ void MMMEngine::LevelUpBubble::UpdateIcon()
 	float camDistance = Vector3::Distance(Camera::GetMainCamera()->GetTransform()->GetWorldPosition(), wPos);
 	float distFactor = camDistance * mDistanceFactor;
 
-	float deselectIconSize = (mDeselectIconSize * mUIScale) / distFactor;
-	float selectIconSize = (mSelectIconSize * mUIScale) / distFactor;
+	float deselectIconSize = (mDeselectIconSize * mFinalScale) / distFactor;
+	float selectIconSize = (mSelectIconSize * mFinalScale) / distFactor;
 
 	for (auto& icon : mIcons) {
 		icon->GetRectTransform()->SetWorldScale(

@@ -58,25 +58,30 @@ void MMMEngine::CastleLevelController::SetLVManager(int _upIndex)
 	}
 }
 
-void MMMEngine::CastleLevelController::UpdateGuage()
+void MMMEngine::CastleLevelController::UpdateHPGuage()
 {
 	mHpGage->GetGameObject()->SetActive(true);
-	mExpGage->GetGameObject()->SetActive(true);
-	mCountIcon->GetGameObject()->SetActive(true);
 
-	auto expRect = mExpGage->GetRectTransform();
 	auto hpRect = mHpGage->GetRectTransform();
-	auto countRect = mCountIcon->GetRectTransform();
-
-	SetUITrans(expRect, mGagePosOffset ,mPadding);
 	SetUITrans(hpRect, mGagePosOffset, -mPadding);
-	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	auto maxHP = mCastle->maxHP;
 	auto currHP = mCastle->prevHP;
 
 	float hpFactor = (float)currHP / (float)maxHP;
 	mHpGage->SetValue(hpFactor);
+}
+
+void MMMEngine::CastleLevelController::UpdateExtraGuage()
+{
+	mExpGage->GetGameObject()->SetActive(true);
+	mCountIcon->GetGameObject()->SetActive(true);
+
+	auto expRect = mExpGage->GetRectTransform();
+	auto countRect = mCountIcon->GetRectTransform();
+
+	SetUITrans(expRect, mGagePosOffset ,mPadding);
+	SetUITrans(countRect, mGagePosOffset, mCountPosOffset);
 
 	float expFactor = 0.0f;
 	if (mReqExp == 0)
@@ -94,7 +99,7 @@ void MMMEngine::CastleLevelController::UpdateGuage()
 
 void MMMEngine::CastleLevelController::UpdateReadyIcon()
 {
-	if (mReadyIcon)
+	if (!mReadyIcon)
 		mReadyIcon->GetGameObject()->SetActive(true);
 	else
 		return;
@@ -102,6 +107,21 @@ void MMMEngine::CastleLevelController::UpdateReadyIcon()
 	auto readyTrans = mReadyIcon->GetRectTransform();
 
 	SetUITrans(readyTrans, mReadyPosOffset, Vector2{0.0f, 0.0f});
+}
+
+void MMMEngine::CastleLevelController::LowHPUpdate()
+{
+	if (!mHpGage)
+		return;
+
+	int prevHP = mCastle->prevHP;
+	int maxHP = mCastle->maxHP;
+
+	if (prevHP < maxHP) {
+		UpdateHPGuage();
+	}
+	else
+		mHpGage->GetGameObject()->SetActive(false);
 }
 
 //void MMMEngine::CastleLevelController::UpdateSelectIcon()
@@ -156,13 +176,20 @@ void MMMEngine::CastleLevelController::Start()
 	mCanvas = LevelUpManager::Get()->GetCanvas();
 	mCastle = LevelUpManager::Get()->GetCastle();
 	mReqExp = LevelUpManager::Get()->GetExpPoint(EXPTYPE::EXP_CASTLE, mCurrLevel);
-	mHpGage = LevelUpManager::Get()->mHpGage;
 	mExpGage = LevelUpManager::Get()->mExpGage;
 	mReadyIcon = LevelUpManager::Get()->mReadyIcon;
 	mCastleIcon = LevelUpManager::Get()->mCastleIcon;
 	mScoopIcon = LevelUpManager::Get()->mScoopIcon;
 	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
 
+	auto gage = Instantiate(LevelUpManager::Get()->mGagePrefab);
+	
+	if (gage) {
+		gage->GetTransform()->SetParent(mCanvas->GetTransform());
+		mHpGage = gage->GetComponent<Gage>();
+		gage->SetActive(false);
+	}
+	
 	mCountIcon->GetTransform()->SetParent(mCanvas->GetTransform());
 	mCountIcon->GetGameObject()->SetActive(false);
 
@@ -202,26 +229,24 @@ void MMMEngine::CastleLevelController::Start()
 
 void MMMEngine::CastleLevelController::Update()
 {
-	if (isActive) {
-		/*if (mUpPending > 0) {
-			UpdateSelectIcon();
-		}
-		else {
-			UpdateGuage();
-		}*/
-
-		UpdateGuage();
-	}
-	else if (mUpPending > 0) {
-		UpdateReadyIcon();
-	}
-
-	if (mPrevActive != isActive && mUpPending > 0) {
+	if (mPrevActive != isActive) {
 		mPrevActive = isActive;
 		if (mPrevActive) {
+			auto object = GetGameObject();
+			LevelUpManager::Get()->SetUIPuller(object);
+		}
+		else {
+			LevelUpManager::Get()->RemoveUIPuller();
+		}
+	}
+
+	static bool prevReady = false;
+
+	if (prevReady != (mUpPending > 0)) {
+		prevReady = mUpPending > 0;
+		if (prevReady) {
 			mReadyIcon->GetGameObject()->SetActive(false);
 
-			mPrevActive = isActive;
 			std::vector<ObjPtr<Image>> icons{ mCastleIcon, mScoopIcon };
 			LevelUpManager::Get()->SetBubble(EXPTYPE::EXP_CASTLE, GetGameObject(), icons);
 		}
@@ -230,9 +255,57 @@ void MMMEngine::CastleLevelController::Update()
 		}
 	}
 
+	if (isActive) {
+		/*if (mUpPending > 0) {
+			UpdateSelectIcon();
+		}
+		else {
+			UpdateGuage();
+		}*/
+		UpdateHPGuage();
+		UpdateExtraGuage();
+		if (prevReady) {
+
+		}
+	}
+	else {
+		// 체력이 풀상태 아닐시 HP 띄우기
+		LowHPUpdate();
+
+		if (mUpPending > 0)
+			UpdateReadyIcon();
+	}
+
 	auto currEXP = mCastle->exp;
 	if (currEXP >= mReqExp && mCurrLevel < LevelUpManager::Get()->GetMaxLevel(EXPTYPE::EXP_CASTLE))
 		UpLevel();
+}
+
+void MMMEngine::CastleLevelController::OnDisable()
+{
+	isActive = false;
+
+	// 본인 소유객체는 알아서 끄기
+	if(mHpGage->GetGameObject().IsValid())
+		mHpGage->GetGameObject()->SetActive(false);
+	if(mCountIcon->GetGameObject().IsValid())
+		mCountIcon->GetGameObject()->SetActive(false);
+
+	auto puller = LevelUpManager::Get()->GetUIPuller();
+	auto go = GetGameObject();
+
+	if (puller.IsValid() && go.IsValid()) {
+		if (puller == go) {
+			if(mExpGage->GetGameObject().IsValid())
+				mExpGage->GetGameObject()->SetActive(false);
+			
+			if (auto target = LevelUpManager::Get()->GetBubbleTarget(); target.IsValid()) {
+				if (target == go) {
+					LevelUpManager::Get()->RemoveBubble();
+				}
+			}
+		}
+	}
 }
 
 void MMMEngine::CastleLevelController::OnTriggerEnter(MMMEngine::TriggerInfo info)

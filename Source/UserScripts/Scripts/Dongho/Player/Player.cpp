@@ -12,6 +12,7 @@
 #include "../Battlestats.h"
 #include "../../test/PlayerController.h"
 #include "../../Sunken/PlayerAnimController.h"
+#include "../../test/PlayerMove.h"
 
 void MMMEngine::Player::Start()
 {
@@ -189,10 +190,13 @@ void MMMEngine::Player::LevelUp()
 { 
 	if (level >= 10)
 		return;
-	level ++;
+	level++;
 	maxpoint += 2;
-	atk ++;
-	GetComponent<PlayerController>()->SetMaxScoop(maxpoint-1);
+	atk++;
+	if (auto playerController = GetComponent<PlayerController>())
+		playerController->SetMaxScoop(maxpoint - 1);
+	if (auto playerMove = GetComponent<PlayerMove>())
+		playerMove->SetSnowMaxScoop(maxpoint - 1);
 	GameManager::instance->levelsum++;
 }
 
