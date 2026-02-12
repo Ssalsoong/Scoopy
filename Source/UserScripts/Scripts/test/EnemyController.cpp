@@ -1,4 +1,4 @@
-Ôªø#include "Export.h"
+#include "Export.h"
 #include "ScriptBehaviour.h"
 #include "EnemyController.h"
 #include "Transform.h"
@@ -15,8 +15,7 @@
 #include "TargetSlotProvider.h"
 #include "../Sunken/EnemyAnimController.h"
 #include "RigidBodyComponent.h"
-#include "../Mingi/UI/MiniMap.h"
-
+#include "../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::EnemyController::Start()
 {
@@ -27,22 +26,6 @@ void MMMEngine::EnemyController::Start()
 	if (auto go = GameObject::Find("Castle"); go.IsValid())
 	{
 		m_MainTarget = go;
-	}
-}
-
-void MMMEngine::EnemyController::OnEnable()
-{
-	if (MiniMap::Instance.IsValid())
-	{
-		MiniMap::Instance->RegisterTracker(GetMUID(),GetTransform(),TrackerType::Enemy);
-	}
-}
-
-void MMMEngine::EnemyController::OnDisable()
-{
-	if (MiniMap::Instance.IsValid())
-	{
-		MiniMap::Instance->UnregisterTracker(GetMUID());
 	}
 }
 
@@ -58,7 +41,7 @@ void MMMEngine::EnemyController::Update()
 		}
 	}
 	UpdateDistance();
-	// Ïä¨Î°Ø ÌÉÄÏûÑÏïÑÏõÉ Ïû¨ÏöîÏ≤≠
+	// ΩΩ∑‘ ≈∏¿”æ∆øÙ ¿Áø‰√ª
 	const float dt = Time::GetDeltaTime();
 	m_slotReassignTimer = std::max(0.0f, m_slotReassignTimer - dt);
 
@@ -90,7 +73,7 @@ void MMMEngine::EnemyController::Update()
 }
 
 
-//Enemy Ï¥àÍ∏∞Í∞í ÏÑ§Ï†ïÏö©
+//Enemy √ ±‚∞™ º≥¡§øÎ
 void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::Vector3 pos, int hp)
 {
 	GetTransform()->SetWorldPosition(pos);
@@ -108,7 +91,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 
 	m_EnemyType = type;
 
-	//ÎûúÎç§Î≥ÄÏàò
+	//∑£¥˝∫Øºˆ
 	static std::mt19937 rng(std::random_device{}());
 	std::uniform_real_distribution<float> dist(0.f, DirectX::XM_2PI);
 	m_rangedAngle = dist(rng);
@@ -167,14 +150,16 @@ void MMMEngine::EnemyController::ChangeState()
 	float rangeEnter = E_state.Range + extra;
 	float rangeExit = rangeEnter + 0.2f;
 
-	float slotEnter = slotArriveRadius;   // Í∑ºÏ†ë Í≥µÍ≤©ÏùÄ Ïù¥ Í∞íÎßå ÏÇ¨Ïö©
+	float slotEnter = slotArriveRadius;   // ±Ÿ¡¢ ∞¯∞›¿∫ ¿Ã ∞™∏∏ ªÁøÎ
 	float slotExit = slotEnter + 0.1f;
 
-	// Attack ÏÉÅÌÉúÎ©¥ Î®ºÏ†Ä Ïù¥ÌÉà Ï≤¥ÌÅ¨
+	// Attack ªÛ≈¬∏È ∏’¿˙ ¿Ã≈ª √º≈©
 	if (curState == EnemyState::Attack)
 	{
 		if (!m_canExitAttack)
 			return;
+		m_orbiting = false;
+
 		float exitDist = (IsBruiser() ? slotExit : rangeExit);
 		if (!m_CurTarget.IsValid() || distance > exitDist)
 		{
@@ -191,7 +176,7 @@ void MMMEngine::EnemyController::ChangeState()
 		return;
 	}
 
-	// ÏùºÎ∞ò ÏßÑÏûÖ Ï°∞Í±¥
+	// ¿œπ› ¡¯¿‘ ¡∂∞«
 	if (IsBruiser())
 	{
 		if (m_usingSlotTarget)
@@ -257,75 +242,84 @@ void MMMEngine::EnemyController::UpdateDistance()
 	{
 		if (useSlot)
 		{
-			Vector3 center = m_CurTarget->GetTransform()->GetWorldPosition();
-
-			Vector3 cur = EnemyPos - center; cur.y = 0.f;
-			Vector3 tar = TargetPos - center; tar.y = 0.f;
-
-			float rCur = cur.Length();
-			float rTar = tar.Length();
-
-			if (rCur > 1e-3f && rTar > 1e-3f)
+			if (distance <= slotArriveRadius)
 			{
-				float aCur = atan2f(cur.z, cur.x);
-				float aTar = atan2f(tar.z, tar.x);
+				m_orbiting = false;
+				m_Move->SetTargetOverride(TargetPos);
+			}
+			else
+			{
+				Vector3 center = m_CurTarget->GetTransform()->GetWorldPosition();
 
-				float d = aTar - aCur;
-				// WrapPi
-				while (d > DirectX::XM_PI) d -= DirectX::XM_2PI;
-				while (d < -DirectX::XM_PI) d += DirectX::XM_2PI;
+				Vector3 cur = EnemyPos - center; cur.y = 0.f;
+				Vector3 tar = TargetPos - center; tar.y = 0.f;
 
-				if (!m_orbiting && fabs(d) > orbitEnterAngle)
+				float rCur = cur.Length();
+				float rTar = tar.Length();
+
+				if (rCur > 1e-3f && rTar > 1e-3f)
 				{
-					m_orbiting = true;
-					m_orbitDir = (d >= 0.f) ? +1 : -1;
-				}
+					float aCur = atan2f(cur.z, cur.x);
+					float aTar = atan2f(tar.z, tar.x);
 
-				float radialDiff = fabs(rCur - rTar);
+					float d = aTar - aCur;
+					// WrapPi
+					while (d > DirectX::XM_PI) d -= DirectX::XM_2PI;
+					while (d < -DirectX::XM_PI) d += DirectX::XM_2PI;
 
-				// orbit ÏßÑÏûÖ Ï°∞Í±¥ (Í±∞Î¶¨/Î∞òÍ≤Ω Ï°∞Í±¥ÏúºÎ°ú Ï°∞Ï†à)
-				if (!m_orbiting)
-				{
-					if (radialDiff <= orbitRadialTolerance &&
-						distance <= orbitStartDist &&
-						fabs(d) > orbitEnterAngle)
+					if (!m_orbiting && distance > slotArriveRadius && fabs(d) > orbitEnterAngle)
 					{
 						m_orbiting = true;
 						m_orbitDir = (d >= 0.f) ? +1 : -1;
 					}
-				}
 
-				// orbit Ïú†ÏßÄ/Ìï¥Ï†ú Ï°∞Í±¥
-				if (m_orbiting)
-				{
-					if (radialDiff > orbitRadialTolerance ||
-						distance < orbitExitDist ||
-						fabs(d) < orbitExitAngle)
+					float radialDiff = fabs(rCur - rTar);
+
+					// orbit ¡¯¿‘ ¡∂∞« (∞≈∏Æ/π›∞Ê ¡∂∞«¿∏∑Œ ¡∂¿˝)
+					if (!m_orbiting)
 					{
-						m_orbiting = false;
-					}
-					else
-					{
-						Vector3 tangent(-cur.z, 0.f, cur.x);
-						if (tangent.LengthSquared() > 1e-6f)
+						if (distance > slotArriveRadius &&
+							radialDiff <= orbitRadialTolerance &&
+							distance <= orbitStartDist &&
+							fabs(d) > orbitEnterAngle)
 						{
-							tangent.Normalize();
-							tangent *= (float)m_orbitDir;
+							m_orbiting = true;
+							m_orbitDir = (d >= 0.f) ? +1 : -1;
+						}
+					}
 
-							TargetPos = EnemyPos + tangent * orbitStepDist;
-
-							float useR = std::max(rCur, rTar + orbitLaneOffset);
-							Vector3 toNew = TargetPos - center; toNew.y = 0.f;
-							if (toNew.LengthSquared() > 1e-6f)
+					// orbit ¿Ø¡ˆ/«ÿ¡¶ ¡∂∞«
+					if (m_orbiting)
+					{
+						if (radialDiff > orbitRadialTolerance ||
+							distance < orbitExitDist ||
+							fabs(d) < orbitExitAngle)
+						{
+							m_orbiting = false;
+						}
+						else
+						{
+							Vector3 tangent(-cur.z, 0.f, cur.x);
+							if (tangent.LengthSquared() > 1e-6f)
 							{
-								toNew.Normalize();
-								TargetPos = center + toNew * useR;
+								tangent.Normalize();
+								tangent *= (float)m_orbitDir;
+
+								TargetPos = EnemyPos + tangent * orbitStepDist;
+
+								float useR = std::max(rCur, rTar + orbitLaneOffset);
+								Vector3 toNew = TargetPos - center; toNew.y = 0.f;
+								if (toNew.LengthSquared() > 1e-6f)
+								{
+									toNew.Normalize();
+									TargetPos = center + toNew * useR;
+								}
 							}
 						}
 					}
 				}
+				m_Move->SetTargetOverride(TargetPos);
 			}
-			m_Move->SetTargetOverride(TargetPos);
 		}
 		else
 		{
@@ -334,6 +328,18 @@ void MMMEngine::EnemyController::UpdateDistance()
 		}
 	}
 	m_usingSlotTarget = useSlot;
+
+	if (m_usingSlotTarget && !m_orbiting && curState == EnemyState::Attack && m_Rigid.IsValid() && distance > slotArriveRadius)
+	{
+		Vector3 toSlot = m_effectiveTargetPos - EnemyPos;
+		toSlot.y = 0.f;
+		if (toSlot.LengthSquared() > 1e-6f)
+		{
+			toSlot.Normalize();
+			const float slotPullAccel = 4.0f;
+			m_Rigid->AddForce(toSlot * slotPullAccel, RigidBodyComponent::ForceMode::Acceleration);
+		}
+	}
 }
 
 
@@ -345,6 +351,8 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	{
 	case EnemyState::Move:
 	{
+		m_Rigid->SetLineDamping(0.0f);
+		m_Rigid->SetAngularDamping(0.05f);
 		m_Rigid->SetKinematic(false);
 		m_Move->ChangeTarget(m_CurTarget);
 		m_Move->MoveTriggerSet(true);
@@ -354,8 +362,10 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	}
 	case EnemyState::Attack:
 	{
+		m_Rigid->SetLineDamping(6.0f);
+		m_Rigid->SetAngularDamping(1.0f);
 		auto t_Zero = DirectX::SimpleMath::Vector3::Zero;
-		m_Rigid->SetKinematic(true);
+		m_Rigid->SetKinematic(false);
 		m_Rigid->SetLinearVelocity(t_Zero);
 		m_Rigid->SetAngularVelocity(t_Zero);
 		m_Move->MoveTriggerSet(false);
@@ -409,9 +419,9 @@ bool MMMEngine::EnemyController::UpdateTarget()
 	{
 		auto targetPos = m_CurTarget->GetTransform()->GetWorldPosition();
 
-		// Í≥†Ï†ï Í∞ÅÎèÑ/Î∞òÍ≤Ω Ïò§ÌîÑÏÖã (Í∞úÏ≤¥Î≥Ñ Í≥†Ï†ï)
-		float angle = m_rangedAngle;           // Start()ÏóêÏÑú ÎûúÎç§/Ìï¥ÏãúÎ°ú Ï¥àÍ∏∞Ìôî
-		float radius = m_rangedHoldRadius;     // 2.0f~4.0f Ï†ïÎèÑ
+		// ∞Ì¡§ ∞¢µµ/π›∞Ê ø¿«¡º¬ (∞≥√º∫∞ ∞Ì¡§)
+		float angle = m_rangedAngle;           // Start()ø°º≠ ∑£¥˝/«ÿΩ√∑Œ √ ±‚»≠
+		float radius = m_rangedHoldRadius;     // 2.0f~4.0f ¡§µµ
 		Vector3 offset(std::cos(angle) * radius, 0.f, std::sin(angle) * radius);
 
 		m_Move->SetTargetOverride(targetPos + offset);
@@ -424,7 +434,7 @@ bool MMMEngine::EnemyController::UpdateTarget()
 	if (m_CurTarget != target)
 	{
 		ReleaseSlot();
-		m_orbiting = false; //ÌÉÄÍ≤ü Î∞îÎÄåÎ©¥ orbit Î¶¨ÏÖã
+		m_orbiting = false; //≈∏∞Ÿ πŸ≤Ó∏È orbit ∏Æº¬
 		m_CurTarget = target;
 		m_Move->ChangeTarget(m_CurTarget);
 		TryAcquireSlot();
@@ -462,8 +472,6 @@ void MMMEngine::EnemyController::TryAcquireSlot()
 		m_slotRing = ring;
 		m_slotIndex = index;
 	}
-
-	std::cout << "m_hasSlot : " << m_hasSlot << "m_slotRing : " << m_slotRing << "m_slotIndex : " << m_slotIndex << std::endl;
 }
 
 void MMMEngine::EnemyController::ReleaseSlot()
@@ -491,7 +499,7 @@ MMMEngine::ObjPtr<MMMEngine::GameObject> MMMEngine::EnemyController::ResolveTarg
 	{
 		auto go = tr->GetGameObject();
 		if (auto p = go->GetComponent<TargetSlotProvider>(); p.IsValid())
-			return go; // Ïä¨Î°Ø Ï†úÍ≥µÏûê(Î∂ÄÎ™®)Î•º ÌÉÄÍ≤üÏúºÎ°ú ÏäπÍ≤©
+			return go; // ΩΩ∑‘ ¡¶∞¯¿⁄(∫Œ∏)∏¶ ≈∏∞Ÿ¿∏∑Œ Ω¬∞›
 	}
 
 	return raw;
@@ -517,13 +525,7 @@ void MMMEngine::EnemyController::AttackTarget()
 		return;
 	}
 
-	if (!m_Rigid->GetKinematic())
-	{
-		m_Rigid->SetKinematic(true);
-		m_Rigid->SetLinearVelocity(Vector3::Zero);
-		m_Rigid->SetAngularVelocity(Vector3::Zero);
-		m_Move->MoveTriggerSet(false);
-	}
+	// Attack stays dynamic; do not force kinematic or zero velocity here.
 
 	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
 	{
@@ -550,6 +552,8 @@ void MMMEngine::EnemyController::AttackTarget()
 			m_attackPhase = AttackPhase::Pause;
 			RecoverTimer = 0.0f;
 			attackTimer = 0.0f;
+
+			PauseEnter();
 		}
 	}
 	else // Pause
@@ -573,7 +577,7 @@ void MMMEngine::EnemyController::DoHit()
 	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
 		return;
 
-	// ÌÉÄÍ≤üÏù¥ Î∞îÎÄåÏóàÏúºÎ©¥ Í≥µÍ≤© Ï∑®ÏÜå
+	// ≈∏∞Ÿ¿Ã πŸ≤Óæ˙¿∏∏È ∞¯∞› √Îº“
 	if (battletarget != m_CurTarget)
 	{
 		m_CurTarget = m_MainTarget;
@@ -582,7 +586,7 @@ void MMMEngine::EnemyController::DoHit()
 		return;
 	}
 
-	// Snow Ï≤òÎ¶¨
+	// Snow √≥∏Æ
 	if (battletarget->GetName() == "Snow")
 	{
 		if (auto snowCollider = battletarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
@@ -599,13 +603,13 @@ void MMMEngine::EnemyController::DoHit()
 		return;
 	}
 
-	// ÏõêÍ±∞Î¶¨/Í∑ºÍ±∞Î¶¨
+	// ø¯∞≈∏Æ/±Ÿ∞≈∏Æ
 	if (auto arrowenemy = GetComponent<ArrowEnemy>(); arrowenemy.IsValid())
 		arrowenemy->ArrowAttack(battletarget, E_state.AD);
 	else
 		BattleManager::instance->Attack(GetGameObject(), battletarget, E_state.AD);
 
-	// HP Ï≤¥ÌÅ¨
+	// HP √º≈©
 	if (auto targetstats = battletarget->GetComponent<Battlestats>(); targetstats.IsValid())
 	{
 		if (targetstats->HP <= 0)
@@ -657,12 +661,24 @@ void MMMEngine::EnemyController::MotionEnter()
 	{
 		EnemyAni->PlayAttack();
 	}
-	//std::cout << "motionon" << std::endl;
+	if (m_EnemyType == EnemyType::Warrior)
+	{
+		SoundManager::Instance->PlaySFX3D("WarriorAttack", SelfPtr(this), 1.0f);
+	}
+	else if (m_EnemyType == EnemyType::Archer)
+	{
+		SoundManager::Instance->PlaySFX3D("ArcherAttack", SelfPtr(this), 1.0f);
+	}
+	else if (m_EnemyType == EnemyType::Scout)
+	{
+		SoundManager::Instance->PlaySFX3D("AssassinAttack", SelfPtr(this), 1.0f);
+	}
+	
 }
 
 void MMMEngine::EnemyController::PauseEnter()
 {
-	//std::cout << "pauseon" << std::endl;
+	
 }
 
 
@@ -691,9 +707,12 @@ void MMMEngine::EnemyController::UpdateAttackDebuffSource(const void* src, float
 
 void MMMEngine::EnemyController::RecalcAttackMult()
 {
-	float best = 1.0f; // max Î£∞ (Í∞ÄÏû• Í∞ïÌïòÍ≤å)
+	float best = 1.0f; // max ∑Í (∞°¿Â ∞≠«œ∞‘)
 	for (auto& [k, v] : m_AttackDebuffSources)
 		if (v > best) best = v;
 
 	m_FinalAttackMult = best;
 }
+
+
+

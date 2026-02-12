@@ -48,13 +48,30 @@ void MMMEngine::EnemyMove::FixedUpdate()
 		: (Obj_target.IsValid() ? Obj_target->GetTransform()->GetWorldPosition()
 			: m_GO->GetTransform()->GetWorldPosition());
 
-	FaceTargetYaw(targetPos);
-
+	Vector3 faceTargetPos = Obj_target.IsValid()
+		? Obj_target->GetTransform()->GetWorldPosition()
+		: targetPos;
 
 	auto rb = GetComponent<RigidBodyComponent>();
+	float maxPushSpeed = SnowObjPtr.empty() ? 1.0f : 0.35f; // ´« Á¢ÃË ½Ã¸¸ ¾àÇÏ°Ô
+
+
 	if (!is_move)
 	{
-		rb->SetLinearVelocity(DirectX::SimpleMath::Vector3::Zero);
+		Vector3 v = rb->GetLinearVelocity();
+		v.y = 0.f;
+
+		if (v.LengthSquared() > maxPushSpeed * maxPushSpeed)
+		{
+			v.Normalize();
+			v *= maxPushSpeed;
+			rb->SetLinearVelocity(v);
+		}
+
+		rb->SetLockRotY(true);
+		rb->SetAngularVelocity(Vector3(0.f, 0.f, 0.f));
+		FaceTargetYaw(faceTargetPos);
+
 		return;
 	}
 
@@ -153,11 +170,23 @@ void MMMEngine::EnemyMove::FixedUpdate()
 
 	rb->SetLinearVelocity(curVel);
 
+	Vector3 v = rb->GetLinearVelocity();
+	v.y = 0.f;
+
+	float maxSpeed = (curVel.Length() > maxPushSpeed) ? curVel.Length() : maxPushSpeed;
+	if (v.LengthSquared() > maxSpeed * maxSpeed)
+	{
+		v.Normalize();
+		v *= maxSpeed;
+		rb->SetLinearVelocity(v);
+	}
+
+
 	if (is_move)
 	{
 		rb->SetLockPosX(false);
 		rb->SetLockPosZ(false);
-		rb->SetLockRotY(false);
+		rb->SetLockRotY(true);
 		FaceVelocityYaw(curVel);
 	}
 	else
