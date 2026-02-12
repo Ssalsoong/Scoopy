@@ -75,6 +75,8 @@ void MMMEngine::PauseUI::Update()
 		return;
 	}
 
+
+	// todo : 게임매니저에서 게임이 끝난상태에서는 호출하지 않게하기 Return
 	bool lastPause = m_isPause;
 	if (Input::GetKeyDown(KeyCode::Escape))
 	{
@@ -197,6 +199,21 @@ void MMMEngine::PauseUI::OnDestroy()
 	{
 		Time::SetTimeScale(1.0f);
 	}
+}
+
+void MMMEngine::PauseUI::ForcePauseOff()
+{
+	m_internalTimer = 0.0f;
+	PanelGO->SetActive(false);
+	m_isControlAble = false;
+	m_resumeFocusAlpha = 0.5f;
+	m_toTitleFocusAlpha = 0.5f;
+	m_currentSelected = 0;
+	Resume_rect->SetLocalScale({ 1.0f , 1.0f ,1.0f });
+	ToTitle_rect->SetLocalScale({ 1.0f , 1.0f ,1.0f });
+	m_buttonSelectTimer = 0.0f;
+
+	Time::SetTimeScale(1.0f);
 }
 
 bool MMMEngine::PauseUI::IsPause()

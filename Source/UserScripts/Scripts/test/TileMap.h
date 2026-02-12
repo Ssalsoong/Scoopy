@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -7,114 +7,133 @@
 
 namespace MMMEngine
 {
-	class Transform;
+    class Transform;
 
-	class USERSCRIPTS TileMap : public ScriptBehaviour
-	{
-	private:
-		RTTR_ENABLE(ScriptBehaviour)
-			RTTR_REGISTRATION_FRIEND
-	private:
-		static constexpr int GRID_W = 30;
-		static constexpr int GRID_H = 30;
+    
 
+    class USERSCRIPTS TileMap : public ScriptBehaviour
+    {
+    private:
+        RTTR_ENABLE(ScriptBehaviour)
+        RTTR_REGISTRATION_FRIEND
+    private:
+        static constexpr int GRID_W = 20;
+        static constexpr int GRID_H = 20;
+        
+        enum class TilePhase
+        {
+            Idle,
+            Harvesting,
+            Cleared,
+            Regenerating
+        };
 
-		struct TileState
-		{
-			bool cleared = false;     // true = ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-			float accum = 0.0f;       // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
-			float respawn = 0.0f;     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½
+        struct TileState
+        {
+            TilePhase phase = TilePhase::Idle;
 
-			bool inRespawn = false;
-		};
+            float accum = 0.f;       // ÀÌµ¿ ´©Àû
+            float fade = 0.f;        //µð´õ¸µ¿ë º¯¼ö ( ÁøÇàµµ¶ó°í »ý°¢ÇÏ½Ã¸éµÊ )
+            float respawn = 0.f;     // ¸®½ºÆù Å¸ÀÌ¸Ó
+        };
 
-		struct RespawnEntry {
-			int ix, iz;
-		};
+        struct RespawnEntry {
+            int ix, iz;
+        };
 
-	public:
-		TileMap()
-		{
+    public:
+        TileMap()
+        {
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
-		USCRIPT_PROPERTY()
-			ObjPtr<Transform> P_trans = nullptr;
+        USCRIPT_PROPERTY()
+        ObjPtr<Transform> P_trans = nullptr;
 
-		struct Vec2 { float x, z; };
-
-
-		float tileSize = 1.0f;
-		float originX = 0.0f;
-		float originZ = 0.0f;
-
-		USCRIPT_PROPERTY()
-			float threshold = 1.5f; // Å¸ï¿½ï¿½ ï¿½È¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ú¿ï¿½È¹ï¿½ï¿½
+        struct Vec2 { float x, z; };
 
 
-		Vec2 prevPos{};
-		bool hasPrev = false;
+        float tileSize = 1.0f;
+        float originX = 0.0f;
+        float originZ = 0.0f;
+
+        USCRIPT_PROPERTY()
+        float threshold = 0.75f; // Å¸ÀÏ ¾È¿¡¼­ ÀÌ ¼öÄ¡¸¸Å­ ¿òÁ÷ÀÌ¸é ÀÚ¿øÈ¹µæ
+
+        USCRIPT_PROPERTY()
+        float recoverSpeed = 1.0f;        // ¶°³µÀ» ¶§ º¹±¸ ¼Óµµ
+
+        USCRIPT_PROPERTY()
+        float regenFadeSpeed = 1.0f;      // ¸®Á¨ ½Ã µîÀå ¼Óµµ
+
+        USCRIPT_PROPERTY()
+        float accumRegenSpeed = 1.0f;     // º¹¼ö ¼öÄ¡
+   
+        Vec2 prevPos{};
+        bool hasPrev = false;
 
 
-		bool isHarvesting = false; // Ä³ï¿½Â»ï¿½ï¿½ï¿½
-		bool wasHarvesting = false; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        bool isHarvesting = false; // Ä³´Â»óÅÂ
+
+        //bool wasHarvesting = false; // ÀÌÀü ÇÁ·¹ÀÓ
+
+        
+
+        USCRIPT_MESSAGE()
+        void Start();
+
+        USCRIPT_MESSAGE()
+        void Update();
 
 
-
-		USCRIPT_MESSAGE()
-			void Start();
-
-		USCRIPT_MESSAGE()
-			void Update();
+        USCRIPT_PROPERTY()
+        ResPtr<Prefab> box;
 
 
-		USCRIPT_PROPERTY()
-			ResPtr<Prefab> box;
+        int width = 30;
+        int offset = 15;
 
+        //int index = 0;
+        std::vector<ObjPtr<GameObject>> boxlist;
+        std::vector<TileState> tiles;
 
-		int width = 30;
-		int offset = 15;
+        std::vector<RespawnEntry> CheckTiles;
+        
+        USCRIPT_PROPERTY()
+        float RESPAWN_TIME = 15.0f;
 
-		int index = 0;
-		std::vector<ObjPtr<GameObject>> boxlist;
-		std::vector<TileState> tiles;
+        //bool  gained[GRID_W][GRID_H]{};
+        //float accum[GRID_W][GRID_H]{};
 
-		std::vector<RespawnEntry> CheckTiles;
+    private:
+        int OneTimeGetValue = 1;
 
-		USCRIPT_PROPERTY()
-			float RESPAWN_TIME = 15.0f;
+    public:
+        void SetOneTimeValue(int value);
+        void NoticePlayer(bool value);
 
-		//bool  gained[GRID_W][GRID_H]{};
-		//float accum[GRID_W][GRID_H]{};
+        bool IsTileClearedAt(float x, float z);
 
-	private:
-		int OneTimeGetValue = 1;
+    private:
+        float DistXZ(const Vec2& a, const Vec2& b);
 
-	public:
-		void SetOneTimeValue(int value);
-		void NoticePlayer(bool value);
+        bool InBounds(int ix, int iz);
 
-		bool IsTileClearedAt(float x, float z);
-	private:
-		float DistXZ(const Vec2& a, const Vec2& b);
+        void WorldToTile(float x, float z, float originX, float originZ, float tileSize, int& outIx, int& outIz);
 
-		bool InBounds(int ix, int iz);
+        void EnterState(const Vec2& startPos);
 
-		void WorldToTile(float x, float z, float originX, float originZ, float tileSize, int& outIx, int& outIz);
+        void TileCheck(const Vec2& pos);
 
-		void EnterState(const Vec2& startPos);
+        //ÇöÀç playerÀ§Ä¡ ¾ò´Â ÇÔ¼ö
+        Vec2 GetCurPosXZ() const;
 
-		void TileCheck(const Vec2& pos);
+        int GetIndex(int x, int y);
 
-		//ï¿½ï¿½ï¿½ï¿½ playerï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
-		Vec2 GetCurPosXZ() const;
+        void UpdateRespawn();
 
-		int GetIndex(int x, int y);
-
-
-		void UpdateRespawn();
-
-	};
+        void UpdateAccumDecay(int currentTileIdx);
+    };
 }

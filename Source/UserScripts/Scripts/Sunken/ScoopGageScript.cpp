@@ -2,6 +2,8 @@
 #include "ScriptBehaviour.h"
 #include "ScoopGageScript.h"
 
+#include "MMMMathF.h"
+
 #include "../test/PlayerController.h"
 #include "../Dongho/Snow/Snowball.h"
 #include "../Dongho/Player/Player.h"
@@ -51,12 +53,17 @@ void MMMEngine::ScoopGageScript::Update()
 				int snowSize = snow->point;
 				int maxSize = mPlayer->maxpoint;
 
+
+				float targetGage = static_cast<float>(snowSize) / static_cast<float>(maxSize);
+				m_showingGage = MathF::Lerp(m_showingGage, targetGage, 6.0f * Time::GetDeltaTime());
+
 				if (mGage && maxSize > 0) {
-					mGage->SetValue(static_cast<float>(snowSize) / static_cast<float>(maxSize));
+					mGage->SetValue(m_showingGage);
 				}
 			}
 		}
 		else if (mGage) {
+			m_showingGage = 0.0f;
 			mGage->SetValue(0.0f);
 		}
 
