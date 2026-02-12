@@ -212,7 +212,7 @@ void MMMEngine::Castle::LevelUp()
 	if (level >= 10)
 		return;
 	level ++;
-	atk += 2;
+	atk += 3;
 	GameManager::instance->levelsum++;
 }
 
