@@ -1,4 +1,4 @@
-ï»¿#pragma once
+#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -61,7 +61,7 @@ namespace MMMEngine
 
         DirectX::SimpleMath::Vector3 toTarget{};
 
-		// ìŠ¬ë¡¯ ìƒíƒœ
+		// ½½·Ô »óÅÂ
 		ObjPtr<TargetSlotProvider> m_SlotProvider;
 		ObjPtr<GameObject> m_SlotTarget;
 		bool m_hasSlot = false;
@@ -69,15 +69,13 @@ namespace MMMEngine
 		int m_slotIndex = -1;
 		DirectX::SimpleMath::Vector3 m_effectiveTargetPos{};
 
-		// ìŠ¬ë¡¯ ì¬ìš”ì²­
+		// ½½·Ô Àç¿äÃ»
 		int m_slotRetryFrames = 0;
-		int m_slotRetryInterval = 10; // 10í”„ë ˆì„ë§ˆë‹¤ ì¬ìš”ì²­
+		int m_slotRetryInterval = 10; // 10ÇÁ·¹ÀÓ¸¶´Ù Àç¿äÃ»
 
     public:
         EnemyController()
         {
-        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
-        REGISTER_BEHAVIOUR_MESSAGE(OnEnable);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -89,24 +87,18 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
         void Update();
 
-        USCRIPT_MESSAGE()
-            void OnEnable();
-
-        USCRIPT_MESSAGE()
-            void OnDisable();
-
         bool CheckHurt();
 
         void OnHurtFlag(bool value);
 
         void InitEnemy(EnemyType type , DirectX::SimpleMath::Vector3 pos, int hp);
         
-        //ë‚´ë¶€ë¡œì§ì—ì˜í•´ ìŠ¤í…Œì´íŠ¸ë³€ê²½
+        //³»ºÎ·ÎÁ÷¿¡ÀÇÇØ ½ºÅ×ÀÌÆ®º¯°æ
         void ChangeState();
-        //í˜„ì¬ ìŠ¤í…Œì´íŠ¸ì— ë”°ë¼ í–‰ë™í• ê²ƒë“¤
+        //ÇöÀç ½ºÅ×ÀÌÆ®¿¡ µû¶ó Çàµ¿ÇÒ°Íµé
         void CheckState();
 
-        //ê±°ë¦¬ê³„ì‚°
+        //°Å¸®°è»ê
         void UpdateDistance();
 
         void OnStateEnter(EnemyState state);
@@ -121,6 +113,7 @@ namespace MMMEngine
         void AttackTarget();
         ObjPtr<GameObject> battletarget;
         float attackFullTime = 0.5f;
+
         float attackTimer = 0.0f;
 		float snowDamageTimer = 0.0f;
 		float snowDamageDelay = 0.5f;
@@ -155,28 +148,28 @@ namespace MMMEngine
 
         ObjPtr<RigidBodyComponent> m_Rigid;
 
-		//í˜¸ ì´ë™ìš© ë³€ìˆ˜
+		//È£ ÀÌµ¿¿ë º¯¼ö
 		bool m_orbiting = false;
-		int  m_orbitDir = 1;        // +1 ë˜ëŠ” -1
-		float orbitEnterAngle = 0.6f; // ë¼ë””ì•ˆ (ì•½ 57ë„)
-		float orbitExitAngle = 0.25f; // ë¼ë””ì•ˆ (ì•½ 14ë„)
-		float orbitStepDist = 0.4f;  // í•œ í”„ë ˆì„ ì´ë™ ê±°ë¦¬
+		int  m_orbitDir = 1;        // +1 ¶Ç´Â -1
+		float orbitEnterAngle = 0.6f; // ¶óµğ¾È (¾à 57µµ)
+		float orbitExitAngle = 0.25f; // ¶óµğ¾È (¾à 14µµ)
+		float orbitStepDist = 0.4f;  // ÇÑ ÇÁ·¹ÀÓ ÀÌµ¿ °Å¸®
 
-		//í˜¸ ì´ë™ ì‹œì‘ê³¼ ëì„ ìœ„í•œ ë³€ìˆ˜
+		//È£ ÀÌµ¿ ½ÃÀÛ°ú ³¡À» À§ÇÑ º¯¼ö
 		float orbitRadialTolerance = 0.4f;
 		float orbitStartDist = 1.7f;
 		float orbitExitDist = 0.2f;
 		float orbitLaneOffset = 0.25f;
 
 
-		//í‹°ì¼“ë§Œë£Œë³€ìˆ˜
+		//Æ¼ÄÏ¸¸·áº¯¼ö
 		float m_slotElapsed = 0.0f;
-		float m_slotTimeout = 10.0f;     // 10ì´ˆ
-		float m_slotReassignCooldown = 0.5f; // ì¬ì‹œë„ ì¿¨ë‹¤ìš´
+		float m_slotTimeout = 10.0f;     // 10ÃÊ
+		float m_slotReassignCooldown = 0.5f; // Àç½Ãµµ Äğ´Ù¿î
 		float m_slotReassignTimer = 0.0f;
 
         bool m_canExitAttack = false;
-        //ë””ë²„í”„ ê´€ë ¨
+        //µğ¹öÇÁ °ü·Ã
     public:
 		std::unordered_map<const void*, float> m_AttackDebuffSources;
 		float m_FinalAttackMult = 1.0f;

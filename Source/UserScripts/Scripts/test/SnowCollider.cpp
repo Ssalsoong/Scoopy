@@ -137,7 +137,7 @@ void MMMEngine::SnowCollider::FixedUpdate()
 	//m_holdHeight = m_Size / 2;
 
 	float snowRadius = m_Size * 0.5f;
-	float playerRadius = 0.4;
+	float playerRadius = 0.55f;
 	float minXZ = playerRadius + snowRadius + 0.02f;
 
 	m_holdDistance = std::max(minXZ, snowRadius + 0.2f); // 수평만
