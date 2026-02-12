@@ -161,3 +161,21 @@ void MMMEngine::EnemyAnimController::Update()
 		break;
 	}
 }
+
+void MMMEngine::EnemyAnimController::PlayAttack()
+{
+	switch (mAnimType)
+	{
+	case MMMEngine::AT_Archer:
+		mAnimator->PlayClip("Anim_Goblin_Archer_Attack", false);
+		break;
+	case MMMEngine::AT_Warrior:
+		mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", false);
+		break;
+	case MMMEngine::AT_Scout:
+		mAnimator->PlayClip("Anim_Goblin_Scout_Attack", false);
+		break;
+	default:
+		break;
+	}
+}

@@ -4,6 +4,8 @@
 #include "UserScriptsCommon.h"
 #include <CoreComponents.h>
 
+namespace MMMEngine { class TimerUI; }
+
 namespace MMMEngine
 {
     class USERSCRIPTS TimerGageScript : public ScriptBehaviour
@@ -13,8 +15,9 @@ namespace MMMEngine
             RTTR_REGISTRATION_FRIEND
 
             ObjPtr<Gage> mTimerGage;
-
-        bool mPrevStat = false;
+        ObjPtr<TimerUI> mTimerUI;
+                
+        //bool mPrevStat = false;
 
     public:
         TimerGageScript()

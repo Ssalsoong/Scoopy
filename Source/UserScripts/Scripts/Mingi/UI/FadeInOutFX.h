@@ -16,7 +16,7 @@ namespace MMMEngine
 
             int m_fadeState = 0; // 0 = idle, 1 = in, 2 = out;
         float m_internalTime = 0.0f;
-
+        int m_lastFadeState = 0;
 
     public:
         FadeInOutFX()
@@ -56,5 +56,7 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void FadeOut();
+
+        bool LastFadeState();
     };
 }

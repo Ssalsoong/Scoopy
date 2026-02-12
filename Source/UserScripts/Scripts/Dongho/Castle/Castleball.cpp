@@ -7,6 +7,7 @@
 #include "MMMTime.h"
 #include "Transform.h"
 #include "../Manager/BattleManager.h"
+#include "../../Mingi/ExplosionPool.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -56,6 +57,10 @@ void MMMEngine::Castleball::Update()
 		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
 		target = nullptr;
 		auto ownerpos = owner->GetTransform()->GetWorldPosition();
+
+		if (ExplosionPool::Instance.IsValid())
+			ExplosionPool::Instance->Spawn(GetTransform()->GetWorldPosition());
+
 		GetTransform()->SetWorldPosition(ownerpos);
 		GetGameObject()->SetActive(false);
 		return;

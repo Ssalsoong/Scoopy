@@ -20,6 +20,8 @@ namespace MMMEngine
         // int = Layer, set = KeyCodes
         std::unordered_map<int, std::unordered_set<KeyCode>> mControlMap;
 
+        std::set<int> mInputLayers;
+
         int minLayer = -1;
 
         static ObjPtr<ControlManager> instance;
@@ -41,8 +43,8 @@ namespace MMMEngine
         bool GetKeyUp(KeyCode _keycode, int _layer);
         bool GetKey(KeyCode _keycode, int _layer);
 
-        void SetMinLayer(int _layer) { minLayer = _layer; }
-        void ReleaseMinLayer() { minLayer = -1; }
+        void SetMinLayer(int _layer);
+        void ReleaseMinLayer();
         int GetMinLayer() { return minLayer; }
 
         static const ObjPtr<ControlManager> Get() { return instance; }

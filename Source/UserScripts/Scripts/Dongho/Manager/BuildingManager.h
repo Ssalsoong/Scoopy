@@ -38,14 +38,14 @@ namespace MMMEngine
         static constexpr int BuildingPointCount = 8;
         std::array<Vector3, BuildingPointCount> BuildingPos =
         {
-            Vector3{-11.5f,0.f,-11.5f},
-            Vector3{-0.5f,0.f,-9.5f},
-            Vector3{11.5f,0.f,-11.5f},
-            Vector3{9.5f,0.f,-0.5f},
-            Vector3{11.5f,0.f,11.5f},
-            Vector3{0.5f,0.f,9.5f},
-            Vector3{-11.5f,0.f,11.5f},
-            Vector3{-9.5f,0.f,0.5f}
+            Vector3{-5.5f,0.f,-5.5f},
+            Vector3{0.f,0.f,-5.5f},
+            Vector3{5.5f,0.f,-5.5f},
+            Vector3{5.5f,0.f,0.f},
+            Vector3{-5.5f,0.f,5.5f},
+            Vector3{0.f,0.f,5.5f},
+            Vector3{5.5f,0.f,5.5f},
+            Vector3{-5.5f,0.f,0.f}
         };
         DirectX::SimpleMath::Vector3 buildingscale{15.f,15.f,15.f};
         ResPtr<StaticMesh> buildingmesh;
@@ -64,6 +64,9 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         ResPtr<Prefab> pre_building;
+
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> mBuildingPoint;
 
         static ObjPtr<BuildingManager> instance;
     };

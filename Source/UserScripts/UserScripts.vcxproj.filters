@@ -25,6 +25,7 @@
     <ClCompile Include="Scripts\Dongho\Player\Player.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Snow\Snowball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\ExampleBehaviour.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\ClearEmitTrail.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\EngineLogoStartAnim.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\ExplosionParticles.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\ExplosionPool.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -36,6 +37,7 @@
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\PauseUI.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\ScoopParticleCheck.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\SwitchSceneFX.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\TimerUI.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\TitleMenu.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -52,6 +54,7 @@
     <ClCompile Include="Scripts\Sunken\PlayerAnimController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PlayerHpGage.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\PrefabTest.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Sunken\ScoopGageScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\TimerGageScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Sunken\WaveUIScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -88,6 +91,7 @@
     <ClInclude Include="Scripts\Dongho\Player\Player.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Snow\Snowball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\ExampleBehaviour.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\ClearEmitTrail.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\EngineLogoStartAnim.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\ExplosionParticles.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\ExplosionPool.h"><Filter>Scripts</Filter></ClInclude>
@@ -99,6 +103,7 @@
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\PauseUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\ScoopParticleCheck.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\SwitchSceneFX.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\TimerUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\TitleMenu.h"><Filter>Scripts</Filter></ClInclude>
@@ -115,6 +120,7 @@
     <ClInclude Include="Scripts\Sunken\PlayerAnimController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PlayerHpGage.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\PrefabTest.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Sunken\ScoopGageScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\TimerGageScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\WaveUIScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\CastleManager.h"><Filter>Scripts</Filter></ClInclude>

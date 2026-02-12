@@ -37,6 +37,10 @@ namespace MMMEngine
 
         float maxYawSpeed = 0.0f;
 
+		int Snow_MaxScoop = 9;
+
+		void SetSnowMaxScoop(int maxValue);
+
         //PID제어
         float kp = 0.0f;
 

@@ -48,7 +48,11 @@ namespace MMMEngine
         
         void AttachNearestSnow();
 
+        void CheckParticleEnable();
+
         void DetachSnow();
+
+        bool IsParticleEnable();
     private:
 
         DirectX::SimpleMath::Vector3 m_InputDir;
@@ -67,11 +71,13 @@ namespace MMMEngine
 
         bool m_holdSpace = false;
 
+        bool m_particleEnable = false;
+
         ObjPtr<ControlManager> mInput;
         ObjPtr<PlayerAnimController> m_Anime;
 
         USCRIPT_PROPERTY()
-            int mControlLayout = 1;
+            int mInputLayer = 1;
 
     public:
         USCRIPT_PROPERTY()

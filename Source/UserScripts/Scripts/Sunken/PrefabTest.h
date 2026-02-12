@@ -23,5 +23,8 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void Update();
+
+		USCRIPT_PROPERTY()
+			ResPtr<Prefab> Teees;
     };
 }

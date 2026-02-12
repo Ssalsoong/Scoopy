@@ -37,6 +37,7 @@ void MMMEngine::TitleOpeningSequencer::Update()
 		{
 			m_state++;
 			m_internalTime = 0.0f;
+			if(FadeInOutFX::Instance->LastFadeState() != 1)
 			FadeInOutFX::Instance->FadeIn();
 		}
 		break;

@@ -84,7 +84,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 	{
 		float T_OnSnowSpeed = OnSnowSpeed;
 
-		float MinusSpeed = (MinSpeed / float(Snow_MaxScoop));
+		float MinusSpeed = (25.f / float(Snow_MaxScoop));
 
 		float slowed = T_OnSnowSpeed - (float(scoop) * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
@@ -169,4 +169,9 @@ void MMMEngine::PlayerMove::SetScoopMode(bool value, ObjPtr<GameObject> target)
 void MMMEngine::PlayerMove::SetInputDir(DirectX::SimpleMath::Vector3 vec)
 {
 	m_InputDir = vec;
+}
+
+void MMMEngine::PlayerMove::SetSnowMaxScoop(int maxValue)
+{
+	Snow_MaxScoop = maxValue;
 }

@@ -41,7 +41,10 @@ void MMMEngine::SwitchSceneFX::Update()
 		FXCurve.IsEmpty())
 		return;
 
-	m_timer += Time::GetUnscaledDeltaTime();
+	float usdt = Time::GetUnscaledDeltaTime();
+	usdt = std::min(0.016f, usdt);
+
+	m_timer += usdt;
 
 	switch (m_animState)
 	{

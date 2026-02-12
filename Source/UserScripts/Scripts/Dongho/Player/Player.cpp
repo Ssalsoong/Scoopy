@@ -35,7 +35,7 @@ void MMMEngine::Player::Update()
 
 void MMMEngine::Player::HandleAttack()
 {
-	//¿©±â¼­ ½ºÄò»óÅÂÀÏ ¶§ °ø°ÝÀ» ¸øÇÏ°Ô ¸·¾Æ¾ß ÇÔ
+	//ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½Æ¾ï¿½ ï¿½ï¿½
 	if (GetComponent<PlayerController>()->IsHoldingSpace()) {
 		mPAController->SetAttack(false);
 		attackTimer == 0.0f;
@@ -49,14 +49,14 @@ void MMMEngine::Player::HandleAttack()
 	const float range = battledist;
 	const float rangeSq = range * range;
 
-	// ÇÃ·¹ÀÌ¾î Forward (XZ Æò¸é ±âÁØ)
+	// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Forward (XZ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 	Vector3 forward = -GetTransform()->GetWorldMatrix().Forward();
 	forward.y = 0.0f;
 	forward.Normalize();
 
 	bool hasEnemyInRange = false;
 
-	// ¹üÀ§ ¾È ÀûÀÌ ÀÖ´ÂÁö Ã¼Å©
+	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ Ã¼Å©
 	for (auto& e : enemies)
 	{
 		if (!e) continue;
@@ -187,11 +187,11 @@ void MMMEngine::Player::LevelUp()
 { 
 	if (level >= 10)
 		return;
-	level ++;
+	level++;
 	maxpoint += 2;
-	atk ++;
+	atk++;
 	if (auto playerController = GetComponent<PlayerController>())
-		playerController->SetMaxScoop(maxpoint-1);
+		playerController->SetMaxScoop(maxpoint - 1);
 	if (auto playerMove = GetComponent<PlayerMove>())
 		playerMove->SetSnowMaxScoop(maxpoint - 1);
 	GameManager::instance->levelsum++;
