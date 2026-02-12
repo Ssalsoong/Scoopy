@@ -57,6 +57,6 @@ namespace MMMEngine
         USCRIPT_MESSAGE()
         void FadeOut();
 
-        bool LastFadeState();
+        int LastFadeState();
     };
 }

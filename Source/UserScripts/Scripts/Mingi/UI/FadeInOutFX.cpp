@@ -77,7 +77,7 @@ void MMMEngine::FadeInOutFX::FadeIn()
 	m_lastFadeState = 1;
 }
 
-bool MMMEngine::FadeInOutFX::LastFadeState()
+int MMMEngine::FadeInOutFX::LastFadeState()
 {
 	return m_lastFadeState;
 }
