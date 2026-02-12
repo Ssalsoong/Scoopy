@@ -30,6 +30,7 @@ namespace MMMEngine
         DirectX::SimpleMath::Vector3 targetpos;
         void SetOwner(ObjPtr<GameObject> obj) { owner = obj; }
         void SetTarget(ObjPtr<GameObject> obj);
+        void SetAtk(int value) { atk = value; }
         void LookAt(const DirectX::SimpleMath::Vector3& target);
     };
 }

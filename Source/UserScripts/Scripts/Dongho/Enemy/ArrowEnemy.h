@@ -33,7 +33,7 @@ namespace MMMEngine
         std::queue<ObjPtr<GameObject>> Arrows;
         ResPtr<Prefab> pre_arrow;
         ObjPtr<GameObject> target;
-        void ArrowAttack(ObjPtr<GameObject> target);
+        void ArrowAttack(ObjPtr<GameObject> target, int atk);
         void LookAt(const DirectX::SimpleMath::Vector3& target);
         void ReturnArrow(ObjPtr<GameObject> obj);
     };

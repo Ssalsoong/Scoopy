@@ -42,7 +42,7 @@ void MMMEngine::ArrowEnemy::Update()
 {
 }
 
-void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
+void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target, int atk)
 {
 	if (Arrows.empty())
 		return;
@@ -54,6 +54,7 @@ void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
 	if (auto arrow = obj->GetComponent<Arrow>(); arrow.IsValid())
 	{
 		arrow->SetTarget(target);
+		arrow->SetAtk(atk);
 	}
 
 	obj->SetActive(true);

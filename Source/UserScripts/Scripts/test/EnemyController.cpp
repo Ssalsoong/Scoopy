@@ -84,7 +84,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(250.f);
 		E_state.AD = 4;
-		E_state.AS = 1.3f;
+		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -93,7 +93,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(250.f);
 		E_state.AD = 2;
-		E_state.AS = 0.8f;
+		E_state.AS = 0.4f;
 		E_state.Range = 2.0f;
 		break;
 	}
@@ -102,7 +102,7 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(270.f);
 		E_state.AD = 3;
-		E_state.AS = 1.3f;
+		E_state.AS = 6.5f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -206,12 +206,18 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	{
 		m_Move->ChangeTarget(m_CurTarget);
 		m_Move->MoveTriggerSet(true);
+		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
 		break;
 	}
 	case EnemyState::Attack:
 	{
 		m_Move->MoveTriggerSet(false);
 		battletarget = m_CurTarget;
+		m_attackPhase = AttackPhase::Motion;
+		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
+		MotionEnter();
 		break;
 	}
 	case EnemyState::Dead:
@@ -222,6 +228,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 		m_Move->MoveTriggerSet(false);
 		GetTransform()->SetWorldPosition(deadpos);
 		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
 		EnemySpawner::instance->EnemyDeath(GetGameObject());
 		ReleaseSlot();
 		GetGameObject()->SetActive(false);
@@ -318,62 +325,103 @@ void MMMEngine::EnemyController::AttackTarget()
 {
 	if (curState != EnemyState::Attack)
 	{
+		m_attackPhase = AttackPhase::Motion;
 		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
 		return;
 	}
+
 	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
 	{
+		m_attackPhase = AttackPhase::Motion;
 		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
+
 		m_CurTarget = m_MainTarget;
 		OnStateEnter(EnemyState::Move);
+		return;
 	}
-	attackTimer += Time::GetDeltaTime();
-	if (attackTimer >= E_state.AS)
+
+	const float dt = Time::GetDeltaTime();
+
+	if (m_attackPhase == AttackPhase::Motion)
 	{
-		if (battletarget == m_CurTarget)
+		attackTimer += dt;
+
+		if (attackTimer >= E_state.AS * debuff)
 		{
-			if (battletarget->GetName() == "Snow")
-			{
-				if (auto snowCollider = battletarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
-				{
-					if (!snowCollider->CheckOnPlayer())
-					{
-						snowCollider->LifeDown();
-					}
-				}
-				else
-				{
-					m_CurTarget = m_MainTarget;
-					OnStateEnter(EnemyState::Move);
-				}
-				attackTimer = 0.0f;
-				return;
-			}
-			if (auto arrowenemy = GetComponent<ArrowEnemy>(); arrowenemy.IsValid())
-				arrowenemy->ArrowAttack(battletarget);
-			else
-				BattleManager::instance->Attack(GetGameObject(), battletarget, E_state.AD);
-		}
-		else
-		{
-			m_CurTarget = m_MainTarget;
-			OnStateEnter(EnemyState::Move);
+			DoHit();
+
+			m_attackPhase = AttackPhase::Pause;
+			RecoverTimer = 0.0f;
 			attackTimer = 0.0f;
+
+			PauseEnter();
 		}
-		if (auto targetstats = m_CurTarget->GetComponent<Battlestats>(); targetstats.IsValid())
+	}
+	else // Pause
+	{
+		RecoverTimer += dt;
+
+		if (RecoverTimer >= RecoverDelay)
 		{
-			if (targetstats->HP <= 0)
-			{
-				m_CurTarget = m_MainTarget;
-				OnStateEnter(EnemyState::Move);
-			}
+			m_attackPhase = AttackPhase::Motion;
+			attackTimer = 0.0f;
+			RecoverTimer = 0.0f;
+
+			MotionEnter();
+		}
+	}
+}
+
+void MMMEngine::EnemyController::DoHit()
+{
+	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
+		return;
+
+	// 타겟이 바뀌었으면 공격 취소
+	if (battletarget != m_CurTarget)
+	{
+		m_CurTarget = m_MainTarget;
+		OnStateEnter(EnemyState::Move);
+		return;
+	}
+
+	// Snow 처리
+	if (battletarget->GetName() == "Snow")
+	{
+		if (auto snowCollider = battletarget->GetComponent<SnowCollider>(); snowCollider.IsValid())
+		{
+			if (!snowCollider->CheckOnPlayer())
+				snowCollider->LifeDown();
 		}
 		else
 		{
 			m_CurTarget = m_MainTarget;
 			OnStateEnter(EnemyState::Move);
 		}
-		attackTimer = 0.0f;
+		return;
+	}
+
+	// 원거리/근거리
+	if (auto arrowenemy = GetComponent<ArrowEnemy>(); arrowenemy.IsValid())
+		arrowenemy->ArrowAttack(battletarget, E_state.AD);
+	else
+		BattleManager::instance->Attack(GetGameObject(), battletarget, E_state.AD);
+
+	// HP 체크
+	if (auto targetstats = battletarget->GetComponent<Battlestats>(); targetstats.IsValid())
+	{
+		if (targetstats->HP <= 0)
+		{
+			m_CurTarget = m_MainTarget;
+			OnStateEnter(EnemyState::Move);
+		}
+	}
+	else
+	{
+		m_CurTarget = m_MainTarget;
+		OnStateEnter(EnemyState::Move);
 	}
 }
 
@@ -403,4 +451,14 @@ void MMMEngine::EnemyController::HurtCal()
 			HurtTimer = 0.0f;
 		}
 	}
+}
+
+void MMMEngine::EnemyController::MotionEnter()
+{
+	std::cout << "motionon" << std::endl;
+}
+
+void MMMEngine::EnemyController::PauseEnter()
+{
+	std::cout << "pauseon" << std::endl;
 }

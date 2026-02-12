@@ -123,6 +123,17 @@ namespace MMMEngine
         void HurtCal();
         float HurtTimer = 0.0f;
         float HurtDelay = 2.0f;
+
+		enum class AttackPhase { Motion, Pause };
+		AttackPhase m_attackPhase = AttackPhase::Motion;
+
+        float RecoverDelay = 1.0f;
+        float RecoverTimer = 0.0f;
+        void DoHit();
+        void MotionEnter();
+        void PauseEnter();
+        float debuff = 1.0f;
+        void SetDebuffAttack(float value) { debuff = value; }
     private:
 		void TryAcquireSlot();
 	    void ReleaseSlot();

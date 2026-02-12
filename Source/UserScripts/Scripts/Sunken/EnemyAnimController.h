@@ -48,7 +48,5 @@ namespace MMMEngine
 
 		USCRIPT_MESSAGE()
 			void Update();
-
-		void SetAniType(AnimType type);
 	};
 }

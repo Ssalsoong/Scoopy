@@ -161,21 +161,3 @@ void MMMEngine::EnemyAnimController::Update()
 		break;
 	}
 }
-
-void MMMEngine::EnemyAnimController::SetAniType(AnimType type)
-{
-	mAnimType = type;
-	auto clips = mAnimManager->GetAnimClips(mAnimType);
-
-	// 클립 불러오기 실패시 리턴
-	if (clips == nullptr) {
-		std::cerr << GetName() << "::NO AnimClips!!!" << std::endl;
-		return;
-	}
-
-	AnimSize = (int)clips->size();
-
-	for (auto& clip : *clips) {
-		mAnimator->AddAnimClip(clip);
-	}
-}

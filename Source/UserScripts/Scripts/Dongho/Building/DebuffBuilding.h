@@ -17,7 +17,8 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-        float debuff = 0.8f;
+        float speedDebuff = 0.8f;
+        float attackDebuff = 1.1f;
         float debuffdist = 2.0f;
         std::unordered_set<ObjPtr<GameObject>> m_inside;
         void Start();
