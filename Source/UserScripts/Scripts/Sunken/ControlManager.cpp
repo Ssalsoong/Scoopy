@@ -19,7 +19,7 @@ void MMMEngine::ControlManager::LateUpdate()
 {
 	for (auto& [layer, keys] : mControlMap) {
 		for (auto it = keys.begin(); it != keys.end(); ) {
-			if (Input::GetKeyUp(*it)) {
+			if (!Input::GetKey(*it)) {
 				int idx = static_cast<int>(*it);
 				mControlArray[idx] = -1;
 				it = keys.erase(it); // set에서 안전하게 제거

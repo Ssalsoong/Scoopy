@@ -9,6 +9,10 @@ namespace MMMEngine
     enum EXPTYPE : int {
         EXP_CASTLE,
         EXP_BUILD,
+		EXP_SCOOPFIRST,
+		EXP_SCOOPSECOND,
+		EXP_CASTLEFIRST,
+		EXP_CASTLESECOND,
         EXP_END
     };
 
@@ -50,18 +54,48 @@ namespace MMMEngine
         int mCastleLevel = 0;
         int mScoopLevel = 0;
 
+        int mCastleSpecial = 0;
+        int mScoopSpecial = 0;
+
+        USCRIPT_PROPERTY()
+            int mScoopFirst = 5;
+		USCRIPT_PROPERTY()
+			int mScoopSecond = 10;
+		USCRIPT_PROPERTY()
+			int mCastleFirst = 5;
+		USCRIPT_PROPERTY()
+			int mCastleSecond = 10;
+
     public:
+        // 풀링객체 (HP는 이제 안씀)
         USCRIPT_PROPERTY()
             ObjPtr<Gage> mExpGage;
         USCRIPT_PROPERTY()
             ObjPtr<Gage> mHpGage;
         USCRIPT_PROPERTY()
             ObjPtr<Image> mReadyIcon;
+
+        // 캐슬관련
         USCRIPT_PROPERTY()
             ObjPtr<Image> mCastleIcon;
         USCRIPT_PROPERTY()
             ObjPtr<Image> mScoopIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mCastleRangeIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mCastleDoubleIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mCastleExpIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mCastleShieldIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mScoopRangeIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mScoopCritIcon;
+		USCRIPT_PROPERTY()
+			ObjPtr<Image> mScoopReflectIcon;
 
+        // 빌딩관련
 		USCRIPT_PROPERTY()
 			ObjPtr<Image> mHPIcon;
 		USCRIPT_PROPERTY()
@@ -70,23 +104,26 @@ namespace MMMEngine
 			ObjPtr<Image> mDeBuffIcon;
 		USCRIPT_PROPERTY()
 			ObjPtr<Image> mSnowIcon;
+
+        // 버블관련
 		USCRIPT_PROPERTY()
 			ObjPtr<Image> mSpeechBubbleIcon;
-
 		USCRIPT_PROPERTY()
 			ObjPtr<Text> mHeadlineText;
 		USCRIPT_PROPERTY()
 			ObjPtr<Text> mScriptText;
 
-
+        // 공용 프리팹
 		USCRIPT_PROPERTY()
 			ResPtr<Prefab> mReadyPrefab;
 		USCRIPT_PROPERTY()
 			ResPtr<Prefab> mCountPrefab;
 		USCRIPT_PROPERTY()
-            ResPtr<Prefab> mGagePrefab;
+            ResPtr<Prefab> mHPGagePrefab;
+		USCRIPT_PROPERTY()
+			ResPtr<Prefab> mUnivGagePrefab;
 
-
+        bool ValidateReferences();
     public:
         LevelUpManager()
         {
@@ -127,6 +164,7 @@ namespace MMMEngine
         void RemoveBubble();
         void SetSelection(int _selectionIdx);
         ObjPtr<GameObject> GetBubbleTarget();
+        bool IsBubbling();
 
         const std::wstring& GetHeadline(int _idx);
         const std::wstring& GetScripts(int _idx);

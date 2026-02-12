@@ -78,7 +78,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingPoint>("BuildingPoint")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingPoint>"))
-		.property("checkdist", &BuildingPoint::checkdist);
+		.property("player", &BuildingPoint::player);
 
 	registration::class_<ObjPtr<BuildingPoint>>("ObjPtr<BuildingPoint>")
 		.constructor([]() { return Object::NewObject<BuildingPoint>(); })
@@ -88,6 +88,7 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Castle>"))
 		.property("level", &Castle::level)
 		.property("maxHP", &Castle::maxHP)
+		.property("attackDelay", &Castle::attackDelay)
 		.property("exp", &Castle::exp)
 		.property("atk", &Castle::atk)
 		.property("point", &Castle::point)
@@ -128,6 +129,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
+		.property("mBuildTime", &Player::mBuildTime)
 		.property("level", &Player::level)
 		.property("maxHP", &Player::maxHP)
 		.property("battledist", &Player::battledist)
@@ -453,11 +455,22 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mPlayer", &LevelUpManager::mPlayer)
 		.property("mCastle", &LevelUpManager::mCastle)
 		.property("mLevelUpBubble", &LevelUpManager::mLevelUpBubble)
+		.property("mScoopFirst", &LevelUpManager::mScoopFirst)
+		.property("mScoopSecond", &LevelUpManager::mScoopSecond)
+		.property("mCastleFirst", &LevelUpManager::mCastleFirst)
+		.property("mCastleSecond", &LevelUpManager::mCastleSecond)
 		.property("mExpGage", &LevelUpManager::mExpGage)
 		.property("mHpGage", &LevelUpManager::mHpGage)
 		.property("mReadyIcon", &LevelUpManager::mReadyIcon)
 		.property("mCastleIcon", &LevelUpManager::mCastleIcon)
 		.property("mScoopIcon", &LevelUpManager::mScoopIcon)
+		.property("mCastleRangeIcon", &LevelUpManager::mCastleRangeIcon)
+		.property("mCastleDoubleIcon", &LevelUpManager::mCastleDoubleIcon)
+		.property("mCastleExpIcon", &LevelUpManager::mCastleExpIcon)
+		.property("mCastleShieldIcon", &LevelUpManager::mCastleShieldIcon)
+		.property("mScoopRangeIcon", &LevelUpManager::mScoopRangeIcon)
+		.property("mScoopCritIcon", &LevelUpManager::mScoopCritIcon)
+		.property("mScoopReflectIcon", &LevelUpManager::mScoopReflectIcon)
 		.property("mHPIcon", &LevelUpManager::mHPIcon)
 		.property("mBuffIcon", &LevelUpManager::mBuffIcon)
 		.property("mDeBuffIcon", &LevelUpManager::mDeBuffIcon)
@@ -467,7 +480,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mScriptText", &LevelUpManager::mScriptText)
 		.property("mReadyPrefab", &LevelUpManager::mReadyPrefab)
 		.property("mCountPrefab", &LevelUpManager::mCountPrefab)
-		.property("mGagePrefab", &LevelUpManager::mGagePrefab);
+		.property("mHPGagePrefab", &LevelUpManager::mHPGagePrefab)
+		.property("mUnivGagePrefab", &LevelUpManager::mUnivGagePrefab);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
 		.constructor([]() { return Object::NewObject<LevelUpManager>(); })

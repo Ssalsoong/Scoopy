@@ -1,8 +1,8 @@
 {
-    "MUID": "26bfc5ad-9c82-475b-b10f-4498b5ea9156",
+    "MUID": "ff54fcf2-04fa-4d21-a85d-c1bc1cbaf42b",
     "properties": {
         "_albedo": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "file": "Assets\\DefaultMesh\\Default_White.png",
             "type": "Texture2D"
         },
         "_ambientOcclusion": {
@@ -35,7 +35,7 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.5
+            "value": 0.20000000298023224
         },
         "octaves": {
             "type": "int",

@@ -22,10 +22,10 @@ namespace MMMEngine {
 		DirectX::SimpleMath::Vector3 pos;
 		void Start();
 		void Update();
-		int maxHP = 50;
+		int maxHP = 70;
 		int point = 0;
 		int exp = 0;
-		int atk = 10;
+		int atk = 13;
 		int level = 0;
 		float attackDelay = 1.0f;
 		float attackTimer = 0.0f;
