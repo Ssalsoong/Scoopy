@@ -288,7 +288,7 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 			return;
 		if (auto snowball = GetComponent<Snowball>(); snowball.IsValid())
 		{
-			if (auto otherball = GetComponent<Snowball>(); otherball.IsValid())
+			if (auto otherball = info.other->GetComponent<Snowball>(); otherball.IsValid())
 			{
 				int mainpoint = snowball->GetPoint();
 				int otherpoint = otherball->GetPoint();
