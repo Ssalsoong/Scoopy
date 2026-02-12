@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -33,6 +33,7 @@ namespace MMMEngine
             ObjPtr<GameObject> emitter;
             ObjPtr<AudioSource> source;
             ObjPtr<Transform> followTarget;
+            std::string currentKey;
             bool trackCaller = false;
             bool is3D = false;
             uint64_t playSerial = 0;
@@ -54,7 +55,7 @@ namespace MMMEngine
 
         int AcquireSFXSlot();
         ObjPtr<Transform> ResolveCallerTransform(const ObjPtr<Component>& caller) const;
-        void PlaySFXInternal(const std::string& key, const ObjPtr<Component>& caller, bool spatialize, bool trackCaller, float volumeScale);
+        void PlaySFXInternal(const std::string& key, const ObjPtr<Component>& caller, bool spatialize, bool trackCaller, float volumeScale, bool loop);
 
         static std::string Trim(const std::string& s);
         static bool TryParseCsvRow(const std::string& line, std::array<std::string, 4>& outRow);
@@ -82,8 +83,9 @@ namespace MMMEngine
         void PlayBGM(const std::string& key, float volumeScale = 1.0f, bool loop = true);
         void StopBGM();
 
-        void PlaySFX2D(const std::string& key, const ObjPtr<Component>& caller, float volumeScale = 1.0f);
-        void PlaySFX3D(const std::string& key, const ObjPtr<Component>& caller, bool trackCaller, float volumeScale = 1.0f);
+        void PlaySFX2D(const std::string& key, const ObjPtr<Component>& caller, float volumeScale = 1.0f, bool loop = false);
+        void PlaySFX3D(const std::string& key, const ObjPtr<Component>& caller, bool trackCaller, float volumeScale = 1.0f, bool loop = false);
+        void StopSFX(const std::string& key);
         void StopAllSFX();
     };
 }
