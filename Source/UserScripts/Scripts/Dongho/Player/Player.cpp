@@ -176,15 +176,14 @@ void MMMEngine::Player::BuildOn()
 	if (isBuildable) {
 		auto input = ControlManager::Get();
 
-		static bool isInited = false;
 		if (input->GetKeyDown(KeyCode::Space, 5))
-			isInited = true;
+			misInited = true;
 
-		if (isInited && input->GetKey(KeyCode::Space, 5)) {
+		if (misInited && input->GetKey(KeyCode::Space, 5)) {
 			mBuildElipsed += Time::GetDeltaTime();
 
 			if (mBuildElipsed > mBuildTime) {
-				isInited = false;
+				misInited = false;
 
 				auto buildingpoints = GetGameObject()->FindGameObjectsWithTag("BuildingPoint");
 				for (auto& bp : buildingpoints)

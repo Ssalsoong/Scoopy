@@ -18,6 +18,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<Building>("Building")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"))
 		.property("mSpawnScaleCurve", &Building::mSpawnScaleCurve)
+		.property("mLevelScaleCurve", &Building::mLevelScaleCurve)
+		.property("mMeshTrans", &Building::mMeshTrans)
 		.property("level", &Building::level)
 		.property("maxHP", &Building::maxHP)
 		.property("exp", &Building::exp)
@@ -45,12 +47,28 @@ void MMMEngine::Building::Start()
 		Buildingballs.push(obj);
 	}
 
+	if (!mMeshTrans) {
+		std::cout << "Building::MeshTrans Not Found!!!" << std::endl;
+		Destroy(GetGameObject());
+	}
+	else {
+		mInitScale = mMeshTrans->GetLocalScale();
+	}
+
 	isAnimating = true;
 	mAnimType = ANIMTYPE::SPAWN;
+	prevLevel = level;
 }
 
 void MMMEngine::Building::Update()
 {
+	// 레벨업 감지
+	if (prevLevel != level) {
+		isAnimating = true;
+		prevLevel = level;
+	}
+
+	// 애니메이션 재생
 	if (isAnimating) {
 		switch (mAnimType)
 		{
@@ -66,7 +84,7 @@ void MMMEngine::Building::Update()
 			break;
 		}
 	}
-
+	
 	CheckEnemy();
 	AutoAttack();
 }
@@ -162,16 +180,36 @@ void MMMEngine::Building::UpdateSpawnAnim()
 	}
 
 	mElipsedTime += Time::GetDeltaTime();
+	mCurveScale = mSpawnScaleCurve.Evaluate(mElipsedTime);
+
+	mMeshTrans->SetLocalScale(mInitScale * mCurveScale);
 
 	if (mElipsedTime >= mSpawnScaleCurve.GetKeyframes().back().time) {
 		mElipsedTime = 0.0f;
 		isAnimating = false;
-	}
+		mAnimType = ANIMTYPE::LEVEL;
 
-	//mCurveScale = 
+		/*if (auto col = GetComponent<ColliderComponent>(); col) {
+			col->SetEn
+		}*/
+	}
 }
 
 void MMMEngine::Building::UpdateLevelAnim()
 {
+	if (mLevelScaleCurve.GetKeyframes().empty()) {
+		std::cout << "Building::No LevelScaleCurve!!!" << std::endl;
+		isAnimating = false;
+		return;
+	}
 
+	mElipsedTime += Time::GetDeltaTime();
+	mCurveScale = mLevelScaleCurve.Evaluate(mElipsedTime);
+
+	mMeshTrans->SetLocalScale(mInitScale * mCurveScale);
+
+	if (mElipsedTime >= mLevelScaleCurve.GetKeyframes().back().time) {
+		mElipsedTime = 0.0f;
+		isAnimating = false;
+	}
 }

@@ -47,7 +47,7 @@ void MMMEngine::BuildingManager::Start()
 			obj->SetTag("BuildingPoint");
 			obj->AddComponent<BuildingPoint>();
 			obj->AddComponent<MeshRenderer>();
-			obj->GetComponent<MeshRenderer>()->SetMesh(cube);
+			obj->GetTransform()->GetChild(0)->GetComponent<MeshRenderer>()->SetMesh(cube);
 			obj->GetTransform()->SetWorldScale(0.1f, 0.5f, 0.1f);
 			*/
 			obj->GetTransform()->SetWorldPosition(BuildingPos[i]);
@@ -95,7 +95,7 @@ void MMMEngine::BuildingManager::LevelUpHP(ObjPtr<GameObject> obj)
 		return;
 	if (!obj->GetComponent<HPBuilding>()) {
 		obj->AddComponent<HPBuilding>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(HPbuildingmesh);
+		obj->GetTransform()->GetChild(0)->GetComponent<MeshRenderer>()->SetMesh(HPbuildingmesh);
 	}
 	if (obj->GetComponent<Building>()->level >= 5)
 		return;
@@ -110,7 +110,7 @@ void MMMEngine::BuildingManager::LevelUpBuff(ObjPtr<GameObject> obj)
 		return;
 	if (!obj->GetComponent<BuffBuilding>()) {
 		obj->AddComponent<BuffBuilding>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(buffbuildingmesh);
+		obj->GetTransform()->GetChild(0)->GetComponent<MeshRenderer>()->SetMesh(buffbuildingmesh);
 	}
 	if (obj->GetComponent<Building>()->level >= 5)
 		return;
@@ -125,7 +125,7 @@ void MMMEngine::BuildingManager::LevelUpDeBuff(ObjPtr<GameObject> obj)
 		return;
 	if (!obj->GetComponent<DebuffBuilding>()) {
 		obj->AddComponent<DebuffBuilding>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(debuffbuildingmesh);
+		obj->GetTransform()->GetChild(0)->GetComponent<MeshRenderer>()->SetMesh(debuffbuildingmesh);
 	}
 	if (obj->GetComponent<Building>()->level >= 5)
 		return;
@@ -140,7 +140,7 @@ void MMMEngine::BuildingManager::LevelUpSnow(ObjPtr<GameObject> obj)
 		return;
 	if (!obj->GetComponent<SnowBuilding>()) {
 		obj->AddComponent<SnowBuilding>();
-		obj->GetComponent<MeshRenderer>()->SetMesh(snowbuildingmesh);
+		obj->GetTransform()->GetChild(0)->GetComponent<MeshRenderer>()->SetMesh(snowbuildingmesh);
 	}
 	if (obj->GetComponent<Building>()->level >= 5)
 		return;

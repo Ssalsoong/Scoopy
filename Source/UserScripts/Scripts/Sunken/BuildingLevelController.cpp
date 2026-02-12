@@ -426,6 +426,9 @@ void MMMEngine::BuildingLevelController::Update()
 
 void MMMEngine::BuildingLevelController::OnDisable()
 {
+	if (IsDestroyed())
+		return;
+
 	isActive = false;
 
 	// 본인소유 객체는 알아서 끄기

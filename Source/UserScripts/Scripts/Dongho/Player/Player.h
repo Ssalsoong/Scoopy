@@ -55,6 +55,7 @@ namespace MMMEngine
 		float damageTimer = 0.0f;
 		bool isMoving = false;
 		bool buildchance = true;
+		bool misInited = false;
 
 		bool isBuildable = false;
 		void Setbuildchance(bool value) { buildchance = value; }
