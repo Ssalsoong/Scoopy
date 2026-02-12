@@ -405,7 +405,7 @@ bool MMMEngine::LevelUpManager::IsBubbling()
 	return true;
 }
 
-const std::wstring& MMMEngine::LevelUpManager::GetHeadline(int _idx)
+const std::wstring MMMEngine::LevelUpManager::GetHeadline(int _idx)
 {
 	auto it = mHeadlineMap.find(mPendingType);
 
@@ -419,7 +419,7 @@ const std::wstring& MMMEngine::LevelUpManager::GetHeadline(int _idx)
 	return L"";
 }
 
-const std::wstring& MMMEngine::LevelUpManager::GetScripts(int _idx)
+const std::wstring MMMEngine::LevelUpManager::GetScripts(int _idx)
 {
 	auto it = mScriptMap.find(mPendingType);
 
@@ -431,9 +431,9 @@ const std::wstring& MMMEngine::LevelUpManager::GetScripts(int _idx)
 		levelScript = L"LEVEL : ";
 
 		if (_idx == 0)
-			levelScript += std::to_wstring(mCastleLevel);
+			levelScript += std::to_wstring(mCastleLevel + 1);
 		else
-			levelScript += std::to_wstring(mScoopLevel);
+			levelScript += std::to_wstring(mScoopLevel + 1);
 		levelScript += L"\n\n";
 		break;
 	}

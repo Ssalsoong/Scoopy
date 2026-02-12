@@ -17,6 +17,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<Building>("Building")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Building>"))
+		.property("mSpawnScaleCurve", &Building::mSpawnScaleCurve)
 		.property("level", &Building::level)
 		.property("maxHP", &Building::maxHP)
 		.property("exp", &Building::exp)
@@ -43,10 +44,29 @@ void MMMEngine::Building::Start()
 		obj->SetActive(false);
 		Buildingballs.push(obj);
 	}
+
+	isAnimating = true;
+	mAnimType = ANIMTYPE::SPAWN;
 }
 
 void MMMEngine::Building::Update()
 {
+	if (isAnimating) {
+		switch (mAnimType)
+		{
+		case MMMEngine::Building::SPAWN:
+			UpdateSpawnAnim();
+			break;
+		case MMMEngine::Building::LEVEL:
+			UpdateLevelAnim();
+			break;
+		case MMMEngine::Building::END:
+			break;
+		default:
+			break;
+		}
+	}
+
 	CheckEnemy();
 	AutoAttack();
 }
@@ -131,4 +151,27 @@ void MMMEngine::Building::PointUp(int t)
 {
 	point += t;
 	exp += 10 * t;
+}
+
+void MMMEngine::Building::UpdateSpawnAnim()
+{
+	if (mSpawnScaleCurve.GetKeyframes().empty()) {
+		std::cout << "Building::No SpawnScaleCurve!!!" << std::endl;
+		isAnimating = false;
+		return;
+	}
+
+	mElipsedTime += Time::GetDeltaTime();
+
+	if (mElipsedTime >= mSpawnScaleCurve.GetKeyframes().back().time) {
+		mElipsedTime = 0.0f;
+		isAnimating = false;
+	}
+
+	//mCurveScale = 
+}
+
+void MMMEngine::Building::UpdateLevelAnim()
+{
+
 }

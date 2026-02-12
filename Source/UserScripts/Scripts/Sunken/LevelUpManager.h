@@ -166,8 +166,8 @@ namespace MMMEngine
         ObjPtr<GameObject> GetBubbleTarget();
         bool IsBubbling();
 
-        const std::wstring& GetHeadline(int _idx);
-        const std::wstring& GetScripts(int _idx);
+        const std::wstring GetHeadline(int _idx);
+        const std::wstring GetScripts(int _idx);
 
 
         static const ObjPtr<LevelUpManager>& Get() { return instance; }
