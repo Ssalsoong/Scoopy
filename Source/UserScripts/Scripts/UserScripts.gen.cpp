@@ -78,7 +78,8 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingPoint>("BuildingPoint")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingPoint>"))
-		.property("checkdist", &BuildingPoint::checkdist);
+		.property("player", &BuildingPoint::player)
+		.property("mUniversalGage", &BuildingPoint::mUniversalGage);
 
 	registration::class_<ObjPtr<BuildingPoint>>("ObjPtr<BuildingPoint>")
 		.constructor([]() { return Object::NewObject<BuildingPoint>(); })
@@ -133,7 +134,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("maxHP", &Player::maxHP)
 		.property("battledist", &Player::battledist)
 		.property("atk", &Player::atk)
-		.property("maxpoint", &Player::maxpoint);
+		.property("maxpoint", &Player::maxpoint)
+		.property("mBuildTime", &Player::mBuildTime);
 
 	registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
 		.constructor([]() { return Object::NewObject<Player>(); })
@@ -479,7 +481,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mScriptText", &LevelUpManager::mScriptText)
 		.property("mReadyPrefab", &LevelUpManager::mReadyPrefab)
 		.property("mCountPrefab", &LevelUpManager::mCountPrefab)
-		.property("mGagePrefab", &LevelUpManager::mGagePrefab);
+		.property("mHPGagePrefab", &LevelUpManager::mHPGagePrefab)
+		.property("mUnivGagePrefab", &LevelUpManager::mUnivGagePrefab);
 
 	registration::class_<ObjPtr<LevelUpManager>>("ObjPtr<LevelUpManager>")
 		.constructor([]() { return Object::NewObject<LevelUpManager>(); })

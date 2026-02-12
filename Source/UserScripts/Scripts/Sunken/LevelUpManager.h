@@ -119,7 +119,9 @@ namespace MMMEngine
 		USCRIPT_PROPERTY()
 			ResPtr<Prefab> mCountPrefab;
 		USCRIPT_PROPERTY()
-            ResPtr<Prefab> mGagePrefab;
+            ResPtr<Prefab> mHPGagePrefab;
+		USCRIPT_PROPERTY()
+			ResPtr<Prefab> mUnivGagePrefab;
 
         bool ValidateReferences();
     public:

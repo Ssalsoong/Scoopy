@@ -1,0 +1,63 @@
+{
+    "MUID": "15451799-0bfa-4c8f-a4c1-7cd911485fbc",
+    "properties": {
+        "_albedo": {
+            "file": "Assets\\DefaultMesh\\Default_White.png",
+            "type": "Texture2D"
+        },
+        "_ambientOcclusion": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_emissive": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_normal": {
+            "file": "Shader/Resource/Default_Texture/Default_Normal.png",
+            "type": "Texture2D"
+        },
+        "_opacity": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_shadowmap": {
+            "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "iceStrength": {
+            "type": "float",
+            "value": 0.4000000059604645
+        },
+        "mAoStrength": {
+            "type": "float",
+            "value": 0.5
+        },
+        "octaves": {
+            "type": "int",
+            "value": 4
+        },
+        "padding": {
+            "type": "int",
+            "value": 0
+        },
+        "tileScale": {
+            "type": "float",
+            "value": 0.15000000596046448
+        },
+        "warpStrength": {
+            "type": "float",
+            "value": 0.25
+        },
+        "windStrength": {
+            "type": "float",
+            "value": 0.20000000298023224
+        }
+    },
+    "pshader": {
+        "file": "Shader/Snow/TestSnowPS.hlsl"
+    },
+    "vshader": {
+        "file": "Shader/PBR/VS/StaticVertexShader.hlsl"
+    }
+}

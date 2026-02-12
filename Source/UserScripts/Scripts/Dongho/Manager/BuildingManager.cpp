@@ -66,8 +66,9 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	obj->GetComponent<BuildingPoint>()->Setalreadybuilt(true);
 
 	auto building = Instantiate(pre_building);
-	building->GetTransform()->SetParent(obj->GetTransform());
-	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+	//building->GetTransform()->SetParent(obj->GetTransform());
+	building->GetTransform()->SetParent(GetTransform());
+	building->GetTransform()->SetWorldPosition(obj->GetTransform()->GetWorldPosition());
 	Buildings.push_back(building);
 	if (distup)
 		building->GetComponent<Building>()->SetAttackDist(5.5f);

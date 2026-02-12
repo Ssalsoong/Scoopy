@@ -13,6 +13,8 @@ namespace MMMEngine
 			RTTR_REGISTRATION_FRIEND
 
 			ObjPtr<PlayerAnimController> mPAController;
+
+		float mBuildElipsed = 0.0f;
     public:
 		Player()
 		{
@@ -37,6 +39,8 @@ namespace MMMEngine
 		float cosHalfFov = 0.5f;
 		USCRIPT_PROPERTY()
 		int maxpoint = 10;
+		USCRIPT_PROPERTY()
+			float mBuildTime = 2.0f;
 		int Getmaxpoint() const { return maxpoint; };
 		int healHP = 10;
 		float healDelay = 1.0f;
@@ -50,7 +54,10 @@ namespace MMMEngine
 		float damageTimer = 0.0f;
 		bool isMoving = false;
 		bool buildchance = true;
+
+		bool isBuildable = false;
 		void Setbuildchance(bool value) { buildchance = value; }
+		void SetBuildable(bool _val) { isBuildable = _val; }
 
 		DirectX::SimpleMath::Vector3 pos;
 		void AutoHeal();

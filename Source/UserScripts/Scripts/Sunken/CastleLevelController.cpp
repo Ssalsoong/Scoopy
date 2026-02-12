@@ -182,7 +182,7 @@ void MMMEngine::CastleLevelController::Start()
 	mScoopIcon = LevelUpManager::Get()->mScoopIcon;
 	mCountIcon = Instantiate(LevelUpManager::Get()->mCountPrefab)->GetComponent<Image>();
 
-	auto gage = Instantiate(LevelUpManager::Get()->mGagePrefab);
+	auto gage = Instantiate(LevelUpManager::Get()->mHPGagePrefab);
 	
 	if (gage) {
 		gage->GetTransform()->SetParent(mCanvas->GetTransform());

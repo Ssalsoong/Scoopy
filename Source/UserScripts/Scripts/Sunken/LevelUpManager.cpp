@@ -65,7 +65,7 @@ bool MMMEngine::LevelUpManager::ValidateReferences()
 	// 프리팹
 	ReqRes(mReadyPrefab, "ReadyPrefab");
 	ReqRes(mCountPrefab, "CountPrefab");
-	ReqRes(mGagePrefab, "GagePrefab");
+	ReqRes(mHPGagePrefab, "GagePrefab");
 
 	return ok;
 }
@@ -90,7 +90,7 @@ void MMMEngine::LevelUpManager::Start()
 	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"체력건물");
 	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"버프건물");
 	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"디버프건물");
-	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"수급건물");
+	mHeadlineMap[EXPTYPE::EXP_BUILD].push_back(L"눈저장건물");
 
 	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"건물의 체력이\n상승합니다.");
 	mScriptMap[EXPTYPE::EXP_BUILD].push_back(L"근처에 있으면\n이속이 빨라집니다.");
