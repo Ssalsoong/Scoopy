@@ -16,6 +16,7 @@
 #include "../../Mingi/UI/PauseUI.h"
 #include "../../Mingi/UI/MarkWaveController.h"
 #include "../../Mingi/UI/GameOverSequencer.h"
+#include "../../Mingi/UI/GameClearSequencer.h"
 #include "../../Sunken/PlayerAnimController.h"
 #include "../../Mingi/Manager/SoundManager.h"
 
@@ -29,6 +30,7 @@ RTTR_PLUGIN_REGISTRATION
 		.property("mTimerUI", &GameManager::mTimerUI)
 		.property("mPauseUI", &GameManager::mPauseUI)
 		.property("mOverSequencer", &GameManager::mOverSequencer)
+		.property("mClearSequencer", &GameManager::mClearSequencer)
 		.property("enemySpawnDelay", &GameManager::enemySpawnDelay)
 		.property("settingfullTime", &GameManager::settingfullTime);
 		
@@ -78,7 +80,16 @@ void MMMEngine::GameManager::Update()
 {
 	if (GameWin)
 	{
-		
+		if (!mClearSet)
+		{
+			mClearSet = true;
+
+			if (mClearSequencer)
+			{
+				ControlManager::Get()->SetMinLayer(150);
+				mClearSequencer->StartGameClear();
+			}
+		}
 	}
 
 	if (GameOver)

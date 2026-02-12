@@ -4,6 +4,16 @@
 #include "UserScriptsCommon.h"
 #include "AnimationCurve.h"
 #include "SimpleMath.h"
+#include "Image.h"
+#include "Text.h"
+#include "RectTransform.h"
+#include "MMMInput.h"
+#include "MMMTime.h"
+#include "MMMMathF.h"
+#include "Camera.h"
+#include "../../Mingi/UI/FadeInOutFX.h"
+#include "../../Mingi/Manager/SoundManager.h"
+#include "MMMSceneManagement.h"
 
 namespace MMMEngine
 {

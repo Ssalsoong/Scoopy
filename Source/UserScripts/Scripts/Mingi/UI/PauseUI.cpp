@@ -9,6 +9,7 @@
 #include "MMMSceneManagement.h"
 #include "../../Mingi/UI/SwitchSceneFX.h"
 #include "../../Mingi/Manager/SoundManager.h"
+#include "../../Dongho/Manager/GameManager.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -77,6 +78,9 @@ void MMMEngine::PauseUI::Update()
 
 
 	// todo : 게임매니저에서 게임이 끝난상태에서는 호출하지 않게하기 Return
+	if (GameManager::instance.IsValid() && GameManager::instance->GameOver)
+		return;
+
 	bool lastPause = m_isPause;
 	if (Input::GetKeyDown(KeyCode::Escape))
 	{
