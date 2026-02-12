@@ -6,6 +6,7 @@
 #include "RigidBodyComponent.h"
 #include "PlayerController.h"
 #include "../Sunken/PlayerAnimController.h"
+#include "../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::PlayerMove::Start()
 {
@@ -56,6 +57,10 @@ void MMMEngine::PlayerMove::FixedUpdate()
 	if (mPAController) {
 		mPAController->SetMoveSpeed(desiredVel.Length());
 	}
+
+	//움직임 사운드
+	m_IsMoving = desiredVel.LengthSquared() > 1e-6f;
+	PlayWalkSound();
 }
 
 
@@ -211,3 +216,20 @@ void MMMEngine::PlayerMove::RecalcBuff()
 	m_FinalBuff = maxBuff;
 }
 
+
+void MMMEngine::PlayerMove::PlayWalkSound()
+{
+	if (m_IsMoving && !SoundOn)
+	{
+		//루프 재생
+		SoundManager::Instance->PlaySFX2D("Walk", SelfPtr(this), 1, true);
+		SoundOn = true;
+	}
+	else if(!m_IsMoving && SoundOn)
+	{
+		//루프 종료
+		SoundManager::Instance->StopSFX("Walk");
+		SoundOn = false;
+	}
+
+}

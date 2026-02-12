@@ -11,6 +11,7 @@
 #include "../Dongho/Building/Building.h"
 #include "PlayerController.h"
 #include "../Dongho/Manager/BattleManager.h"
+#include "../Mingi/Manager/SoundManager.h"
 
 const float EPS2 = 1e-6f;
 
@@ -272,6 +273,7 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 	{
 		int point = GetComponent<Snowball>()->GetPoint();
 		info.other->GetComponent<Castle>()->PointUp(point);
+		SoundManager::Instance->PlaySFX2D("GiveSnowball", SelfPtr(this), 1.0f);
 		SnowDestory();
 		Destroy(GetGameObject());
 	}
@@ -279,6 +281,7 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 	{
 		int point = GetComponent<Snowball>()->GetPoint();
 		info.other->GetComponent<Building>()->PointUp(point);
+		SoundManager::Instance->PlaySFX2D("GiveSnowball", SelfPtr(this), 1.0f);
 		SnowDestory();
 		Destroy(GetGameObject());
 	}

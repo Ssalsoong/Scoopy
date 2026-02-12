@@ -11,6 +11,7 @@
 #include "../Sunken/PlayerAnimController.h"
 #include "../Sunken/ControlManager.h"
 
+#include "../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::PlayerController::Start()
 {
@@ -219,6 +220,7 @@ void MMMEngine::PlayerController::AttachNearestSnow()
 		{
 			snow->SetOnPlayer(true, GetGameObject());
 			SnowScoopCount = std::min(snow->GetScoopCount(), MaxPlayerScoop);
+			SoundManager::Instance->PlaySFX2D("GetSnowball", SelfPtr(this), 1.0f);
 		}
 	}
 
