@@ -61,7 +61,7 @@ namespace MMMEngine {
 		static constexpr int WaveCount = 10;
 		std::array<std::array<int, SpawnPointCount>, WaveCount > waveTable =
 		{
-			std::array<int, SpawnPointCount>{0,30,0,0,0,0,0,0,0,0,0,0},
+			std::array<int, SpawnPointCount>{0,5,0,0,0,0,0,0,0,0,0,0},
 			std::array<int, SpawnPointCount>{0,0,0,0,0,0,0,0,0,0,10,0},
 			std::array<int, SpawnPointCount>{0,10,0,0,10,0,0,0,0,0,0,0},
 			std::array<int, SpawnPointCount>{0,0,0,0,0,0,0,0,0,0,10,0},

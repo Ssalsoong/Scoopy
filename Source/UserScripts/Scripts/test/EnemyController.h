@@ -162,6 +162,13 @@ namespace MMMEngine
 		float orbitLaneOffset = 0.25f;
 
 
+		//티켓만료변수
+		float m_slotElapsed = 0.0f;
+		float m_slotTimeout = 10.0f;     // 10초
+		float m_slotReassignCooldown = 0.5f; // 재시도 쿨다운
+		float m_slotReassignTimer = 0.0f;
+
+        bool m_canExitAttack = false;
         //디버프 관련
     public:
 		std::unordered_map<const void*, float> m_AttackDebuffSources;

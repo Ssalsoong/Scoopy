@@ -40,6 +40,9 @@ namespace MMMEngine
         bool GetSlotWorldPos(int ring, int index, DirectX::SimpleMath::Vector3& outPos);
 
 
+        ObjPtr<Transform> centerTransform;   // 슬롯 중심 기준
+
+
 
         USCRIPT_PROPERTY()
         float slotCheckRadius = 0.15f;
@@ -71,5 +74,8 @@ namespace MMMEngine
         bool FindExisting(ObjPtr<GameObject> enemy, int& outRing, int& outIndex);
         int GetRingCapacity(float radius) const;
         void EnsureRing(int ringIndex);
+
+        DirectX::SimpleMath::Vector3 GetCenterWorldPos() const;
+
     };
 }

@@ -16,6 +16,7 @@ namespace
 void MMMEngine::TargetSlotProvider::Start()
 {
     m_rings.clear();
+    centerTransform = GetTransform();
 }
 
 int MMMEngine::TargetSlotProvider::GetRingCapacity(float radius) const
@@ -137,7 +138,7 @@ bool MMMEngine::TargetSlotProvider::GetSlotWorldPos(int ring, int index, DirectX
     auto tr = GetTransform();
     if (!tr.IsValid()) return false;
 
-    auto center = tr->GetWorldPosition();
+    auto center = GetCenterWorldPos();
     float radius = m_rings[ring].radius;
     int cap = (int)slots.size();
     if (cap <= 0) return false;
@@ -169,4 +170,13 @@ bool MMMEngine::TargetSlotProvider::IsSlotFree(const DirectX::SimpleMath::Vector
     }
 
     return true;
+}
+
+
+DirectX::SimpleMath::Vector3 MMMEngine::TargetSlotProvider::GetCenterWorldPos() const
+{
+    if (!centerTransform.IsValid())
+        return {};
+
+    return centerTransform->GetWorldPosition();
 }

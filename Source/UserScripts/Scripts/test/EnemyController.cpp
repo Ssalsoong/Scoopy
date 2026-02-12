@@ -41,26 +41,35 @@ void MMMEngine::EnemyController::Update()
 		}
 	}
 	UpdateDistance();
+	// 슬롯 타임아웃 재요청
+	const float dt = Time::GetDeltaTime();
+	m_slotReassignTimer = std::max(0.0f, m_slotReassignTimer - dt);
+
+	if (m_hasSlot && m_usingSlotTarget)
+	{
+		m_slotElapsed += dt;
+
+		if (distance <= slotArriveRadius)
+			m_slotElapsed = 0.0f;
+
+		if (m_slotElapsed >= m_slotTimeout && m_slotReassignTimer <= 0.0f)
+		{
+			ReleaseSlot();
+			TryAcquireSlot();
+			m_slotElapsed = 0.0f;
+			m_slotReassignTimer = m_slotReassignCooldown;
+		}
+	}
+	else
+	{
+		m_slotElapsed = 0.0f;
+	}
 	ChangeState();
 	CheckState();
 
 	AttackTarget();
 	CalSnowDamageDelay();
 	HurtCal();
-
-	int t = 0;
-	auto D = curState;
-	if (D == EnemyState::Attack)
-	{
-		t = 10;
-	}
-	else
-	{
-		t = 5;
-	}
-	//auto t = m_EnemyType;
-	std::cout << t << std::endl;
-
 }
 
 
@@ -147,15 +156,22 @@ void MMMEngine::EnemyController::ChangeState()
 	// Attack 상태면 먼저 이탈 체크
 	if (curState == EnemyState::Attack)
 	{
+		if (!m_canExitAttack)
+			return;
 		float exitDist = (IsBruiser() ? slotExit : rangeExit);
 		if (!m_CurTarget.IsValid() || distance > exitDist)
 		{
 			curState = EnemyState::Move;
+			m_canExitAttack = false;
 			return;
 		}
 
-		if (m_attackPhase == AttackPhase::Motion)
-			return;
+		m_canExitAttack = false;
+		m_attackPhase = AttackPhase::Motion;
+		attackTimer = 0.0f;
+		RecoverTimer = 0.0f;
+		MotionEnter();
+		return;
 	}
 
 	// 일반 진입 조건
@@ -330,6 +346,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 		m_attackPhase = AttackPhase::Motion;
 		attackTimer = 0.0f;
 		RecoverTimer = 0.0f;
+		m_canExitAttack = false;
 		MotionEnter();
 		break;
 	}
@@ -483,6 +500,14 @@ void MMMEngine::EnemyController::AttackTarget()
 		return;
 	}
 
+	if (!m_Rigid->GetKinematic())
+	{
+		m_Rigid->SetKinematic(true);
+		m_Rigid->SetLinearVelocity(Vector3::Zero);
+		m_Rigid->SetAngularVelocity(Vector3::Zero);
+		m_Move->MoveTriggerSet(false);
+	}
+
 	if (!battletarget.IsValid() || !battletarget->IsActiveInHierarchy())
 	{
 		m_attackPhase = AttackPhase::Motion;
@@ -490,6 +515,7 @@ void MMMEngine::EnemyController::AttackTarget()
 		RecoverTimer = 0.0f;
 
 		m_CurTarget = m_MainTarget;
+		curState = EnemyState::Move;
 		OnStateEnter(EnemyState::Move);
 		return;
 	}
@@ -517,11 +543,12 @@ void MMMEngine::EnemyController::AttackTarget()
 
 		if (RecoverTimer >= RecoverDelay * m_FinalAttackMult)
 		{
-			m_attackPhase = AttackPhase::Motion;
+			/*m_attackPhase = AttackPhase::Motion;
 			attackTimer = 0.0f;
 			RecoverTimer = 0.0f;
 
-			MotionEnter();
+			MotionEnter();*/
+			m_canExitAttack = true;
 		}
 	}
 }
@@ -535,6 +562,7 @@ void MMMEngine::EnemyController::DoHit()
 	if (battletarget != m_CurTarget)
 	{
 		m_CurTarget = m_MainTarget;
+		curState = EnemyState::Move;
 		OnStateEnter(EnemyState::Move);
 		return;
 	}
@@ -550,6 +578,7 @@ void MMMEngine::EnemyController::DoHit()
 		else
 		{
 			m_CurTarget = m_MainTarget;
+			curState = EnemyState::Move;
 			OnStateEnter(EnemyState::Move);
 		}
 		return;
@@ -567,12 +596,14 @@ void MMMEngine::EnemyController::DoHit()
 		if (targetstats->HP <= 0)
 		{
 			m_CurTarget = m_MainTarget;
+			curState = EnemyState::Move;
 			OnStateEnter(EnemyState::Move);
 		}
 	}
 	else
 	{
 		m_CurTarget = m_MainTarget;
+		curState = EnemyState::Move;
 		OnStateEnter(EnemyState::Move);
 	}
 }
