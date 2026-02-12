@@ -3,7 +3,6 @@
 #include "ArrowEnemy.h"
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
-#include "Enemy.h"
 #include "MeshRenderer.h"
 #include "StaticMesh.h"
 #include "Transform.h"
@@ -43,30 +42,44 @@ void MMMEngine::ArrowEnemy::Update()
 {
 }
 
-void MMMEngine::ArrowEnemy::ApplyStats()
-{
-	if (!GetGameObject()->GetComponent<Enemy>())
-		return;
-	auto Enemycomp = GetGameObject()->GetComponent<Enemy>();
-	GetComponent<Battlestats>()->SetHP(HP);
-	Enemycomp->atk = atk;
-	Enemycomp->velocity = velocity;
-	Enemycomp->attackDelay = attackDelay;
-	Enemycomp->battledist = battledist;
-	Enemycomp->checkdist = checkdist;
-}
-
-void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target)
+void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target, int atk)
 {
 	if (Arrows.empty())
 		return;
+	if (auto targettr = target->GetTransform(); targettr.IsValid()) {
+		auto targetpos = targettr->GetWorldPosition();
+		LookAt(targetpos);
+	}
+
 	auto obj = Arrows.front();
 	Arrows.pop();
 	if (!obj)
 		return;
-	obj->GetComponent<Arrow>()->SetTarget(target);
+	if (auto arrow = obj->GetComponent<Arrow>(); arrow.IsValid())
+	{
+		arrow->SetTarget(target);
+		arrow->SetAtk(atk);
+	}
+
 	obj->SetActive(true);
 }
+
+void MMMEngine::ArrowEnemy::LookAt(const DirectX::SimpleMath::Vector3& target)
+{
+	auto pos = GetTransform()->GetWorldPosition();
+	auto dir = target - pos;
+	dir.y = 0.0f;
+
+	float len2 = dir.LengthSquared();
+	if (len2 < 1e-8f) return;
+
+	dir.Normalize();
+
+	float yaw = atan2f(dir.x, dir.z);
+	auto rot = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0, 0);
+	GetTransform()->SetWorldRotation(rot);
+}
+
 
 void MMMEngine::ArrowEnemy::ReturnArrow(ObjPtr<GameObject> obj)
 {

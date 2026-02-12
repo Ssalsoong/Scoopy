@@ -4,7 +4,8 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Building.h"
-#include "../Enemy/Enemy.h"
+#include "../../test/EnemyMove.h"
+#include "../../test/EnemyController.h"
 #include "Transform.h"
 #include "../Battlestats.h"
 
@@ -14,7 +15,8 @@ RTTR_PLUGIN_REGISTRATION
 	using namespace MMMEngine;
 
 	registration::class_<DebuffBuilding>("DebuffBuilding")
-        (rttr::metadata("wrapper_type_name", "ObjPtr<DebuffBuilding>"));
+		(rttr::metadata("wrapper_type_name", "ObjPtr<DebuffBuilding>"))
+		.property("speedDebuff", &DebuffBuilding::speedDebuff);
 
 	registration::class_<ObjPtr<DebuffBuilding>>("ObjPtr<DebuffBuilding>")
 		.constructor(
@@ -31,24 +33,23 @@ void MMMEngine::DebuffBuilding::Start()
 
 void MMMEngine::DebuffBuilding::Update()
 {
+	GiveDebuff();
 }
 
 void MMMEngine::DebuffBuilding::GiveDebuff()
 {
-	std::unordered_set<ObjPtr<Enemy>> nowInside;
+	std::unordered_set<ObjPtr<GameObject>> nowInside;
 
 	auto pos = GetTransform()->GetWorldPosition();
 	float bestD2 = debuffdist * debuffdist;
 	auto enemys = GetGameObject()->FindGameObjectsWithTag("Enemy");
 	
-	for (auto& e : enemys)
+	for (auto& enemy : enemys)
 	{
-		if (!e) continue;
 
-		auto enemy = e->GetComponent<Enemy>();
 		if (!enemy) continue;
 
-		auto epos = e->GetTransform()->GetWorldPosition();
+		auto epos = enemy->GetTransform()->GetWorldPosition();
 
 		float dx = pos.x - epos.x;
 		float dz = pos.z - epos.z;
@@ -61,16 +62,20 @@ void MMMEngine::DebuffBuilding::GiveDebuff()
 	{
 		if (m_inside.find(enemy) == m_inside.end())
 		{
-			//enemy->velocity *= debuff;
-			enemy->attackDelay /= debuff;
+			if (auto enemyMove = enemy->GetComponent<EnemyMove>(); enemyMove.IsValid())
+				enemyMove->AddSpeedDebuffSource(this, speedDebuff);
+			if (auto enemyController = enemy->GetComponent<EnemyController>(); enemyController.IsValid())
+				enemyController->AddAttackDebuffSource(this, attackDebuff);
 		}
 	}
 	for (auto& enemy : m_inside)
 	{
 		if (nowInside.find(enemy) == nowInside.end())
 		{
-			//enemy->velocity /= debuff;
-			enemy->attackDelay *= debuff;
+			if (auto enemyMove = enemy->GetComponent<EnemyMove>(); enemyMove.IsValid())
+				enemyMove->RemoveSpeedDebuffSource(this);
+			if (auto enemyController = enemy->GetComponent<EnemyController>(); enemyController.IsValid())
+				enemyController->RemoveAttackDebuffSource(this);
 		}
 	}
 	m_inside.swap(nowInside);
@@ -83,35 +88,40 @@ void MMMEngine::DebuffBuilding::LevelApply(int level)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		debuff = 0.8f;
+		speedDebuff = 0.8f;
+		attackDebuff = 1.2f;
 		debuffdist = 2.0f;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		debuff = 0.65f;
+		speedDebuff = 0.65f;
+		attackDebuff = 1.35f;
 		debuffdist = 2.0f;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
-		debuff = 0.65f;
+		speedDebuff = 0.65f;
+		attackDebuff = 1.35f;
 		debuffdist = 3.0f;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
-		debuff = 0.5f;
+		speedDebuff = 0.5f;
+		attackDebuff = 1.5f;
 		debuffdist = 3.0f;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 100;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(100);
-		debuff = 0.5f;
+		speedDebuff = 0.5f;
+		attackDebuff = 1.5f;
 		debuffdist = 4.0f;
 	}
 }

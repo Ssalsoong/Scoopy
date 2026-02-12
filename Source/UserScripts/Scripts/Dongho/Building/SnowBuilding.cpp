@@ -58,31 +58,32 @@ void MMMEngine::SnowBuilding::LevelApply(int level)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		maxsnowpoint = 15;
+		chargeDelay = 2.0f;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		maxsnowpoint = 20;
+		chargeDelay = 1.5f;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 65;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
-		maxsnowpoint = 25;
+		chargeDelay = 1.0f;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 65;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(65);
-		maxsnowpoint = 30;
+		chargeDelay = 0.5f;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 80;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(80);
-		maxsnowpoint = 35;
+		chargeDelay = 0.25f;
+		provideDelay = 0.25f;
 	}
 }
 

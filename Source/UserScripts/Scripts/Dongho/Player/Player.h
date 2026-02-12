@@ -2,6 +2,7 @@
 #include "ScriptBehaviour.h"
 #include "SimpleMath.h"
 #include "UserScriptsCommon.h"
+#include <unordered_map>
 
 namespace MMMEngine
 {
@@ -78,5 +79,17 @@ namespace MMMEngine
 
 		void Level10Apply(int value);
 		bool reflectOn = false;
+
+		//버프관련
+		std::unordered_map<const void*, int> m_AttackBuffSources;
+		int m_AttackBuffMax = 0;
+
+		void AddAttackBuffSource(const void* src, int value);
+		void RemoveAttackBuffSource(const void* src);
+		void UpdateAttackBuffSource(const void* src, int value);
+
+		int GetAttackFinal() const;   // base + max
+	private:
+		void RecalcAttackBuffMax();
     };
 }

@@ -7,6 +7,8 @@
 
 namespace MMMEngine
 {
+    class TileMap;
+
     class USERSCRIPTS EnemyMove : public ScriptBehaviour
     {
     private:
@@ -26,19 +28,18 @@ namespace MMMEngine
         void FixedUpdate();
 
         USCRIPT_PROPERTY()
-        float movespeed = 1.0f;
+        float movespeed = 10.0f;
 
         USCRIPT_PROPERTY()
         DirectX::SimpleMath::Vector3 Target{};
 
-        USCRIPT_PROPERTY()
         ObjPtr<GameObject> Obj_target;
 
         DirectX::SimpleMath::Vector3 myPos{};
 
         
         ObjPtr<GameObject> m_GO;
-
+        ObjPtr<TileMap> m_T;
 
         DirectX::SimpleMath::Vector3 ComputeChaseVelocity();
 
@@ -83,7 +84,33 @@ namespace MMMEngine
 
         void ChangeTarget(ObjPtr<GameObject> target);
 
+		void SetTargetOverride(const DirectX::SimpleMath::Vector3& pos);
+		void ClearTargetOverride();
+		bool HasTargetOverride() const { return m_hasTargetOverride; }
+
         void MoveTriggerSet(bool value);
         bool is_move = true;
+
+		bool m_hasTargetOverride = false;
+		DirectX::SimpleMath::Vector3 m_targetOverride{};
+
+        void SetEnemySpeed(float speedvalue);
+
+        void SetDebuffSpeed(float value);
+
+        void ResetPos(DirectX::SimpleMath::Vector3 pos);
+
+        void FaceTargetYaw(const DirectX::SimpleMath::Vector3& targetPos);
+
+        //디버프관련
+		std::unordered_map<const void*, float> m_SpeedDebuffSources;
+		float debuffSpeed = 1.0f;
+
+		void AddSpeedDebuffSource(const void* src, float mult);
+		void RemoveSpeedDebuffSource(const void* src);
+		void UpdateSpeedDebuffSource(const void* src, float mult);
+
+	private:
+		void RecalcSpeedMult();
     };
 }

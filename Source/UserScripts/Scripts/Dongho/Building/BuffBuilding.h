@@ -18,7 +18,8 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-        float buff = 10.0f;
+        float speedbuff = 10.0f;
+        int attackbuff = 5;
         float buffdist = 2.0f;
         
         ObjPtr<GameObject> player;

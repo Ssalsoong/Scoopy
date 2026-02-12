@@ -1,5 +1,5 @@
 {
-    "MUID": "060e7545-b28f-4a55-bd8c-4afa90a0a65d",
+    "MUID": "57704ec9-ed4e-44d6-a9bf-6a206a61ef18",
     "properties": {
         "_albedo": {
             "file": "Assets\\Enemy\\FBX\\T_Goblin_Archer.png",
@@ -100,6 +100,10 @@
             "value": 0.0
         },
         "mRoughness": {
+            "type": "float",
+            "value": 0.0
+        },
+        "mRoundDotClip": {
             "type": "float",
             "value": 0.0
         }

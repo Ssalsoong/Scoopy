@@ -3,13 +3,7 @@
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
 #include "AnimResourceManager.h"
-#include "../Dongho/Enemy/Enemy.h"
-
-namespace MMMEngine { class ThiefEnemy; }
-
-namespace MMMEngine { class NormalEnemy; }
-
-namespace MMMEngine { class ArrowEnemy; }
+#include "../test/EnemyController.h"
 
 namespace MMMEngine { class Animator; }
 
@@ -22,9 +16,10 @@ namespace MMMEngine
 			RTTR_REGISTRATION_FRIEND
 		
 		AnimType mAnimType = AnimType::AT_END;
-		Enemy::EnemyState prevStat = Enemy::EnemyState::Dead;
+		EnemyController::EnemyState prevStat = EnemyController::EnemyState::Dead;
 
 		ObjPtr<AnimResourceManager> mAnimManager;
+		ObjPtr<EnemyController> mEnemy;
 
 		void UpdateArcher();
 		void UpdateWarrior();
@@ -39,17 +34,11 @@ namespace MMMEngine
 
 		
 		USCRIPT_PROPERTY()
-			ObjPtr<Animator> mAnimator;
+		ObjPtr<Animator> mAnimator;
 
-		USCRIPT_PROPERTY()
-			ObjPtr<Enemy> mEnemy;
 
 		USCRIPT_PROPERTY()
 		float mAnimSpeed = 1.0f;
-
-		ObjPtr<ArrowEnemy> mArcher;
-		ObjPtr<NormalEnemy> mWarrior;
-		ObjPtr<ThiefEnemy> mScout;
 
 		USCRIPT_PROPERTY()
 			int AnimSize = 0;
