@@ -112,7 +112,7 @@ MMMEngine::TileMap::Vec2 MMMEngine::TileMap::GetCurPosXZ() const
     Vec2 pose{};
     if (!P_trans) return pose;
 
-    if (!P_trans.IsValid()) { std::cout << u8"transform ¹ß°ß¸øÇÔ" << std::endl;};
+    if (!P_trans.IsValid()) { std::cout << u8"transform ï¿½ß°ß¸ï¿½ï¿½ï¿½" << std::endl;};
     auto world_Position = P_trans->GetWorldPosition();
     pose.x = world_Position.x;
     pose.z = world_Position.z;
@@ -141,13 +141,13 @@ void MMMEngine::TileMap::NoticePlayer(bool value)
 
     if (isHarvesting)
     {
-        //¸ð¼Ç ½ÃÀÛ: prevPos¸¦ ÇöÀç À§Ä¡·Î ¸ÂÃß°í hasPrev È°¼ºÈ­
+        //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: prevPosï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ hasPrev È°ï¿½ï¿½È­
         Vec2 cur = GetCurPosXZ();
         EnterState(cur);      // prevPos=cur, hasPrev=true
     }
     else
     {
-        // ¸ð¼Ç Á¾·á
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         hasPrev = false;
     }
 }
@@ -168,7 +168,7 @@ void MMMEngine::TileMap::Start()
 
     if (auto go = GameObject::Find("Player"); go.IsValid())
     {
-        //ÀÌ°Å playerÀÓ ÀÌ¸§ ¼öÁ¤¸øÇßÀ½
+        //ï¿½Ì°ï¿½ playerï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         P_trans = go->GetTransform();
     }
 
@@ -203,7 +203,7 @@ void MMMEngine::TileMap::Update()
         if (InBounds(ix, iz))
             curIdx = GetIndex(ix, iz);
 
-        TileCheck(cur); // harvesting ÁßÀÏ ¶§¸¸ Áõ°¡
+        TileCheck(cur); // harvesting ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
 
     UpdateAccumDecay(curIdx);
@@ -248,7 +248,7 @@ void MMMEngine::TileMap::UpdateAccumDecay(int currentTileIdx)
     for (int i = 0; i < tiles.size(); ++i)
     {
         if (i == currentTileIdx)
-            continue;   // Áö±Ý ÇÃ·¹ÀÌ¾î°¡ ¹â°í ÀÖ´Â Å¸ÀÏÀº Á¦¿Ü
+            continue;   // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         TileState& tile = tiles[i];
 
@@ -259,7 +259,7 @@ void MMMEngine::TileMap::UpdateAccumDecay(int currentTileIdx)
             if (tile.accum < 0.f)
                 tile.accum = 0.f;
 
-            // ¿©±â¼­ fadeµµ °°ÀÌ °»½Å °¡´É
+            // ï¿½ï¿½ï¿½â¼­ fadeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             tile.fade = tile.accum / threshold;
             tile.fade = std::clamp(tile.fade, 0.f, 1.f);
 
