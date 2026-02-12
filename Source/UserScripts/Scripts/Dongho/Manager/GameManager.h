@@ -15,6 +15,7 @@ namespace MMMEngine { class TimerUI; }
 
 using DirectX::SimpleMath::Vector3;
 namespace MMMEngine {
+	class GameClearSequencer;
 	class Player;
 	class Castle;
 	class USERSCRIPTS GameManager : public ScriptBehaviour
@@ -44,6 +45,7 @@ namespace MMMEngine {
 		bool GameWin = false;
 		bool GameOver = false;
 		bool mOverSet = false;
+		bool mClearSet = false;
 
 		bool mPlayingNormalBGM = false;
 		bool mPlayingWaveBGM = false;
@@ -68,6 +70,7 @@ namespace MMMEngine {
 		ObjPtr<Castle> castlecomp;
 		ObjPtr<TimerUI> mTimerUI;
 		ObjPtr<GameOverSequencer> mOverSequencer;
+		ObjPtr<GameClearSequencer> mClearSequencer;
 
 		USCRIPT_PROPERTY()
 		ObjPtr<PauseUI> mPauseUI;

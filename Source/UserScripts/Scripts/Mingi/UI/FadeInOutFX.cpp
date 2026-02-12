@@ -37,9 +37,10 @@ void MMMEngine::FadeInOutFX::Update()
 	if (m_fadeState == 0)
 		return;
 
+	float dt = std::min(0.016f, Time::GetUnscaledDeltaTime());
 	if (m_fadeState == 1)
 	{
-		m_internalTime -= Time::GetUnscaledDeltaTime();
+		m_internalTime -= dt;
 		if (m_internalTime < 0)
 		{
 			m_fadeState = 0;
@@ -48,7 +49,7 @@ void MMMEngine::FadeInOutFX::Update()
 	}
 	if (m_fadeState == 2)
 	{
-		m_internalTime += Time::GetUnscaledDeltaTime();
+		m_internalTime += dt;
 		if (m_internalTime >= FadeDuration)
 		{
 			m_internalTime = FadeDuration; // clamp

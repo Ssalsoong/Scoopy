@@ -96,6 +96,10 @@ void MMMEngine::Player::HandleAttack()
 	}
 
 	mPAController->SetAttack(true);
+	if (attackTimer == 0.0f)
+	{
+		SoundManager::Instance->PlaySFX2D("PlayerAttack", SelfPtr(this), 1.0f);
+	}
 	attackTimer += Time::GetDeltaTime();
 
 	if (attackTimer < attackDelay)
@@ -133,7 +137,6 @@ void MMMEngine::Player::HandleAttack()
 				damage *= 2.0f;
 			}
 		}
-		SoundManager::Instance->PlaySFX2D("PlayerAttack", SelfPtr(this) , 1.0f);
 		BattleManager::instance->Attack(GetGameObject(), e, damage);
 	}
 }
