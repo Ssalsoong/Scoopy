@@ -77,6 +77,9 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	Buildings.push_back(building);
 	if (distup)
 		building->GetComponent<Building>()->SetAttackDist(5.5f);
+
+	// 빌딩포인트 비활성화
+	obj->SetActive(false);
 }
 
 void MMMEngine::BuildingManager::BuildingReturn()

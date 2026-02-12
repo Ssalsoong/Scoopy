@@ -7,6 +7,8 @@
 #include "SimpleMath.h"
 #include <array>
 
+namespace MMMEngine { class GameOverSequencer; }
+
 namespace MMMEngine { class PauseUI; }
 
 namespace MMMEngine { class TimerUI; }
@@ -41,6 +43,8 @@ namespace MMMEngine {
 
 		bool GameWin = false;
 		bool GameOver = false;
+		bool mOverSet = false;
+
 		bool nowSetting = true;
 		bool isPausing = false;
 		int wave = 1;
@@ -60,6 +64,7 @@ namespace MMMEngine {
 		ObjPtr<Player> playercomp;
 		ObjPtr<Castle> castlecomp;
 		ObjPtr<TimerUI> mTimerUI;
+		ObjPtr<GameOverSequencer> mOverSequencer;
 
 		USCRIPT_PROPERTY()
 		ObjPtr<PauseUI> mPauseUI;

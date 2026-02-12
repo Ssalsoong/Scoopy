@@ -14,6 +14,7 @@
 #include "../../Mingi/UI/TimerUI.h"
 #include "../../Sunken/ControlManager.h"
 #include "../../Mingi/UI/PauseUI.h"
+#include "../../Mingi/UI/GameOverSequencer.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -24,6 +25,7 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<GameManager>"))
 		.property("mTimerUI", &GameManager::mTimerUI)
 		.property("mPauseUI", &GameManager::mPauseUI)
+		.property("mOverSequencer", &GameManager::mOverSequencer)
 		.property("enemySpawnDelay", &GameManager::enemySpawnDelay)
 		.property("settingfullTime", &GameManager::settingfullTime);
 		
@@ -60,18 +62,28 @@ void MMMEngine::GameManager::Start()
 	if (!mPauseUI) {
 		std::cout << "GameManager::PauseUI Not Found!!!" << std::endl;
 	}
+
+	if (!mOverSequencer) {
+		std::cout << "GameManager::GameOverSeq Not Found!!!" << std::endl;
+	}
 }
 
 void MMMEngine::GameManager::Update()
 {
 	if (GameWin)
 	{
-
+		
 	}
 
 	if (GameOver)
 	{
-
+		if (!mOverSet) {
+			mOverSet = true;
+			if (mOverSequencer) {
+				ControlManager::Get()->SetMinLayer(150);
+				mOverSequencer->StartGameOver();
+			}
+		}
 	}
 
 	if (nowSetting)
