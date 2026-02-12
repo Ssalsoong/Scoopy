@@ -5,6 +5,9 @@
 #include "EnemyMove.h"
 #include "SphereColliderComponent.h"
 #include "../Mingi/ExplosionPool.h"
+#include "../Dongho/Building/Buildingball.h"
+#include "../Dongho/Castle/Castleball.h"
+#include "../Dongho/Battlestats.h"
 
 void MMMEngine::SnowBullet::Start()
 {
@@ -74,6 +77,30 @@ void MMMEngine::SnowBullet::FixedUpdate()
 		auto trans = GetTransform()->GetWorldPosition();
 		if (trans == p2)
 		{
+			if (auto buildingball = GetComponent<Buildingball>(); buildingball.IsValid())
+			{
+				buildingball->Returnball();
+			}
+			else if (auto castleball = GetComponent<Castleball>(); castleball.IsValid())
+			{
+				castleball->Returnball();
+			}
+			ReSet();
+		}
+	}
+
+	if (auto targetstats = target->GetComponent<Battlestats>())
+	{
+		if (targetstats->HP <= 0)
+		{
+			if (auto buildingball = GetComponent<Buildingball>(); buildingball.IsValid())
+			{
+				buildingball->Attacktarget();
+			}
+			else if (auto castleball = GetComponent<Castleball>(); castleball.IsValid())
+			{
+				castleball->Attacktarget();
+			}
 			ReSet();
 		}
 	}
@@ -84,7 +111,18 @@ void MMMEngine::SnowBullet::OnTriggerEnter(MMMEngine::TriggerInfo info)
 	if (ExplosionPool::Instance.IsValid())
 		ExplosionPool::Instance->Spawn(GetTransform()->GetWorldPosition());
 
-	if (info.other == target) ReSet();
+	if (info.other == target)
+	{
+		if (auto buildingball = GetComponent<Buildingball>(); buildingball.IsValid())
+		{
+			buildingball->Attacktarget();
+		}
+		else if (auto castleball = GetComponent<Castleball>(); castleball.IsValid())
+		{
+			castleball->Attacktarget();
+		}
+		ReSet();
+	}
 }
 
 void MMMEngine::SnowBullet::ReSet()

@@ -533,8 +533,6 @@ void MMMEngine::EnemyController::AttackTarget()
 			m_attackPhase = AttackPhase::Pause;
 			RecoverTimer = 0.0f;
 			attackTimer = 0.0f;
-
-			PauseEnter();
 		}
 	}
 	else // Pause
@@ -642,12 +640,12 @@ void MMMEngine::EnemyController::MotionEnter()
 	{
 		EnemyAni->PlayAttack();
 	}
-	std::cout << "motionon" << std::endl;
+	//std::cout << "motionon" << std::endl;
 }
 
 void MMMEngine::EnemyController::PauseEnter()
 {
-	std::cout << "pauseon" << std::endl;
+	//std::cout << "pauseon" << std::endl;
 }
 
 
