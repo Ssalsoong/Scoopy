@@ -38,7 +38,7 @@ void MMMEngine::Player::HandleAttack()
 	//���⼭ ��������� �� ������ ���ϰ� ���ƾ� ��
 	if (GetComponent<PlayerController>()->IsHoldingSpace()) {
 		mPAController->SetAttack(false);
-		attackTimer == 0.0f;
+		attackTimer = 0.0f;
 		return;
 	}
 		

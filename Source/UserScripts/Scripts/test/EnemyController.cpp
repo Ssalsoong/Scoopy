@@ -13,6 +13,7 @@
 #include "SphereColliderComponent.h"
 #include "SnowCollider.h"
 #include "TargetSlotProvider.h"
+#include "../Sunken/EnemyAnimController.h"
 
 void MMMEngine::EnemyController::Start()
 {
@@ -455,6 +456,10 @@ void MMMEngine::EnemyController::HurtCal()
 
 void MMMEngine::EnemyController::MotionEnter()
 {
+	if (auto EnemyAni = GetComponent<EnemyAnimController>(); EnemyAni.IsValid())
+	{
+		EnemyAni->PlayAttack();
+	}
 	std::cout << "motionon" << std::endl;
 }
 

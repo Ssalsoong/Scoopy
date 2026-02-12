@@ -16,7 +16,7 @@ void MMMEngine::EnemyAnimController::UpdateArcher()
 			mAnimator->PlayClip("Anim_Goblin_Archer_Move", true);
 			break;
 		case EnemyController::EnemyState::Attack:
-			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Archer_Attack", false);
 			break;
 		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Archer_Dead", false);
@@ -37,7 +37,7 @@ void MMMEngine::EnemyAnimController::UpdateWarrior()
 			mAnimator->PlayClip("Anim_Goblin_Warrior_Move", true);
 			break;
 		case EnemyController::EnemyState::Attack:
-			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Warrior_Attack", false);
 			break;
 		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Warrior_Dead", false);
@@ -58,7 +58,7 @@ void MMMEngine::EnemyAnimController::UpdateScout()
 			mAnimator->PlayClip("Anim_Goblin_Scout_Move", true);
 			break;
 		case EnemyController::EnemyState::Attack:
-			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", true);
+			mAnimator->PlayClip("Anim_Goblin_Scout_Attack", false);
 			break;
 		case EnemyController::EnemyState::Dead:
 			mAnimator->PlayClip("Scout_Dead", false);

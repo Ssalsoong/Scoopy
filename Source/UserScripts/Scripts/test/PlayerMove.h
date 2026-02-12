@@ -113,9 +113,5 @@ namespace MMMEngine
         float GetCurSpeed();
         float buff = 0.0f;
         void Setbuff(float value) { buff = value; }
-
-		int Snow_MaxScoop = 9;
-
-        void SetSnowMaxScoop(int maxValue) { Snow_MaxScoop = maxValue; };
     };
 }
