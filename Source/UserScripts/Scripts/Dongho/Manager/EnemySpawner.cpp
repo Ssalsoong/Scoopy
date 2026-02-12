@@ -11,6 +11,9 @@
 #include "Prefab.h"
 #include "../../test/EnemyController.h"
 #include "../../Sunken/EnemyAnimController.h"
+#include "../../Mingi/UI/EnemyGageController.h"
+#include "../../Mingi/UI/WorldSpaceUI.h"
+#include "Gage.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -21,7 +24,9 @@ RTTR_PLUGIN_REGISTRATION
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySpawner>"))
 		.property("pre_normalenemy", &EnemySpawner::pre_normalenemy)
 		.property("pre_arrowenemy", &EnemySpawner::pre_arrowenemy)
-		.property("pre_thiefenemy", &EnemySpawner::pre_thiefenemy);
+		.property("pre_thiefenemy", &EnemySpawner::pre_thiefenemy)
+		.property("pre_hpUI", &EnemySpawner::pre_hpUI)
+		.property("obj_canvas", &EnemySpawner::obj_canvas);
 
 	registration::class_<ObjPtr<EnemySpawner>>("ObjPtr<EnemySpawner>")
 		.constructor(
@@ -44,6 +49,27 @@ void MMMEngine::EnemySpawner::Start()
 		auto obj = Instantiate(pre_normalenemy);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Warrior);
+		auto controller = obj->AddComponent<EnemyGageController>();
+		controller->battlestats = obj->GetComponent<Battlestats>();
+
+		auto hpUI = Instantiate(pre_hpUI)->GetComponent<Gage>();
+		hpUI->GetRectTransform()->SetParent(obj_canvas);
+		hpUI->GetGameObject()->SetActive(false);
+
+		auto worldUI = hpUI->GetComponent<WorldSpaceUI>();
+		if (worldUI.IsValid())
+		{
+			auto offsetTrGO = NewObject<GameObject>();
+			offsetTrGO->GetTransform()->SetParent(obj->GetTransform(), false);
+			offsetTrGO->GetTransform()->SetLocalPosition({ 0,0.6f,0 });
+			worldUI->TargetTransform = offsetTrGO->GetTransform();
+			worldUI->Start();
+			worldUI->LateUpdate();
+		}
+
+		controller->hpUI = hpUI;
+		controller->type = EnemyGageController::EnemyType::Warrior;
+
 		obj->SetActive(false);
 		NormalEnemys.push(obj);
 	}
@@ -52,6 +78,28 @@ void MMMEngine::EnemySpawner::Start()
 		auto obj = Instantiate(pre_arrowenemy);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Archer);
+		auto controller = obj->AddComponent<EnemyGageController>();
+		controller->battlestats = obj->GetComponent<Battlestats>();
+
+		auto hpUI = Instantiate(pre_hpUI)->GetComponent<Gage>();
+		hpUI->GetRectTransform()->SetParent(obj_canvas);
+		hpUI->GetGameObject()->SetActive(false);
+
+
+		auto worldUI = hpUI->GetComponent<WorldSpaceUI>();
+		if (worldUI.IsValid())
+		{
+			auto offsetTrGO = NewObject<GameObject>();
+			offsetTrGO->GetTransform()->SetParent(obj->GetTransform(), false);
+			offsetTrGO->GetTransform()->SetLocalPosition({ 0,0.6f,0 });
+			worldUI->TargetTransform = offsetTrGO->GetTransform();
+			worldUI->Start();
+			worldUI->LateUpdate();
+		}
+
+		controller->hpUI = hpUI;
+		controller->type = EnemyGageController::EnemyType::Ranger;
+
 		obj->SetActive(false);
 		ArrowEnemys.push(obj);
 	}
@@ -60,6 +108,28 @@ void MMMEngine::EnemySpawner::Start()
 		auto obj = Instantiate(pre_thiefenemy);
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
 		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Scout);
+
+		auto controller = obj->AddComponent<EnemyGageController>();
+		controller->battlestats = obj->GetComponent<Battlestats>();
+
+		auto hpUI = Instantiate(pre_hpUI)->GetComponent<Gage>();
+		hpUI->GetRectTransform()->SetParent(obj_canvas);
+		hpUI->GetGameObject()->SetActive(false);
+
+		auto worldUI = hpUI->GetComponent<WorldSpaceUI>();
+		if (worldUI.IsValid())
+		{
+			auto offsetTrGO = NewObject<GameObject>();
+			offsetTrGO->GetTransform()->SetParent(obj->GetTransform(), false);
+			offsetTrGO->GetTransform()->SetLocalPosition({ 0,0.6f,0 });
+			worldUI->TargetTransform = offsetTrGO->GetTransform();
+			worldUI->Start();
+			worldUI->LateUpdate();
+		}
+
+		controller->hpUI = hpUI;
+		controller->type = EnemyGageController::EnemyType::Assassin;
+
 		obj->SetActive(false);
 		ThiefEnemys.push(obj);
 	}

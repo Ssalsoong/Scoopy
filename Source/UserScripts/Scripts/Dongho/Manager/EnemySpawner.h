@@ -6,6 +6,7 @@
 #include "SimpleMath.h"
 #include <array>
 #include "Prefab.h"
+#include "RectTransform.h"
 
 using DirectX::SimpleMath::Vector3;
 namespace MMMEngine {
@@ -85,5 +86,9 @@ namespace MMMEngine {
 		ResPtr<Prefab> pre_arrowenemy;
 		USCRIPT_PROPERTY()
 		ResPtr<Prefab> pre_thiefenemy;
+		USCRIPT_PROPERTY()
+		ResPtr<Prefab> pre_hpUI;
+		USCRIPT_PROPERTY()
+		ObjPtr<RectTransform> obj_canvas;
 	};
 }
