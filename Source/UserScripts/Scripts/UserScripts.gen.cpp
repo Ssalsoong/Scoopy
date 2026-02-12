@@ -25,6 +25,8 @@
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/FadeInOutFX.h"
 #include "Mingi/UI/GameOverSequencer.h"
+#include "Mingi/UI/MarkUIInfo.h"
+#include "Mingi/UI/MarkWaveController.h"
 #include "Mingi/UI/MiniMap.h"
 #include "Mingi/UI/PauseUI.h"
 #include "Mingi/UI/RotateTrakingUI.h"
@@ -233,6 +235,43 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<GameOverSequencer>>("ObjPtr<GameOverSequencer>")
 		.constructor([]() { return Object::NewObject<GameOverSequencer>(); })
 		.method("Inject", &ObjPtr<GameOverSequencer>::Inject);
+
+	registration::class_<MarkUIInfo>("MarkUIInfo")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<MarkUIInfo>"))
+		.property("worldSpaceUI", &MarkUIInfo::worldSpaceUI)
+		.property("countText", &MarkUIInfo::countText);
+
+	registration::class_<ObjPtr<MarkUIInfo>>("ObjPtr<MarkUIInfo>")
+		.constructor([]() { return Object::NewObject<MarkUIInfo>(); })
+		.method("Inject", &ObjPtr<MarkUIInfo>::Inject);
+
+	registration::class_<MarkWaveController>("MarkWaveController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<MarkWaveController>"))
+		.property("Warrior1", &MarkWaveController::Warrior1)
+		.property("Warrior2", &MarkWaveController::Warrior2)
+		.property("Warrior3", &MarkWaveController::Warrior3)
+		.property("Assassin1", &MarkWaveController::Assassin1)
+		.property("Assassin2", &MarkWaveController::Assassin2)
+		.property("Assassin3", &MarkWaveController::Assassin3)
+		.property("Ranger1", &MarkWaveController::Ranger1)
+		.property("Ranger2", &MarkWaveController::Ranger2)
+		.property("Ranger3", &MarkWaveController::Ranger3)
+		.property("num1_DW_TR", &MarkWaveController::num1_DW_TR)
+		.property("num1_L_TR", &MarkWaveController::num1_L_TR)
+		.property("num2_TR", &MarkWaveController::num2_TR)
+		.property("num3_R_TR", &MarkWaveController::num3_R_TR)
+		.property("num3_DW_TR", &MarkWaveController::num3_DW_TR)
+		.property("num4_TR", &MarkWaveController::num4_TR)
+		.property("num6_TR", &MarkWaveController::num6_TR)
+		.property("num7_L_TR", &MarkWaveController::num7_L_TR)
+		.property("num7_UP_TR", &MarkWaveController::num7_UP_TR)
+		.property("num8_TR", &MarkWaveController::num8_TR)
+		.property("num9_R_TR", &MarkWaveController::num9_R_TR)
+		.property("num9_UP_TR", &MarkWaveController::num9_UP_TR);
+
+	registration::class_<ObjPtr<MarkWaveController>>("ObjPtr<MarkWaveController>")
+		.constructor([]() { return Object::NewObject<MarkWaveController>(); })
+		.method("Inject", &ObjPtr<MarkWaveController>::Inject);
 
 	registration::class_<MiniMap>("MiniMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<MiniMap>"))

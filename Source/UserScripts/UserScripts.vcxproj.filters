@@ -35,6 +35,8 @@
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\GameOverSequencer.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\MarkUIInfo.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\Mingi\UI\MarkWaveController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\MiniMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\PauseUI.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Mingi\UI\RotateTrakingUI.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -101,6 +103,8 @@
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\GameOverSequencer.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\MarkUIInfo.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\Mingi\UI\MarkWaveController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\MiniMap.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\PauseUI.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Mingi\UI\RotateTrakingUI.h"><Filter>Scripts</Filter></ClInclude>

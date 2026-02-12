@@ -14,6 +14,7 @@
 #include "../../Mingi/UI/TimerUI.h"
 #include "../../Sunken/ControlManager.h"
 #include "../../Mingi/UI/PauseUI.h"
+#include "../../Mingi/UI/MarkWaveController.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -49,6 +50,9 @@ void MMMEngine::GameManager::Start()
 	playercomp = player->GetComponent<Player>();
 	castlecomp = castle->GetComponent<Castle>();
 
+
+	MarkWaveController::Instance->SetWave(wave);
+
 	if (!mTimerUI) {
 		std::cout << "GameManager::TimerUI Not Found!!!" << std::endl;
 	}
@@ -79,6 +83,8 @@ void MMMEngine::GameManager::Update()
 		settingTimer += Time::GetDeltaTime();
 		if (settingTimer >= settingfullTime)
 		{
+
+			MarkWaveController::Instance->AllOff();
 			EnemySpawner::instance->WaveSetting(wave);
 			nowSetting = false;
 			settingTimer = 0.0f;
@@ -97,6 +103,8 @@ void MMMEngine::GameManager::Update()
 			wave += 1;
 			BuildingManager::instance->BuildingReturn();
 			EnemySpawner::instance->EnemyUpgrade();
+
+			MarkWaveController::Instance->SetWave(wave);
 			playercomp->Setbuildchance(true);
 			player->GetComponent<Battlestats>()->SetHP(playercomp->GetmaxHP());
 			castle->GetComponent<Battlestats>()->SetHP(castlecomp->GetmaxHP());

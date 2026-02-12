@@ -15,6 +15,7 @@
 #include "TargetSlotProvider.h"
 #include "../Sunken/EnemyAnimController.h"
 #include "RigidBodyComponent.h"
+#include "../Mingi/UI/MiniMap.h"
 
 
 void MMMEngine::EnemyController::Start()
@@ -26,6 +27,22 @@ void MMMEngine::EnemyController::Start()
 	if (auto go = GameObject::Find("Castle"); go.IsValid())
 	{
 		m_MainTarget = go;
+	}
+}
+
+void MMMEngine::EnemyController::OnEnable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->RegisterTracker(GetMUID(),GetTransform(),TrackerType::Enemy);
+	}
+}
+
+void MMMEngine::EnemyController::OnDisable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->UnregisterTracker(GetMUID());
 	}
 }
 

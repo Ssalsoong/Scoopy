@@ -76,6 +76,8 @@ namespace MMMEngine
     public:
         EnemyController()
         {
+        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
+        REGISTER_BEHAVIOUR_MESSAGE(OnEnable);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -86,6 +88,12 @@ namespace MMMEngine
 
         USCRIPT_MESSAGE()
         void Update();
+
+        USCRIPT_MESSAGE()
+            void OnEnable();
+
+        USCRIPT_MESSAGE()
+            void OnDisable();
 
         bool CheckHurt();
 
