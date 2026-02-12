@@ -5,7 +5,19 @@ SFX,GiveSnowball,Assets/Sound/SFX/give snowball.audioclip,1
 SFX,Select,Assets/Sound/SFX/sellect.audioclip,1
 SFX,Bubble,Assets/Sound/SFX/Bubble.audioclip,1
 SFX,GetSnowball,Assets/Sound/SFX/get snowball.audioclip,1
-"			",,,
+SFX,Alarm,Assets/Sound/SFX/Alarm.audioclip,1
+SFX,WarriorAttack,Assets/Sound/SFX/warrior_att.audioclip,1
+SFX,ArcherAttack,Assets/Sound/SFX/archer_att.audioclip,1
+SFX,AssassinAttack,Assets/Sound/SFX/assassin_att.audioclip,1
+SFX,Build,Assets/Sound/SFX/build.audioclip,1
+SFX,ChoiceMove,Assets/Sound/SFX/choise move.audioclip,1
+SFX,LevelUp,Assets/Sound/SFX/Lv up.audioclip,1
+SFX,PlayerAttack,Assets/Sound/SFX/PC_attack.audioclip,1
+SFX,Walk,Assets/Sound/SFX/Walk.audioclip,1
+,,,
 "# BGM			",,,
 BGM,MainTheme,Assets/Sound/BGM/main.audioclip,0.8
-,,,
+BGM,BattleTheme,Assets/Sound/BGM/battle.audioclip,0.8
+BGM,GameClear,Assets/Sound/BGM/Game_Clear.audioclip,0.8
+BGM,GameOver,Assets/Sound/BGM/Game_Over.audioclip,0.8
+BGM,TitleTheme,Assets/Sound/BGM/Title.audioclip,0.8

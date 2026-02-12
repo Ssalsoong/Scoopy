@@ -6,6 +6,7 @@
 #include "SimpleMath.h"
 #include "Prefab.h"
 #include "AnimationCurve.h"
+#include "CoreComponents.h"
 
 namespace MMMEngine {
 	class USERSCRIPTS Building : public ScriptBehaviour
@@ -45,9 +46,12 @@ namespace MMMEngine {
 		USCRIPT_PROPERTY()
 			AnimationCurve mLevelScaleCurve;
 
+		ObjPtr<Transform> mMeshTrans;
+
 		bool isAnimating = false;
 		float mElipsedTime = 0.0f;
 		float mCurveScale;
+		Vector3 mInitScale;
 		ANIMTYPE mAnimType = ANIMTYPE::END;
 
 		int maxHP = 70;
@@ -55,6 +59,7 @@ namespace MMMEngine {
 		int exp = 0;
 		int atk = 13;
 		int level = 0;
+		int prevLevel = 0;
 		float attackDelay = 1.0f;
 		float attackTimer = 0.0f;
 		float attackdist = 3.0f;

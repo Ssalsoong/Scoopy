@@ -9,6 +9,7 @@
 #include "../Dongho/Building/BuffBuilding.h"
 #include "../Dongho/Building/DebuffBuilding.h"
 #include "../Dongho/Building/SnowBuilding.h"
+#include "../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::BuildingLevelController::SetLevelSelection(int _idx)
 {
@@ -109,6 +110,9 @@ void MMMEngine::BuildingLevelController::Start()
 }
 
 void MMMEngine::BuildingLevelController::LevelUp() {
+	// 사운드 재생
+	SoundManager::Instance->PlaySFX2D("LevelUp", SelfPtr(this));
+
 	mUpPending--;
 	mCurrLevel++;
 	mBuilding->exp = 0;
@@ -426,6 +430,9 @@ void MMMEngine::BuildingLevelController::Update()
 
 void MMMEngine::BuildingLevelController::OnDisable()
 {
+	if (IsDestroyed())
+		return;
+
 	isActive = false;
 
 	// 본인소유 객체는 알아서 끄기

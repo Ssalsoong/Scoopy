@@ -33,36 +33,51 @@ void MMMEngine::Castleball::Start()
 void MMMEngine::Castleball::Update()
 {
 	// 타겟이 없거나 죽었거나 비활성화면 회수
-	if (!target)
-	{
-		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
-		auto ownerpos = owner->GetTransform()->GetWorldPosition();
-		GetTransform()->SetWorldPosition(ownerpos);
-		GetGameObject()->SetActive(false);
-		return;
-	}
-	targetpos = target->GetTransform()->GetWorldPosition();
-	auto pos = GetTransform()->GetWorldPosition();
+	//if (!target)
+	//{
+	//	owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
+	//	auto ownerpos = owner->GetTransform()->GetWorldPosition();
+	//	GetTransform()->SetWorldPosition(ownerpos);
+	//	GetGameObject()->SetActive(false);
+	//	return;
+	//}
+	//targetpos = target->GetTransform()->GetWorldPosition();
+	//auto pos = GetTransform()->GetWorldPosition();
 
 
-	// 이동 후 히트 판정
-	auto left = targetpos - pos;
-	left.y = 0.0f;
+	//// 이동 후 히트 판정
+	//auto left = targetpos - pos;
+	//left.y = 0.0f;
 
-	if (left.LengthSquared() <= hitRadius * hitRadius)
-	{
-		// 데미지(컴포넌트로 판별)
-		BattleManager::instance->Attack(owner, target, atk);
+	//if (left.LengthSquared() <= hitRadius * hitRadius)
+	//{
+	//	// 데미지(컴포넌트로 판별)
+	//	BattleManager::instance->Attack(owner, target, atk);
 
-		owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
-		target = nullptr;
-		auto ownerpos = owner->GetTransform()->GetWorldPosition();
+	//	owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
+	//	target = nullptr;
+	//	auto ownerpos = owner->GetTransform()->GetWorldPosition();
 
-		if (ExplosionPool::Instance.IsValid())
-			ExplosionPool::Instance->Spawn(GetTransform()->GetWorldPosition());
+	//	if (ExplosionPool::Instance.IsValid())
+	//		ExplosionPool::Instance->Spawn(GetTransform()->GetWorldPosition());
 
-		GetTransform()->SetWorldPosition(ownerpos);
-		GetGameObject()->SetActive(false);
-		return;
-	}
+	//	GetTransform()->SetWorldPosition(ownerpos);
+	//	GetGameObject()->SetActive(false);
+	//	return;
+	//}
+}
+
+void MMMEngine::Castleball::Returnball()
+{
+	owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
+	target = nullptr;
+}
+
+void MMMEngine::Castleball::Attacktarget()
+{
+	BattleManager::instance->Attack(owner, target, atk);
+
+	owner->GetComponent<Castle>()->ReturnBall(GetGameObject());
+	target = nullptr;
+
 }

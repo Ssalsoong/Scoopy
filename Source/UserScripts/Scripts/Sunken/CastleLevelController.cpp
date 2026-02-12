@@ -283,6 +283,9 @@ void MMMEngine::CastleLevelController::Update()
 
 void MMMEngine::CastleLevelController::OnDisable()
 {
+	if (IsDestroyed())
+		return;
+
 	isActive = false;
 
 	// 본인 소유객체는 알아서 끄기

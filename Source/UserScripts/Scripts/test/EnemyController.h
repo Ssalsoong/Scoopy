@@ -120,7 +120,7 @@ namespace MMMEngine
 
         void AttackTarget();
         ObjPtr<GameObject> battletarget;
-
+        float attackFullTime = 0.5f;
         float attackTimer = 0.0f;
 		float snowDamageTimer = 0.0f;
 		float snowDamageDelay = 0.5f;
@@ -137,7 +137,6 @@ namespace MMMEngine
 		enum class AttackPhase { Motion, Pause };
 		AttackPhase m_attackPhase = AttackPhase::Motion;
 
-        float RecoverDelay = 1.0f;
         float RecoverTimer = 0.0f;
         void DoHit();
         void MotionEnter();

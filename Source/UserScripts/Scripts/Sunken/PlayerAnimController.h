@@ -17,6 +17,7 @@ namespace MMMEngine
             IDLE = 0,
             ATTACK,
             SCOOP,
+            DIE,
             END
         };
 
@@ -80,6 +81,10 @@ namespace MMMEngine
         // 현재 공격상태 입력
         USCRIPT_PROPERTY()
             void SetAttack(bool _isAttacking);
+
+		// 현재 공격상태 입력
+		USCRIPT_PROPERTY()
+			void PlayDie();
 
         void SetDefaultSpeed(float _speed) { mDefaultSpeed = _speed; }
     };

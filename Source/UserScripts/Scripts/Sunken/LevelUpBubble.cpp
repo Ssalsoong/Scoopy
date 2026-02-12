@@ -4,6 +4,7 @@
 #include "InputManager.h"
 #include "ControlManager.h"
 #include "MMMTime.h"
+#include "../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::LevelUpBubble::Start()
 {
@@ -219,6 +220,9 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 
 	if (input->GetKeyDown(KeyCode::LeftArrow, mInputLayer)) {
 		if (mSelectIdx > 0) {
+			// 사운드 재생
+			SoundManager::Instance->PlaySFX2D("ChoiceMove", SelfPtr(this));
+
 			mSelectIdx--;
 			isDirty = true;
 			isIconAnimDirty = true;
@@ -226,6 +230,9 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 	}
 	else if (input->GetKeyDown(KeyCode::RightArrow, mInputLayer)) {
 		if (mSelectIdx < mIcons.size() - 1) {
+			// 사운드 재생
+			SoundManager::Instance->PlaySFX2D("ChoiceMove", SelfPtr(this));
+
 			mSelectIdx++;
 			isDirty = true;
 			isIconAnimDirty = true;
@@ -233,6 +240,9 @@ void MMMEngine::LevelUpBubble::UpdateControl()
 	}
 	else if (input->GetKeyDown(KeyCode::Space, mInputLayer)) {
 		//std::cout << "LevelUpBubble::Selected " << std::to_string(mSelectIdx) << std::endl;
+		// 사운드 재생
+		SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
+
 		LevelUpManager::Get()->SetSelection(mSelectIdx);
 		input->ReleaseMinLayer();
 		isActive = false;

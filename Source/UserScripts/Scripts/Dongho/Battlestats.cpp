@@ -13,9 +13,8 @@ void MMMEngine::Battlestats::Start()
 		HP = player->GetmaxHP();
 		type = Type::Player;
 	}
-	else if (GetComponent<EnemyController>()) {
+	else if (GetComponent<EnemyController>())
 		type = Type::Enemy;
-	}
 	else if (auto castle = GetComponent<Castle>()) {
 		HP = castle->GetmaxHP();
 		type = Type::Castle;
