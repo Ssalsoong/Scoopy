@@ -8,14 +8,24 @@
 
 void MMMEngine::Battlestats::Start()
 {
-	if (GetComponent<Player>())
+
+	if (auto player = GetComponent<Player>()) {
+		HP = player->GetmaxHP();
 		type = Type::Player;
-	else if (GetComponent<Enemy>())
+	}
+	else if (auto enemy = GetComponent<Enemy>()) {
 		type = Type::Enemy;
-	else if (GetComponent<Castle>())
+	}
+	else if (auto castle = GetComponent<Castle>()) {
+		HP = castle->GetmaxHP();
 		type = Type::Castle;
-	else if (GetComponent<Building>())
+	}
+		
+	else if (auto building = GetComponent<Building>()) {
+		HP = building->maxHP;
 		type = Type::Building;
+	}
+		
 }
 
 void MMMEngine::Battlestats::Update()

@@ -7,6 +7,7 @@
 
 namespace MMMEngine
 {
+    class Player;
     class USERSCRIPTS BuildingPoint : public ScriptBehaviour
     {
     private:
@@ -15,6 +16,7 @@ namespace MMMEngine
 
         ObjPtr<Gage> mProgGage;
         ObjPtr<Canvas> mCanvas;
+        ObjPtr<Player> mPlayer;
     public:
         BuildingPoint()
         {
@@ -29,9 +31,6 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         ObjPtr<GameObject> player;
-
-		USCRIPT_PROPERTY()
-	    ResPtr<Prefab> mUniversalGage;
 
         bool canBuild = false;
         bool GetcanBuild() { return canBuild; }

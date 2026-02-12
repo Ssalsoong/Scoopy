@@ -1,5 +1,5 @@
 {
-    "MUID": "b9b729e7-6692-4ad6-857b-204219717628",
+    "MUID": "26bfc5ad-9c82-475b-b10f-4498b5ea9156",
     "properties": {
         "_albedo": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
@@ -9,15 +9,7 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_brdflut": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
-            "type": "Texture2D"
-        },
         "_emissive": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
-            "type": "Texture2D"
-        },
-        "_irradiance": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
@@ -33,107 +25,41 @@
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_roughness": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
-            "type": "Texture2D"
-        },
         "_shadowmap": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
             "type": "Texture2D"
         },
-        "_specular": {
-            "file": "Shader/Resource/Default_Texture/Solid_White.png",
-            "type": "Texture2D"
+        "iceStrength": {
+            "type": "float",
+            "value": 0.4000000059604645
         },
         "mAoStrength": {
             "type": "float",
             "value": 0.5
         },
-        "mBaseColor": {
-            "type": "Vector4",
-            "value": [
-                1.0,
-                1.0,
-                1.0,
-                1.0
-            ]
+        "octaves": {
+            "type": "int",
+            "value": 4
         },
-        "mDiffGradientDepth": {
+        "padding": {
+            "type": "int",
+            "value": 0
+        },
+        "tileScale": {
             "type": "float",
-            "value": 68.32630157470703
+            "value": 0.15000000596046448
         },
-        "mDiffGradientDistHalf": {
+        "warpStrength": {
             "type": "float",
-            "value": 0.15625
+            "value": 0.25
         },
-        "mDiffuseStr": {
+        "windStrength": {
             "type": "float",
-            "value": 0.5
-        },
-        "mEmissive": {
-            "type": "float",
-            "value": 0.0
-        },
-        "mIntensity": {
-            "type": "float",
-            "value": 0.0
-        },
-        "mLightColor": {
-            "type": "Vector3",
-            "value": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "mLightDir": {
-            "type": "Vector3",
-            "value": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "mLightPadding": {
-            "type": "float",
-            "value": 0.0
-        },
-        "mLightPos": {
-            "type": "Vector4",
-            "value": [
-                0.0,
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "mLowLut": {
-            "type": "float",
-            "value": 0.5
-        },
-        "mPadding": {
-            "type": "Vector3",
-            "value": [
-                0.0,
-                0.0,
-                0.0
-            ]
-        },
-        "mRimLightStr": {
-            "type": "float",
-            "value": 0.5
-        },
-        "mRoughness": {
-            "type": "float",
-            "value": 0.0
-        },
-        "mSpecularStr": {
-            "type": "float",
-            "value": 0.10000000149011612
+            "value": 0.20000000298023224
         }
     },
     "pshader": {
-        "file": "Shader/TOON/ToonPS.hlsl"
+        "file": "Shader/Snow/TestSnowPS.hlsl"
     },
     "vshader": {
         "file": "Shader/PBR/VS/StaticVertexShader.hlsl"

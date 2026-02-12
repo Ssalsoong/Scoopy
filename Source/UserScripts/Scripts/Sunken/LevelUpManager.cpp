@@ -423,9 +423,30 @@ const std::wstring& MMMEngine::LevelUpManager::GetScripts(int _idx)
 {
 	auto it = mScriptMap.find(mPendingType);
 
+	std::wstring levelScript;
+	switch (mPendingType)
+	{
+	case MMMEngine::EXP_CASTLE:
+	{
+		levelScript = L"LEVEL : ";
+
+		if (_idx == 0)
+			levelScript += std::to_wstring(mCastleLevel);
+		else
+			levelScript += std::to_wstring(mScoopLevel);
+		levelScript += L"\n\n";
+		break;
+	}
+	case MMMEngine::EXP_END:
+		break;
+	default:
+		levelScript = L"\n\n\n";
+		break;
+	}
+
 	if (it != mScriptMap.end()) {
 		if (_idx < it->second.size()) {
-			return it->second[_idx];
+			return levelScript + it->second[_idx];
 		}
 	}
 

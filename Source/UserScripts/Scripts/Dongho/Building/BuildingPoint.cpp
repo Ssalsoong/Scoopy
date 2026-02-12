@@ -16,6 +16,10 @@ void MMMEngine::BuildingPoint::Start()
 		std::cout << "BuildingPoint::PlayerObj Not Found!!!" << std::endl;
 		Destroy(GetGameObject());
 	}
+	else if (mPlayer = player->GetComponent<Player>(); !mPlayer.IsValid()) {
+		std::cout << "BuildingPoint::PlayerScript Not Found!!!" << std::endl;
+		Destroy(GetGameObject());
+	}
 
 	if (!LevelUpManager::Get()) {
 		std::cout << "BuildingPoint::LevelUpManager Not Found!!" << std::endl;
@@ -27,7 +31,11 @@ void MMMEngine::BuildingPoint::Start()
 		if (mCanvas = LevelUpManager::Get()->GetCanvas(); mCanvas) {
 			auto obj = Instantiate(gage);
 			obj->GetTransform()->SetParent(mCanvas->GetTransform());
-			mProgGage = obj->GetComponent<Gage>();
+			obj->SetActive(true);
+
+			if (mProgGage = obj->GetComponent<Gage>(); mProgGage) {
+				mProgGage->SetEnabled(false);
+			}
 
 			if (auto wsUI = obj->GetComponent<WorldSpaceUI>(); wsUI) {
 				wsUI->TargetTransform = GetTransform();
@@ -43,15 +51,31 @@ void MMMEngine::BuildingPoint::Start()
 
 void MMMEngine::BuildingPoint::Update()
 {
-	if (!player) return;
-	//playerpos = player->GetTransform()->GetWorldPosition();
-	if (player->GetComponent<Player>()->buildchance)
+	if (!player || !mPlayer) return;
+
+	if (mPlayer->buildchance)
 	{
 		GetComponent<MeshRenderer>()->SetEnabled(true);
+
+		if (canBuild) {
+			if (mProgGage) {
+				mProgGage->SetEnabled(true);
+
+				float maxTime = mPlayer->GetBuildTime();
+				float currTime = mPlayer->GetBuildElipsed();
+				mProgGage->SetValue(currTime / maxTime);
+			}
+		}
+		else {
+			if (mProgGage)
+				mProgGage->SetEnabled(false);
+		}
 	}
 	else
 	{
 		GetComponent<MeshRenderer>()->SetEnabled(false);
+		if (mProgGage)
+			mProgGage->SetEnabled(false);
 	}
 	//CheckPlayer();
 }
@@ -68,9 +92,6 @@ void MMMEngine::BuildingPoint::OnTriggerEnter(MMMEngine::TriggerInfo info)
 		else
 			canBuild = false;
 	}
-
-	if (mProgGage && mProgGage->GetGameObject())
-		mProgGage->GetGameObject()->SetActive(true);
 }
 
 void MMMEngine::BuildingPoint::OnTriggerExit(MMMEngine::TriggerInfo info)
@@ -81,9 +102,6 @@ void MMMEngine::BuildingPoint::OnTriggerExit(MMMEngine::TriggerInfo info)
 		}
 		canBuild = false;
 	}
-
-	if (mProgGage && mProgGage->GetGameObject())
-		mProgGage->GetGameObject()->SetActive(false);
 }
 
 void MMMEngine::BuildingPoint::OnDisable()
@@ -95,8 +113,8 @@ void MMMEngine::BuildingPoint::OnDisable()
 		}
 	}
 
-	if (mProgGage && mProgGage->GetGameObject())
-		mProgGage->GetGameObject()->SetActive(false);
+	if (mProgGage)
+		mProgGage->SetEnabled(false);
 
 	canBuild = false;
 }

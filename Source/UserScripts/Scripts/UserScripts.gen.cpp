@@ -78,8 +78,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuildingPoint>("BuildingPoint")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingPoint>"))
-		.property("player", &BuildingPoint::player)
-		.property("mUniversalGage", &BuildingPoint::mUniversalGage);
+		.property("player", &BuildingPoint::player);
 
 	registration::class_<ObjPtr<BuildingPoint>>("ObjPtr<BuildingPoint>")
 		.constructor([]() { return Object::NewObject<BuildingPoint>(); })
@@ -130,12 +129,12 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<Player>("Player")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<Player>"))
+		.property("mBuildTime", &Player::mBuildTime)
 		.property("level", &Player::level)
 		.property("maxHP", &Player::maxHP)
 		.property("battledist", &Player::battledist)
 		.property("atk", &Player::atk)
-		.property("maxpoint", &Player::maxpoint)
-		.property("mBuildTime", &Player::mBuildTime);
+		.property("maxpoint", &Player::maxpoint);
 
 	registration::class_<ObjPtr<Player>>("ObjPtr<Player>")
 		.constructor([]() { return Object::NewObject<Player>(); })

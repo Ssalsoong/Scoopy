@@ -1,5 +1,5 @@
 {
-    "MUID": "15451799-0bfa-4c8f-a4c1-7cd911485fbc",
+    "MUID": "ff54fcf2-04fa-4d21-a85d-c1bc1cbaf42b",
     "properties": {
         "_albedo": {
             "file": "Assets\\DefaultMesh\\Default_White.png",
@@ -11,6 +11,10 @@
         },
         "_emissive": {
             "file": "Shader/Resource/Default_Texture/Solid_White.png",
+            "type": "Texture2D"
+        },
+        "_lutMap": {
+            "file": "Shader/Resource/Default_Texture/Toon_Lut.png",
             "type": "Texture2D"
         },
         "_normal": {
@@ -31,7 +35,7 @@
         },
         "mAoStrength": {
             "type": "float",
-            "value": 0.5
+            "value": 0.20000000298023224
         },
         "octaves": {
             "type": "int",

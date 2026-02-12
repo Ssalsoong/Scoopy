@@ -21,8 +21,8 @@ RTTR_PLUGIN_REGISTRATION
 
 void MMMEngine::HPBuilding::Start()
 {
-	GetGameObject()->GetComponent<Battlestats>()->HP = 100;
-	GetGameObject()->GetComponent<Building>()->maxHP = 100;
+	GetGameObject()->GetComponent<Battlestats>()->HP = 150;
+	GetGameObject()->GetComponent<Building>()->maxHP = 150;
 }
 
 void MMMEngine::HPBuilding::Update()
@@ -32,7 +32,7 @@ void MMMEngine::HPBuilding::Update()
 
 void MMMEngine::HPBuilding::LevelApply(int level)
 {
-	GetGameObject()->GetComponent<Building>()->maxHP = 50 *level + 50;
+	GetGameObject()->GetComponent<Building>()->maxHP = 80 * level + 70;
 	GetGameObject()->GetComponent<Battlestats>()->HP =
 		GetGameObject()->GetComponent<Building>()->maxHP;
 }
