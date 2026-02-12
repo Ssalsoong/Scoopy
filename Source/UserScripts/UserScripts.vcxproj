@@ -136,6 +136,7 @@
     <ClCompile Include="Scripts\Mingi\UI\CameraMove.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\EnemyGageController.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\FadeInOutFX.cpp" />
+    <ClCompile Include="Scripts\Mingi\UI\GameClearSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\GameOverSequencer.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MarkUIInfo.cpp" />
     <ClCompile Include="Scripts\Mingi\UI\MarkWaveController.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="Scripts\Mingi\UI\CameraMove.h" />
     <ClInclude Include="Scripts\Mingi\UI\EnemyGageController.h" />
     <ClInclude Include="Scripts\Mingi\UI\FadeInOutFX.h" />
+    <ClInclude Include="Scripts\Mingi\UI\GameClearSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\GameOverSequencer.h" />
     <ClInclude Include="Scripts\Mingi\UI\MarkUIInfo.h" />
     <ClInclude Include="Scripts\Mingi\UI\MarkWaveController.h" />

@@ -25,6 +25,7 @@
 #include "Mingi/UI/CameraMove.h"
 #include "Mingi/UI/EnemyGageController.h"
 #include "Mingi/UI/FadeInOutFX.h"
+#include "Mingi/UI/GameClearSequencer.h"
 #include "Mingi/UI/GameOverSequencer.h"
 #include "Mingi/UI/MarkUIInfo.h"
 #include "Mingi/UI/MarkWaveController.h"
@@ -220,6 +221,21 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<FadeInOutFX>>("ObjPtr<FadeInOutFX>")
 		.constructor([]() { return Object::NewObject<FadeInOutFX>(); })
 		.method("Inject", &ObjPtr<FadeInOutFX>::Inject);
+
+	registration::class_<GameClearSequencer>("GameClearSequencer")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<GameClearSequencer>"))
+		.property("NextSceneName", &GameClearSequencer::NextSceneName)
+		.property("GameClearImg", &GameClearSequencer::GameClearImg)
+		.property("GameClearBGPanel", &GameClearSequencer::GameClearBGPanel)
+		.property("GameClearBGAlphaCV", &GameClearSequencer::GameClearBGAlphaCV)
+		.property("GameClearScaleXCV", &GameClearSequencer::GameClearScaleXCV)
+		.property("GameClearScaleYCV", &GameClearSequencer::GameClearScaleYCV)
+		.property("GameClearAlphaCV", &GameClearSequencer::GameClearAlphaCV)
+		.property("GameClearRotZCV", &GameClearSequencer::GameClearRotZCV);
+
+	registration::class_<ObjPtr<GameClearSequencer>>("ObjPtr<GameClearSequencer>")
+		.constructor([]() { return Object::NewObject<GameClearSequencer>(); })
+		.method("Inject", &ObjPtr<GameClearSequencer>::Inject);
 
 	registration::class_<GameOverSequencer>("GameOverSequencer")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<GameOverSequencer>"))
