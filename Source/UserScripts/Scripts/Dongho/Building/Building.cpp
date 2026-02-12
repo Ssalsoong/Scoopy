@@ -9,6 +9,7 @@
 #include "../Battlestats.h"
 #include "../../test/SnowBullet.h"
 #include "../../Mingi/UI/MiniMap.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -51,6 +52,8 @@ void MMMEngine::Building::OnDisable()
 }
 void MMMEngine::Building::Start()
 {
+	SoundManager::Instance->PlaySFX2D("Build", SelfPtr(this));
+
 	pos = GetTransform()->GetWorldPosition();
 	for (int i = 0; i < 10;++i)
 	{
