@@ -12,15 +12,11 @@ void MMMEngine::EnemySensor::Start()
 void MMMEngine::EnemySensor::OnTriggerEnter(MMMEngine::TriggerInfo info)
 {
 	TargetList.insert(info.other);
-
-	std::cout << "Trigger enter: other=" << info.other->GetTag() << std::endl;
-	std::cout << "Trigger enter: otherid = " << info.other->GetInstanceID() << std::endl;
 }
 
 void MMMEngine::EnemySensor::OnTriggerExit(MMMEngine::TriggerInfo info)
 {
 	TargetList.erase(info.other);
-	std::cout << "Trigger outer: other=" << info.other->GetTag() << std::endl;
 }
 
 MMMEngine::ObjPtr<MMMEngine::GameObject> MMMEngine::EnemySensor::GetTarget()
