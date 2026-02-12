@@ -1,4 +1,4 @@
-#pragma once
+癤�#pragma once
 #include "rttr/type"
 #include "ScriptBehaviour.h"
 #include "UserScriptsCommon.h"
@@ -6,60 +6,60 @@
 
 namespace MMMEngine
 {
-    class EnemyMove;
-    class EnemySensor;
-    class TargetSlotProvider;
-    class RigidBodyComponent;
+	class EnemyMove;
+	class EnemySensor;
+	class TargetSlotProvider;
+	class RigidBodyComponent;
 
-    class USERSCRIPTS EnemyController : public ScriptBehaviour
-    {
-    private:
-        RTTR_ENABLE(ScriptBehaviour)
-        RTTR_REGISTRATION_FRIEND
-        bool EnemyHurt = false;
+	class USERSCRIPTS EnemyController : public ScriptBehaviour
+	{
+	private:
+		RTTR_ENABLE(ScriptBehaviour)
+			RTTR_REGISTRATION_FRIEND
+			bool EnemyHurt = false;
 
-        struct Stat
-        {
-            int AD;
-            float AS;
-            float Range;
-        };
+		struct Stat
+		{
+			int AD;
+			float AS;
+			float Range;
+		};
 
-        float distance = 0.f;
-    public:
-        enum class EnemyState
-        {
-            Move,
-            Attack,
-            Dead
-        };
+		float distance = 0.f;
+	public:
+		enum class EnemyState
+		{
+			Move,
+			Attack,
+			Dead
+		};
 
-        enum class EnemyType
-        {
-            Warrior,
-            Scout,
-            Archer
-        };
+		enum class EnemyType
+		{
+			Warrior,
+			Scout,
+			Archer
+		};
 
-        Stat E_state;
+		Stat E_state;
 
-        EnemyState curState = EnemyState::Move;
-        EnemyState prevState = EnemyState::Dead;
+		EnemyState curState = EnemyState::Move;
+		EnemyState prevState = EnemyState::Dead;
 
-        EnemyType m_EnemyType = EnemyType::Warrior;
+		EnemyType m_EnemyType = EnemyType::Warrior;
 
-        ObjPtr<EnemySensor> m_Sensor;
-        ObjPtr<EnemyMove> m_Move;
-        
-        USCRIPT_PROPERTY()
-        ObjPtr<GameObject> m_MainTarget;
-        
-        ObjPtr<GameObject> m_CurTarget;
+		ObjPtr<EnemySensor> m_Sensor;
+		ObjPtr<EnemyMove> m_Move;
 
 		USCRIPT_PROPERTY()
-		ObjPtr<GameObject> m_SensorObj;
+			ObjPtr<GameObject> m_MainTarget;
 
-        DirectX::SimpleMath::Vector3 toTarget{};
+		ObjPtr<GameObject> m_CurTarget;
+
+		USCRIPT_PROPERTY()
+			ObjPtr<GameObject> m_SensorObj;
+
+		DirectX::SimpleMath::Vector3 toTarget{};
 
 		// 슬롯 상태
 		ObjPtr<TargetSlotProvider> m_SlotProvider;
@@ -73,70 +73,70 @@ namespace MMMEngine
 		int m_slotRetryFrames = 0;
 		int m_slotRetryInterval = 10; // 10프레임마다 재요청
 
-    public:
-        EnemyController()
-        {
+	public:
+		EnemyController()
+		{
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
 
-        USCRIPT_MESSAGE()
-        void Start();
+		USCRIPT_MESSAGE()
+			void Start();
 
-        USCRIPT_MESSAGE()
-        void Update();
+		USCRIPT_MESSAGE()
+			void Update();
 
-        bool CheckHurt();
+		bool CheckHurt();
 
-        void OnHurtFlag(bool value);
+		void OnHurtFlag(bool value);
 
-        void InitEnemy(EnemyType type , DirectX::SimpleMath::Vector3 pos, int hp);
-        
-        //내부로직에의해 스테이트변경
-        void ChangeState();
-        //현재 스테이트에 따라 행동할것들
-        void CheckState();
+		void InitEnemy(EnemyType type, DirectX::SimpleMath::Vector3 pos, int hp);
 
-        //거리계산
-        void UpdateDistance();
+		//내부로직에의해 스테이트변경
+		void ChangeState();
+		//현재 스테이트에 따라 행동할것들
+		void CheckState();
 
-        void OnStateEnter(EnemyState state);
+		//거리계산
+		void UpdateDistance();
 
-        bool UpdateTarget();
-        
-        bool IsBruiser();
+		void OnStateEnter(EnemyState state);
 
-        EnemyType GetType() { return m_EnemyType; }
+		bool UpdateTarget();
+
+		bool IsBruiser();
+
+		EnemyType GetType() { return m_EnemyType; }
 
 
-        void AttackTarget();
-        ObjPtr<GameObject> battletarget;
-        float attackFullTime = 0.5f;
+		void AttackTarget();
+		ObjPtr<GameObject> battletarget;
 
-        float attackTimer = 0.0f;
+		float attackTimer = 0.0f;
 		float snowDamageTimer = 0.0f;
 		float snowDamageDelay = 0.5f;
 		void CalSnowDamageDelay();
 		bool ApplySnowDamage();
 
-        void SetType(EnemyType type) { m_EnemyType = type; }
+		void SetType(EnemyType type) { m_EnemyType = type; }
 
-        void HurtTimerOn() { HurtTimer = HurtDelay; }
-        void HurtCal();
-        float HurtTimer = 0.0f;
-        float HurtDelay = 2.0f;
+		void HurtTimerOn() { HurtTimer = HurtDelay; }
+		void HurtCal();
+		float HurtTimer = 0.0f;
+		float HurtDelay = 2.0f;
 
 		enum class AttackPhase { Motion, Pause };
 		AttackPhase m_attackPhase = AttackPhase::Motion;
 
-        float RecoverTimer = 0.0f;
-        void DoHit();
-        void MotionEnter();
-        void PauseEnter();
-    private:
+		float RecoverDelay = 1.0f;
+		float RecoverTimer = 0.0f;
+		void DoHit();
+		void MotionEnter();
+		void PauseEnter();
+	private:
 		void TryAcquireSlot();
-	    void ReleaseSlot();
+		void ReleaseSlot();
 
 		float slotArriveRadius = 0.2f;
 		bool m_usingSlotTarget = false;
@@ -146,7 +146,7 @@ namespace MMMEngine
 
 		ObjPtr<GameObject> ResolveTarget(ObjPtr<GameObject> raw);
 
-        ObjPtr<RigidBodyComponent> m_Rigid;
+		ObjPtr<RigidBodyComponent> m_Rigid;
 
 		//호 이동용 변수
 		bool m_orbiting = false;
@@ -168,9 +168,9 @@ namespace MMMEngine
 		float m_slotReassignCooldown = 0.5f; // 재시도 쿨다운
 		float m_slotReassignTimer = 0.0f;
 
-        bool m_canExitAttack = false;
-        //디버프 관련
-    public:
+		bool m_canExitAttack = false;
+		//디버프 관련
+	public:
 		std::unordered_map<const void*, float> m_AttackDebuffSources;
 		float m_FinalAttackMult = 1.0f;
 
@@ -178,8 +178,8 @@ namespace MMMEngine
 		void RemoveAttackDebuffSource(const void* src);
 		void UpdateAttackDebuffSource(const void* src, float mult);
 
-    private:
-	    void RecalcAttackMult();
+	private:
+		void RecalcAttackMult();
 
-    };
+	};
 }

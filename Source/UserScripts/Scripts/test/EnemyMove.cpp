@@ -48,30 +48,13 @@ void MMMEngine::EnemyMove::FixedUpdate()
 		: (Obj_target.IsValid() ? Obj_target->GetTransform()->GetWorldPosition()
 			: m_GO->GetTransform()->GetWorldPosition());
 
-	Vector3 faceTargetPos = Obj_target.IsValid()
-		? Obj_target->GetTransform()->GetWorldPosition()
-		: targetPos;
+	FaceTargetYaw(targetPos);
+
 
 	auto rb = GetComponent<RigidBodyComponent>();
-	float maxPushSpeed = SnowObjPtr.empty() ? 1.0f : 0.35f; // ´« Á¢ÃË ½Ã¸¸ ¾àÇÏ°Ô
-
-
 	if (!is_move)
 	{
-		Vector3 v = rb->GetLinearVelocity();
-		v.y = 0.f;
-
-		if (v.LengthSquared() > maxPushSpeed * maxPushSpeed)
-		{
-			v.Normalize();
-			v *= maxPushSpeed;
-			rb->SetLinearVelocity(v);
-		}
-
-		rb->SetLockRotY(true);
-		rb->SetAngularVelocity(Vector3(0.f, 0.f, 0.f));
-		FaceTargetYaw(faceTargetPos);
-
+		// Allow external pushes while not moving; don't zero velocity each frame.
 		return;
 	}
 
@@ -170,23 +153,11 @@ void MMMEngine::EnemyMove::FixedUpdate()
 
 	rb->SetLinearVelocity(curVel);
 
-	Vector3 v = rb->GetLinearVelocity();
-	v.y = 0.f;
-
-	float maxSpeed = (curVel.Length() > maxPushSpeed) ? curVel.Length() : maxPushSpeed;
-	if (v.LengthSquared() > maxSpeed * maxSpeed)
-	{
-		v.Normalize();
-		v *= maxSpeed;
-		rb->SetLinearVelocity(v);
-	}
-
-
 	if (is_move)
 	{
 		rb->SetLockPosX(false);
 		rb->SetLockPosZ(false);
-		rb->SetLockRotY(true);
+		rb->SetLockRotY(false);
 		FaceVelocityYaw(curVel);
 	}
 	else
@@ -234,27 +205,27 @@ DirectX::SimpleMath::Vector3 MMMEngine::EnemyMove::ComputeChaseVelocity()
 
 void MMMEngine::EnemyMove::FaceVelocityYaw(const DirectX::SimpleMath::Vector3& vel)
 {
-    Vector3 v = vel;
-    v.y = 0.f;
+	Vector3 v = vel;
+	v.y = 0.f;
 
-    if (v.LengthSquared() < 0.01f)
-        return;
+	if (v.LengthSquared() < 0.01f)
+		return;
 
-    v.Normalize();
+	v.Normalize();
 
-    float targetYaw = atan2f(v.x, v.z);
+	float targetYaw = atan2f(v.x, v.z);
 
-    auto tr = m_GO->GetTransform();
+	auto tr = m_GO->GetTransform();
 
-    Quaternion curQ = tr->GetWorldRotation();
-    float curYaw = YawFromQuat_YUp(curQ);
+	Quaternion curQ = tr->GetWorldRotation();
+	float curYaw = YawFromQuat_YUp(curQ);
 
-    float newYaw = LerpAngleRad(curYaw, targetYaw, yawLerpA);
+	float newYaw = LerpAngleRad(curYaw, targetYaw, yawLerpA);
 
-    Quaternion newQ =
-        Quaternion::CreateFromYawPitchRoll(newYaw, 0.f, 0.f);
+	Quaternion newQ =
+		Quaternion::CreateFromYawPitchRoll(newYaw, 0.f, 0.f);
 
-    tr->GetComponent<RigidBodyComponent>()->SnapRotation(newQ);
+	tr->GetComponent<RigidBodyComponent>()->SnapRotation(newQ);
 }
 
 
@@ -277,7 +248,7 @@ void MMMEngine::EnemyMove::Remove(ObjPtr<GameObject> snow)
 
 void MMMEngine::EnemyMove::ChangeTarget(ObjPtr<GameObject> target)
 {
-    Obj_target = target;
+	Obj_target = target;
 }
 
 void MMMEngine::EnemyMove::SetTargetOverride(const DirectX::SimpleMath::Vector3& pos)
@@ -294,7 +265,7 @@ void MMMEngine::EnemyMove::ClearTargetOverride()
 
 void MMMEngine::EnemyMove::MoveTriggerSet(bool value)
 {
-    is_move = value;
+	is_move = value;
 }
 
 void MMMEngine::EnemyMove::SetEnemySpeed(float speedvalue)

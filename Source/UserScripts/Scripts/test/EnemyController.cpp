@@ -15,7 +15,7 @@
 #include "TargetSlotProvider.h"
 #include "../Sunken/EnemyAnimController.h"
 #include "RigidBodyComponent.h"
-#include "../Mingi/Manager/SoundManager.h"
+
 
 void MMMEngine::EnemyController::Start()
 {
@@ -108,8 +108,8 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Warrior:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 3;
-		E_state.AS = 1.0f;
+		E_state.AD = 4;
+		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -117,17 +117,17 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	case EnemyType::Archer:
 	{
 		m_Move->SetEnemySpeed(250.f);
-		E_state.AD = 1;
-		E_state.AS = 0.6f;
-		E_state.Range = 2.5f;
+		E_state.AD = 2;
+		E_state.AS = 0.4f;
+		E_state.Range = 2.0f;
 		break;
 	}
 
 	case EnemyType::Scout:
 	{
 		m_Move->SetEnemySpeed(270.f);
-		E_state.AD = 2;
-		E_state.AS = 0.8f;
+		E_state.AD = 3;
+		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
 	}
@@ -158,8 +158,6 @@ void MMMEngine::EnemyController::ChangeState()
 	{
 		if (!m_canExitAttack)
 			return;
-		m_orbiting = false;
-
 		float exitDist = (IsBruiser() ? slotExit : rangeExit);
 		if (!m_CurTarget.IsValid() || distance > exitDist)
 		{
@@ -242,84 +240,75 @@ void MMMEngine::EnemyController::UpdateDistance()
 	{
 		if (useSlot)
 		{
-			if (distance <= slotArriveRadius)
+			Vector3 center = m_CurTarget->GetTransform()->GetWorldPosition();
+
+			Vector3 cur = EnemyPos - center; cur.y = 0.f;
+			Vector3 tar = TargetPos - center; tar.y = 0.f;
+
+			float rCur = cur.Length();
+			float rTar = tar.Length();
+
+			if (rCur > 1e-3f && rTar > 1e-3f)
 			{
-				m_orbiting = false;
-				m_Move->SetTargetOverride(TargetPos);
-			}
-			else
-			{
-				Vector3 center = m_CurTarget->GetTransform()->GetWorldPosition();
+				float aCur = atan2f(cur.z, cur.x);
+				float aTar = atan2f(tar.z, tar.x);
 
-				Vector3 cur = EnemyPos - center; cur.y = 0.f;
-				Vector3 tar = TargetPos - center; tar.y = 0.f;
+				float d = aTar - aCur;
+				// WrapPi
+				while (d > DirectX::XM_PI) d -= DirectX::XM_2PI;
+				while (d < -DirectX::XM_PI) d += DirectX::XM_2PI;
 
-				float rCur = cur.Length();
-				float rTar = tar.Length();
-
-				if (rCur > 1e-3f && rTar > 1e-3f)
+				if (!m_orbiting && fabs(d) > orbitEnterAngle)
 				{
-					float aCur = atan2f(cur.z, cur.x);
-					float aTar = atan2f(tar.z, tar.x);
+					m_orbiting = true;
+					m_orbitDir = (d >= 0.f) ? +1 : -1;
+				}
 
-					float d = aTar - aCur;
-					// WrapPi
-					while (d > DirectX::XM_PI) d -= DirectX::XM_2PI;
-					while (d < -DirectX::XM_PI) d += DirectX::XM_2PI;
+				float radialDiff = fabs(rCur - rTar);
 
-					if (!m_orbiting && distance > slotArriveRadius && fabs(d) > orbitEnterAngle)
+				// orbit 진입 조건 (거리/반경 조건으로 조절)
+				if (!m_orbiting)
+				{
+					if (radialDiff <= orbitRadialTolerance &&
+						distance <= orbitStartDist &&
+						fabs(d) > orbitEnterAngle)
 					{
 						m_orbiting = true;
 						m_orbitDir = (d >= 0.f) ? +1 : -1;
 					}
+				}
 
-					float radialDiff = fabs(rCur - rTar);
-
-					// orbit 진입 조건 (거리/반경 조건으로 조절)
-					if (!m_orbiting)
+				// orbit 유지/해제 조건
+				if (m_orbiting)
+				{
+					if (radialDiff > orbitRadialTolerance ||
+						distance < orbitExitDist ||
+						fabs(d) < orbitExitAngle)
 					{
-						if (distance > slotArriveRadius &&
-							radialDiff <= orbitRadialTolerance &&
-							distance <= orbitStartDist &&
-							fabs(d) > orbitEnterAngle)
-						{
-							m_orbiting = true;
-							m_orbitDir = (d >= 0.f) ? +1 : -1;
-						}
+						m_orbiting = false;
 					}
-
-					// orbit 유지/해제 조건
-					if (m_orbiting)
+					else
 					{
-						if (radialDiff > orbitRadialTolerance ||
-							distance < orbitExitDist ||
-							fabs(d) < orbitExitAngle)
+						Vector3 tangent(-cur.z, 0.f, cur.x);
+						if (tangent.LengthSquared() > 1e-6f)
 						{
-							m_orbiting = false;
-						}
-						else
-						{
-							Vector3 tangent(-cur.z, 0.f, cur.x);
-							if (tangent.LengthSquared() > 1e-6f)
+							tangent.Normalize();
+							tangent *= (float)m_orbitDir;
+
+							TargetPos = EnemyPos + tangent * orbitStepDist;
+
+							float useR = std::max(rCur, rTar + orbitLaneOffset);
+							Vector3 toNew = TargetPos - center; toNew.y = 0.f;
+							if (toNew.LengthSquared() > 1e-6f)
 							{
-								tangent.Normalize();
-								tangent *= (float)m_orbitDir;
-
-								TargetPos = EnemyPos + tangent * orbitStepDist;
-
-								float useR = std::max(rCur, rTar + orbitLaneOffset);
-								Vector3 toNew = TargetPos - center; toNew.y = 0.f;
-								if (toNew.LengthSquared() > 1e-6f)
-								{
-									toNew.Normalize();
-									TargetPos = center + toNew * useR;
-								}
+								toNew.Normalize();
+								TargetPos = center + toNew * useR;
 							}
 						}
 					}
 				}
-				m_Move->SetTargetOverride(TargetPos);
 			}
+			m_Move->SetTargetOverride(TargetPos);
 		}
 		else
 		{
@@ -328,18 +317,6 @@ void MMMEngine::EnemyController::UpdateDistance()
 		}
 	}
 	m_usingSlotTarget = useSlot;
-
-	if (m_usingSlotTarget && !m_orbiting && curState == EnemyState::Attack && m_Rigid.IsValid() && distance > slotArriveRadius)
-	{
-		Vector3 toSlot = m_effectiveTargetPos - EnemyPos;
-		toSlot.y = 0.f;
-		if (toSlot.LengthSquared() > 1e-6f)
-		{
-			toSlot.Normalize();
-			const float slotPullAccel = 4.0f;
-			m_Rigid->AddForce(toSlot * slotPullAccel, RigidBodyComponent::ForceMode::Acceleration);
-		}
-	}
 }
 
 
@@ -351,8 +328,6 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	{
 	case EnemyState::Move:
 	{
-		m_Rigid->SetLineDamping(0.0f);
-		m_Rigid->SetAngularDamping(0.05f);
 		m_Rigid->SetKinematic(false);
 		m_Move->ChangeTarget(m_CurTarget);
 		m_Move->MoveTriggerSet(true);
@@ -362,8 +337,6 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	}
 	case EnemyState::Attack:
 	{
-		m_Rigid->SetLineDamping(6.0f);
-		m_Rigid->SetAngularDamping(1.0f);
 		auto t_Zero = DirectX::SimpleMath::Vector3::Zero;
 		m_Rigid->SetKinematic(false);
 		m_Rigid->SetLinearVelocity(t_Zero);
@@ -472,6 +445,8 @@ void MMMEngine::EnemyController::TryAcquireSlot()
 		m_slotRing = ring;
 		m_slotIndex = index;
 	}
+
+	std::cout << "m_hasSlot : " << m_hasSlot << "m_slotRing : " << m_slotRing << "m_slotIndex : " << m_slotIndex << std::endl;
 }
 
 void MMMEngine::EnemyController::ReleaseSlot()
@@ -545,7 +520,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		attackTimer += dt;
 
-		if (attackTimer >= attackFullTime)
+		if (attackTimer >= E_state.AS)
 		{
 			DoHit();
 
@@ -560,7 +535,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		RecoverTimer += dt;
 
-		if (RecoverTimer >= E_state.AS * m_FinalAttackMult)
+		if (RecoverTimer >= RecoverDelay * m_FinalAttackMult)
 		{
 			/*m_attackPhase = AttackPhase::Motion;
 			attackTimer = 0.0f;
@@ -661,24 +636,12 @@ void MMMEngine::EnemyController::MotionEnter()
 	{
 		EnemyAni->PlayAttack();
 	}
-	if (m_EnemyType == EnemyType::Warrior)
-	{
-		SoundManager::Instance->PlaySFX3D("WarriorAttack", SelfPtr(this), 1.0f);
-	}
-	else if (m_EnemyType == EnemyType::Archer)
-	{
-		SoundManager::Instance->PlaySFX3D("ArcherAttack", SelfPtr(this), 1.0f);
-	}
-	else if (m_EnemyType == EnemyType::Scout)
-	{
-		SoundManager::Instance->PlaySFX3D("AssassinAttack", SelfPtr(this), 1.0f);
-	}
-	
+	std::cout << "motionon" << std::endl;
 }
 
 void MMMEngine::EnemyController::PauseEnter()
 {
-	
+	std::cout << "pauseon" << std::endl;
 }
 
 
@@ -713,6 +676,3 @@ void MMMEngine::EnemyController::RecalcAttackMult()
 
 	m_FinalAttackMult = best;
 }
-
-
-
