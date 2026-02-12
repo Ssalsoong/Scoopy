@@ -60,7 +60,7 @@ void MMMEngine::PlayerMove::FixedUpdate()
 
 	//움직임 사운드
 	m_IsMoving = desiredVel.LengthSquared() > 1e-6f;
-	void PlayWalkSound();
+	PlayWalkSound();
 }
 
 
@@ -221,11 +221,15 @@ void MMMEngine::PlayerMove::PlayWalkSound()
 {
 	if (m_IsMoving && !SoundOn)
 	{
-		/*SoundManager::Instance->PlaySFX2D()*/
+		//루프 재생
+		SoundManager::Instance->PlaySFX2D("Walk", SelfPtr(this), 1, true);
+		SoundOn = true;
 	}
-	else
+	else if(!m_IsMoving && SoundOn)
 	{
-
+		//루프 종료
+		SoundManager::Instance->StopSFX("Walk");
+		SoundOn = false;
 	}
 
 }
