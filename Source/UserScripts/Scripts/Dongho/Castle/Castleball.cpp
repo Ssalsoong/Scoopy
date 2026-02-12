@@ -6,7 +6,6 @@
 #include "Castle.h"
 #include "MMMTime.h"
 #include "Transform.h"
-#include "../Enemy/Enemy.h"
 #include "../Manager/BattleManager.h"
 #include "../../Mingi/ExplosionPool.h"
 

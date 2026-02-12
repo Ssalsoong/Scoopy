@@ -2,7 +2,6 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "Buildingball.h"
-#include "../Enemy/Enemy.h"
 #include "Transform.h"
 #include "MeshRenderer.h"
 #include "StaticMesh.h"
@@ -154,7 +153,7 @@ void MMMEngine::Building::AutoAttack()
 		obj->GetComponent<Buildingball>()->Setatk(atk);
 		auto bulletpos = pos;
 		bulletpos.y = 1.f;
-		obj->GetComponent<SnowBullet>()->StartBullet(pos, bulletsize, bulletSpeed, enemyTarget);
+		obj->GetComponent<SnowBullet>()->StartBullet(bulletpos, bulletsize, bulletSpeed, enemyTarget);
 		attackTimer = 0.0f;
 		point--;
 	}

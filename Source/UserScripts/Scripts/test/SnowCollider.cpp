@@ -103,8 +103,11 @@ void MMMEngine::SnowCollider::Start()
 
 void MMMEngine::SnowCollider::Update()
 {
-	GetTransform()->SetWorldPosition(Vector3::Lerp(m_lastPos, m_currPos, TimeManager::Get().GetInterpolationAlpha()));
-	GetTransform()->SetWorldRotation(Quaternion::Slerp(m_lastRot, m_currRot, TimeManager::Get().GetInterpolationAlpha()));
+	if (GetGameObject().IsValid())
+	{
+		GetTransform()->SetWorldPosition(Vector3::Lerp(m_lastPos, m_currPos, TimeManager::Get().GetInterpolationAlpha()));
+		GetTransform()->SetWorldRotation(Quaternion::Slerp(m_lastRot, m_currRot, TimeManager::Get().GetInterpolationAlpha()));
+	}
 }
 
 void MMMEngine::SnowCollider::FixedUpdate()
@@ -283,9 +286,24 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 	{
 		if (!On_Player)
 			return;
-		GetComponent<Snowball>()->EatSnow(info.other);
-		info.other->GetComponent<SnowCollider>()->SnowDestory();
-		Destroy(info.other);
+		if (auto snowball = GetComponent<Snowball>(); snowball.IsValid())
+		{
+			if (auto otherball = GetComponent<Snowball>(); otherball.IsValid())
+			{
+				int mainpoint = snowball->GetPoint();
+				int otherpoint = otherball->GetPoint();
+				if (mainpoint <= 3 || otherpoint <= 3)
+				{
+					GetComponent<Snowball>()->EatSnow(info.other);
+					info.other->GetComponent<SnowCollider>()->SnowDestory();
+					Destroy(info.other);
+				}
+			}
+			else
+				return;
+		}
+		else
+			return;
 	}
 	else if (info.other->GetTag() == "Enemy")
 	{
@@ -293,5 +311,14 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 			return;
 		int damage = GetComponent<Snowball>()->GetPoint();
 		BattleManager::instance->Attack(GetGameObject(), info.other, damage);
+	}
+}
+
+void MMMEngine::SnowCollider::LifeDown()
+{
+	life--;
+	if (life <= 0) {
+		SnowDestory();
+		Destroy(GetGameObject());
 	}
 }

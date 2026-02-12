@@ -2,7 +2,7 @@
 #include "ScriptBehaviour.h"
 #include "BattleManager.h"
 #include "../Player/Player.h"
-#include "../Enemy/Enemy.h"
+#include "../../test/EnemyController.h"
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
 #include "../Battlestats.h"
@@ -41,7 +41,7 @@ void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameOb
 
 	case Battlestats::Type::Enemy:
 	{
-		auto enemy = target->GetComponent<Enemy>();
+		auto enemy = target->GetComponent<EnemyController>();
 		if (!enemy) return;
 
 		// Snowball -> Enemy (특수)
@@ -56,7 +56,7 @@ void MMMEngine::BattleManager::Attack(ObjPtr<GameObject> attacker, ObjPtr<GameOb
 		if (attacker->GetComponent<Player>())
 		{
 			targetbs->ApplyDamage(damage);
-			enemy->PlayerHitMe();
+			enemy->OnHurtFlag(true);
 			return;
 		}
 		targetbs->ApplyDamage(damage);

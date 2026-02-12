@@ -38,20 +38,25 @@ namespace MMMEngine {
 		float spawnTimer = 0.0f;
 		float spawnDelay = 1.5f;
 		static constexpr int SpawnPointCount = 12;
+
+		int NormalHP = 45;
+		int ArrowHP = 15;
+		int ThiefHP = 30;
+
 		std::array<Vector3, SpawnPointCount> spawnPos =
 		{
-			Vector3{-14.5f,0.f,-20.5f},
-			Vector3{ 0.f,  0.f,-20.5f},
-			Vector3{14.5f, 0.f,-20.5f},
-			Vector3{ 20.5f, 0.f, -14.5f },
-			Vector3{ 20.5f, 0.f, 0.f},
-			Vector3{ 20.5f, 0.f, 14.5f },
-			Vector3{ 14.5f, 0.f, 20.5f },
-			Vector3{ 0.f, 0.f, 20.5f },
-			Vector3{ -14.5f, 0.f, 20.5f },
-			Vector3{ -20.5f,  0.f, 14.5f },
-			Vector3{ -20.5f,  0.f, 0.f},
-			Vector3{ -20.5f,  0.f, -14.5f }
+		Vector3{-6.5f,0.f,-10.f},
+		Vector3{ 0.f, 0.f,-10.f},
+		Vector3{6.5f, 0.f,-10.f},
+		Vector3{ 10.f, 0.f, -6.5f },
+		Vector3{ 10.f, 0.f, 0.f},
+		Vector3{ 10.f, 0.f, 6.5f },
+		Vector3{ 6.5f, 0.f, 10.f },
+		Vector3{ 0.f, 0.f, 10.f },
+		Vector3{ -6.5f, 0.f, 10.f },
+		Vector3{ -10.f, 0.f, 6.5f },
+		Vector3{ -10.f, 0.f, 0.f},
+		Vector3{ -10.f, 0.f, -6.5f }
 		};
 		static constexpr int WaveCount = 10;
 		std::array<std::array<int, SpawnPointCount>, WaveCount > waveTable =

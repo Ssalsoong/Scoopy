@@ -1,8 +1,5 @@
 #include "EnemySpawner.h"
-#include "../Enemy/Enemy.h"
-#include "../Enemy/NormalEnemy.h"
 #include "../Enemy/ArrowEnemy.h"
-#include "../Enemy/ThiefEnemy.h"
 #include "../Player/Player.h"
 #include "MMMTime.h"
 #include "Transform.h"
@@ -12,6 +9,8 @@
 #include "StaticMesh.h"
 #include "../Battlestats.h"
 #include "Prefab.h"
+#include "../../test/EnemyController.h"
+#include "../../Sunken/EnemyAnimController.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -40,30 +39,27 @@ void MMMEngine::EnemySpawner::Awake()
 
 void MMMEngine::EnemySpawner::Start()
 {
-	pre_normalenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/NormalEnemy.Prefab");
-	pre_arrowenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ArrowEnemy.Prefab");
-	pre_thiefenemy = ResourceManager::Get().Load<Prefab>(L"Assets/Prefab/ThiefEnemy.Prefab");
 	for (int i = 0; i < 40; ++i)
 	{
 		auto obj = Instantiate(pre_normalenemy);
-		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
+		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Warrior);
 		obj->SetActive(false);
 		NormalEnemys.push(obj);
 	}
 	for (int i = 0; i < 20; ++i)
 	{
 		auto obj = Instantiate(pre_arrowenemy);
-		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
+		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Archer);
 		obj->SetActive(false);
 		ArrowEnemys.push(obj);
 	}
 	for (int i = 0; i < 20; ++i)
 	{
 		auto obj = Instantiate(pre_thiefenemy);
-		obj->GetTransform()->SetParent(GetTransform());
 		obj->GetTransform()->SetWorldPosition(200.f, 200.f, 200.f);
+		obj->GetComponent<EnemyController>()->SetType(EnemyController::EnemyType::Scout);
 		obj->SetActive(false);
 		ThiefEnemys.push(obj);
 	}
@@ -83,8 +79,7 @@ void MMMEngine::EnemySpawner::SpawnNormalEnemy(const DirectX::SimpleMath::Vector
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(pos);
-	obj->GetComponent<NormalEnemy>()->ApplyStats();
+	obj->GetComponent<EnemyController>()->InitEnemy(EnemyController::EnemyType::Warrior, pos, NormalHP);
 	obj->SetActive(true);
 }
 
@@ -97,8 +92,7 @@ void MMMEngine::EnemySpawner::SpawnArrowEnemy(const DirectX::SimpleMath::Vector3
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(pos);
-	obj->GetComponent<ArrowEnemy>()->ApplyStats();
+	obj->GetComponent<EnemyController>()->InitEnemy(EnemyController::EnemyType::Archer, pos, ArrowHP);
 	obj->SetActive(true);
 }
 
@@ -111,18 +105,19 @@ void MMMEngine::EnemySpawner::SpawnThiefEnemy(const DirectX::SimpleMath::Vector3
 
 	if (!obj)
 		return;
-	obj->GetTransform()->SetWorldPosition(pos);
-	obj->GetComponent<ThiefEnemy>()->ApplyStats();
+	obj->GetComponent<EnemyController>()->InitEnemy(EnemyController::EnemyType::Scout, pos, ThiefHP);
 	obj->SetActive(true);
 }
 
 void MMMEngine::EnemySpawner::EnemyDeath(ObjPtr<GameObject> obj)
 {
-	if (obj->GetComponent<NormalEnemy>())
+	auto type = obj->GetComponent<EnemyController>()->GetType();
+
+	if (type == EnemyController::EnemyType::Warrior)
 		NormalEnemys.push(obj);
-	if (obj->GetComponent<ArrowEnemy>())
+	if (type == EnemyController::EnemyType::Archer)
 		ArrowEnemys.push(obj);
-	if (obj->GetComponent<ThiefEnemy>())
+	if (type == EnemyController::EnemyType::Scout)
 		ThiefEnemys.push(obj);
 	if (aliveCount > 0)
 		aliveCount--;
@@ -130,33 +125,9 @@ void MMMEngine::EnemySpawner::EnemyDeath(ObjPtr<GameObject> obj)
 
 void MMMEngine::EnemySpawner::EnemyUpgrade()
 {
-	size_t n = NormalEnemys.size();
-	for (size_t i = 0; i < n; ++i)
-	{
-		auto e = NormalEnemys.front();
-		NormalEnemys.pop();
-		if (e)
-			e->GetComponent<NormalEnemy>()->HP += 3;
-		NormalEnemys.push(e);
-	}
-	size_t a = ArrowEnemys.size();
-	for (size_t i = 0; i < a; ++i)
-	{
-		auto e = ArrowEnemys.front();
-		ArrowEnemys.pop();
-		if (e)
-			e->GetComponent<ArrowEnemy>()->HP += 1;
-		ArrowEnemys.push(e);
-	}
-	size_t t = ThiefEnemys.size();
-	for (size_t i = 0; i < t; ++i)
-	{
-		auto e = ThiefEnemys.front();
-		ThiefEnemys.pop();
-		if (e)
-			e->GetComponent<ThiefEnemy>()->HP += 2;
-		ThiefEnemys.push(e);
-	}
+	NormalHP += 3;
+	ArrowHP += 1;
+	ThiefHP += 2;
 }
 
 void MMMEngine::EnemySpawner::WaveSetting(int wave)

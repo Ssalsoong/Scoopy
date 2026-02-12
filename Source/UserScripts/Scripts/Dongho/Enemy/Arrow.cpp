@@ -4,13 +4,13 @@
 #include "rttr/registration"
 #include "rttr/detail/policies/ctor_policies.h"
 #include "../Enemy/ArrowEnemy.h"
-#include "../Enemy/Enemy.h"
 #include "Transform.h"
 #include "MMMTime.h"
 #include "../Player/Player.h"
 #include "../Castle/Castle.h"
 #include "../Building/Building.h"
 #include "../Manager/BattleManager.h"
+#include "../../test/EnemyController.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -44,9 +44,8 @@ void MMMEngine::Arrow::Update()
 		return;
 	}
 	targetpos = target->GetTransform()->GetWorldPosition();
-	atk = owner->GetComponent<Enemy>()->atk;
 	auto pos = GetTransform()->GetWorldPosition();
-
+	LookAt(targetpos);
 	// 방향/거리
 	auto to = targetpos - pos;
 	to.y = 0.0f;
@@ -82,4 +81,25 @@ void MMMEngine::Arrow::Update()
 		GetGameObject()->SetActive(false);
 		return;
 	}
+}
+
+void MMMEngine::Arrow::SetTarget(ObjPtr<GameObject> obj) 
+{ 
+	target = obj;
+}
+
+void MMMEngine::Arrow::LookAt(const DirectX::SimpleMath::Vector3& target)
+{
+	auto pos = GetTransform()->GetWorldPosition();
+	auto dir = target - pos;
+	dir.y = 0.0f;
+
+	float len2 = dir.LengthSquared();
+	if (len2 < 1e-8f) return;
+
+	dir.Normalize();
+
+	float yaw = atan2f(dir.x, dir.z);
+	auto rot = DirectX::SimpleMath::Quaternion::CreateFromYawPitchRoll(yaw, 0, 0);
+	GetTransform()->SetWorldRotation(rot);
 }

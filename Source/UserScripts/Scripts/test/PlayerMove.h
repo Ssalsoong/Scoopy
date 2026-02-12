@@ -6,6 +6,7 @@
 #include "PhysxManager.h"
 #include <SimpleMath.h>
 #include <MMMTime.h>
+#include <unordered_map>
 
 using namespace DirectX::SimpleMath;
 
@@ -111,7 +112,17 @@ namespace MMMEngine
         float CurSpeed = 0;
 
         float GetCurSpeed();
-        float buff = 0.0f;
-        void Setbuff(float value) { buff = value; }
+
+        //버프관련
+		std::unordered_map<const void*, float> m_BuffSources;
+		float m_FinalBuff = 0.f;
+
+		void AddBuffSource(const void* src, float value);
+		void RemoveBuffSource(const void* src);
+		void UpdateBuffSource(const void* src, float value);
+		float GetFinalBuff() const {return m_FinalBuff;}
+
+	private:
+		void RecalcBuff();
     };
 }

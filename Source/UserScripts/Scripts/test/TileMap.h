@@ -92,8 +92,8 @@ namespace MMMEngine
         ResPtr<Prefab> box;
 
 
-        int width = 30;
-        int offset = 15;
+        int width = 20;
+        int offset = 10;
 
         //int index = 0;
         std::vector<ObjPtr<GameObject>> boxlist;

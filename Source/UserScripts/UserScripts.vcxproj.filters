@@ -18,9 +18,6 @@
     <ClCompile Include="Scripts\Dongho\Castle\Castleball.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Enemy\Arrow.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Enemy\ArrowEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\Enemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\NormalEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
-    <ClCompile Include="Scripts\Dongho\Enemy\ThiefEnemy.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\BattleManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\BuildingManager.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\Dongho\Manager\EnemySpawner.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -63,7 +60,9 @@
     <ClCompile Include="Scripts\Sunken\WaveUIScript.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\UserScripts.gen.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\CastleManager.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\EnemyController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\EnemyMove.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\EnemySensor.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\MeshSize.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\PlayerController.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\PlayerMove.cpp"><Filter>Scripts</Filter></ClCompile>
@@ -71,6 +70,7 @@
     <ClCompile Include="Scripts\test\SnowCollider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowTrigger.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\SnowballManager2.cpp"><Filter>Scripts</Filter></ClCompile>
+    <ClCompile Include="Scripts\test\TargetSlotProvider.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClCompile Include="Scripts\test\TileMap.cpp"><Filter>Scripts</Filter></ClCompile>
     <ClInclude Include="Scripts\Dongho\Battlestats.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h"><Filter>Scripts</Filter></ClInclude>
@@ -84,9 +84,6 @@
     <ClInclude Include="Scripts\Dongho\Castle\Castleball.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Enemy\Arrow.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Enemy\ArrowEnemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\Enemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\NormalEnemy.h"><Filter>Scripts</Filter></ClInclude>
-    <ClInclude Include="Scripts\Dongho\Enemy\ThiefEnemy.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\BattleManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\BuildingManager.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Dongho\Manager\EnemySpawner.h"><Filter>Scripts</Filter></ClInclude>
@@ -128,7 +125,9 @@
     <ClInclude Include="Scripts\Sunken\TimerGageScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\Sunken\WaveUIScript.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\CastleManager.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\EnemyController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\EnemyMove.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\EnemySensor.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\MeshSize.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\PlayerController.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\PlayerMove.h"><Filter>Scripts</Filter></ClInclude>
@@ -136,6 +135,7 @@
     <ClInclude Include="Scripts\test\SnowCollider.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowTrigger.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\SnowballManager2.h"><Filter>Scripts</Filter></ClInclude>
+    <ClInclude Include="Scripts\test\TargetSlotProvider.h"><Filter>Scripts</Filter></ClInclude>
     <ClInclude Include="Scripts\test\TileMap.h"><Filter>Scripts</Filter></ClInclude>
   </ItemGroup>
 </Project>

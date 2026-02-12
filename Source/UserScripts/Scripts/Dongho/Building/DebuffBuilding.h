@@ -5,7 +5,6 @@
 
 namespace MMMEngine
 {
-    class Enemy;
     class USERSCRIPTS DebuffBuilding : public ScriptBehaviour
     {
     private:
@@ -18,9 +17,10 @@ namespace MMMEngine
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
         }
-        float debuff = 0.8f;
+        float speedDebuff = 0.8f;
+        float attackDebuff = 1.1f;
         float debuffdist = 2.0f;
-        std::unordered_set<ObjPtr<Enemy>> m_inside;
+        std::unordered_set<ObjPtr<GameObject>> m_inside;
         void Start();
         void Update();
         void GiveDebuff();

@@ -20,13 +20,24 @@ namespace MMMEngine
             float m_internalTimer = 0.0f;
             float m_sceneChangeTime = 1.250f;
             int m_animState = 0;
+            int m_currentSelected = 0;
+
+            float m_replayFocusAlpha = 0.0f;
+            float m_totitleFocusAlpha = 0.0f;
 
             float m_state1_maximumTime = 0.0f;
+            float m_state3_maximumTime = 0.0f;
 
             bool m_startGameOverSequence = false;
 
+            bool m_isControlAble = false;
+
         DirectX::SimpleMath::Vector3 m_firstCamPos = {};
         DirectX::SimpleMath::Vector3 m_firstCamRot = {};
+        DirectX::SimpleMath::Vector2 m_firstGameOverPos = {};
+        DirectX::SimpleMath::Vector3 m_firstGameOverRot = {};
+        DirectX::SimpleMath::Vector2 m_firstReplayPos = {};
+        DirectX::SimpleMath::Vector2 m_firstToTitlePos = {};
 
         ObjPtr<Camera> m_mainCam;
 
@@ -69,6 +80,12 @@ namespace MMMEngine
 
         USCRIPT_PROPERTY()
         AnimationCurve GameOverPosXCV;
+
+        USCRIPT_PROPERTY()
+        std::string TitleSceneName = "TitleScene";
+
+        USCRIPT_PROPERTY()
+            std::string GameSceneName = "GameScene";
 
         USCRIPT_PROPERTY()
         AnimationCurve GameOverPosYCV;

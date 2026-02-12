@@ -12,7 +12,6 @@
 #include "Dongho/Battlestats.h"
 #include "Dongho/Building/BuildingPoint.h"
 #include "Dongho/Castle/Castle.h"
-#include "Dongho/Enemy/Enemy.h"
 #include "Dongho/Manager/BattleManager.h"
 #include "Dongho/Manager/BuildingManager.h"
 #include "Dongho/Player/Player.h"
@@ -50,7 +49,9 @@
 #include "Sunken/TimerGageScript.h"
 #include "Sunken/WaveUIScript.h"
 #include "test/CastleManager.h"
+#include "test/EnemyController.h"
 #include "test/EnemyMove.h"
+#include "test/EnemySensor.h"
 #include "test/MeshSize.h"
 #include "test/PlayerController.h"
 #include "test/PlayerMove.h"
@@ -58,11 +59,9 @@
 #include "test/SnowCollider.h"
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
+#include "test/TargetSlotProvider.h"
 #include "test/TileMap.h"
 #include "Dongho/Building/Building.h"
-#include "Dongho/Enemy/ArrowEnemy.h"
-#include "Dongho/Enemy/NormalEnemy.h"
-#include "Dongho/Enemy/ThiefEnemy.h"
 
 using namespace rttr;
 using namespace MMMEngine;
@@ -100,18 +99,6 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<Castle>(); })
 		.method("Inject", &ObjPtr<Castle>::Inject);
 
-	registration::class_<Enemy>("Enemy")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Enemy>"))
-		.property("atk", &Enemy::atk)
-		.property("velocity", &Enemy::velocity)
-		.property("attackDelay", &Enemy::attackDelay)
-		.property("battledist", &Enemy::battledist)
-		.property("checkdist", &Enemy::checkdist);
-
-	registration::class_<ObjPtr<Enemy>>("ObjPtr<Enemy>")
-		.constructor([]() { return Object::NewObject<Enemy>(); })
-		.method("Inject", &ObjPtr<Enemy>::Inject);
-
 	registration::class_<BattleManager>("BattleManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BattleManager>"));
 
@@ -122,7 +109,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<BuildingManager>("BuildingManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
 		.property("pre_building", &BuildingManager::pre_building)
-		.property("mBuildingPoint", &BuildingManager::mBuildingPoint);
+		.property("mBuildingPoint", &BuildingManager::mBuildingPoint)
+		.property("baseRadius", &BuildingManager::baseRadius);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor([]() { return Object::NewObject<BuildingManager>(); })
@@ -230,6 +218,8 @@ RTTR_PLUGIN_REGISTRATION
 		.property("ToTitleText", &GameOverSequencer::ToTitleText)
 		.property("PanelCV", &GameOverSequencer::PanelCV)
 		.property("GameOverPosXCV", &GameOverSequencer::GameOverPosXCV)
+		.property("TitleSceneName", &GameOverSequencer::TitleSceneName)
+		.property("GameSceneName", &GameOverSequencer::GameSceneName)
 		.property("GameOverPosYCV", &GameOverSequencer::GameOverPosYCV)
 		.property("GameOverRotZCV", &GameOverSequencer::GameOverRotZCV)
 		.property("ButtonYPosCV", &GameOverSequencer::ButtonYPosCV)
@@ -444,7 +434,6 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<EnemyAnimController>("EnemyAnimController")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyAnimController>"))
 		.property("mAnimator", &EnemyAnimController::mAnimator)
-		.property("mEnemy", &EnemyAnimController::mEnemy)
 		.property("mAnimSpeed", &EnemyAnimController::mAnimSpeed)
 		.property("AnimSize", &EnemyAnimController::AnimSize);
 
@@ -573,10 +562,18 @@ RTTR_PLUGIN_REGISTRATION
 		.constructor([]() { return Object::NewObject<CastleManager>(); })
 		.method("Inject", &ObjPtr<CastleManager>::Inject);
 
+	registration::class_<EnemyController>("EnemyController")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyController>"))
+		.property("m_MainTarget", &EnemyController::m_MainTarget)
+		.property("m_SensorObj", &EnemyController::m_SensorObj);
+
+	registration::class_<ObjPtr<EnemyController>>("ObjPtr<EnemyController>")
+		.constructor([]() { return Object::NewObject<EnemyController>(); })
+		.method("Inject", &ObjPtr<EnemyController>::Inject);
+
 	registration::class_<EnemyMove>("EnemyMove")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemyMove>"))
 		.property("movespeed", &EnemyMove::movespeed)
-		.property("Obj_target", &EnemyMove::Obj_target)
 		.property("sweepRadius", &EnemyMove::sweepRadius)
 		.property("sweepAhead", &EnemyMove::sweepAhead)
 		.property("avoidGain", &EnemyMove::avoidGain);
@@ -584,6 +581,14 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<EnemyMove>>("ObjPtr<EnemyMove>")
 		.constructor([]() { return Object::NewObject<EnemyMove>(); })
 		.method("Inject", &ObjPtr<EnemyMove>::Inject);
+
+	registration::class_<EnemySensor>("EnemySensor")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<EnemySensor>"))
+		.property("EnemyObj", &EnemySensor::EnemyObj);
+
+	registration::class_<ObjPtr<EnemySensor>>("ObjPtr<EnemySensor>")
+		.constructor([]() { return Object::NewObject<EnemySensor>(); })
+		.method("Inject", &ObjPtr<EnemySensor>::Inject);
 
 	registration::class_<MeshSize>("MeshSize")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<MeshSize>"));
@@ -653,6 +658,21 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<ObjPtr<SnowballManager2>>("ObjPtr<SnowballManager2>")
 		.constructor([]() { return Object::NewObject<SnowballManager2>(); })
 		.method("Inject", &ObjPtr<SnowballManager2>::Inject);
+
+	registration::class_<TargetSlotProvider>("TargetSlotProvider")
+		(rttr::metadata("wrapper_type_name", "ObjPtr<TargetSlotProvider>"))
+		.property("baseRadius", &TargetSlotProvider::baseRadius)
+		.property("ringSpacing", &TargetSlotProvider::ringSpacing)
+		.property("slotSpacing", &TargetSlotProvider::slotSpacing)
+		.property("yOffset", &TargetSlotProvider::yOffset)
+		.property("maxRings", &TargetSlotProvider::maxRings)
+		.property("slotCheckRadius", &TargetSlotProvider::slotCheckRadius)
+		.property("slotBlockLayer", &TargetSlotProvider::slotBlockLayer)
+		.property("includeTriggerInOverlap", &TargetSlotProvider::includeTriggerInOverlap);
+
+	registration::class_<ObjPtr<TargetSlotProvider>>("ObjPtr<TargetSlotProvider>")
+		.constructor([]() { return Object::NewObject<TargetSlotProvider>(); })
+		.method("Inject", &ObjPtr<TargetSlotProvider>::Inject);
 
 	registration::class_<TileMap>("TileMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))
