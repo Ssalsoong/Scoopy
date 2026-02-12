@@ -14,6 +14,7 @@
 #include "../Building/BuildingPoint.h"
 #include "../Battlestats.h"
 #include "Prefab.h"
+#include "../../test/TargetSlotProvider.h"
 
 MMMEngine::ObjPtr<MMMEngine::BuildingManager> MMMEngine::BuildingManager::instance = nullptr;
 
@@ -68,6 +69,10 @@ void MMMEngine::BuildingManager::Build(ObjPtr<GameObject> obj)
 	auto building = Instantiate(pre_building);
 	building->GetTransform()->SetParent(obj->GetTransform());
 	building->GetTransform()->SetLocalPosition(0.f, 0.f, 0.f);
+	if (auto buildingTSP = building->GetComponent<TargetSlotProvider>(); buildingTSP.IsValid())
+	{
+		buildingTSP->SetbaseRadius(baseRadius);
+	}
 	Buildings.push_back(building);
 	if (distup)
 		building->GetComponent<Building>()->SetAttackDist(5.5f);

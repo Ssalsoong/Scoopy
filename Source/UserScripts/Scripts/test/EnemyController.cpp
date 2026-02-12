@@ -14,17 +14,14 @@
 #include "SnowCollider.h"
 #include "TargetSlotProvider.h"
 #include "../Sunken/EnemyAnimController.h"
+#include "RigidBodyComponent.h"
+
 
 void MMMEngine::EnemyController::Start()
 {
 	m_Sensor = m_SensorObj->GetComponent<EnemySensor>();
 	m_Move = GetComponent<EnemyMove>();
-
-	//if (auto TriggerCol = GetComponent<SphereColliderComponent>(); TriggerCol.IsValid())
-	//{
-	//	TriggerCol->SetTriggerQueryEnabled(false);
-	//}
-	
+	m_Rigid = GetComponent<RigidBodyComponent>();
 
 	if (auto go = GameObject::Find("Castle"); go.IsValid())
 	{
@@ -50,6 +47,20 @@ void MMMEngine::EnemyController::Update()
 	AttackTarget();
 	CalSnowDamageDelay();
 	HurtCal();
+
+	int t = 0;
+	auto D = curState;
+	if (D == EnemyState::Attack)
+	{
+		t = 10;
+	}
+	else
+	{
+		t = 5;
+	}
+	//auto t = m_EnemyType;
+	std::cout << t << std::endl;
+
 }
 
 
@@ -71,6 +82,10 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 
 	m_EnemyType = type;
 
+	//랜덤변수
+	static std::mt19937 rng(std::random_device{}());
+	std::uniform_real_distribution<float> dist(0.f, DirectX::XM_2PI);
+	m_rangedAngle = dist(rng);
 
 	m_CurTarget = m_MainTarget;
 	TryAcquireSlot();
@@ -103,13 +118,68 @@ void MMMEngine::EnemyController::InitEnemy(EnemyType type, DirectX::SimpleMath::
 	{
 		m_Move->SetEnemySpeed(270.f);
 		E_state.AD = 3;
-		E_state.AS = 6.5f;
+		E_state.AS = 0.65f;
 		E_state.Range = 0.3f;
 		break;
 	}
 	}
 }
 
+
+void MMMEngine::EnemyController::ChangeState()
+{
+	prevState = curState;
+
+	float extra = 0.0f;
+	const auto& tag = m_CurTarget->GetTag();
+
+	if (tag == "Castle") extra = 0.8f;
+	else if (tag == "Building") extra = 0.4f;
+	else if (tag == "Player") extra = 0.25f;
+	else if (tag == "Snow") extra = 0.3f;
+
+	float rangeEnter = E_state.Range + extra;
+	float rangeExit = rangeEnter + 0.2f;
+
+	float slotEnter = slotArriveRadius;   // 근접 공격은 이 값만 사용
+	float slotExit = slotEnter + 0.1f;
+
+	// Attack 상태면 먼저 이탈 체크
+	if (curState == EnemyState::Attack)
+	{
+		float exitDist = (IsBruiser() ? slotExit : rangeExit);
+		if (!m_CurTarget.IsValid() || distance > exitDist)
+		{
+			curState = EnemyState::Move;
+			return;
+		}
+
+		if (m_attackPhase == AttackPhase::Motion)
+			return;
+	}
+
+	// 일반 진입 조건
+	if (IsBruiser())
+	{
+		if (m_usingSlotTarget)
+			curState = (distance <= slotEnter) ? EnemyState::Attack : EnemyState::Move;
+		else
+			curState = (distance <= rangeEnter) ? EnemyState::Attack : EnemyState::Move;
+	}
+	else
+	{
+		curState = (distance <= rangeEnter) ? EnemyState::Attack : EnemyState::Move;
+	}
+
+}
+
+void MMMEngine::EnemyController::CheckState()
+{
+	if (prevState != curState)
+	{
+		OnStateEnter(curState);
+	}
+}
 
 void MMMEngine::EnemyController::UpdateDistance()
 {
@@ -141,7 +211,10 @@ void MMMEngine::EnemyController::UpdateDistance()
 	}
 
 	if (!useSlot)
-		TargetPos = m_CurTarget->GetTransform()->GetWorldPosition();
+		if (auto Curtr = m_CurTarget->GetTransform(); Curtr.IsValid())
+		{
+			TargetPos = Curtr->GetWorldPosition();
+		}
 
 	m_effectiveTargetPos = TargetPos;
 	toTarget = TargetPos - EnemyPos;
@@ -150,53 +223,87 @@ void MMMEngine::EnemyController::UpdateDistance()
 	if (m_Move.IsValid())
 	{
 		if (useSlot)
-			m_Move->SetTargetOverride(m_effectiveTargetPos);
-		else
-			m_Move->ClearTargetOverride();
-	}
+		{
+			Vector3 center = m_CurTarget->GetTransform()->GetWorldPosition();
 
+			Vector3 cur = EnemyPos - center; cur.y = 0.f;
+			Vector3 tar = TargetPos - center; tar.y = 0.f;
+
+			float rCur = cur.Length();
+			float rTar = tar.Length();
+
+			if (rCur > 1e-3f && rTar > 1e-3f)
+			{
+				float aCur = atan2f(cur.z, cur.x);
+				float aTar = atan2f(tar.z, tar.x);
+
+				float d = aTar - aCur;
+				// WrapPi
+				while (d > DirectX::XM_PI) d -= DirectX::XM_2PI;
+				while (d < -DirectX::XM_PI) d += DirectX::XM_2PI;
+
+				if (!m_orbiting && fabs(d) > orbitEnterAngle)
+				{
+					m_orbiting = true;
+					m_orbitDir = (d >= 0.f) ? +1 : -1;
+				}
+
+				float radialDiff = fabs(rCur - rTar);
+
+				// orbit 진입 조건 (거리/반경 조건으로 조절)
+				if (!m_orbiting)
+				{
+					if (radialDiff <= orbitRadialTolerance &&
+						distance <= orbitStartDist &&
+						fabs(d) > orbitEnterAngle)
+					{
+						m_orbiting = true;
+						m_orbitDir = (d >= 0.f) ? +1 : -1;
+					}
+				}
+
+				// orbit 유지/해제 조건
+				if (m_orbiting)
+				{
+					if (radialDiff > orbitRadialTolerance ||
+						distance < orbitExitDist ||
+						fabs(d) < orbitExitAngle)
+					{
+						m_orbiting = false;
+					}
+					else
+					{
+						Vector3 tangent(-cur.z, 0.f, cur.x);
+						if (tangent.LengthSquared() > 1e-6f)
+						{
+							tangent.Normalize();
+							tangent *= (float)m_orbitDir;
+
+							TargetPos = EnemyPos + tangent * orbitStepDist;
+
+							float useR = std::max(rCur, rTar + orbitLaneOffset);
+							Vector3 toNew = TargetPos - center; toNew.y = 0.f;
+							if (toNew.LengthSquared() > 1e-6f)
+							{
+								toNew.Normalize();
+								TargetPos = center + toNew * useR;
+							}
+						}
+					}
+				}
+			}
+			m_Move->SetTargetOverride(TargetPos);
+		}
+		else
+		{
+			if (IsBruiser())
+				m_Move->ClearTargetOverride();
+		}
+	}
 	m_usingSlotTarget = useSlot;
 }
 
 
-
-void MMMEngine::EnemyController::ChangeState()
-{
-	/*if (curState == EnemyState::Attack && attackTimer > 0.0f)
-		return;*/
-    prevState = curState;
-
-    float extra = 0.0f;
-    const auto& tag = m_CurTarget->GetTag();
-
-    if (tag == "Castle"){ extra = 0.6f;}
-    else if (tag == "Building") extra = 0.3f;
-    else if (tag == "Player") extra = 0.2f;
-    else if (tag == "Snow") extra = 0.4f;
-
-	if (m_usingSlotTarget)
-		curState = (distance <= slotArriveRadius) ? EnemyState::Attack : EnemyState::Move;
-	else
-		curState = (distance <= (E_state.Range + extra)) ? EnemyState::Attack : EnemyState::Move;
-
-	/*if (curState == EnemyState::Attack)
-	{
-		std::cout << "now Attack" << std::endl;
-	}
-	if (curState == EnemyState::Move)
-	{
-		std::cout << "now Move" << std::endl;
-	}*/
-}
-
-void MMMEngine::EnemyController::CheckState()
-{
-
-	if (prevState != curState)
-	{
-		OnStateEnter(curState);
-	}
-}
 
 
 void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
@@ -205,6 +312,7 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	{
 	case EnemyState::Move:
 	{
+		m_Rigid->SetKinematic(false);
 		m_Move->ChangeTarget(m_CurTarget);
 		m_Move->MoveTriggerSet(true);
 		attackTimer = 0.0f;
@@ -213,6 +321,10 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 	}
 	case EnemyState::Attack:
 	{
+		auto t_Zero = DirectX::SimpleMath::Vector3::Zero;
+		m_Rigid->SetKinematic(true);
+		m_Rigid->SetLinearVelocity(t_Zero);
+		m_Rigid->SetAngularVelocity(t_Zero);
 		m_Move->MoveTriggerSet(false);
 		battletarget = m_CurTarget;
 		m_attackPhase = AttackPhase::Motion;
@@ -240,21 +352,15 @@ void MMMEngine::EnemyController::OnStateEnter(EnemyState state)
 
 bool MMMEngine::EnemyController::UpdateTarget()
 {
-	ObjPtr<GameObject> target = m_Sensor->GetTarget();
-	if (target.IsValid())
-	{
-		if (m_CurTarget != target)
-		{
-			ReleaseSlot();
-			m_CurTarget = target;
-			m_Move->ChangeTarget(m_CurTarget); // 여기서 바로 갱신
-			TryAcquireSlot();
-		}
-		return true;
-	}
+	ObjPtr<GameObject> raw = m_Sensor->GetTarget();
+	ObjPtr<GameObject> target = ResolveTarget(raw);
+
+	if (!IsBruiser() && m_hasSlot)
+		ReleaseSlot();
 
 	if (!target.IsValid())
 	{
+
 		if (m_CurTarget != m_MainTarget)
 		{
 			ReleaseSlot();
@@ -265,11 +371,42 @@ bool MMMEngine::EnemyController::UpdateTarget()
 		return false;
 	}
 
-	return false;
+	if (!IsBruiser())
+	{
+		auto targetPos = m_CurTarget->GetTransform()->GetWorldPosition();
+
+		// 고정 각도/반경 오프셋 (개체별 고정)
+		float angle = m_rangedAngle;           // Start()에서 랜덤/해시로 초기화
+		float radius = m_rangedHoldRadius;     // 2.0f~4.0f 정도
+		Vector3 offset(std::cos(angle) * radius, 0.f, std::sin(angle) * radius);
+
+		m_Move->SetTargetOverride(targetPos + offset);
+	}
+	else
+	{
+		m_Move->ClearTargetOverride();
+	}
+
+	if (m_CurTarget != target)
+	{
+		ReleaseSlot();
+		m_orbiting = false; //타겟 바뀌면 orbit 리셋
+		m_CurTarget = target;
+		m_Move->ChangeTarget(m_CurTarget);
+		TryAcquireSlot();
+	}
+
+	return true;
+}
+
+bool MMMEngine::EnemyController::IsBruiser()
+{
+	return (m_EnemyType == EnemyType::Warrior || m_EnemyType == EnemyType::Scout);
 }
 
 void MMMEngine::EnemyController::TryAcquireSlot()
 {
+	if (!IsBruiser()) return;
 	m_hasSlot = false;
 	m_SlotProvider = nullptr;
 	m_SlotTarget = nullptr;
@@ -312,6 +449,20 @@ void MMMEngine::EnemyController::ReleaseSlot()
 		m_Move->ClearTargetOverride();
 }
 
+MMMEngine::ObjPtr<MMMEngine::GameObject> MMMEngine::EnemyController::ResolveTarget(ObjPtr<GameObject> raw)
+{
+	if (!raw.IsValid()) return nullptr;
+
+	for (auto tr = raw->GetTransform(); tr != nullptr; tr = tr->GetParent())
+	{
+		auto go = tr->GetGameObject();
+		if (auto p = go->GetComponent<TargetSlotProvider>(); p.IsValid())
+			return go; // 슬롯 제공자(부모)를 타겟으로 승격
+	}
+
+	return raw;
+}
+
 bool MMMEngine::EnemyController::CheckHurt()
 {
 	return EnemyHurt;
@@ -349,7 +500,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		attackTimer += dt;
 
-		if (attackTimer >= E_state.AS * debuff)
+		if (attackTimer >= E_state.AS)
 		{
 			DoHit();
 
@@ -364,7 +515,7 @@ void MMMEngine::EnemyController::AttackTarget()
 	{
 		RecoverTimer += dt;
 
-		if (RecoverTimer >= RecoverDelay)
+		if (RecoverTimer >= RecoverDelay * m_FinalAttackMult)
 		{
 			m_attackPhase = AttackPhase::Motion;
 			attackTimer = 0.0f;
@@ -466,4 +617,37 @@ void MMMEngine::EnemyController::MotionEnter()
 void MMMEngine::EnemyController::PauseEnter()
 {
 	std::cout << "pauseon" << std::endl;
+}
+
+
+
+void MMMEngine::EnemyController::AddAttackDebuffSource(const void* src, float mult)
+{
+	m_AttackDebuffSources[src] = mult;
+	RecalcAttackMult();
+}
+
+void MMMEngine::EnemyController::RemoveAttackDebuffSource(const void* src)
+{
+	m_AttackDebuffSources.erase(src);
+	RecalcAttackMult();
+}
+
+void MMMEngine::EnemyController::UpdateAttackDebuffSource(const void* src, float mult)
+{
+	auto it = m_AttackDebuffSources.find(src);
+	if (it != m_AttackDebuffSources.end())
+	{
+		it->second = mult;
+		RecalcAttackMult();
+	}
+}
+
+void MMMEngine::EnemyController::RecalcAttackMult()
+{
+	float best = 1.0f; // max 룰 (가장 강하게)
+	for (auto& [k, v] : m_AttackDebuffSources)
+		if (v > best) best = v;
+
+	m_FinalAttackMult = best;
 }

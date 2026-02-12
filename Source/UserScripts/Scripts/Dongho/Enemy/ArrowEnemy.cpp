@@ -46,7 +46,11 @@ void MMMEngine::ArrowEnemy::ArrowAttack(ObjPtr<GameObject> target, int atk)
 {
 	if (Arrows.empty())
 		return;
-	
+	if (auto targettr = target->GetTransform(); targettr.IsValid()) {
+		auto targetpos = targettr->GetWorldPosition();
+		LookAt(targetpos);
+	}
+
 	auto obj = Arrows.front();
 	Arrows.pop();
 	if (!obj)

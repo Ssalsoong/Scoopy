@@ -45,23 +45,23 @@ namespace MMMEngine {
 
 		std::array<Vector3, SpawnPointCount> spawnPos =
 		{
-			Vector3{-14.5f,0.f,-20.5f},
-			Vector3{ 0.f,  0.f,-20.5f},
-			Vector3{14.5f, 0.f,-20.5f},
-			Vector3{ 20.5f, 0.f, -14.5f },
-			Vector3{ 20.5f, 0.f, 0.f},
-			Vector3{ 20.5f, 0.f, 14.5f },
-			Vector3{ 14.5f, 0.f, 20.5f },
-			Vector3{ 0.f, 0.f, 20.5f },
-			Vector3{ -14.5f, 0.f, 20.5f },
-			Vector3{ -20.5f,  0.f, 14.5f },
-			Vector3{ -20.5f,  0.f, 0.f},
-			Vector3{ -20.5f,  0.f, -14.5f }
+		Vector3{-6.5f,0.f,-10.f},
+		Vector3{ 0.f, 0.f,-10.f},
+		Vector3{6.5f, 0.f,-10.f},
+		Vector3{ 10.f, 0.f, -6.5f },
+		Vector3{ 10.f, 0.f, 0.f},
+		Vector3{ 10.f, 0.f, 6.5f },
+		Vector3{ 6.5f, 0.f, 10.f },
+		Vector3{ 0.f, 0.f, 10.f },
+		Vector3{ -6.5f, 0.f, 10.f },
+		Vector3{ -10.f, 0.f, 6.5f },
+		Vector3{ -10.f, 0.f, 0.f},
+		Vector3{ -10.f, 0.f, -6.5f }
 		};
 		static constexpr int WaveCount = 10;
 		std::array<std::array<int, SpawnPointCount>, WaveCount > waveTable =
 		{
-			std::array<int, SpawnPointCount>{0,1,0,0,0,0,0,0,0,0,0,0},
+			std::array<int, SpawnPointCount>{0,30,0,0,0,0,0,0,0,0,0,0},
 			std::array<int, SpawnPointCount>{0,0,0,0,0,0,0,0,0,0,10,0},
 			std::array<int, SpawnPointCount>{0,10,0,0,10,0,0,0,0,0,0,0},
 			std::array<int, SpawnPointCount>{0,0,0,0,0,0,0,0,0,0,10,0},

@@ -69,5 +69,8 @@ namespace MMMEngine
 		ResPtr<Prefab> mBuildingPoint;
 
         static ObjPtr<BuildingManager> instance;
+
+        USCRIPT_PROPERTY()
+        float baseRadius = 1.0f;
     };
 }

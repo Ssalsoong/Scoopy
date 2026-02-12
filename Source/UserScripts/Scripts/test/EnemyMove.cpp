@@ -42,22 +42,25 @@ void MMMEngine::EnemyMove::Start()
 
 void MMMEngine::EnemyMove::FixedUpdate()
 {
+
+	Vector3 targetPos = m_hasTargetOverride
+		? m_targetOverride
+		: (Obj_target.IsValid() ? Obj_target->GetTransform()->GetWorldPosition()
+			: m_GO->GetTransform()->GetWorldPosition());
+
+	FaceTargetYaw(targetPos);
+
+
 	auto rb = GetComponent<RigidBodyComponent>();
 	if (!is_move)
 	{
-		rb->SetLockPosX(true);
-		rb->SetLockPosZ(true);
-		rb->SetLockRotY(true);
-		rb->SetLinearVelocity(DirectX::SimpleMath::Vector3{});
+		rb->SetLinearVelocity(DirectX::SimpleMath::Vector3::Zero);
 		return;
 	}
-	
+
 
 	auto col = GetComponent<CapsuleColliderComponent>();
 	float dt = TimeManager::Get().GetFixedDeltaTime();
-	rb->SetLockPosX(false);
-	rb->SetLockPosZ(false);
-	rb->SetLockRotY(false);
 
 	//목표 속도
 	Vector3 desiredVel = ComputeChaseVelocity();
@@ -150,7 +153,20 @@ void MMMEngine::EnemyMove::FixedUpdate()
 
 	rb->SetLinearVelocity(curVel);
 
-	FaceVelocityYaw(curVel);
+	if (is_move)
+	{
+		rb->SetLockPosX(false);
+		rb->SetLockPosZ(false);
+		rb->SetLockRotY(false);
+		FaceVelocityYaw(curVel);
+	}
+	else
+	{
+		rb->SetLockPosX(true);
+		rb->SetLockPosZ(true);
+		rb->SetLockRotY(true);
+		FaceTargetYaw(targetPos);
+	}
 }
 
 
@@ -274,4 +290,59 @@ void MMMEngine::EnemyMove::ResetPos(DirectX::SimpleMath::Vector3 pos)
 		curVel = Vector3::Zero;
 		is_move = false;
 	}
+}
+
+void MMMEngine::EnemyMove::FaceTargetYaw(const DirectX::SimpleMath::Vector3& targetPos)
+{
+	Vector3 my = m_GO->GetTransform()->GetWorldPosition();
+	Vector3 dir = targetPos - my;
+	dir.y = 0.f;
+
+	//변화가 없다면
+	if (dir.LengthSquared() < 1e-6f)
+		return;
+
+	dir.Normalize();
+	float targetYaw = atan2f(dir.x, dir.z);
+
+	auto rb = m_GO->GetComponent<RigidBodyComponent>();
+
+	// 회전은 SnapRotation으로 제어 ( x y z 다 잠궈둠 )
+	Quaternion newQ = Quaternion::CreateFromYawPitchRoll(targetYaw, 0.f, 0.f);
+	rb->SnapRotation(newQ);
+
+	// 물리 회전 튐 방지
+	rb->SetAngularVelocity(Vector3::Zero);
+}
+
+
+void MMMEngine::EnemyMove::AddSpeedDebuffSource(const void* src, float mult)
+{
+	m_SpeedDebuffSources[src] = mult;
+	RecalcSpeedMult();
+}
+
+void MMMEngine::EnemyMove::RemoveSpeedDebuffSource(const void* src)
+{
+	m_SpeedDebuffSources.erase(src);
+	RecalcSpeedMult();
+}
+
+void MMMEngine::EnemyMove::UpdateSpeedDebuffSource(const void* src, float mult)
+{
+	auto it = m_SpeedDebuffSources.find(src);
+	if (it != m_SpeedDebuffSources.end())
+	{
+		it->second = mult;
+		RecalcSpeedMult();
+	}
+}
+
+void MMMEngine::EnemyMove::RecalcSpeedMult()
+{
+	float best = 1.0f; // min 룰 (가장 느리게)
+	for (auto& [k, v] : m_SpeedDebuffSources)
+		if (v < best) best = v;
+
+	debuffSpeed = best;
 }

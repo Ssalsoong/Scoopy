@@ -171,7 +171,6 @@
     <ClCompile Include="Scripts\test\SnowTrigger.cpp" />
     <ClCompile Include="Scripts\test\SnowballManager2.cpp" />
     <ClCompile Include="Scripts\test\TargetSlotProvider.cpp" />
-    <ClCompile Include="Scripts\test\Testpooling.cpp" />
     <ClCompile Include="Scripts\test\TileMap.cpp" />
     <ClInclude Include="Scripts\Dongho\Battlestats.h" />
     <ClInclude Include="Scripts\Dongho\Building\BuffBuilding.h" />
@@ -236,7 +235,6 @@
     <ClInclude Include="Scripts\test\SnowTrigger.h" />
     <ClInclude Include="Scripts\test\SnowballManager2.h" />
     <ClInclude Include="Scripts\test\TargetSlotProvider.h" />
-    <ClInclude Include="Scripts\test\Testpooling.h" />
     <ClInclude Include="Scripts\test\TileMap.h" />
   </ItemGroup>
 

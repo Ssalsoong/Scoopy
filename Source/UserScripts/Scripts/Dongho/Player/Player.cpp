@@ -119,7 +119,7 @@ void MMMEngine::Player::HandleAttack()
 		float dot = forward.Dot(toEnemy);
 		if (dot < cosHalfFov)
 			continue;
-		float damage = atk;
+		float damage = atk + m_AttackBuffMax;
 		if (criticalOn)
 		{
 			float r = static_cast<float>(rand()) / static_cast<float>(RAND_MAX);
@@ -252,4 +252,41 @@ void MMMEngine::Player::Level10Apply(int value)
 		maxHP = 150;
 		GetComponent<Battlestats>()->SetHP(maxHP);
 	}
+}
+
+
+void MMMEngine::Player::AddAttackBuffSource(const void* src, int value)
+{
+	m_AttackBuffSources[src] = value;
+	RecalcAttackBuffMax();
+}
+
+void MMMEngine::Player::RemoveAttackBuffSource(const void* src)
+{
+	m_AttackBuffSources.erase(src);
+	RecalcAttackBuffMax();
+}
+
+void MMMEngine::Player::UpdateAttackBuffSource(const void* src, int value)
+{
+	auto it = m_AttackBuffSources.find(src);
+	if (it != m_AttackBuffSources.end())
+	{
+		it->second = value;
+		RecalcAttackBuffMax();
+	}
+}
+
+void MMMEngine::Player::RecalcAttackBuffMax()
+{
+	int best = 0; // 버프 없으면 0
+	for (auto& [k, v] : m_AttackBuffSources)
+		if (v > best) best = v;
+
+	m_AttackBuffMax = best;
+}
+
+int MMMEngine::Player::GetAttackFinal() const
+{
+	return atk + m_AttackBuffMax;
 }

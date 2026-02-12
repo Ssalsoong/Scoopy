@@ -9,6 +9,7 @@ namespace MMMEngine
     class EnemyMove;
     class EnemySensor;
     class TargetSlotProvider;
+    class RigidBodyComponent;
 
     class USERSCRIPTS EnemyController : public ScriptBehaviour
     {
@@ -55,6 +56,9 @@ namespace MMMEngine
         
         ObjPtr<GameObject> m_CurTarget;
 
+		USCRIPT_PROPERTY()
+		ObjPtr<GameObject> m_SensorObj;
+
         DirectX::SimpleMath::Vector3 toTarget{};
 
 		// 슬롯 상태
@@ -100,10 +104,8 @@ namespace MMMEngine
         void OnStateEnter(EnemyState state);
 
         bool UpdateTarget();
-
-		USCRIPT_PROPERTY()
-		ObjPtr<GameObject> m_SensorObj;
         
+        bool IsBruiser();
 
         EnemyType GetType() { return m_EnemyType; }
 
@@ -132,13 +134,45 @@ namespace MMMEngine
         void DoHit();
         void MotionEnter();
         void PauseEnter();
-        float debuff = 1.0f;
-        void SetDebuffAttack(float value) { debuff = value; }
     private:
 		void TryAcquireSlot();
 	    void ReleaseSlot();
 
 		float slotArriveRadius = 0.2f;
 		bool m_usingSlotTarget = false;
+
+		float m_rangedAngle = 1.0f;
+		float m_rangedHoldRadius = 3.0f;
+
+		ObjPtr<GameObject> ResolveTarget(ObjPtr<GameObject> raw);
+
+        ObjPtr<RigidBodyComponent> m_Rigid;
+
+		//호 이동용 변수
+		bool m_orbiting = false;
+		int  m_orbitDir = 1;        // +1 또는 -1
+		float orbitEnterAngle = 0.6f; // 라디안 (약 57도)
+		float orbitExitAngle = 0.25f; // 라디안 (약 14도)
+		float orbitStepDist = 0.4f;  // 한 프레임 이동 거리
+
+		//호 이동 시작과 끝을 위한 변수
+		float orbitRadialTolerance = 0.4f;
+		float orbitStartDist = 1.7f;
+		float orbitExitDist = 0.2f;
+		float orbitLaneOffset = 0.25f;
+
+
+        //디버프 관련
+    public:
+		std::unordered_map<const void*, float> m_AttackDebuffSources;
+		float m_FinalAttackMult = 1.0f;
+
+		void AddAttackDebuffSource(const void* src, float mult);
+		void RemoveAttackDebuffSource(const void* src);
+		void UpdateAttackDebuffSource(const void* src, float mult);
+
+    private:
+	    void RecalcAttackMult();
+
     };
 }

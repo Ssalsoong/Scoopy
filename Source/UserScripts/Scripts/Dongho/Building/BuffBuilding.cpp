@@ -7,6 +7,7 @@
 #include "../../test/PlayerMove.h"
 #include "Transform.h"
 #include "../Battlestats.h"
+#include "../Player/Player.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -15,7 +16,7 @@ RTTR_PLUGIN_REGISTRATION
 
 	registration::class_<BuffBuilding>("BuffBuilding")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuffBuilding>"))
-		.property("buff", &BuffBuilding::buff);
+		.property("speedbuff", &BuffBuilding::speedbuff);
 
 	registration::class_<ObjPtr<BuffBuilding>>("ObjPtr<BuffBuilding>")
 		.constructor(
@@ -45,16 +46,22 @@ void MMMEngine::BuffBuilding::GiveBuff()
 	float dz = pos.z - playerpos.z;
 	float d2 = dx * dx + dz * dz;
 	bool nowInRange = (d2 < bestD2);
-	auto playermove = player->GetComponent<PlayerMove>();
-	if (nowInRange && !prevInRange)
-	{
-		playermove->Setbuff(buff);
+	if (auto playermove = player->GetComponent<PlayerMove>();playermove.IsValid()) {
+		if (auto playercomp = player->GetComponent<Player>(); playercomp.IsValid())
+		{
+			if (nowInRange && !prevInRange)
+			{
+				playermove->AddBuffSource(this, speedbuff);
+				playercomp->AddAttackBuffSource(this, attackbuff);
+			}
+			else if (!nowInRange && prevInRange)
+			{
+				playermove->RemoveBuffSource(this);
+				playercomp->AddAttackBuffSource(this, attackbuff);
+			}
+			prevInRange = nowInRange;
+		}
 	}
-	else if(!nowInRange && prevInRange)
-	{
-		playermove->Setbuff(0.0f);
-	}
-	prevInRange = nowInRange;
 }
 
 void MMMEngine::BuffBuilding::LevelApply(int level)
@@ -63,35 +70,40 @@ void MMMEngine::BuffBuilding::LevelApply(int level)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		buff = 10.f;
+		speedbuff = 10.f;
+		attackbuff = 5;
 		buffdist = 2.0f;
 	}
 	if (level == 2)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 50;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(50);
-		buff = 20.f;
+		speedbuff = 20.f;
+		attackbuff = 10;
 		buffdist = 2.0f;
 	}
 	if (level == 3)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
-		buff = 30.f;
+		speedbuff = 30.f;
+		attackbuff = 15;
 		buffdist = 3.0f;
 	}
 	if (level == 4)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 75;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(75);
-		buff = 40.f;
+		speedbuff = 40.f;
+		attackbuff = 20;
 		buffdist = 3.0f;
 	}
 	if (level == 5)
 	{
 		GetGameObject()->GetComponent<Building>()->maxHP = 100;
 		GetGameObject()->GetComponent<Battlestats>()->SetHP(100);
-		buff = 50.f;
+		speedbuff = 50.f;
+		attackbuff = 25;
 		buffdist = 4.0f;
 	}
 }

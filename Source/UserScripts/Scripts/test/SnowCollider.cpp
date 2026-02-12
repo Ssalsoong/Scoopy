@@ -286,9 +286,24 @@ void MMMEngine::SnowCollider::OnCollisionStay(MMMEngine::CollisionInfo info)
 	{
 		if (!On_Player)
 			return;
-		GetComponent<Snowball>()->EatSnow(info.other);
-		info.other->GetComponent<SnowCollider>()->SnowDestory();
-		Destroy(info.other);
+		if (auto snowball = GetComponent<Snowball>(); snowball.IsValid())
+		{
+			if (auto otherball = GetComponent<Snowball>(); otherball.IsValid())
+			{
+				int mainpoint = snowball->GetPoint();
+				int otherpoint = otherball->GetPoint();
+				if (mainpoint <= 3 || otherpoint <= 3)
+				{
+					GetComponent<Snowball>()->EatSnow(info.other);
+					info.other->GetComponent<SnowCollider>()->SnowDestory();
+					Destroy(info.other);
+				}
+			}
+			else
+				return;
+		}
+		else
+			return;
 	}
 	else if (info.other->GetTag() == "Enemy")
 	{

@@ -88,7 +88,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 
 		float slowed = T_OnSnowSpeed - (float(scoop) * MinusSpeed);
 		if (slowed < MinSpeed) slowed = MinSpeed;
-		return slowed; // 스쿱 상태면 타일 영향 무시
+		return (slowed + m_FinalBuff); // 스쿱 상태면 타일 영향 무시
 	}
 
 	// 스쿱 아닐 때만 타일 속도 적용
@@ -101,7 +101,7 @@ float MMMEngine::PlayerMove::ComputeSpeed()
 
 	CurSpeed = speed;
 
-	return speed;
+	return (speed + m_FinalBuff);
 }
 
 float MMMEngine::PlayerMove::GetCurSpeed()
@@ -175,3 +175,39 @@ void MMMEngine::PlayerMove::SetSnowMaxScoop(int maxValue)
 {
 	Snow_MaxScoop = maxValue;
 }
+
+
+void MMMEngine::PlayerMove::AddBuffSource(const void* src, float value)
+{
+	m_BuffSources[src] = value;
+	RecalcBuff();
+}
+
+void MMMEngine::PlayerMove::RemoveBuffSource(const void* src)
+{
+	m_BuffSources.erase(src);
+	RecalcBuff();
+}
+
+void MMMEngine::PlayerMove::UpdateBuffSource(const void* src, float value)
+{
+	auto it = m_BuffSources.find(src);
+	if (it != m_BuffSources.end())
+	{
+		it->second = value;
+		RecalcBuff();
+	}
+}
+
+void MMMEngine::PlayerMove::RecalcBuff()
+{
+	float maxBuff = 0.f;
+
+	for (auto& [k, v] : m_BuffSources)
+	{
+		if (v > maxBuff)
+			maxBuff = v;
+	}
+	m_FinalBuff = maxBuff;
+}
+

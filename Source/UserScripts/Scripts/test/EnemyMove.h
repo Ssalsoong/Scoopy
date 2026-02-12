@@ -98,8 +98,19 @@ namespace MMMEngine
 
         void SetDebuffSpeed(float value);
 
-        float debuffSpeed = 1.0f;
-
         void ResetPos(DirectX::SimpleMath::Vector3 pos);
+
+        void FaceTargetYaw(const DirectX::SimpleMath::Vector3& targetPos);
+
+        //디버프관련
+		std::unordered_map<const void*, float> m_SpeedDebuffSources;
+		float debuffSpeed = 1.0f;
+
+		void AddSpeedDebuffSource(const void* src, float mult);
+		void RemoveSpeedDebuffSource(const void* src);
+		void UpdateSpeedDebuffSource(const void* src, float mult);
+
+	private:
+		void RecalcSpeedMult();
     };
 }

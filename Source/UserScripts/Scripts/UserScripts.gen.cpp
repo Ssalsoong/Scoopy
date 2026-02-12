@@ -59,7 +59,6 @@
 #include "test/SnowTrigger.h"
 #include "test/SnowballManager2.h"
 #include "test/TargetSlotProvider.h"
-#include "test/Testpooling.h"
 #include "test/TileMap.h"
 #include "Dongho/Building/Building.h"
 
@@ -108,7 +107,8 @@ RTTR_PLUGIN_REGISTRATION
 	registration::class_<BuildingManager>("BuildingManager")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<BuildingManager>"))
 		.property("pre_building", &BuildingManager::pre_building)
-		.property("mBuildingPoint", &BuildingManager::mBuildingPoint);
+		.property("mBuildingPoint", &BuildingManager::mBuildingPoint)
+		.property("baseRadius", &BuildingManager::baseRadius);
 
 	registration::class_<ObjPtr<BuildingManager>>("ObjPtr<BuildingManager>")
 		.constructor([]() { return Object::NewObject<BuildingManager>(); })
@@ -626,21 +626,14 @@ RTTR_PLUGIN_REGISTRATION
 		.property("ringSpacing", &TargetSlotProvider::ringSpacing)
 		.property("slotSpacing", &TargetSlotProvider::slotSpacing)
 		.property("yOffset", &TargetSlotProvider::yOffset)
-		.property("maxRings", &TargetSlotProvider::maxRings);
+		.property("maxRings", &TargetSlotProvider::maxRings)
+		.property("slotCheckRadius", &TargetSlotProvider::slotCheckRadius)
+		.property("slotBlockLayer", &TargetSlotProvider::slotBlockLayer)
+		.property("includeTriggerInOverlap", &TargetSlotProvider::includeTriggerInOverlap);
 
 	registration::class_<ObjPtr<TargetSlotProvider>>("ObjPtr<TargetSlotProvider>")
 		.constructor([]() { return Object::NewObject<TargetSlotProvider>(); })
 		.method("Inject", &ObjPtr<TargetSlotProvider>::Inject);
-
-	registration::class_<Testpooling>("Testpooling")
-		(rttr::metadata("wrapper_type_name", "ObjPtr<Testpooling>"))
-		.property("e1", &Testpooling::e1)
-		.property("e2", &Testpooling::e2)
-		.property("e3", &Testpooling::e3);
-
-	registration::class_<ObjPtr<Testpooling>>("ObjPtr<Testpooling>")
-		.constructor([]() { return Object::NewObject<Testpooling>(); })
-		.method("Inject", &ObjPtr<Testpooling>::Inject);
 
 	registration::class_<TileMap>("TileMap")
 		(rttr::metadata("wrapper_type_name", "ObjPtr<TileMap>"))

@@ -26,7 +26,7 @@ namespace MMMEngine
         void LevelApply(int level);
         void ProvideSnow();
         int snowpoint = 0;
-        int maxsnowpoint = 15;
+        int maxsnowpoint = 1;
         float chargeDelay = 2.0f;
         float chargeTimer = 0.0f;
 

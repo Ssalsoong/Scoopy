@@ -39,6 +39,21 @@ namespace MMMEngine
         void ReleaseSlot(int ring, int index, ObjPtr<GameObject> enemy);
         bool GetSlotWorldPos(int ring, int index, DirectX::SimpleMath::Vector3& outPos);
 
+
+
+        USCRIPT_PROPERTY()
+        float slotCheckRadius = 0.15f;
+
+        USCRIPT_PROPERTY()
+        uint32_t slotBlockLayer = 5; // 적+장애물 포함 레이어
+
+        USCRIPT_PROPERTY()
+        bool includeTriggerInOverlap = false;
+
+        bool IsSlotFree(const DirectX::SimpleMath::Vector3& pos, ObjPtr<GameObject> enemy) const;
+
+
+        void SetbaseRadius(float value) { baseRadius = value; }
     private:
         struct Slot
         {

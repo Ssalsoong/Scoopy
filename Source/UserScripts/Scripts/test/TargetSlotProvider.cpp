@@ -4,6 +4,9 @@
 #include "Transform.h"
 #include <algorithm>
 #include <cmath>
+#include "PhysxManager.h"
+#include "ColliderComponent.h"
+#include "RigidBodyComponent.h"
 
 namespace
 {
@@ -68,9 +71,17 @@ bool MMMEngine::TargetSlotProvider::FindExisting(ObjPtr<GameObject> enemy, int& 
 bool MMMEngine::TargetSlotProvider::RequestSlot(ObjPtr<GameObject> enemy, int& outRing, int& outIndex)
 {
     if (!enemy.IsValid()) return false;
-
     if (FindExisting(enemy, outRing, outIndex))
         return true;
+
+    auto enemyPos = enemy->GetTransform()->GetWorldPosition();
+
+    struct Candidate
+    {
+        int ring, index;
+        float distSq;
+    };
+    std::vector<Candidate> candidates;
 
     int limit = std::max(1, maxRings);
     for (int r = 0; r < limit; ++r)
@@ -80,17 +91,28 @@ bool MMMEngine::TargetSlotProvider::RequestSlot(ObjPtr<GameObject> enemy, int& o
         for (int i = 0; i < (int)ring.slots.size(); ++i)
         {
             auto& occ = ring.slots[i].occupant;
-            if (!occ.IsValid())
-            {
-                occ = enemy;
-                outRing = r;
-                outIndex = i;
-                return true;
-            }
+            if (occ.IsValid()) continue;
+
+            DirectX::SimpleMath::Vector3 pos;
+            if (!GetSlotWorldPos(r, i, pos)) continue;
+            if (!IsSlotFree(pos, enemy)) continue;
+
+            float d = (pos - enemyPos).LengthSquared();
+            candidates.push_back({ r, i, d });
         }
     }
 
-    return false;
+    if (candidates.empty()) return false;
+
+    std::sort(candidates.begin(), candidates.end(),
+        [](const Candidate& a, const Candidate& b) { return a.distSq < b.distSq; });
+
+    // 가장 가까운 슬롯 배정
+    auto c = candidates.front();
+    m_rings[c.ring].slots[c.index].occupant = enemy;
+    outRing = c.ring;
+    outIndex = c.index;
+    return true;
 }
 
 void MMMEngine::TargetSlotProvider::ReleaseSlot(int ring, int index, ObjPtr<GameObject> enemy)
@@ -124,5 +146,27 @@ bool MMMEngine::TargetSlotProvider::GetSlotWorldPos(int ring, int index, DirectX
     outPos.x = center.x + std::cos(angle) * radius;
     outPos.z = center.z + std::sin(angle) * radius;
     outPos.y = center.y + yOffset;
+    return true;
+}
+
+bool MMMEngine::TargetSlotProvider::IsSlotFree(const DirectX::SimpleMath::Vector3& pos, ObjPtr<GameObject> enemy) const
+{
+    auto& phys = PhysxManager::Get();
+    std::vector<OverlapHit> hits;
+
+    ObjPtr<ColliderComponent> enemyCol = enemy.IsValid() ? enemy->GetComponent<ColliderComponent>() : nullptr;
+    ObjPtr<RigidBodyComponent> enemyRb = enemy.IsValid() ? enemy->GetComponent<RigidBodyComponent>() : nullptr;
+
+    bool any = phys.OverlapSphere(pos, slotCheckRadius, hits, slotBlockLayer, enemyCol, enemyRb, includeTriggerInOverlap);
+    if (!any) return true;
+
+    for (auto& h : hits)
+    {
+        if (!h.gameObject.IsValid()) continue;
+        if (enemy.IsValid() && h.gameObject == enemy) continue;
+        if (h.gameObject == GetGameObject()) continue; // 타겟 자신은 무시
+        return false;
+    }
+
     return true;
 }
