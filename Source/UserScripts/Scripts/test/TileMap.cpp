@@ -97,11 +97,19 @@ MMMEngine::TileMap::Vec2 MMMEngine::TileMap::GetCurPosXZ() const
 	Vec2 pose{};
 	if (!P_trans) return pose;
 
+<<<<<<< Updated upstream
 	if (!P_trans.IsValid()) { std::cout << u8"transform ¹ß°ß¸øÇÔ" << std::endl; };
 	auto world_Position = P_trans->GetWorldPosition();
 	pose.x = world_Position.x;
 	pose.z = world_Position.z;
 	return pose;
+=======
+    if (!P_trans.IsValid()) { std::cout << u8"transform ï¿½ß°ß¸ï¿½ï¿½ï¿½" << std::endl;};
+    auto world_Position = P_trans->GetWorldPosition();
+    pose.x = world_Position.x;
+    pose.z = world_Position.z;
+    return pose;
+>>>>>>> Stashed changes
 }
 
 int MMMEngine::TileMap::GetIndex(int x, int y)
@@ -122,6 +130,7 @@ void MMMEngine::TileMap::NoticePlayer(bool value)
 {
 	isHarvesting = value;
 
+<<<<<<< Updated upstream
 	if (isHarvesting)
 	{
 		//¸ð¼Ç ½ÃÀÛ: prevPos¸¦ ÇöÀç À§Ä¡·Î ¸ÂÃß°í hasPrev È°¼ºÈ­
@@ -133,6 +142,19 @@ void MMMEngine::TileMap::NoticePlayer(bool value)
 		// ¸ð¼Ç Á¾·á
 		hasPrev = false;
 	}
+=======
+    if (isHarvesting)
+    {
+        //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: prevPosï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ hasPrev È°ï¿½ï¿½È­
+        Vec2 cur = GetCurPosXZ();
+        EnterState(cur);      // prevPos=cur, hasPrev=true
+    }
+    else
+    {
+        // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        hasPrev = false;
+    }
+>>>>>>> Stashed changes
 }
 
 void MMMEngine::TileMap::Start()
@@ -149,11 +171,19 @@ void MMMEngine::TileMap::Start()
 	boxlist.reserve(GRID_W * GRID_H);
 	CheckTiles.reserve(GRID_W * GRID_H);
 
+<<<<<<< Updated upstream
 	if (auto go = GameObject::Find("Player"); go.IsValid())
 	{
 		//ÀÌ°Å playerÀÓ ÀÌ¸§ ¼öÁ¤¸øÇßÀ½
 		P_trans = go->GetTransform();
 	}
+=======
+    if (auto go = GameObject::Find("Player"); go.IsValid())
+    {
+        //ï¿½Ì°ï¿½ playerï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        P_trans = go->GetTransform();
+    }
+>>>>>>> Stashed changes
 
 
 	if (box)
@@ -180,8 +210,15 @@ void MMMEngine::TileMap::Update()
 	if (!isHarvesting)
 		return;
 
+<<<<<<< Updated upstream
 	Vec2 cur = GetCurPosXZ();
 	TileCheck(cur);
+=======
+        TileCheck(cur); // harvesting ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    }
+
+    UpdateAccumDecay(curIdx);
+>>>>>>> Stashed changes
 }
 
 
@@ -204,8 +241,63 @@ void MMMEngine::TileMap::UpdateRespawn()
 			e_tile.cleared = false;
 			e_tile.inRespawn = false;
 
+<<<<<<< Updated upstream
 			if (0 <= t_index && t_index < (int)boxlist.size() && boxlist[t_index].IsValid())
 				boxlist[t_index]->SetActive(true);
+=======
+        tile.respawn += dt;
+
+        if (tile.respawn >= RESPAWN_TIME)
+        {
+            tile.accum = threshold;
+            tile.fade = 1.f;
+            tile.phase = TilePhase::Regenerating;
+
+            if (boxlist[idx].IsValid())
+                boxlist[idx]->SetActive(true);
+
+            CheckTiles[i] = CheckTiles.back();
+            CheckTiles.pop_back();
+            continue;
+        }
+        ++i;
+    }
+}
+
+void MMMEngine::TileMap::UpdateAccumDecay(int currentTileIdx)
+{
+    float dt = Time::GetDeltaTime();
+
+    for (int i = 0; i < tiles.size(); ++i)
+    {
+        if (i == currentTileIdx)
+            continue;   // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+
+        TileState& tile = tiles[i];
+
+        if (!(tile.phase == TileMap::TilePhase::Cleared) && tile.accum > 0.f)
+        {
+            tile.accum -= dt * accumRegenSpeed;
+
+            if (tile.accum < 0.f)
+                tile.accum = 0.f;
+
+            // ï¿½ï¿½ï¿½â¼­ fadeï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            tile.fade = tile.accum / threshold;
+            tile.fade = std::clamp(tile.fade, 0.f, 1.f);
+
+            if (i < boxlist.size() && boxlist[i].IsValid())
+            {
+                auto renderer = boxlist[i]->GetComponent<MeshRenderer>();
+                if (renderer)
+                {
+                    renderer->SetDitherAlpha(1 - tile.fade);
+                }
+            }
+        }
+    }
+}
+>>>>>>> Stashed changes
 
 			CheckTiles[i] = CheckTiles.back();
 			CheckTiles.pop_back();

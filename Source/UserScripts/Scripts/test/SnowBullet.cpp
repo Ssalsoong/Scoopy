@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "EnemyMove.h"
 #include "SphereColliderComponent.h"
+#include "../Mingi/ExplosionPool.h"
 
 void MMMEngine::SnowBullet::Start()
 {
@@ -80,6 +81,9 @@ void MMMEngine::SnowBullet::FixedUpdate()
 
 void MMMEngine::SnowBullet::OnTriggerEnter(MMMEngine::CollisionInfo info)
 {
+	if (ExplosionPool::Instance.IsValid())
+		ExplosionPool::Instance->Spawn(GetTransform()->GetWorldPosition());
+
 	if (info.other == target) ReSet();
 }
 
