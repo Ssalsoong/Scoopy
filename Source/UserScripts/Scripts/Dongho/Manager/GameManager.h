@@ -45,6 +45,9 @@ namespace MMMEngine {
 		bool GameOver = false;
 		bool mOverSet = false;
 
+		bool mPlayingNormalBGM = false;
+		bool mPlayingWaveBGM = false;
+
 		bool nowSetting = true;
 		bool isPausing = false;
 		int wave = 1;

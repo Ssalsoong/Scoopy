@@ -14,8 +14,10 @@
 #include "../../Mingi/UI/TimerUI.h"
 #include "../../Sunken/ControlManager.h"
 #include "../../Mingi/UI/PauseUI.h"
+#include "../../Mingi/UI/MarkWaveController.h"
 #include "../../Mingi/UI/GameOverSequencer.h"
 #include "../../Sunken/PlayerAnimController.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -51,6 +53,9 @@ void MMMEngine::GameManager::Start()
 	castle = GetGameObject()->Find("Castle");
 	playercomp = player->GetComponent<Player>();
 	castlecomp = castle->GetComponent<Castle>();
+
+
+	MarkWaveController::Instance->SetWave(wave);
 
 	if (!mTimerUI) {
 		std::cout << "GameManager::TimerUI Not Found!!!" << std::endl;
@@ -98,9 +103,18 @@ void MMMEngine::GameManager::Update()
 
 	if (nowSetting)
 	{
+		if (!mPlayingNormalBGM) {
+			mPlayingNormalBGM = true;
+			mPlayingWaveBGM = false;
+			SoundManager::Instance->StopBGM();
+			SoundManager::Instance->PlayBGM("TitleTheme");
+		}
+
 		settingTimer += Time::GetDeltaTime();
 		if (settingTimer >= settingfullTime)
 		{
+
+			MarkWaveController::Instance->AllOff();
 			EnemySpawner::instance->WaveSetting(wave);
 			nowSetting = false;
 			settingTimer = 0.0f;
@@ -109,6 +123,13 @@ void MMMEngine::GameManager::Update()
 	}
 	else
 	{
+		if (!mPlayingWaveBGM) {
+			mPlayingNormalBGM = false;
+			mPlayingWaveBGM = true;
+			SoundManager::Instance->StopBGM();
+			SoundManager::Instance->PlayBGM("BattleTheme");
+		}
+
 		if (!EnemySpawner::instance->WaveSpawn(wave))
 		{
 			if (wave == mMaxWave) {
@@ -119,6 +140,8 @@ void MMMEngine::GameManager::Update()
 			wave += 1;
 			BuildingManager::instance->BuildingReturn();
 			EnemySpawner::instance->EnemyUpgrade();
+
+			MarkWaveController::Instance->SetWave(wave);
 			playercomp->Setbuildchance(true);
 			player->GetComponent<Battlestats>()->SetHP(playercomp->GetmaxHP());
 			castle->GetComponent<Battlestats>()->SetHP(castlecomp->GetmaxHP());
@@ -143,15 +166,19 @@ void MMMEngine::GameManager::Update()
 		
 	}
 
-	// Pause Key Å½Áö
+	// Pause Key Å½ï¿½ï¿½
 	if (mPauseUI.IsValid()) {
 		bool pauseStat = mPauseUI->IsPause();
 		if (isPausing != pauseStat) {
 			isPausing = pauseStat;
-			if (pauseStat)
+			if (pauseStat) {
+				SoundManager::Instance->PlaySFX2D("Pause", SelfPtr(this));
 				ControlManager::Get()->SetMinLayer(100);
-			else
+			}
+			else {
+				SoundManager::Instance->PlaySFX2D("Pause", SelfPtr(this));
 				ControlManager::Get()->ReleaseMinLayer();
+			}	
 		}
 	}
 }

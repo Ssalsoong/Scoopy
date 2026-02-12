@@ -6,6 +6,7 @@
 #include "../Dongho/Player/Player.h"
 #include "BuildingLevelController.h"
 #include "LevelUpBubble.h"
+#include "../Mingi/Manager/SoundManager.h"
 
 MMMEngine::ObjPtr<MMMEngine::LevelUpManager> MMMEngine::LevelUpManager::instance;
 
@@ -304,6 +305,8 @@ void MMMEngine::LevelUpManager::SetBubble(EXPTYPE _type, ObjPtr<GameObject> _tar
 
 	mLevelUpBubble->SetActive(true);
 	mLevelUpBubble->SetIcons(_icons);
+
+	SoundManager::Instance->PlaySFX2D("Bubble", SelfPtr(this));
 
 	// SetHeadline과 SetScript는 버블 안에서 해결
 }

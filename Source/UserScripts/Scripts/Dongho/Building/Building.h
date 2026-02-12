@@ -27,6 +27,8 @@ namespace MMMEngine {
 	public:
 		Building()
 		{
+        REGISTER_BEHAVIOUR_MESSAGE(OnDisable);
+        REGISTER_BEHAVIOUR_MESSAGE(OnEnable);
         REGISTER_BEHAVIOUR_MESSAGE(Start);
         REGISTER_BEHAVIOUR_MESSAGE(Update);
 
@@ -34,6 +36,10 @@ namespace MMMEngine {
 		DirectX::SimpleMath::Vector3 pos;
 		void Start();
 		void Update();
+
+
+		void OnEnable();
+		void OnDisable();
 
 		USCRIPT_PROPERTY()
 			AnimationCurve mSpawnScaleCurve;

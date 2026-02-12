@@ -10,6 +10,7 @@
 #include "../Battlestats.h"
 #include "../../test/SnowBullet.h"
 #include "../Manager/BuildingManager.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::Castle::Start()
 {
@@ -208,6 +209,8 @@ void MMMEngine::Castle::PointUp(int t)
 
 void MMMEngine::Castle::LevelUp()
 {
+	SoundManager::Instance->PlaySFX2D("LevelUp", SelfPtr(this));
+
 	if (level >= 10)
 		return;
 	level ++;

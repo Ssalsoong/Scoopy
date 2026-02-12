@@ -8,6 +8,7 @@
 #include "MMMTime.h"
 #include "../Battlestats.h"
 #include "../../test/SnowBullet.h"
+#include "../../Mingi/UI/MiniMap.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -34,6 +35,20 @@ RTTR_PLUGIN_REGISTRATION
 			}).method("Inject", &ObjPtr<Building>::Inject);
 }
 
+void MMMEngine::Building::OnEnable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->RegisterTracker(GetMUID(), GetTransform(), TrackerType::Building);
+	}
+}
+void MMMEngine::Building::OnDisable()
+{
+	if (MiniMap::Instance.IsValid())
+	{
+		MiniMap::Instance->UnregisterTracker(GetMUID());
+	}
+}
 void MMMEngine::Building::Start()
 {
 	pos = GetTransform()->GetWorldPosition();

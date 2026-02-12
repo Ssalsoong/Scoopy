@@ -92,14 +92,20 @@ void MMMEngine::PauseUI::Update()
 
 		currentFrameHasControl = upKey || downKey;
 
-		if (upKey || downKey)
+		if (upKey || downKey) {
+			SoundManager::Instance->PlaySFX2D("ChoiceMove", SelfPtr(this));
 			m_currentSelected = 1 - m_currentSelected;
+		}
+			
 
 
 		bool selectKey = Input::GetKeyDown(KeyCode::Enter) || Input::GetKeyDown(KeyCode::Space);
 
 		if (selectKey)
 		{
+			// 사운드 재생
+			SoundManager::Instance->PlaySFX2D("Select", SelfPtr(this));
+
 			if (m_currentSelected == 0)
 			{
 				m_isPause = false;

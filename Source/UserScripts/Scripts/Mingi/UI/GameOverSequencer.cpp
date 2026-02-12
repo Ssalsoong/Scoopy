@@ -69,14 +69,6 @@ void MMMEngine::GameOverSequencer::Start()
 
 void MMMEngine::GameOverSequencer::Update()
 {
-	//debug
-	if (Input::GetKeyDown(KeyCode::G))
-	{
-		//연출 시작
-		StartGameOver();
-	}
-
-
 	if (m_animState == 0 || !m_mainCam.IsValid())
 		return;
 
