@@ -1,4 +1,4 @@
-﻿#include "Export.h"
+#include "Export.h"
 #include "ScriptBehaviour.h"
 #include "SoundManager.h"
 
@@ -292,6 +292,7 @@ void MMMEngine::SoundManager::EnsureSFXPool()
         slot.trackCaller = false;
         slot.is3D = false;
         slot.followTarget = nullptr;
+        slot.currentKey.clear();
         slot.playSerial = 0;
 
         const std::string emitterName = "SoundManager_SFXEmitter_" + std::to_string(i);
@@ -360,41 +361,42 @@ MMMEngine::ObjPtr<MMMEngine::Transform> MMMEngine::SoundManager::ResolveCallerTr
     return owner->GetTransform();
 }
 
-void MMMEngine::SoundManager::PlaySFXInternal(
+uint64_t MMMEngine::SoundManager::PlaySFXInternal(
     const std::string& key,
     const ObjPtr<Component>& caller,
     bool spatialize,
     bool trackCaller,
-    float volumeScale)
+    float volumeScale,
+    bool loop)
 {
     auto it = m_sfxTable.find(key);
     if (it == m_sfxTable.end())
     {
         std::cout << "[SoundManager] SFX key not found: " << key << std::endl;
-        return;
+        return 0;
     }
 
     const AudioEntry& entry = it->second;
     if (!entry.clip)
     {
         std::cout << "[SoundManager] SFX clip is null: " << key << std::endl;
-        return;
+        return 0;
     }
 
     EnsureSFXPool();
 
     const int slotIndex = AcquireSFXSlot();
     if (slotIndex < 0 || slotIndex >= kSfxPoolSize)
-        return;
+        return 0;
 
     auto& slot = m_sfxSlots[static_cast<size_t>(slotIndex)];
     if (!slot.source.IsValid())
-        return;
+        return 0;
 
     if (slot.source->IsPlaying())
         slot.source->Stop();
 
-    slot.source->SetLoop(false);
+    slot.source->SetLoop(loop);
     slot.source->SetSpatialize(spatialize);
     slot.source->SetClip(entry.clip);
 
@@ -418,9 +420,11 @@ void MMMEngine::SoundManager::PlaySFXInternal(
     slot.is3D = spatialize;
     slot.trackCaller = spatialize && trackCaller && callerTransform.IsValid();
     slot.followTarget = slot.trackCaller ? callerTransform : ObjPtr<Transform>();
+    slot.currentKey = key;
     slot.playSerial = ++m_playSerialCounter;
 
     slot.source->Play();
+    return slot.playSerial;
 }
 
 void MMMEngine::SoundManager::PlayBGM(const std::string& key, float volumeScale, bool loop)
@@ -459,14 +463,60 @@ void MMMEngine::SoundManager::StopBGM()
         m_bgmSource->Stop();
 }
 
-void MMMEngine::SoundManager::PlaySFX2D(const std::string& key, const ObjPtr<Component>& caller, float volumeScale)
+uint64_t MMMEngine::SoundManager::PlaySFX2D(const std::string& key, const ObjPtr<Component>& caller, float volumeScale, bool loop)
 {
-    PlaySFXInternal(key, caller, false, false, volumeScale);
+    return PlaySFXInternal(key, caller, false, false, volumeScale, loop);
 }
 
-void MMMEngine::SoundManager::PlaySFX3D(const std::string& key, const ObjPtr<Component>& caller, bool trackCaller, float volumeScale)
+uint64_t MMMEngine::SoundManager::PlaySFX3D(const std::string& key, const ObjPtr<Component>& caller, bool trackCaller, float volumeScale, bool loop)
 {
-    PlaySFXInternal(key, caller, true, trackCaller, volumeScale);
+    return PlaySFXInternal(key, caller, true, trackCaller, volumeScale, loop);
+}
+
+void MMMEngine::SoundManager::StopSFX(const std::string& key)
+{
+    for (auto& slot : m_sfxSlots)
+    {
+        if (!slot.source.IsValid())
+            continue;
+
+        if (!slot.source->IsPlaying())
+            continue;
+
+        if (slot.currentKey != key)
+            continue;
+
+        slot.source->Stop();
+        slot.trackCaller = false;
+        slot.is3D = false;
+        slot.followTarget = nullptr;
+        slot.currentKey.clear();
+    }
+}
+
+void MMMEngine::SoundManager::StopSFXByID(uint64_t playId)
+{
+    if (playId == 0)
+        return;
+
+    for (auto& slot : m_sfxSlots)
+    {
+        if (!slot.source.IsValid())
+            continue;
+
+        if (!slot.source->IsPlaying())
+            continue;
+
+        if (slot.playSerial != playId)
+            continue;
+
+        slot.source->Stop();
+        slot.trackCaller = false;
+        slot.is3D = false;
+        slot.followTarget = nullptr;
+        slot.currentKey.clear();
+        return;
+    }
 }
 
 void MMMEngine::SoundManager::StopAllSFX()
@@ -479,6 +529,7 @@ void MMMEngine::SoundManager::StopAllSFX()
         slot.trackCaller = false;
         slot.is3D = false;
         slot.followTarget = nullptr;
+        slot.currentKey.clear();
     }
 }
 
