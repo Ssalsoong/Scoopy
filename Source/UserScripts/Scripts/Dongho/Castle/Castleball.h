@@ -30,5 +30,8 @@ namespace MMMEngine
         void SetOwner(ObjPtr<GameObject> obj) { owner = obj; }
         void SetTarget(ObjPtr<GameObject> obj) { target = obj; }
         void Setatk(int value) { atk = value; }
+
+        void Returnball();
+        void Attacktarget();
     };
 }
