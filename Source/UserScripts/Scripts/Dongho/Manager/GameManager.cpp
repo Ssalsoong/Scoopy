@@ -15,6 +15,7 @@
 #include "../../Sunken/ControlManager.h"
 #include "../../Mingi/UI/PauseUI.h"
 #include "../../Mingi/UI/GameOverSequencer.h"
+#include "../../Sunken/PlayerAnimController.h"
 
 RTTR_PLUGIN_REGISTRATION
 {
@@ -79,9 +80,18 @@ void MMMEngine::GameManager::Update()
 	{
 		if (!mOverSet) {
 			mOverSet = true;
+
 			if (mOverSequencer) {
 				ControlManager::Get()->SetMinLayer(150);
 				mOverSequencer->StartGameOver();
+			}
+
+			if (auto bs = player->GetComponent<Battlestats>(); bs) {
+				bs->SetHP(0);
+			}
+
+			if (auto controller = player->GetComponent<PlayerAnimController>(); controller) {
+				controller->PlayDie();
 			}
 		}
 	}

@@ -8,15 +8,30 @@
 
 void MMMEngine::PlayerAnimController::CreateAnimNode()
 {
-	AnimState as = {};
-	as.clipName = "Player_Idle";
-	as.loop = true;
-	as.rootIdx = mAnimator->GetBoneIdx("Hip");
+	{
+		AnimState as = {};
+		as.clipName = "Player_Idle";
+		as.loop = true;
+		as.rootIdx = mAnimator->GetBoneIdx("Hip");
 
-	mAnimController->AddState("Idle", as);
-	
-	as.clipName = "Player_Move";
-	mAnimController->AddState("Move", as);
+		mAnimController->AddState("Idle", as);
+	}
+	{
+		AnimState as = {};
+		as.clipName = "Player_Move";
+		as.loop = true;
+		as.rootIdx = mAnimator->GetBoneIdx("Hip");
+
+		mAnimController->AddState("Move", as);
+	}
+	/*{
+		AnimState as = {};
+		as.clipName = "Player_Dead";
+		as.loop = false;
+		as.rootIdx = -1;
+
+		mAnimController->AddState("Die", as);
+	}*/
 
 	//as.clipName = "Player_Scoop_Idle";
 	//as.rootIdx = mAnimator->GetBoneIdx("Bone");	// 스쿱만 움직일수 있나? 확인하기
@@ -33,6 +48,7 @@ void MMMEngine::PlayerAnimController::CreateAnimNode()
 void MMMEngine::PlayerAnimController::CreateParams()
 {
 	mAnimController->SetFloat("MoveSpeed", 0.0f);
+	mAnimController->SetBool("Dead", false);
 	/*mAnimController->SetBool("Scoop", false);
 	mAnimController->SetBool("Attack", false);*/
 }
@@ -53,6 +69,17 @@ void MMMEngine::PlayerAnimController::CreateTrans()
 		at.conditions.push_back(cd);
 		mAnimController->AddTransition("Idle", at);
 	}
+	/*{
+		AnimCondition cd = {};
+		cd.param = "Dead";
+		cd.op = CondOp::Equal;
+		cd.value = 1.0f;
+
+		AnimTransition at;
+		at.toState = "Die";
+		at.conditions.push_back(cd);
+		mAnimController->AddTransition("Idle", at);
+	}*/
 	/*{
 		AnimCondition cd = {};
 		cd.param = "Scoop";
@@ -88,6 +115,17 @@ void MMMEngine::PlayerAnimController::CreateTrans()
 		at.conditions.push_back(cd);
 		mAnimController->AddTransition("Move", at);
 	}
+	/*{
+		AnimCondition cd = {};
+		cd.param = "Dead";
+		cd.op = CondOp::Equal;
+		cd.value = 1.0f;
+
+		AnimTransition at;
+		at.toState = "Die";
+		at.conditions.push_back(cd);
+		mAnimController->AddTransition("Move", at);
+	}*/
 	/*{
 		AnimCondition cd = {};
 		cd.param = "Attack";
@@ -206,3 +244,9 @@ void MMMEngine::PlayerAnimController::SetAttack(bool _isAttacking)
 {
 	mAttacking = _isAttacking;
 }
+
+void MMMEngine::PlayerAnimController::PlayDie()
+{
+	mAnimator->PlayClip("Player_Dead", false);
+}
+

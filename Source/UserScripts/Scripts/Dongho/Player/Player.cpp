@@ -25,6 +25,9 @@ void MMMEngine::Player::Start()
 
 void MMMEngine::Player::Update()
 {
+	if (prevHP <= 0)
+		return;
+
 	pos = GetTransform()->GetWorldPosition();
 	if(buildchance)
 		BuildOn();

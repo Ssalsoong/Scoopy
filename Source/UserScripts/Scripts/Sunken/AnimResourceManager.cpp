@@ -26,6 +26,8 @@ void MMMEngine::AnimResourceManager::Awake()
 		.Load<AnimationClip>(L"Assets/Sunken/Player/Anims/Player_Scoop_Move Attack_0.animclip"));
 	mAnimClips[AnimType::AT_Player].push_back(ResourceManager::Get()
 		.Load<AnimationClip>(L"Assets/Sunken/Player/Anims/Player_Scoop_Move_0.animclip"));
+	mAnimClips[AnimType::AT_Player].push_back(ResourceManager::Get()
+		.Load<AnimationClip>(L"Assets/Sunken/Player/Anims/Player_Dead_0.animclip"));
 
 	// 적 클립
 	mAnimClips[AnimType::AT_Archer].push_back(ResourceManager::Get()
