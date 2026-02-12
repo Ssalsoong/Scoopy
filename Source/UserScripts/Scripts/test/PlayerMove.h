@@ -124,5 +124,10 @@ namespace MMMEngine
 
 	private:
 		void RecalcBuff();
+
+        //사운드용
+        bool m_IsMoving = false;
+        bool SoundOn = false;
+        void PlayWalkSound();
     };
 }

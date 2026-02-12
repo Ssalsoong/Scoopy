@@ -13,6 +13,7 @@
 #include "../../Sunken/PlayerAnimController.h"
 #include "../../test/PlayerMove.h"
 #include "../../Sunken/ControlManager.h"
+#include "../../Mingi/Manager/SoundManager.h"
 
 void MMMEngine::Player::Start()
 {
@@ -132,7 +133,7 @@ void MMMEngine::Player::HandleAttack()
 				damage *= 2.0f;
 			}
 		}
-
+		SoundManager::Instance->PlaySFX2D("PlayerAttack", SelfPtr(this) , 1.0f);
 		BattleManager::instance->Attack(GetGameObject(), e, damage);
 	}
 }
@@ -189,6 +190,7 @@ void MMMEngine::Player::BuildOn()
 				for (auto& bp : buildingpoints)
 				{
 					if (bp->GetComponent<BuildingPoint>()->GetcanBuild()) {
+						SoundManager::Instance->PlaySFX2D("Build", SelfPtr(this), 1.0f);
 						BuildingManager::instance->Build(bp);
 						buildchance = false;
 					}
