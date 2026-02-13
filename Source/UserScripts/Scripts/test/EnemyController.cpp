@@ -16,6 +16,7 @@
 #include "../Sunken/EnemyAnimController.h"
 #include "RigidBodyComponent.h"
 #include "../Mingi/Manager/SoundManager.h"
+#include "../Mingi/UI/MiniMap.h"
 
 void MMMEngine::EnemyController::Start()
 {
@@ -29,6 +30,16 @@ void MMMEngine::EnemyController::Start()
 	}
 }
 
+void MMMEngine::EnemyController::OnEnable()
+{
+	if (MiniMap::Instance.IsValid())
+		MiniMap::Instance->RegisterTracker(GetMUID(), GetTransform(), TrackerType::Enemy);
+}
+void MMMEngine::EnemyController::OnDisable()
+{
+	if (MiniMap::Instance.IsValid())
+		MiniMap::Instance->UnregisterTracker(GetMUID());
+}
 void MMMEngine::EnemyController::Update()
 {
 	UpdateTarget();
